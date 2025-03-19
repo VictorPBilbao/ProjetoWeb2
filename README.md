@@ -2,7 +2,7 @@
 
 # Alunos: 
 - Victor Pasini Bilbao - GRR20231012
-- [Aluno_2]
+- Adriano Zandroski Soares - GRR20231029
 - [Aluno_3]
 - [Aluno_4]
 
