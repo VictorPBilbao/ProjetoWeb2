@@ -1,10 +1,17 @@
-# Projeto Web Dev II
 
-# Alunos: 
-- Victor Pasini Bilbao - GRR20231012
-- [Aluno_2]
-- [Aluno_3]
-- [Aluno_4]
+# Alunos:
+
+<div align="center">
+
+| Nome                          | GRR         |
+|-------------------------------|-------------|
+| Victor Pasini Bilbao          | GRR20231012 |
+| Adriano Zandroski Soares      | GRR20231029 |
+| [Aluno_2]                     | [GRR]       |
+| [Aluno_4]                     | [GRR]       |
+| [Aluno_5]                     | [GRR]       |
+
+</div>
 
 # Flow:
 
