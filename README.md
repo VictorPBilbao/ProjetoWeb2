@@ -1,12 +1,4 @@
 
-<<<<<<< HEAD
-# Alunos: 
-- Victor Pasini Bilbao - GRR20231012
-- Adriano Zandroski Soares - GRR20231029
-- [Aluno_3]
-- [Aluno_4]
-- [Aluno_5]
-=======
 # Alunos:
 
 <div align="center">
@@ -20,7 +12,6 @@
 | [Aluno_5]                     | [GRR]       |
 
 </div>
->>>>>>> main
 
 # Flow:
 
