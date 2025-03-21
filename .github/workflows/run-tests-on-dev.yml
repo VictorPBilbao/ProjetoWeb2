@@ -28,4 +28,6 @@ jobs:
                       ${{ runner.os }}-maven-
 
             - name: Run Tests
-              run: ./mvnw test
+              run: |
+                  cd backend/app
+                  ./mvnw test
