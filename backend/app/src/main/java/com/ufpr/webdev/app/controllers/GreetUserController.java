@@ -20,8 +20,8 @@ public class GreetUserController {
 
     // GET: /api/hello?name=YourName
     @GetMapping("/hello")
-    public String sayHello(@RequestParam(defaultValue = "World") String name) {
-        return "Hello " + name;
+    public String sayHello(String name) {
+        return "Hello " + (name != null ? name : "World");
     }
 
     // GET with a path parameter: /api/users/{userId}
