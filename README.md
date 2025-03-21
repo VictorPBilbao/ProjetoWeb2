@@ -1,15 +1,14 @@
-
 # Alunos:
 
 <div align="center">
 
-| Nome                          | GRR         |
-|-------------------------------|-------------|
-| Victor Pasini Bilbao          | GRR20231012 |
-| Adriano Zandroski Soares      | GRR20231029 |
-| [Aluno_2]                     | [GRR]       |
-| [Aluno_4]                     | [GRR]       |
-| [Aluno_5]                     | [GRR]       |
+| Nome                     | GRR         |
+| ------------------------ | ----------- |
+| Victor Pasini Bilbao     | GRR20231012 |
+| Adriano Zandroski Soares | GRR20231029 |
+| Thalita dos Santos       | GRR20231007 |
+| [Aluno_4]                | [GRR]       |
+| [Aluno_5]                | [GRR]       |
 
 </div>
 
