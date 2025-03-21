@@ -6,7 +6,7 @@ on:
             - dev
 
 jobs:
-    test:
+    test-linux:
         runs-on: ubuntu-latest
 
         steps:
@@ -34,3 +34,29 @@ jobs:
               run: |
                   cd backend/app
                   ./mvnw test
+
+    test-windows:
+        runs-on: windows-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Set up Java
+              uses: actions/setup-java@v3
+              with:
+                  distribution: "temurin"
+                  java-version: "23"
+
+            - name: Cache Maven dependencies
+              uses: actions/cache@v3
+              with:
+                  path: C:\Users\runneradmin\.m2
+                  key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-maven-
+
+            - name: Run Tests
+              run: |
+                  cd backend\app
+                  .\mvnw.cmd test
