@@ -7,7 +7,7 @@
 | Victor Pasini Bilbao     | GRR20231012 |
 | Adriano Zandroski Soares | GRR20231029 |
 | Thalita dos Santos       | GRR20231007 |
-| [Aluno_4]                | [GRR]       |
+| [Iman de Lacerda ]       | GRR20193747 |
 | [Aluno_5]                | [GRR]       |
 
 </div>
