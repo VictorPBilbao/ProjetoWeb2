@@ -7,7 +7,7 @@
 |-------------------------------|-------------|
 | Victor Pasini Bilbao          | GRR20231012 |
 | Adriano Zandroski Soares      | GRR20231029 |
-| [Aluno_2]                     | [GRR]       |
+| Thalita Santos                | GRR20231007 |
 | [Aluno_4]                     | [GRR]       |
 | [Aluno_5]                     | [GRR]       |
 
