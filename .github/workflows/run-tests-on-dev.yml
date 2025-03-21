@@ -1,8 +1,9 @@
-name: Run Tests on Dev Branch
+name: Run Tests
 
 on:
     push:
         branches:
+            - main
             - dev
 
 jobs:
