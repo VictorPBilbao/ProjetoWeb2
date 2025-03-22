@@ -29,7 +29,7 @@ jobs:
                       ${{ runner.os }}-maven-
 
             - name: Make mvnw executable
-              run: chmod +x backend/app/mvnw
+              run: chmod +x byteassist-backend/mvnw
 
             - name: Run Tests
               run: |
