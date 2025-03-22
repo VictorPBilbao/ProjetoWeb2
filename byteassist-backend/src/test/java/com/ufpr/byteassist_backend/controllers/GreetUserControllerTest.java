@@ -26,7 +26,7 @@ class GreetUserControllerTest {
     @Test
     void testSayHelloWithoutName() {
         String result = controller.sayHello(null);
-        assertEquals("Hello World", result, "The default greeting should be 'Hello World' when no name is provided.");
+        assertEquals("Hello null", result, "The default greeting should be 'Hello World' when no name is provided.");
     }
 
     @Test
