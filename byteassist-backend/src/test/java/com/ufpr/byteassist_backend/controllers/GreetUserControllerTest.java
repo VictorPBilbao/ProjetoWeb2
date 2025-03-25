@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 class GreetUserControllerTest {
 
-    private final GreetUserController controller = new GreetUserController();
+    private final GreetUserController controller = new GreetUserController(null);
 
     @Test
     void testGetMethodName() {

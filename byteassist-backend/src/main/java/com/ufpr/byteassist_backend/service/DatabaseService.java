@@ -19,6 +19,7 @@ public class DatabaseService {
             db.connect("wss://byteassist-database.fly.dev/");
             db.useNs("dev").useDb("public");
             db.signin(new Namespace("byteassist-user", "password", "dev"));
+
         } catch (Exception e) {
             throw new RuntimeException("Failed to connect to the database", e);
         }
