@@ -1,4 +1,4 @@
-package com.ufpr.byteassist_backend.controllers;
+package com.ufpr.byteassist_backend.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 

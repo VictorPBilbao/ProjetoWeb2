@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ByteassistBackendApplication {
 
     public static void main(String[] args) {
+        System.out.println("Starting application...");
         SpringApplication.run(ByteassistBackendApplication.class, args);
     }
-
 }

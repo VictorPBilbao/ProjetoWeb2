@@ -2,6 +2,9 @@ package com.ufpr.byteassist_backend.controllers;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import com.ufpr.byteassist_backend.controller.GreetUserController;
+
 import java.util.HashMap;
 import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
