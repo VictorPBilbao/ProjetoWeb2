@@ -14,13 +14,11 @@ public class DatabaseService {
 
     @PostConstruct
     public void initialize() {
-        System.out.println("Connecting to database...");
         try {
             db = new Surreal();
-            db.connect("wss://java-db-06askd6f4ps5n7ve0cltelvua8.aws-use1.surreal.cloud");
-            db.useNs("main").useDb("main");
-            db.signin(new Namespace("byteassist-test-user", "password", "main"));
-            System.out.println("Connected to the database");
+            db.connect("wss://byteassist-database.fly.dev/");
+            db.useNs("dev").useDb("public");
+            db.signin(new Namespace("byteassist-user", "password", "dev"));
         } catch (Exception e) {
             throw new RuntimeException("Failed to connect to the database", e);
         }
