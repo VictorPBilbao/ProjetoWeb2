@@ -1,7 +1,7 @@
 package com.ufpr.byteassist_backend.service;
 
 import com.surrealdb.Surreal;
-import com.surrealdb.signin.Namespace;
+import com.surrealdb.signin.Database;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -18,7 +18,7 @@ public class DatabaseService {
             db = new Surreal();
             db.connect("wss://byteassist-database.fly.dev/");
             db.useNs("dev").useDb("public");
-            db.signin(new Namespace("byteassist-user", "password", "dev"));
+            db.signin(new Database("byteassist-api", "9g35IwQ*", "dev", "public"));
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to connect to the database", e);
