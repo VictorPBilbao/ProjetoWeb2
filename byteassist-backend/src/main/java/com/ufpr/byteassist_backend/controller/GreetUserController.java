@@ -1,8 +1,13 @@
-package com.ufpr.byteassist_backend.controllers;
+package com.ufpr.byteassist_backend.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.surrealdb.Surreal;
+import com.ufpr.byteassist_backend.model.User;
+import com.ufpr.byteassist_backend.service.DatabaseService;
+
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 public class GreetUserController {
+
+    private final Surreal db;
+
+    public GreetUserController(DatabaseService databaseService) {
+        this.db = databaseService.getDatabase();
+    }
 
     @GetMapping("/")
     public String getMethodName() {
@@ -42,6 +53,16 @@ public class GreetUserController {
     @PostMapping("/echo")
     public Map<String, Object> echoRequest(@RequestParam Map<String, Object> requestBody) {
         return requestBody;
+    }
+
+    // GET endpoint to return all users from the database
+    @GetMapping("/users")
+    public String getAllUsers() {
+        Iterator<User> users = db.select(User.class, "Users");
+        while (users.hasNext()) {
+            System.out.println("Found user: " + users.next().toString());
+        }
+        return "teste";
     }
 
 }
