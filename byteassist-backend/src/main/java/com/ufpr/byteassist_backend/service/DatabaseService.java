@@ -16,7 +16,7 @@ public class DatabaseService {
     @PostConstruct
     public void initialize() {
         try {
-            Dotenv dotenv = Dotenv.load();
+            Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
             String url = dotenv.get("DATABASE_URL");
             String namespace = dotenv.get("DATABASE_NAMESPACE");
             String dbName = dotenv.get("DATABASE_NAME");
