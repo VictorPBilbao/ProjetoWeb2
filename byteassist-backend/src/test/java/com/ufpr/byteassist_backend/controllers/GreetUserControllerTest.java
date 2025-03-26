@@ -1,18 +1,30 @@
 package com.ufpr.byteassist_backend.controllers;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.ufpr.byteassist_backend.controller.GreetUserController;
+import com.ufpr.byteassist_backend.service.DatabaseService;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class GreetUserControllerTest {
 
-    private final GreetUserController controller = new GreetUserController(null);
+    private GreetUserController controller;
+    private DatabaseService mockDatabaseService;
+
+    @BeforeEach
+    void setUp() {
+        mockDatabaseService = mock(DatabaseService.class);
+        when(mockDatabaseService.getDatabase()).thenReturn(null); // Mock behavior if needed
+        controller = new GreetUserController(mockDatabaseService);
+    }
 
     @Test
     void testGetMethodName() {
