@@ -39,6 +39,12 @@ jobs:
               run: |
                   cd byteassist-backend
                   ./mvnw test
+              env:
+                  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+                  DATABASE_NAMESPACE: ${{ secrets.DATABASE_NAMESPACE }}
+                  DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+                  DATABASE_USER: ${{ secrets.DATABASE_USER }}
+                  DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
 
     test-windows:
         runs-on: windows-latest
@@ -65,3 +71,9 @@ jobs:
               run: |
                   cd byteassist-backend
                   .\mvnw.cmd test
+              env:
+                  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+                  DATABASE_NAMESPACE: ${{ secrets.DATABASE_NAMESPACE }}
+                  DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+                  DATABASE_USER: ${{ secrets.DATABASE_USER }}
+                  DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
