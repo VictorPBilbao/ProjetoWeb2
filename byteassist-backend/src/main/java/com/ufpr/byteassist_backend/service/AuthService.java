@@ -22,7 +22,7 @@ public class AuthService {
     }
 
     public ResponseEntity<Object> login(String username, String password) {
-        User user = userRepo.getUserByUsername(username, password);
+        User user = userRepo.getUserByUsername(username);
         if (user != null && passwordEncoder.matches(password, user.password)) {
             String token = jwtService.generateToken(user.id.toString(), user.username);
             UserDTO userDTO = new UserDTO(user.id.toString(), user.username, token);

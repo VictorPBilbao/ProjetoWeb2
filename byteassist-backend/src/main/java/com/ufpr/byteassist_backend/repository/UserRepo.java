@@ -13,7 +13,7 @@ public class UserRepo {
         this.db = databaseService.getDatabase();
     }
 
-    public User getUserByUsername(String username, String password) {
+    public User getUserByUsername(String username) {
         Response response = db
                 .query("SELECT * FROM Users WHERE username = '" + username + "'");
 
