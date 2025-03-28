@@ -1,4 +1,6 @@
-# Alunos:
+# ByteAssist - Controle de Manutenção de Equipamentos
+
+## Alunos:
 
 <div align="center">
 
@@ -10,28 +12,90 @@
 | Thalita dos Santos       | GRR20231007 |
 | Victor Pasini Bilbao     | GRR20231012 |
 
-
 </div>
 
-# WORKFLOW (Desenvolvimento):
+---
 
-Temos 2 branches:
+## Descrição do Projeto
+Este sistema foi desenvolvido para gerenciar solicitações de serviços de manutenção de equipamentos, mantendo um histórico de alterações de estado. Possui dois perfis de usuário: **Cliente** e **Funcionário**, cada um com funcionalidades específicas. O projeto utiliza tecnologias modernas como **Angular** (Frontend) e **Spring Boot** (Backend), seguindo boas práticas de programação e padrões de projeto.
 
-• Main 
-• Dev 
+---
 
-O branch main é o principal, onde o código está sempre funcionando em ambiente de produção. 
+## Funcionalidades Principais
+### Perfil Cliente:
+- Autocadastro com validação de dados e integração com a API ViaCEP.
+- Login com identificação automática do perfil.
+- Registro de solicitações de manutenção, incluindo descrição do equipamento e defeito.
+- Visualização de histórico de solicitações e aprovação/rejeição de orçamentos.
+- Pagamento de serviços concluídos.
 
-O branch dev é o branch de desenvolvimento, onde podemos adicionar novas funcionalidades e testar, em que contará inclusive com testes automatizados em Gherkin e contando com Pipeline CI/CD. 
+### Perfil Funcionário:
+- Gestão de solicitações em diversos estados (Aberta, Orçada, etc.).
+- Efetuação de orçamentos e manutenções.
+- Redirecionamento de solicitações para outros funcionários.
+- CRUD de categorias de equipamentos e de funcionários.
+- Relatórios de receitas em PDF.
 
-Todos os deploys serão feitos da seguinte maneira: 
+---
 
-1 - Criar uma nova branch, a partir da branch "Dev". Desenvolver, realizar a sincronização com o github e depois solicitar um pull request para o branch dev. 
+## Como Executar o Projeto
 
-2 - Após a validação da alteração, poderá realizar o merge com a branch "Dev", sendo somente após isso o pull request para a "Main", que simula o ambiente de produção. Para isso, haverá uma pessoa responsável por fazer o code review. Possivelmente, Victor ou Adriano.
+<details>
+<summary>Backend</summary>
 
-# Diagrama de caso de uso: 
+1. Navegue até a pasta do backend:
+```bash
+cd ./byteassist-backend
+```
+
+2. Execute o seguinte comando para iniciar o servidor:
+```bash
+./mvnw spring-boot:run
+```
+
+3. Acesse a aplicação no navegador em: [http://localhost:8080](http://localhost:8080)
+
+</details>
+
+<details>
+<summary>Frontend</summary>
+
+1. Navegue até a pasta do frontend:
+```bash
+cd ./byteassist-frontend
+```
+
+2. Instale as dependências do projeto:
+```bash
+npm install
+```
+
+3. Inicie o servidor de desenvolvimento:
+```bash
+ng serve
+```
+
+4. Acesse a aplicação no navegador em: [http://localhost:4200](http://localhost:4200)
+
+</details>
+
+---
+
+## Diagramas: 
+
+<details>
+<summary>Diagrama de caso de uso:</summary>
 
 Para facilitar o desenvolvimento, abaixo, o diagrama de caso de uso do cliente: 
 
-![alt text](image/diagrama.png)
+![Diagrama de Caso de Uso](image/diagrama.png "Diagrama de caso de uso nível 1 do cliente feito pela @imanlacerda")
+
+</details>
+
+---
+
+## Contribuindo
+
+Para informações sobre como contribuir com o projeto, consulte o arquivo [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Para detalhes sobre as APIs disponíveis, consulte a [Documentação da API](https://1428fdd8or.apidog.io)
