@@ -28,8 +28,10 @@ Todos os deploys serão feitos da seguinte maneira:
 
 1 - Criar uma nova branch, a partir da branch "Dev". Desenvolver, realizar a sincronização com o github e depois solicitar um pull request para o branch dev. 
 
-Após a validação da alteração, poderá realizar o merge com a branch "Dev", sendo somente após isso o pull request para a "Main", que simula o ambiente de produção. Para isso, haverá uma pessoa responsável por fazer o code review. Possivelmente, Victor ou Adriano.
+2 - Após a validação da alteração, poderá realizar o merge com a branch "Dev", sendo somente após isso o pull request para a "Main", que simula o ambiente de produção. Para isso, haverá uma pessoa responsável por fazer o code review. Possivelmente, Victor ou Adriano.
 
 # Diagrama de caso de uso: 
 
 Para facilitar o desenvolvimento, abaixo, o diagrama de caso de uso do cliente: 
+
+<img src="\image\diagrama.png">
