@@ -15,7 +15,7 @@ public class UserRepo {
 
     public User getUserByUsername(String username, String password) {
         Response response = db
-                .query("SELECT * FROM Users WHERE username = '" + username + "' AND password = '" + password + "';");
+                .query("SELECT * FROM Users WHERE username = '" + username + "'");
 
         // WTF IS THIS?? NOT SURE HOW I MANAGED TO FIND IT
         // User user = response.take(0).getArray().get(0).get(User.class);
