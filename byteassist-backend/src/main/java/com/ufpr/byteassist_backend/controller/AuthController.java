@@ -1,23 +1,25 @@
 package com.ufpr.byteassist_backend.controller;
 
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.ufpr.byteassist_backend.dto.UserDTO;
+import com.ufpr.byteassist_backend.service.AuthService;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+    private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @GetMapping("/health")
-    public String returnControllerStatus() {
+    public String health() {
         return "OK";
     }
 
     @PostMapping("/login")
-    public String getMethodName(@RequestParam String username, @RequestParam String password) {
-        return "Received username: " + username + " and password: " + password;
+    public UserDTO login(@RequestParam String username, @RequestParam String password) {
+        return authService.login(username, password);
     }
-
 }

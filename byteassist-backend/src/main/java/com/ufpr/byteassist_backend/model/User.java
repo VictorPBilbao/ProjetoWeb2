@@ -4,24 +4,23 @@ import com.surrealdb.RecordId;
 
 public class User {
     public RecordId id;
-    public String name;
-    public int age;
+    public String password;
+    public String username;
 
     public User() {
     }
 
-    public User(RecordId id, String name, int age) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }
