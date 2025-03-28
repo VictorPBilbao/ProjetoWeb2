@@ -13,6 +13,25 @@
 
 </div>
 
-# Flow:
+# WORKFLOW (Desenvolvimento):
 
-Temos 2 branches, main e dev. O branch main é o branch principal, onde o código está sempre funcionando. O branch dev é o branch de desenvolvimento, onde podemos adicionar novas funcionalidades e fazer testes. Sempre que formos adicionar uma nova funcionalidade ou corrigir um bug, devemos criar uma nova branch a partir do branch dev. Após terminar a funcionalidade ou correção, devemos fazer um pull request para o branch dev. Depois de termos uma branch dev estável, devemos fazer um pull request para o branch main que deverá ser aprovada por 1 pessoa
+Temos 2 branches:
+
+• Main 
+• Dev 
+
+O branch main é o principal, onde o código está sempre funcionando em ambiente de produção. 
+
+O branch dev é o branch de desenvolvimento, onde podemos adicionar novas funcionalidades e testar, em que contará inclusive com testes automatizados em Gherkin e contando com Pipeline CI/CD. 
+
+Todos os deploys serão feitos da seguinte maneira: 
+
+1 - Criar uma nova branch, a partir da branch "Dev". Desenvolver, realizar a sincronização com o github e depois solicitar um pull request para o branch dev. 
+
+2 - Após a validação da alteração, poderá realizar o merge com a branch "Dev", sendo somente após isso o pull request para a "Main", que simula o ambiente de produção. Para isso, haverá uma pessoa responsável por fazer o code review. Possivelmente, Victor ou Adriano.
+
+# Diagrama de caso de uso: 
+
+Para facilitar o desenvolvimento, abaixo, o diagrama de caso de uso do cliente: 
+
+<img src="\image\diagrama.png">
