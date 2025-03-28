@@ -1,3 +1,9 @@
+<div align="center">
+
+![BackendTests](https://github.com/VictorPBilbao/ProjetoWeb2/actions/workflows/run-tests-on-dev.yml/badge.svg) [![ApidogBadge](https://img.shields.io/badge/Apidog-8A2BE2)](https://1428fdd8or.apidog.io)
+
+</div>
+
 # ByteAssist - Controle de Manutenção de Equipamentos
 
 ## Alunos:
