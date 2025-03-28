@@ -45,6 +45,7 @@ jobs:
                   DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
                   DATABASE_USER: ${{ secrets.DATABASE_USER }}
                   DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+                  JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
     test-windows:
         runs-on: windows-latest
@@ -77,3 +78,4 @@ jobs:
                   DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
                   DATABASE_USER: ${{ secrets.DATABASE_USER }}
                   DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+                  JWT_SECRET: ${{ secrets.JWT_SECRET }}

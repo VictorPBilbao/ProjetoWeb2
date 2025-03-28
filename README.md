@@ -34,4 +34,4 @@ Todos os deploys serão feitos da seguinte maneira:
 
 Para facilitar o desenvolvimento, abaixo, o diagrama de caso de uso do cliente: 
 
-<img src="\image\diagrama.png">
+![alt text](image/diagrama.png)
