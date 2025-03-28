@@ -1,6 +1,5 @@
 package com.ufpr.byteassist_backend.controller;
 
-import com.ufpr.byteassist_backend.dto.UserDTO;
 import com.ufpr.byteassist_backend.service.AuthService;
 
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<Object> login(@RequestParam String username, @RequestParam String password) {
         return authService.login(username, password);
     }
 }
