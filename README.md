@@ -96,6 +96,6 @@ Para facilitar o desenvolvimento, abaixo, o diagrama de caso de uso do cliente:
 
 ## Contribuindo
 
-Para informações sobre como contribuir com o projeto, consulte o arquivo [CONTRIBUTING.md](CONTRIBUTING.md).
+Para informações sobre como contribuir com o projeto, consulte o arquivo [CONTRIBUTING.md](CONTRIBUTING).
 
 Para detalhes sobre as APIs disponíveis, consulte a [Documentação da API](https://1428fdd8or.apidog.io)
