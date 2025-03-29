@@ -11,6 +11,49 @@ Utilizamos as seguintes branches para o desenvolvimento:
 - **Main**: A branch de produção. O código aqui é estável e está em produção.
 - **Dev**: A branch de desenvolvimento. Novas funcionalidades e correções são integradas aqui antes de serem mescladas na `Main`.
 
+### Nomeação de Branches
+
+Para manter o repositório organizado e facilitar a colaboração, siga as convenções abaixo ao nomear suas branches:
+- Formato geral: <tipo>/<descrição-breve>
+    - **tipo:** Indica o propósito da branch, como feature, bugfix, ou hotfix.
+    - **descrição-breve:** Uma descrição curta e clara do que será implementado ou corrigido.
+
+#### Exemplos de Nomes Corretos:
+- feature/login-page
+- bugfix/fix-typo
+- hotfix/urgent-issue
+- release/v1.0.0
+- docs/update-readme
+
+#### Exemplos de Nomes Incorretos:
+- Feature/login-page (a palavra inicial deve estar em minúsculas)
+- bugfix/ (falta o nome após a barra)
+- hotfix/123_invalid (caracteres inválidos como _, aceita somente alfanuméricos e -)
+- release-v1.0.0 (falta a barra / após a palavra inicial)
+
+### Nomeação de Commits e Pull Requests
+
+As mensagens de commit e pull requests devem seguir este padrão:
+`<tipo>(<escopo opcional>): <resumo>`
+
+- <tipo>: Um dos valores permitidos: feat, fix, refactor, style, test, docs, chore.
+- <escopo opcional>: Um contexto específico entre parênteses (opcional).
+- <resumo>: Uma breve descrição do commit (obrigatório).
+- <descrição opcional>: Detalhes adicionais em linhas subsequentes (opcional).
+
+#### Exemplos Corretos: 
+- feat(api): adiciona suporte a autenticação
+- fix: corrige erro no carregamento de dados
+- docs(readme): atualiza instruções de instalação
+- test: adiciona testes para validação de entrada
+
+#### Exemplos Incorretos:
+- feature: adiciona nova funcionalidade (sem o tipo correto, deve ser feat)
+- fix(api): (O resumo não pode estar vazio)
+- docs:Atualiza documentação (sem espaço após os dois pontos)
+- style (ui): corrige espaçamento ( não deve haver espaço entre o tipo e o escopo )
+- chore:123 (não deve começar com números ou caracteres especiais)
+
 ---
 
 ## Fluxo de Trabalho para Contribuir
