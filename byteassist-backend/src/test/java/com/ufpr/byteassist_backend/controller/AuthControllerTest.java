@@ -1,6 +1,5 @@
-package com.ufpr.byteassist_backend.controllers;
+package com.ufpr.byteassist_backend.controller;
 
-import com.ufpr.byteassist_backend.controller.AuthController;
 import com.ufpr.byteassist_backend.service.AuthService;
 
 import org.junit.jupiter.api.BeforeEach;
