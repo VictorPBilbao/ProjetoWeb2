@@ -1,3 +1,5 @@
+<app-notification [message]="message" [visible]="showNotification"/>
+
 <svg width="0" height="0">
   <defs>
       <mask id="waveMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
@@ -46,16 +48,21 @@
 
       <div class="right-section">
           <h2 class="welcome-text">BEM-VINDO DE VOLTA!</h2>
-
-          <form class="login-form">
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
               <div class="form-group">
                   <label for="username">Usuário:</label>
-                  <input type="text" id="username" placeholder="Digite seu usuário">
+                  <input type="text" id="username" formControlName="username" placeholder="Digite seu usuário" required>
+                  <div class="error-message" *ngIf="isFieldInvalid('username')">
+                    {{ getErrorMessage('username') }}
+                  </div>
               </div>
 
               <div class="form-group">
                   <label for="password">Senha:</label>
-                  <input type="password" id="password" placeholder="Digite sua senha">
+                  <input type="password" id="password" formControlName="password" placeholder="Digite sua senha" required>
+                  <div class="error-message" *ngIf="isFieldInvalid('password')">
+                    {{ getErrorMessage('password') }}
+                  </div>
               </div>
 
               <div class="form-links">
