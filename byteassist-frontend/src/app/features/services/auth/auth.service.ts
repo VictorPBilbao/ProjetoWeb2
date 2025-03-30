@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { handleErrors } from '../../helpers/errors/handleErrors';
 
 @Injectable({
@@ -17,6 +17,10 @@ export class AuthService {
     const body = { username, password };
 
     return this.http.post(`${this.apiUrl}/login`, body).pipe(
+      map((response: any) => {
+          return response.data;
+        }
+      ),
       catchError(handleErrors.handleError)
     );
   }
