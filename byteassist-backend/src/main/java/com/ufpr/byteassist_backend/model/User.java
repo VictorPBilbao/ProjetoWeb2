@@ -2,25 +2,16 @@ package com.ufpr.byteassist_backend.model;
 
 import com.surrealdb.RecordId;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
+    // TODO: Alter to private after SurrealDB update
     public RecordId id;
-    public String password;
     public String username;
-
-    public User() {
-    }
-
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='***'" +
-                '}';
-    }
+    public String password;
 }
