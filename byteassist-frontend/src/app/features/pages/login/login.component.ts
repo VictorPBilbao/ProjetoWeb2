@@ -54,7 +54,8 @@ export class LoginComponent implements OnInit {
       // Chama a service de login
       this.auth.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
         next: (response) => {
-          console.log('Login bem-sucedido', response);
+          this.message = 'Login bem-sucedido';
+          this.showNotification = true;
         },
         error: (err) => {
           // Verifica se err.error existe antes de acessar message
