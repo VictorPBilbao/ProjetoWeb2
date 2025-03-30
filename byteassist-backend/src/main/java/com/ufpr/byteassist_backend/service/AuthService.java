@@ -15,17 +15,18 @@ public class AuthService {
     private final JwtService jwtService;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public AuthService(DatabaseService databaseService, JwtService jwtService) {
-        this.userRepo = new UserRepo(databaseService);
+    // Constructor injection
+    public AuthService(UserRepo userRepo, JwtService jwtService) {
+        this.userRepo = userRepo;
         this.jwtService = jwtService;
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public ResponseEntity<Object> login(String username, String password) {
         User user = userRepo.getUserByUsername(username);
-        if (user != null && passwordEncoder.matches(password, user.password)) {
-            String token = jwtService.generateToken(user.id.toString(), user.username);
-            UserDTO userDTO = new UserDTO(user.id.toString(), user.username, token);
+        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+            String token = jwtService.generateToken(user.getId().toString(), user.getUsername());
+            UserDTO userDTO = new UserDTO(user.getId().toString(), user.getUsername(), token);
             return new ResponseEntity<>(userDTO, HttpStatus.OK);
         }
         ErrorResponse errorResponse = ErrorResponse.builder()
