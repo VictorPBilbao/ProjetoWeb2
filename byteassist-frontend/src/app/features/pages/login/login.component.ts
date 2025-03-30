@@ -9,8 +9,7 @@ import { AuthService } from '../../services/auth/auth.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    NotificationComponent,
-    AuthService
+    NotificationComponent
   ], // Importa os módulos necessários
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -26,8 +25,8 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     // Cria o formulário de login com campos e validações
     this.loginForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(10)]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      username: ['', [Validators.required]],
+      password: ['', [Validators.required]],
     });
   }
 
@@ -50,16 +49,24 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.loginForm.valid) {
+      this.showNotification = false;
+
       // Chama a service de login
-      try {
-        this.auth.login(this.loginForm.value.username, this.loginForm.value.password);
-      } catch (error) {
-        if (error instanceof Error) {
-          this.message = error.message;
-        } else {
-          this.message = 'Erro desconhecido'; // Caso o erro não seja uma instância de Error
+      this.auth.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
+        next: (response) => {
+          console.log('Login bem-sucedido', response);
+        },
+        error: (err) => {
+          // Verifica se err.error existe antes de acessar message
+          if (err.error && err.error.message) {
+            this.message = err.error.message || 'Erro ao fazer login';
+          } else {
+            this.message = 'Erro ao fazer login. Verifique sua conexão ou tente novamente mais tarde.';
+          }
+
+          this.showNotification = true; // Mostra a notificação de erro
         }
-      }
+      });
 
     } else {
       this.loginForm.markAllAsTouched(); // Marca todos os campos como tocados para mostrar as mensagens de erro
