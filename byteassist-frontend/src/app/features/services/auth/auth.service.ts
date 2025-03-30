@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { handleErrors } from '../../helpers/errors/handleErrors';
 
@@ -14,9 +14,15 @@ export class AuthService {
 
   // Faz a requisição para o endpoint login no backend
   login(username: string, password: string): Observable<any> {
-    const body = { username, password };
+    const body = new HttpParams()
+      .set('username', username)
+      .set('password', password);
 
-    return this.http.post(`${this.apiUrl}/login`, body).pipe(
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded'
+    });
+
+    return this.http.post(`${this.apiUrl}/auth/login`, body.toString(), { headers }).pipe(
       catchError(handleErrors.handleError)
     );
   }
