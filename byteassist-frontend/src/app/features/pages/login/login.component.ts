@@ -51,26 +51,27 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.showNotification = false;
 
-      // Chama a service de login
       this.auth.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
         next: (response) => {
-          this.message = 'Login bem-sucedido';
-          this.showNotification = true;
-        },
-        error: (err) => {
-          // Verifica se err.error existe antes de acessar message
-          if (err.error && err.error.message) {
-            this.message = err.error.message || 'Erro ao fazer login';
+          if (response && response.id) {
+            this.message = `logged in! ID: ${response.id}`;
           } else {
             this.message = 'Erro ao fazer login. Verifique sua conexão ou tente novamente mais tarde.';
           }
-
-          this.showNotification = true; // Mostra a notificação de erro
+          this.showNotification = true;
+        },
+        error: (err) => {
+          if (err.status === 401) {
+            this.message = err.error?.message || 'Erro ao fazer login. Verifique sua conexão ou tente novamente mais tarde.';
+          } else {
+            this.message = 'Erro ao fazer login. Verifique sua conexão ou tente novamente mais tarde.';
+          }
+          this.showNotification = true;
         }
       });
 
     } else {
-      this.loginForm.markAllAsTouched(); // Marca todos os campos como tocados para mostrar as mensagens de erro
+      this.loginForm.markAllAsTouched();
       console.log('Form is invalid', this.loginForm);
     }
   }
