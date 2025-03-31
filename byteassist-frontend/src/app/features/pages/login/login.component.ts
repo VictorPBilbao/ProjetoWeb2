@@ -53,7 +53,6 @@ export class LoginComponent implements OnInit {
 
       this.auth.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
         next: (response) => {
-          console.log('Login successful, response:', response); // Log the full response for debugging
           if (response && response.id) {
             this.message = `logged in! ID: ${response.id}`;
           } else {
@@ -62,7 +61,6 @@ export class LoginComponent implements OnInit {
           this.showNotification = true;
         },
         error: (err) => {
-          console.error('Login error, response:', err); // Log the error response for debugging
           if (err.status === 401) {
             this.message = err.error?.message || 'Erro ao fazer login. Verifique sua conexão ou tente novamente mais tarde.';
           } else {
