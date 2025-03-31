@@ -53,12 +53,21 @@ export class LoginComponent implements OnInit {
 
       this.auth.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
         next: (response) => {
-          this.message = 'Login bem-sucedido';
+          console.log('Login successful, response:', response); // Log the full response for debugging
+          if (response && response.id) {
+            this.message = `logged in! ID: ${response.id}`;
+          } else {
+            this.message = 'Erro ao fazer login. Verifique sua conexão ou tente novamente mais tarde.';
+          }
           this.showNotification = true;
-          console.log('Login response:', response);
         },
         error: (err) => {
-          this.message = err.error?.message || 'Erro ao fazer login. Verifique sua conexão ou tente novamente mais tarde.';
+          console.error('Login error, response:', err); // Log the error response for debugging
+          if (err.status === 401) {
+            this.message = err.error?.message || 'Erro ao fazer login. Verifique sua conexão ou tente novamente mais tarde.';
+          } else {
+            this.message = 'Erro ao fazer login. Verifique sua conexão ou tente novamente mais tarde.';
+          }
           this.showNotification = true;
         }
       });
