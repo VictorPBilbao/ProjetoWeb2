@@ -1,4 +1,12 @@
-# Alunos:
+<div align="center">
+
+![BackendTests](https://github.com/VictorPBilbao/ProjetoWeb2/actions/workflows/run-tests-on-dev.yml/badge.svg) [![ApidogBadge](https://img.shields.io/badge/Apidog-8A2BE2)](https://1428fdd8or.apidog.io)
+
+</div>
+
+# ByteAssist - Controle de Manutenção de Equipamentos
+
+## Alunos:
 
 <div align="center">
 
@@ -10,9 +18,90 @@
 | Thalita dos Santos       | GRR20231007 |
 | Victor Pasini Bilbao     | GRR20231012 |
 
-
 </div>
 
-# Flow:
+---
 
-Temos 2 branches, main e dev. O branch main é o branch principal, onde o código está sempre funcionando. O branch dev é o branch de desenvolvimento, onde podemos adicionar novas funcionalidades e fazer testes. Sempre que formos adicionar uma nova funcionalidade ou corrigir um bug, devemos criar uma nova branch a partir do branch dev. Após terminar a funcionalidade ou correção, devemos fazer um pull request para o branch dev. Depois de termos uma branch dev estável, devemos fazer um pull request para o branch main que deverá ser aprovada por 1 pessoa
+## Descrição do Projeto
+Este sistema foi desenvolvido para gerenciar solicitações de serviços de manutenção de equipamentos, mantendo um histórico de alterações de estado. Possui dois perfis de usuário: **Cliente** e **Funcionário**, cada um com funcionalidades específicas. O projeto utiliza tecnologias modernas como **Angular** (Frontend) e **Spring Boot** (Backend), seguindo boas práticas de programação e padrões de projeto.
+
+---
+
+## Funcionalidades Principais
+### Perfil Cliente:
+- Autocadastro com validação de dados e integração com a API ViaCEP.
+- Login com identificação automática do perfil.
+- Registro de solicitações de manutenção, incluindo descrição do equipamento e defeito.
+- Visualização de histórico de solicitações e aprovação/rejeição de orçamentos.
+- Pagamento de serviços concluídos.
+
+### Perfil Funcionário:
+- Gestão de solicitações em diversos estados (Aberta, Orçada, etc.).
+- Efetuação de orçamentos e manutenções.
+- Redirecionamento de solicitações para outros funcionários.
+- CRUD de categorias de equipamentos e de funcionários.
+- Relatórios de receitas em PDF.
+
+---
+
+## Como Executar o Projeto
+
+<details>
+<summary>Backend</summary>
+
+1. Navegue até a pasta do backend:
+```bash
+cd ./byteassist-backend
+```
+
+2. Execute o seguinte comando para iniciar o servidor:
+```bash
+./mvnw spring-boot:run
+```
+
+3. Acesse a aplicação no navegador em: [http://localhost:8080](http://localhost:8080)
+
+</details>
+
+<details>
+<summary>Frontend</summary>
+
+1. Navegue até a pasta do frontend:
+```bash
+cd ./byteassist-frontend
+```
+
+2. Instale as dependências do projeto:
+```bash
+npm install
+```
+
+3. Inicie o servidor de desenvolvimento:
+```bash
+ng serve
+```
+
+4. Acesse a aplicação no navegador em: [http://localhost:4200](http://localhost:4200)
+
+</details>
+
+---
+
+## Diagramas: 
+
+<details>
+<summary>Diagrama de caso de uso:</summary>
+
+Para facilitar o desenvolvimento, abaixo, o diagrama de caso de uso do cliente: 
+
+![Diagrama de Caso de Uso](image/diagrama.png "Diagrama de caso de uso nível 1 do cliente feito pela @imanlacerda")
+
+</details>
+
+---
+
+## Contribuindo
+
+Para informações sobre como contribuir com o projeto, consulte o arquivo [CONTRIBUTING.md](CONTRIBUTING).
+
+Para detalhes sobre as APIs disponíveis, consulte a [Documentação da API](https://1428fdd8or.apidog.io)

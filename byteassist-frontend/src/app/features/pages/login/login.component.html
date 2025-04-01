@@ -1,73 +1,82 @@
-<svg width="0" height="0">
-  <defs>
-      <mask id="waveMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
-          <path d="M0,0
-                  C0.3,0.2 0.2,0.5 0.4,0.5
-                  C0.7,0.6 0.7,0.9 1,1
-                  L1,0
-                  Z"
-                fill="white" />
-      </mask>
-  </defs>
-</svg>
+<app-notification [message]="message" [visible]="showNotification"/>
 
-<div class="container">
-  <header class="main-header">
-      <div class="branding">
-          <img src="/images/byte.png" alt="ByteAssist Logo" class="logo">
-          <span class="company-name">
-              <h1>Byte Assist</h1>
-          </span>
-      </div>
+<section>
+  <svg width="0" height="0">
+    <defs>
+        <mask id="waveMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
+            <path d="M0,0
+                    C0.3,0.2 0.2,0.5 0.4,0.5
+                    C0.7,0.6 0.7,0.9 1,1
+                    L1,0
+                    Z"
+                  fill="white" />
+        </mask>
+    </defs>
+  </svg>
 
-      <nav class="main-nav">
-          <a href="/" class="nav-item">
-              <img src="/images/home.png" alt="Home logo" class="logo">
-              <h3>Home</h3>
-          </a>
-          <a href="#" class="nav-item">
-              <img src="/images/usuarios.png" alt="SobreNos logo" class="logo">
-              <h3>Sobre Nós</h3>
-          </a>
-          <a href="#" class="nav-item">
-              <img src="/images/megafone.png" alt="Ajuda logo" class="logo">
-              <h3>Ajuda</h3>
-          </a>
-      </nav>
-  </header>
+  <div class="container">
+    <header class="main-header">
+        <div class="branding">
+            <img src="/images/byte.png" alt="ByteAssist Logo" class="logo">
+            <span class="company-name">
+                <h1>Byte Assist</h1>
+            </span>
+        </div>
 
-  <div class="content-wrapper">
+        <nav class="main-nav">
+            <a href="/" class="nav-item d-flex align-items-center">
+                <i class="bi bi-house-door-fill"></i>
+                <h3>Home</h3>
+            </a>
+            <a href="#" class="nav-item d-flex align-items-center">
+                <i class="bi bi-people-fill"></i>
+                <h3>Sobre Nós</h3>
+            </a>
+            <a href="#" class="nav-item d-flex align-items-center">
+                <i class="bi bi-info-circle-fill"></i>
+                <h3>Ajuda</h3>
+            </a>
+        </nav>
+    </header>
 
-      <div class="wave-container">
-          <div class="wave-gradient"></div>
-          <div class="wave-overlay"></div>
-      </div>
+    <div class="content-wrapper">
+
+        <div class="wave-container">
+            <div class="wave-gradient"></div>
+            <div class="wave-overlay"></div>
+        </div>
 
 
-      <div class="right-section">
-          <h2 class="welcome-text">BEM-VINDO DE VOLTA!</h2>
+        <div class="right-section">
+            <h2 class="welcome-text">BEM-VINDO DE VOLTA!</h2>
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+                <div class="form-group">
+                    <label for="username">Usuário:</label>
+                    <input type="text" id="username" formControlName="username" placeholder="Digite seu usuário" required>
+                    <div class="error-message" *ngIf="isFieldInvalid('username')">
+                      {{ getErrorMessage('username') }}
+                    </div>
+                </div>
 
-          <form class="login-form">
-              <div class="form-group">
-                  <label for="username">Usuário:</label>
-                  <input type="text" id="username" placeholder="Digite seu usuário">
-              </div>
+                <div class="form-group">
+                    <label for="password">Senha:</label>
+                    <input type="password" id="password" formControlName="password" placeholder="Digite sua senha" required>
+                    <div class="error-message" *ngIf="isFieldInvalid('password')">
+                      {{ getErrorMessage('password') }}
+                    </div>
+                </div>
 
-              <div class="form-group">
-                  <label for="password">Senha:</label>
-                  <input type="password" id="password" placeholder="Digite sua senha">
-              </div>
-
-              <div class="form-links">
-                  <a href="#" class="forgot-password">Esqueceu a senha?</a>
-                  <button type="submit" class="login-btn">Login</button>
-                  <div class="register-link">
-                      <span>Não tem uma conta?</span>
-                      <a href="#" class="register">Cadastre-se</a>
-                  </div>
-              </div>
-          </form>
-      </div>
+                <div class="form-links">
+                    <a href="#" class="forgot-password">Esqueceu a senha?</a>
+                    <button type="submit" class="login-btn">Login</button>
+                    <div class="register-link">
+                        <span>Não tem uma conta?</span>
+                        <a href="#" class="register">Cadastre-se</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
   </div>
-</div>
+</section>
 

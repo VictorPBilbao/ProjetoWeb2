@@ -22,7 +22,7 @@ jobs:
               uses: actions/setup-java@v3
               with:
                   distribution: "temurin"
-                  java-version: "24"
+                  java-version: "21"
 
             - name: Cache Maven dependencies
               uses: actions/cache@v3
@@ -45,6 +45,7 @@ jobs:
                   DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
                   DATABASE_USER: ${{ secrets.DATABASE_USER }}
                   DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+                  JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
     test-windows:
         runs-on: windows-latest
@@ -56,8 +57,8 @@ jobs:
             - name: Set up Java
               uses: actions/setup-java@v3
               with:
-                  distribution: "zulu"
-                  java-version: "24"
+                  distribution: "temurin"
+                  java-version: "21"
 
             - name: Cache Maven dependencies
               uses: actions/cache@v3
@@ -77,3 +78,4 @@ jobs:
                   DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
                   DATABASE_USER: ${{ secrets.DATABASE_USER }}
                   DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+                  JWT_SECRET: ${{ secrets.JWT_SECRET }}

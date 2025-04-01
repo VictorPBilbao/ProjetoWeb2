@@ -1,10 +1,9 @@
-package com.ufpr.byteassist_backend.controllers;
+package com.ufpr.byteassist_backend.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.ufpr.byteassist_backend.controller.GreetUserController;
 import com.ufpr.byteassist_backend.service.DatabaseService;
 
 import java.util.HashMap;
