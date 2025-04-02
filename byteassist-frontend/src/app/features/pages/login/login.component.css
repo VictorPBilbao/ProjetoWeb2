@@ -1,66 +1,13 @@
 section {
   background: linear-gradient(90deg, #062685 0%, #4d73e4 50%, #49a2ad 100%);
-  min-height: 100vh;
+  height: 100vh;
   color: #ffffff;
-  overflow: hidden;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-}
-
-.main-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 265px 20px 140px;
+.login-container {
+  padding-top: 80px; /* Compensa o header fixo */
   position: relative;
-  z-index: 10;
-  background: transparent;
-}
-
-.branding {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.branding .logo {
-  width: 45px;
-  height: 45px;
-}
-
-.logo {
-  width: 30px;
-  height: 23px;
-  object-fit: contain;
-}
-
-.nav-item h3 {
-  margin: 0;
-  font-weight: 500;
-  color: inherit;
-  white-space: nowrap;
-}
-
-.company-name h1 {
-  font-size: 35px;
-  font-weight: 700;
-  color: white;
-}
-
-.main-nav {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  margin-right: 25px;
-  margin-left: 0px;
-  margin-top: 0px;
-  padding-left: 180px;
-  padding-right: 0px;
-
+  z-index: 2;
 }
 
 .nav-item {
@@ -77,12 +24,6 @@ section {
   display: flex;
 }
 
-.nav-item .logo {
-  width: 25px;
-  height: 25px;
-  object-fit: contain;
-}
-
 .nav-item:hover {
   border-color: rgba(255, 255, 255, 0.8);
   background-color: rgba(255, 255, 255, 0.2);
@@ -97,7 +38,6 @@ section {
   width: 100%;
   height: 100vh;
   z-index: 1;
-  overflow: hidden;
 }
 
 .wave-gradient {
@@ -120,7 +60,7 @@ section {
 
 .wave-overlay {
   position: absolute;
-  top: 50%;
+  top: 48%; /*posicao da imagem*/
   left: 30%;
   transform: translate(-70%, -40%);
   width: 360px;
@@ -134,7 +74,7 @@ section {
 .right-section {
   width: 50%;
   margin-left: 50%;
-  padding: 30px 70px;
+  padding: 70px 50px; /*mover botões pra baixo ou pra cima*/
   position: relative;
   z-index: 2;
 }
@@ -143,7 +83,7 @@ section {
   font-size: 35px;
   font-weight: 700;
   text-transform: uppercase;
-  margin-bottom: 40px;
+  margin-bottom: 50px; /*espaço entre texto e botões*/
   line-height: 1.3;
   color: white;
 }
@@ -279,6 +219,7 @@ section {
   }
 
   .login-form {
+      
       margin-left: auto;
       margin-right: auto;
   }

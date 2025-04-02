@@ -1,13 +1,40 @@
-<header class="header default-header">
-  <div class="logo">
-    <h1>Minha Aplicação</h1>
+<header class="header">
+  <div class="logo-container">
+    <img [src]="logoPath" alt="ByteAssist Logo" class="logo-img">
+    <span class="company-name">
+      <h1>{{ companyName }}</h1>
+    </span>
   </div>
+
   <nav class="nav">
-    <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/sobre">Sobre</a></li>
-      <li><a href="/contato">Contato</a></li>
-      <li><a href="/login">Entrar</a></li>
-    </ul>
+    @if (variant === 'default') {
+      @for (item of navItems; track item.path) {
+        <a 
+          [routerLink]="item.path" 
+          class="nav-item"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.path === '/' }">
+          <i [class]="item.icon"></i>
+          <span class="nav-text">{{ item.label }}</span>
+        </a>
+      }
+    }
+
+    @if (variant === 'login') {
+      <a 
+        routerLink="/login" 
+        class="nav-item login-btn"
+        routerLinkActive="active">
+        <i class="bi bi-box-arrow-in-right"></i>
+        <span class="nav-text">Login</span>
+      </a>
+    }
+
+    @for (btn of customButtons; track btn.label) {
+      <button (click)="btn.action()" class="custom-btn">
+        <i [class]="btn.icon"></i>
+        <span>{{ btn.label }}</span>
+      </button>
+    }
   </nav>
 </header>

@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './features/components/header/header.component';
-import { CommonModule } from '@angular/common';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [
     RouterOutlet,
     HeaderComponent,
-    CommonModule
+    NgIf
   ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  templateUrl: './app.component.html', // Referência ao arquivo HTML externo
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'byteassist-frontend';
@@ -20,9 +21,11 @@ export class AppComponent {
 
   shouldShowHeader(): boolean {
     const currentUrl = this.router.url;
-    return currentUrl === '/' ||
-           (!currentUrl.includes('/login') &&
-            !currentUrl.includes('/register') &&
-            !currentUrl.includes('/reset-password'));
+    return true;
+    //
+    //!currentUrl.includes('/login') && 
+      //     !currentUrl.includes('/register') &&
+       //    !currentUrl.includes('/reset-password');
+           //
   }
 }
