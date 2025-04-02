@@ -26,4 +26,15 @@ export class AuthService {
       catchError(handleErrors.handleError)
     );
   }
+
+  // Faz a requisição para o endpoint register no backend
+  register(userData: { username: string; email: string; password: string }): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post(`${this.apiUrl}/auth/register`, JSON.stringify(userData), { headers }).pipe(
+      catchError(handleErrors.handleError)
+    );
+  }
 }
