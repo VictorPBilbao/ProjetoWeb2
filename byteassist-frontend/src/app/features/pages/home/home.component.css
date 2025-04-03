@@ -437,31 +437,6 @@ body {
   background: rgba(11, 94, 215, 0.05); 
 }
 
-/*Modal*/
-.modal {
-  z-index: 1060;
-  display: none;
-}
-
-.modal.show {
-  display: block;
-}
-
-.modal-backdrop {
-  z-index: 1050;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-/* Remove o outline dos botões */
-.btn:focus {
-  box-shadow: none;
-}
-
 /* Localização */
 .location-section {
   background: linear-gradient(90deg, #062685 0%, #4d73e4 50%, #49a2ad 100%);
