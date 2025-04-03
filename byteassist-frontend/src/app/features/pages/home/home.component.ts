@@ -1,6 +1,5 @@
 import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { Router, RouterModule} from '@angular/router';  // Adicione esta importação
-//import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ModalComponent } from '../../../features/components/modal/modal.component';
 
 @Component({
@@ -8,7 +7,6 @@ import { ModalComponent } from '../../../features/components/modal/modal.compone
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   imports:[RouterModule, ModalComponent],
-  //schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class HomeComponent implements OnInit, OnDestroy {
   activeSection: string = 'home';
