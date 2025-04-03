@@ -12,8 +12,10 @@
         <a 
           [routerLink]="item.path" 
           class="nav-item"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: item.path === '/' }">
+          [class.active]="item.section && window.location.hash === '#' + item.section"
+          [routerLinkActive]="shouldUseRouterLinkActive(item) ? 'active' : ''"
+          [routerLinkActiveOptions]="{ exact: item.path === '/' }"
+          (click)="handleNavClick(item, $event)">
           <i [class]="item.icon"></i>
           <span class="nav-text">{{ item.label }}</span>
         </a>

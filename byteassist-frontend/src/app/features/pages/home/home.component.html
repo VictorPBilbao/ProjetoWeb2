@@ -1,13 +1,18 @@
 <section>
-<section class="home-section">
+  
+<section id="home" class="home-section">
   <div class="container py-5">
     <div class="row align-items-center">
       <div class="col-lg-6">
         <h1 class="display-4 fw-bold mb-4">Soluções Completas em Manutenção</h1>
         <p class="lead mb-4">100 anos de excelência em serviços técnicos especializados!</p>
-        <button class="btn btn-primary btn-lg me-2">Solicitar Orçamento</button>
-        <button class="btn btn-outline-light btn-lg">Nossos Serviços</button>
+        <button 
+        class="btn btn-primary btn-lg me-2" 
+        routerLink="/login">
+        Solicitar Orçamento
+        </button>
       </div>
+
       <div class="col-lg-6">
         <img src="/images/serviços.png" alt="Técnicos trabalhando" class="hero-image">
       </div>
@@ -16,7 +21,7 @@
 </section>
 
 <!-- Seção de Serviços -->
-<section class="services-section py-5 bg-light">
+<section id="servicos" class="services-section py-5 bg-light">
   <div class="container">
     <h2 class="text-center mb-5">Nossos Serviços</h2>
     <div class="row g-4">
@@ -103,7 +108,7 @@
 </section>
 
 <!-- Seção Clientes -->
-<section class="clients-section py-5 bg-light">
+<section id="clientes" class="clients-section py-5 bg-light">
   <div class="container">
     <h2 class="text-center mb-5">Nossos Clientes</h2>
     <div class="row justify-content-center align-items-center g-4">
@@ -128,8 +133,22 @@
           <img src="/images/Google_2015_logo.svg.png" alt="Google" class="client-logo">
         </div>
       </div>
-      
+
       <!-- Cliente 4 -->
+         <div class="col-6 col-md-3 col-lg-2 mb-4">
+          <div class="client-logo-container">
+            <img src="/images/ExxonMobil-Logo.wine.png" alt="Exxon" class="client-logo">
+          </div>
+      </div>
+
+       <!-- Cliente 5 -->
+       <div class="col-6 col-md-3 col-lg-2 mb-4">
+        <div class="client-logo-container">
+          <img src="/images/Nubank_logo_2021.svg.png" alt="Nubank" class="client-logo">
+        </div>
+      </div>
+      
+      <!-- Cliente 6 -->
       <div class="col-6 col-md-3 col-lg-2 mb-4">
         <div class="client-logo-container">
           <img src="/images/images.png" alt="Meta" class="client-logo">
@@ -140,62 +159,169 @@
 </section>
 </section>
 
-
-<!-- Seção Sobre
-<section class="about-section py-5">
+<!-- Seção Sobre -->
+<section id="sobre" class="about-section py-5">
   <div class="container">
     <div class="row align-items-center">
-      <div class="col-lg-6">
+      <!-- Coluna do Texto (mantida como está) -->
+      <div class="col-lg-6 d-flex flex-column justify-content-start">
         <h2 class="mb-4">Nossa História</h2>
-        <p class="about-text">Somos referência em manutenção de de equipamentos com mais de 500 mil clientes atendidos. Nossa jornada começou em uma pequena oficina e hoje contamos com uma equipe altamente qualificada e equipamentos de última geração.</p>
+        <p class="about-text">Somos referência em manutenção de equipamentos com mais de 500 mil clientes atendidos. Nossa jornada começou em uma pequena oficina e hoje contamos com uma equipe altamente qualificada e equipamentos de última geração.</p>
         <p class="about-text">Ao longo desses 100 anos da nossa história, nos dedicamos a oferecer soluções personalizadas e eficientes para cada desafio técnico que nossos clientes enfrentam.</p>
         <ul class="list-unstyled">
           <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i> Equipe técnica especializada</li>
           <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i> Atendimento 24/7</li>
+          <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i> Atendimento remoto e presencial</li>
+          <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i> Agendamento online</li>
+          <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i> Formas de pagamento facilitadas</li>
           <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i> Garantia em todos os serviços</li>
         </ul>
-        <a routerLink="/sobre" class="btn btn-primary mt-3">Saiba mais</a>
+      </div>
+      
+      <!-- Nova Coluna da Linha do Tempo -->
+      <div class="col-lg-6">
+        <div class="timeline">
+          <div class="timeline-container left">
+            <div class="timeline-content">
+              <h6>1923</h6>
+              <p>Fundada como pequena oficina de reparos na cidade de Curitiba</p>
+            </div>
+          </div>
+          <div class="timeline-container right">
+            <div class="timeline-content">
+              <h6>1950</h6>
+              <p>Primeira expansão para outras cidades do estado do Paraná</p>
+            </div>
+          </div>
+          <div class="timeline-container left">
+            <div class="timeline-content">
+              <h6>2003</h6>
+              <p>Certificação ISO 9001 de qualidade</p>
+            </div>
+          </div>
+          <div class="timeline-container right">
+            <div class="timeline-content">
+              <h6>2023</h6>
+              <p>Completamos 100 anos com mais de 500 mil clientes atendidos</p>
+            </div>
+          </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 </section>
 
-<!-- Seção Contato 
-<section class="contact-section py-5 bg-primary text-white">
+<!-- Seção Contato -->
+<section id="contato" class="contact-section py-5 bg-primary text-white">
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-8 text-center">
         <h2 class="mb-4">Precisa de ajuda com manutenção?</h2>
         <p class="lead mb-5">Nossa equipe está pronta para atender sua demanda com agilidade e qualidade.</p>
-        <a routerLink="/contato" class="btn btn-light btn-lg me-3">Fale Conosco</a>
-        <a routerLink="/ajuda" class="btn btn-outline-light btn-lg">Central de Ajuda</a>
+        
+        <!-- Botões que acionam os modais -->
+        <button class="btn btn-outline-light btn-lg" (click)="openModal('help')">
+          Central de Atendimento
+        </button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Seção Localização 
-<section class="location-section py-5">
+<!-- Modal Central de Atendimento -->
+<app-modal 
+  [isVisible]="activeModal === 'help'"
+  title="Central de Atendimento"
+  closeButtonText="OK"
+  (closed)="closeModal()">
+
+<p>📞 Central de Atendimento</p>
+<ul>
+<li>4002-1234 (Capitais e Regiões Metropolitanas)</li>
+<li>0800-123-4567 (Demais Localidades)</li>
+<li>+55 11 98765-4321 (WhatsApp Suporte)</li>
+<li>+1 800-555-0123 (Estados Unidos e Canadá)</li>
+<li>+49 30 1234 5678 (Alemanha)</li>
+</ul>
+<p>📧 E-mail</p>
+<ul>
+<li>Atendimento Geral: suporte&#64;byteassist.com</li>
+<li>Comercial: vendas&#64;byteassist.com</li>
+<li>Parcerias: parcerias&#64;byteassist.com</li>
+</ul>
+</app-modal>
+
+<!-- Modal Fale Conosco 
+<div class="modal fade" [class.show]="activeModal === 'contact'" [style.display]="activeModal === 'contact' ? 'block' : 'none'">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Fale Conosco</h5>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <p>Estamos disponíves de segunda a sexta: 8h às 18h 
+        <br>
+        Sábado: 8h às 12h</p>
+        <p>Telefone: (41) 3250-8000</p>
+        <p>Email: byteassist&#64;ufpr.br</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Central de Ajuda 
+<div class="modal fade" [class.show]="activeModal === 'help'" [style.display]="activeModal === 'help' ? 'block' : 'none'">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Central de Ajuda</h5>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        <p>Entre em contato com nosso suporte.</p>
+        <ul>
+          <li>Central de atendimento: 0800 27022025</li>
+          <li>Suporte por email: byteassist&#64;ufpr.br </li>
+          <li>Endereço: R.Dr. Alcides Vieira Arcoverde, 1225 - Jardim das Américas, Curitiba - PR, 81520-260 </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Backdrop 
+<div class="modal-backdrop fade show" *ngIf="activeModal"></div>
+ -->
+
+<!-- Seção Localização -->
+<section id="localizacao" class="location-section py-5">
   <div class="container">
     <h2 class="text-center mb-5">Onde Estamos</h2>
     <div class="row align-items-center">
       <div class="col-lg-6">
         <div class="map-container">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12345.6789!2d-46.123456!3d-23.987654!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDU5JzE1LjYiUyA0NsKwMDcnMjkuNiJX!5e0!3m2!1spt-BR!2sbr!4v1234567890123!5m2!1spt-BR!2sbr" 
-                  width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" class="map-iframe"></iframe>
+          <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3602.438038119599!2d-49.2358452!3d-25.4570448!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94dce4df926b4ea3%3A0x88b4331e264d4ee4!2sSetor%20de%20Educa%C3%A7%C3%A3o%20Profissional%20e%20Tecnol%C3%B3gica%20UFPR!5e0!3m2!1spt-BR!2sbr!4v1743681719636!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+          width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" class="map-iframe"
+        </iframe>
         </div>
       </div>
       <div class="col-lg-6">
         <div class="location-info">
           <h3 class="mb-4">Sede</h3>
           <p class="location-text"><i class="bi bi-geo-alt-fill me-2"></i> R. Dr. Alcides Vieira Arcoverde, 1225 - Jardim das Américas, Curitiba - PR, 81520-260.</p>
-          <p class="location-text"><i class="bi bi-telephone-fill me-2"></i> (41) 1234-5678</p>
-          <p class="location-text"><i class="bi bi-envelope-fill me-2"></i> byteassist.com.br</p>
+          <p class="location-text"><i class="bi bi-telephone-fill me-2"></i> (41) 9827-1512</p>
+          <p class="location-text"><i class="bi bi-envelope-fill me-2"></i> "byteassist&#64;ufpr.br"</p>
           <p class="location-text"><i class="bi bi-clock-fill me-2"></i> Segunda a Sexta: 8h às 18h | Sábado: 8h às 12h</p>
         </div>
       </div>
     </div>
   </div>
 </section>
-</section>
--->
