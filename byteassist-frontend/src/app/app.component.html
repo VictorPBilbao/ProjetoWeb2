@@ -1,4 +1,7 @@
-<app-header *ngIf="shouldShowHeader()"></app-header>
+<app-header 
+  *ngIf="shouldShowHeader()" 
+  [activeSection]="activeSection">
+</app-header>
 
 <main class="main">
   <router-outlet></router-outlet>

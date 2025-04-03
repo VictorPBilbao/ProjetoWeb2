@@ -1,0 +1,24 @@
+
+.modal {
+    z-index: 1060;
+    display: none;
+  }
+  
+  .modal.show {
+    display: block;
+  }
+  
+  .modal-backdrop {
+    z-index: 1050;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .btn:focus {
+    box-shadow: none;
+  }
+  
