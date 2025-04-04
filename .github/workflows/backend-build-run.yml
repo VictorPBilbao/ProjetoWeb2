@@ -47,5 +47,4 @@ jobs:
 
             - name: Run backend
               run: |
-                  cd backend
                   java -jar target/*.jar
