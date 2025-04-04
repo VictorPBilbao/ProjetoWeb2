@@ -5,10 +5,14 @@ on:
         branches:
             - main
             - dev
+        paths:
+            - "byteassist-backend/**"
     pull_request:
         branches:
             - main
             - dev
+        paths:
+            - "byteassist-backend/**"
 
 jobs:
     build-and-run:
@@ -45,15 +49,3 @@ jobs:
                   flyctl deploy --remote-only
               env:
                   FLY_API_TOKEN: ${{ secrets.BACKEND_DEPLOY_TOKEN }}
-
-            # - name: Run backend
-            #   run: |
-            #       cd byteassist-backend
-            #       java -jar target/*.jar
-            #   env:
-            #       DATABASE_URL: ${{ secrets.DATABASE_URL }}
-            #       DATABASE_NAMESPACE: ${{ secrets.DATABASE_NAMESPACE }}
-            #       DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-            #       DATABASE_USER: ${{ secrets.DATABASE_USER }}
-            #       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
-            #       JWT_SECRET: ${{ secrets.JWT_SECRET }}
