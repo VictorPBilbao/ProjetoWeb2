@@ -9,7 +9,6 @@ import java.time.format.DateTimeFormatter;
 @Data
 @AllArgsConstructor
 public class UserDTO {
-    // Fields
     private String id;
     private String username;
     private boolean active;

@@ -6,13 +6,13 @@ on:
             - main
             - dev
         paths:
-            - "backend/**"
+            - "byteassist-backend/**"
     push:
         branches:
             - main
             - dev
         paths:
-            - "backend/**"
+            - "byteassist-backend/**"
 
 jobs:
     build-and-run:
