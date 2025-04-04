@@ -27,7 +27,9 @@ public class AuthService {
 
     public ResponseEntity<Object> login(String username, String password) {
         User user = userRepo.getUserByUsername(username);
-        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+        // log the hashed password
+        System.out.println("Hashed password with cost 10: " + user.getPassword());
+        if (passwordEncoder.matches(password, user.getPassword())) {
             String token = jwtService.generateToken(user.getId().toString(), user.getId().toString());
             UserDTO userDTO = new UserDTO(
                     user.getId().toString(),
