@@ -27,9 +27,6 @@ public class UserRepo {
         // ? vírgula. O response é uma lista de respostas, por isso pegamos a primeira
         // ? resposta com response.take(0) e transformamos em um array com getArray() e
         // ? pegamos o primeiro elemento com get(0) caso necessário.
-        // LOG THE QUERY IN THE TERMINAL
-        System.out.println("Query: SELECT *, id.id() AS username FROM User WHERE id.id() = '" + username
-                + "' OR email = '" + username + "';");
         try {
             Response response = db
                     .query("SELECT *, id.id() AS username FROM User WHERE id.id() = '" + username + "' OR email = '"

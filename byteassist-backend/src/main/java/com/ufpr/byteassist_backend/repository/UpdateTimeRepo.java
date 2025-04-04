@@ -16,7 +16,7 @@ public class UpdateTimeRepo {
 
     public void updateTimeLastLogin(String id) {
         try {
-            db.query("UPDATE " + id + " SET last_login_at = time::now()");
+            db.query("UPDATE " + id + " SET time.last_login_at = time::now()");
         } catch (Exception e) {
             // Skip update
         }
