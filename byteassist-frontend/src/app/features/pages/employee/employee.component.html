@@ -1,2 +1,39 @@
-<app-notification [message]="message" [visible]="showNotification"/>
+<head>
+<title>Employee's page</title>
+</head>
+<body>
 
+    <div class="titulo">
+    <H1>BEM-VINDO</H1></div>
+
+    <h2>Serviços Pendentes</h2>
+
+<table border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Cliente</th>
+      <th>Serviço</th>
+      <th>Status</th>
+      <th>Data Agendada</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let servico of pendingServices">
+      <td>{{ servico.id }}</td>
+      <td>{{ servico.cliente }}</td>
+      <td>{{ servico.servico }}</td>
+      <td>{{ servico.status }}</td>
+      <td>{{ servico.data }}</td>
+      <td>
+        <button (click)="concluir(servico.id)">Concluir</button>
+        <button (click)="cancelar(servico.id)">Cancelar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+     
+      
+    
+</body>
