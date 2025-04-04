@@ -35,6 +35,7 @@ jobs:
             - name: Build backend
               run: |
                   cd byteassist-backend
+                  chmod +x mvnw
                   ./mvnw clean package -DskipTests
               env:
                   DATABASE_URL: ${{ secrets.DATABASE_URL }}
