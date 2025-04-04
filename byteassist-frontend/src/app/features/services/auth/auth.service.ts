@@ -8,7 +8,7 @@ import { handleErrors } from '../../helpers/errors/handleErrors';
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly apiUrl = 'http://localhost:8080/api';
+  private readonly apiUrl = 'https://byteassist-backend.fly.dev/api';
 
   constructor(private http: HttpClient) { }
 
