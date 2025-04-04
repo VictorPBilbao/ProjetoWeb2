@@ -47,4 +47,5 @@ jobs:
 
             - name: Run backend
               run: |
+                  cd byteassist-backend
                   java -jar target/*.jar
