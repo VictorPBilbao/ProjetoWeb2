@@ -27,6 +27,23 @@ export class AuthService {
     );
   }
 
+  // Salva o token na localStorage
+  saveToken(token: string): void {
+    localStorage.setItem('token', token);
+  }
+
+  // Remove o token da localStorage
+  removeToken(): void {
+    localStorage.removeItem('token');
+  }
+
+  // Verifica se o usuário está autenticado (Vamos implementar um endpoint para fazer essa verificação e consumi-lo aqui)
+  isAuthenticated(): boolean {
+    const token = localStorage.getItem('token');
+    return !!token; // Retorna true se o token existir, false caso contrário
+  }
+
+
   // Faz a requisição para o endpoint register no backend
   register(userData: { username: string; email: string; password: string }): Observable<any> {
     const headers = new HttpHeaders({
