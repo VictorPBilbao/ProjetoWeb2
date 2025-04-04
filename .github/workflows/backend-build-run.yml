@@ -1,18 +1,14 @@
 name: Build and Run Backend
 
 on:
-    pull_request:
-        branches:
-            - main
-            - dev
-        paths:
-            - "byteassist-backend/**"
     push:
         branches:
             - main
             - dev
-        paths:
-            - "byteassist-backend/**"
+    pull_request:
+        branches:
+            - main
+            - dev
 
 jobs:
     build-and-run:
