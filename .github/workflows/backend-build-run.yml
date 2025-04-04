@@ -1,0 +1,47 @@
+name: Build and Run Backend
+
+on:
+    pull_request:
+        branches:
+            - main
+            - dev
+        paths:
+            - "backend/**"
+    push:
+        branches:
+            - main
+            - dev
+        paths:
+            - "backend/**"
+
+jobs:
+    build-and-run:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Set up JDK
+              uses: actions/setup-java@v3
+              with:
+                  distribution: "temurin"
+                  java-version: "21"
+
+            - name: Cache Maven dependencies
+              uses: actions/cache@v3
+              with:
+                  path: ~/.m2
+                  key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+                  restore-keys: |
+                      ${{ runner.os }}-maven-
+
+            - name: Build backend
+              run: |
+                  cd backend
+                  ./mvnw clean package -DskipTests
+
+            - name: Run backend
+              run: |
+                  cd backend
+                  java -jar target/*.jar
