@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common'; // Importa o CommonModule para usar ngIf e ngFor no template
 import { NotificationComponent } from '../../components/notification/notification.component'; // Importa o componente de notificação
 import { AuthService } from '../../services/auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,7 @@ export class LoginComponent implements OnInit {
   message: string = '';
   showNotification: boolean = false;
 
-  constructor (private fb: FormBuilder, private auth: AuthService) { }
+  constructor (private fb: FormBuilder, private auth: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     // Cria o formulário de login com campos e validações
@@ -53,8 +54,13 @@ export class LoginComponent implements OnInit {
 
       this.auth.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
         next: (response) => {
-          if (response && response.id) {
-            this.message = `logged in! ID: ${response.id}`;
+          if (response && response.id && response.token != "") {
+            try {
+              this.auth.saveToken(response.token); // Salva o token no localStorage
+              this.router.navigate(['/home']); // Redireciona para a página inicial
+            } catch (error) {
+              throw error;
+            }
           } else {
             this.message = 'Erro ao fazer login. Verifique sua conexão ou tente novamente mais tarde.';
           }
