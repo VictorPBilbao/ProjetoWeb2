@@ -1,6 +1,6 @@
 <div align="center">
 
-![BackendTests](https://github.com/VictorPBilbao/ProjetoWeb2/actions/workflows/run-tests-on-dev.yml/badge.svg) [![ApidogBadge](https://img.shields.io/badge/Apidog-8A2BE2)](https://1428fdd8or.apidog.io)
+![Backend Tests](https://img.shields.io/github/actions/workflow/status/VictorPBilbao/ProjetoWeb2/run-tests.yml?style=for-the-badge&logo=github) [![ApidogBadge](https://img.shields.io/badge/API%20Docs-8A2BE2?style=for-the-badge&logo=mapillary)](https://1428fdd8or.apidog.io) ![Build](https://img.shields.io/github/actions/workflow/status/VictorPBilbao/ProjetoWeb2/compile-jar-and-deploy.yml?style=for-the-badge&logo=flydotio&color=%237c3aed) ![Issues](https://img.shields.io/github/issues/VictorPBilbao/ProjetoWeb2?style=for-the-badge)
 
 </div>
 
