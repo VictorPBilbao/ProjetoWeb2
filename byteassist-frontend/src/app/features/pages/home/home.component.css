@@ -5,6 +5,10 @@ body {
   color: #ffffff;
 }
 
+section {
+  scroll-margin-top: 100px; /* Ajuste para a altura do cabeçalho fixo */
+}
+
 .home-section {
   background: linear-gradient(90deg, #062685 0%, #4d73e4 50%, #49a2ad 100%);
   min-height: 100vh;
@@ -120,7 +124,7 @@ body {
 .btn-home:hover .btn-icon {
   transform: translateX(3px);
 }
-        
+
 /* Serviços */
 .services-section {
   background: linear-gradient(90deg, #062685 0%, #4d73e4 50%, #49a2ad 100%);
@@ -147,18 +151,18 @@ body {
 
 .card {
   border-radius: 10px;
-  overflow: hidden; 
+  overflow: hidden;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
 .card-img-top {
-  height: 180px; 
+  height: 180px;
   display: flex;
-  align-items: center; 
-  justify-content: center; 
-  background-color: #aaf1fb; 
+  align-items: center;
+  justify-content: center;
+  background-color: #aaf1fb;
   overflow: hidden;
 }
 
@@ -167,12 +171,12 @@ body {
   height: 100%;
   object-fit: contain;
   object-position: center;
-  padding: 10px; 
+  padding: 10px;
   transition: transform 0.3s ease;
 }
 
 .card-body {
-  flex: 1; 
+  flex: 1;
   display: flex;
   flex-direction: column;
   padding: 20px;
@@ -185,7 +189,7 @@ body {
 }
 
 .card-body p {
-  flex-grow: 1; 
+  flex-grow: 1;
   color: #555;
   font-size: 0.95rem;
   margin-bottom: 0;
@@ -241,7 +245,7 @@ body {
 }
 
 .about-section h2 {
-  color: #ffffff; 
+  color: #ffffff;
   font-weight: 700;
   text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
   margin-bottom: 1.5rem;
@@ -250,7 +254,7 @@ body {
 }
 
 .about-text {
-  color: rgba(255, 255, 255, 0.95); 
+  color: rgba(255, 255, 255, 0.95);
   line-height: 1.7;
   font-size: 1.1rem;
   margin-bottom: 1.25rem;
@@ -263,7 +267,7 @@ body {
 }
 
 .about-section .bi-check-circle-fill {
-  color: #4dffb4 !important; 
+  color: #4dffb4 !important;
   font-size: 1.2rem;
   vertical-align: middle;
 }
@@ -383,15 +387,15 @@ body {
 }
 
 .contact-section h2 {
-  color: #000101; 
+  color: #000101;
   font-weight: 700;
   font-size: 2.2rem;
   margin-bottom: 1.5rem;
-  text-shadow: none; 
+  text-shadow: none;
 }
 
 .contact-section .lead {
-  color: #2c3e50; 
+  color: #2c3e50;
   font-size: 1.25rem;
   opacity: 0.9;
   max-width: 700px;
@@ -410,13 +414,13 @@ body {
 }
 
 .btn-light {
-  background-color: #0b5ed7; 
+  background-color: #0b5ed7;
   color: white !important;
   border: 2px solid #0b5ed7;
 }
 
 .btn-light:hover {
-  background-color: #094aa8; 
+  background-color: #094aa8;
   border-color: #094aa8;
   transform: translateY(-3px);
   box-shadow: 0 5px 15px rgba(11, 94, 215, 0.3);
@@ -424,7 +428,7 @@ body {
 
 .btn-outline-light {
   background-color: white;
-  color: #0b5ed7 !important; 
+  color: #0b5ed7 !important;
   border: 2px solid #0b5ed7;
 }
 
@@ -434,7 +438,7 @@ body {
 }
 
 .contact-decoration {
-  background: rgba(11, 94, 215, 0.05); 
+  background: rgba(11, 94, 215, 0.05);
 }
 
 /* Localização */
@@ -489,24 +493,24 @@ body {
     text-align: center;
     padding: 60px 0;
   }
-  
+
   .home-section .col-lg-6:last-child {
     margin-top: 30px;
   }
-  
+
   .hero-image {
     margin-left: 0;
   }
-  
+
   .about-section .col-lg-6:first-child {
     order: 2;
     margin-top: 30px;
   }
-  
+
   .about-section .col-lg-6:last-child {
     order: 1;
   }
-  
+
   .location-section .col-lg-6:first-child {
     margin-bottom: 30px;
   }

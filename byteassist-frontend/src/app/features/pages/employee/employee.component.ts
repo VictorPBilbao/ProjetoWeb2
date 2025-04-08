@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-employee',
+  imports: [CommonModule],
+  standalone: true,
   templateUrl: './employee.component.html',
   styleUrls: ['./employee.component.css']
 })
@@ -37,6 +40,6 @@ export class EmployeeComponent {
 
   cancelar(id: string) {
     console.log(`Serviço ${id} cancelado!`);
-  
+
   }
 }

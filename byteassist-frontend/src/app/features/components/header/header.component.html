@@ -7,36 +7,36 @@
   </div>
 
   <nav class="nav">
-    @if (variant === 'default') {
-      @for (item of navItems; track item.path) {
-        <a 
-          [routerLink]="item.path" 
-          class="nav-item"
-          [class.active]="item.section && window.location.hash === '#' + item.section"
-          [routerLinkActive]="shouldUseRouterLinkActive(item) ? 'active' : ''"
-          [routerLinkActiveOptions]="{ exact: item.path === '/' }"
-          (click)="handleNavClick(item, $event)">
-          <i [class]="item.icon"></i>
-          <span class="nav-text">{{ item.label }}</span>
-        </a>
-      }
-    }
+    <!-- Menu principal -->
+    <a href="#home" class="nav-item">
+      <i class="bi bi-house-door"></i>
+      <span class="nav-text">Home</span>
+    </a>
 
-    @if (variant === 'login') {
-      <a 
-        routerLink="/login" 
-        class="nav-item login-btn"
-        routerLinkActive="active">
-        <i class="bi bi-box-arrow-in-right"></i>
-        <span class="nav-text">Login</span>
-      </a>
-    }
+    <a href="#servicos" class="nav-item">
+      <i class="bi bi-scissors"></i>
+      <span class="nav-text">Serviços</span>
+    </a>
 
-    @for (btn of customButtons; track btn.label) {
-      <button (click)="btn.action()" class="custom-btn">
-        <i [class]="btn.icon"></i>
-        <span>{{ btn.label }}</span>
-      </button>
-    }
+    <a href="#clientes" class="nav-item">
+      <i class="bi bi-people"></i>
+      <span class="nav-text">Clientes</span>
+    </a>
+
+    <a href="#sobre" class="nav-item">
+      <i class="bi bi-building"></i>
+      <span class="nav-text">Sobre Nós</span>
+    </a>
+
+    <a href="#contato" class="nav-item">
+      <i class="bi bi-envelope"></i>
+      <span class="nav-text">Contato</span>
+    </a>
+
+    <!-- Login (separado) -->
+    <a routerLink="/login" class="nav-item login-btn" routerLinkActive="active">
+      <i class="bi bi-box-arrow-in-right"></i>
+      <span class="nav-text">Login</span>
+    </a>
   </nav>
 </header>

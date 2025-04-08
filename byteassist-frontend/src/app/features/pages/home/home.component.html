@@ -1,13 +1,11 @@
-<section>
-  
 <section id="home" class="home-section">
   <div class="container py-5">
     <div class="row align-items-center">
       <div class="col-lg-6">
         <h1 class="display-4 fw-bold mb-4">Soluções Completas em Manutenção</h1>
         <p class="lead mb-4">100 anos de excelência em serviços técnicos especializados!</p>
-        <button 
-        class="btn btn-primary btn-lg me-2" 
+        <button
+        class="btn btn-primary btn-lg me-2"
         routerLink="/login">
         Solicitar Orçamento
         </button>
@@ -90,7 +88,7 @@
               </div>
             </div>
           </div>
-    
+
       <!-- Serviço 6: Equipamentos -->
       <div class="col-md-4">
         <div class="card h-100 border-0 shadow-sm">
@@ -112,21 +110,21 @@
   <div class="container">
     <h2 class="text-center mb-5">Nossos Clientes</h2>
     <div class="row justify-content-center align-items-center g-4">
-      
+
       <!-- Cliente 1 -->
       <div class="col-6 col-md-3 col-lg-2 mb-4">
         <div class="client-logo-container">
           <img src="/images/compagas.png" alt="Compagas" class="client-logo">
         </div>
       </div>
-      
+
       <!-- Cliente 2 -->
       <div class="col-6 col-md-3 col-lg-2 mb-4">
         <div class="client-logo-container">
           <img src="/images/images (2).png" alt="Oregon" class="client-logo">
         </div>
       </div>
-      
+
       <!-- Cliente 3 -->
       <div class="col-6 col-md-3 col-lg-2 mb-4">
         <div class="client-logo-container">
@@ -147,7 +145,7 @@
           <img src="/images/Nubank_logo_2021.svg.png" alt="Nubank" class="client-logo">
         </div>
       </div>
-      
+
       <!-- Cliente 6 -->
       <div class="col-6 col-md-3 col-lg-2 mb-4">
         <div class="client-logo-container">
@@ -156,7 +154,6 @@
       </div>
     </div>
   </div>
-</section>
 </section>
 
 <!-- Seção Sobre -->
@@ -177,7 +174,7 @@
           <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i> Garantia em todos os serviços</li>
         </ul>
       </div>
-      
+
       <!-- Nova Coluna da Linha do Tempo -->
       <div class="col-lg-6">
         <div class="timeline">
@@ -218,7 +215,7 @@
       <div class="col-lg-8 text-center">
         <h2 class="mb-4">Precisa de ajuda com manutenção?</h2>
         <p class="lead mb-5">Nossa equipe está pronta para atender sua demanda com agilidade e qualidade.</p>
-        
+
         <!-- Botões que acionam os modais -->
         <button class="btn btn-outline-light btn-lg" (click)="openModal('help')">
           Central de Atendimento
@@ -229,7 +226,7 @@
 </section>
 
 <!-- Modal Central de Atendimento -->
-<app-modal 
+<app-modal
   [isVisible]="activeModal === 'help'"
   title="Central de Atendimento"
   closeButtonText="OK"
@@ -251,7 +248,7 @@
 </ul>
 </app-modal>
 
-<!-- 
+<!--
 <Modal Central de Ajuda >
 <div class="modal fade" [class.show]="activeModal === 'help'" [style.display]="activeModal === 'help' ? 'block' : 'none'">
   <div class="modal-dialog">
@@ -275,7 +272,7 @@
   </div>
 </div>
 
-<!-- Backdrop 
+<!-- Backdrop
 <div class="modal-backdrop fade show" *ngIf="activeModal"></div>
  -->
 
@@ -286,7 +283,7 @@
     <div class="row align-items-center">
       <div class="col-lg-6">
         <div class="map-container">
-          <iframe 
+          <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3602.438038119599!2d-49.2358452!3d-25.4570448!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94dce4df926b4ea3%3A0x88b4331e264d4ee4!2sSetor%20de%20Educa%C3%A7%C3%A3o%20Profissional%20e%20Tecnol%C3%B3gica%20UFPR!5e0!3m2!1spt-BR!2sbr!4v1743681719636!5m2!1spt-BR!2sbr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
           width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy" class="map-iframe"
         </iframe>
