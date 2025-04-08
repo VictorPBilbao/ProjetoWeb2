@@ -1,87 +1,118 @@
-<app-notification [message]="message" [visible]="showNotification"/>
+<app-notification [message]="message" [visible]="showNotification"></app-notification>
 
 <section>
   <svg width="0" height="0">
     <defs>
-        <mask id="waveMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
-            <path d="M0,0
-                    C0.3,0.2 0.2,0.5 0.4,0.5
-                    C0.7,0.6 0.7,0.9 1,1
-                    L1,0
-                    Z"
-                  fill="white" />
-        </mask>
+      <mask id="waveMask" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
+        <path d="M0,0
+                C2.3,0.2 0.2,0.5 0.4,0.5
+                C1.7,0.6 0.7,0.9 1,1
+                L1,0
+                Z"
+              fill="white" />
+      </mask>
     </defs>
   </svg>
 
+  <div class="wave-container">
+    <div class="wave-gradient"></div>
+    <div class="wave-overlay"></div>
+  </div>
+
   <div class="container">
-    <header class="main-header">
-        <div class="branding">
-            <img src="/images/byte.png" alt="ByteAssist Logo" class="logo">
-            <span class="company-name">
-                <h1>Byte Assist</h1>
-            </span>
-        </div>
-
-        <nav class="main-nav">
-            <a href="/" class="nav-item d-flex align-items-center">
-                <i class="bi bi-house-door-fill"></i>
-                <h3>Home</h3>
-            </a>
-            <a href="#" class="nav-item d-flex align-items-center">
-                <i class="bi bi-people-fill"></i>
-                <h3>Sobre Nós</h3>
-            </a>
-            <a href="#" class="nav-item d-flex align-items-center">
-                <i class="bi bi-info-circle-fill"></i>
-                <h3>Ajuda</h3>
-            </a>
-        </nav>
-    </header>
-
     <div class="content-wrapper">
+      <div class="right-section">
+        <h2 class="welcome-text">Cadastro de Usuário</h2>
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+          <!-- Linha 1: Nome, CPF, Data de Nascimento -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nome">Nome:</label>
+              <input type="text" id="nome" formControlName="nome" placeholder="Digite seu nome" required>
+            </div>
+            <div class="form-group">
+              <label for="cpf">CPF:</label>
+              <input type="text" id="cpf" formControlName="cpf" placeholder="Digite seu CPF" required>
+            </div>
+            <div class="form-group">
+              <label for="dataNascimento">Data de Nascimento:</label>
+              <input type="date" id="dataNascimento" formControlName="dataNascimento" required>
+            </div>
+            <div class="form-group">
+                <label for="sexo">Sexo:</label>
+                <select id="sexo" formControlName="sexo" required>
+                  <option value="Feminino">Feminino</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Outro">Outro</option>
+                </select>
+              </div>
+          </div>
 
-        <div class="wave-container">
-            <div class="wave-gradient"></div>
-            <div class="wave-overlay"></div>
-        </div>
+          <!-- Linha 2: Email, Telefone, Sexo -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" id="email" formControlName="email" placeholder="Digite seu email" required>
+            </div>
+            <div class="form-group">
+              <label for="telefone">Telefone:</label>
+              <input type="text" id="telefone" formControlName="telefone" placeholder="Digite seu telefone" required>
+            </div>
+            <div class="form-group">
+                <label for="cep">CEP:</label>
+                <input type="text" id="cep" formControlName="cep" placeholder="Digite seu CEP" required>
+              </div>
+          </div>
 
-        <div class="right-section">
-            <h2 class="welcome-text">CRIE SUA CONTA!</h2>
-            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
-                <div class="form-group">
-                    <label for="username">Usuário:</label>
-                    <input type="text" id="username" formControlName="username" placeholder="Digite seu usuário" required>
-                    <div class="error-message" *ngIf="isFieldInvalid('username')">
-                      {{ getErrorMessage('username') }}
-                    </div>
-                </div>
+          <!-- Linha 3  -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="uf">UF/Estado:</label>
+              <input type="text" id="uf" formControlName="uf" placeholder="Digite seu estado" required>
+            </div>
+            <div class="form-group">
+                <label for="cidade">Cidade:</label>
+                <input type="text" id="cidade" formControlName="cidade" placeholder="Digite sua cidade" required>
+              </div>
+              <div class="form-group">
+                <label for="bairro">Bairro:</label>
+                <input type="text" id="bairro" formControlName="bairro" placeholder="Digite seu bairro" required>
+              </div>
+          </div>
+          <!-- Linha 4  -->
+          <div class="form-row">
+            <div class="form-group">
+                <label for="logradouro">Logradouro:</label>
+                <input type="text" id="logradouro" formControlName="logradouro" placeholder="Digite seu logradouro" required>
+              </div>
+              <div class="form-group">
+                <label for="numero">Número:</label>
+                <input type="text" id="numero" formControlName="numero" placeholder="Digite o número" required>
+              </div>
+              <div class="form-group">
+                <label for="complemento">Complemento:</label>
+                <input type="text" id="complemento" formControlName="complemento" placeholder="Digite o complemento">
+              </div>
+          </div>
 
-                <div class="form-group">
-                    <label for="password">Senha:</label>
-                    <input type="password" id="password" formControlName="password" placeholder="Digite sua senha" required>
-                    <div class="error-message" *ngIf="isFieldInvalid('password')">
-                      {{ getErrorMessage('password') }}
-                    </div>
-                </div>
+          <!-- Botão Cadastrar -->
+            <div class="form-group button-group">
+              <button type="submit" class="register-btn">Cadastrar</button>
+            </div>
 
-                <div class="form-group">
-                    <label for="confirmPassword">Confirme a Senha:</label>
-                    <input type="password" id="confirmPassword" formControlName="confirmPassword" placeholder="Confirme sua senha" required>
-                    <div class="error-message" *ngIf="isFieldInvalid('confirmPassword')">
-                      {{ getErrorMessage('confirmPassword') }}
-                    </div>
-                </div>
+          <!-- Link para Login -->
+          <div class="form-row login-row">
+            <p class="form-links">
+              Já tem conta? <a (click)="navigateToLogin()" class="register">Faça o Login</a>
+            </p>
+          </div>
+        </form>
+    </div>
 
-                <div class="form-links">
-                    <button type="submit" class="register-btn">Registrar</button>
-                    <div class="login-link">
-                        <span>Já tem uma conta?</span>
-                        <a href="#" class="login">Faça login</a>
-                    </div>
-                </div>
-            </form>
-        </div>
+    <!-- Seção da imagem -->
+    <div class="image-section">
+        <img src="\images\imagemresgisterr-removebg-preview.png" alt="Imagem de Registro">
     </div>
   </div>
+</div>
 </section>

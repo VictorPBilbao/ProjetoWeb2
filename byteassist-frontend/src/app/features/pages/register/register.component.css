@@ -1,14 +1,54 @@
 section {
   background: linear-gradient(90deg, #062685 0%, #4d73e4 50%, #49a2ad 100%);
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
   color: #ffffff;
   overflow: hidden;
+}
+
+.wave-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1; /* Certifique-se de que as ondas estão atrás do formulário */
+}
+
+.wave-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+      180deg,
+      rgba(74, 97, 224, 0.9) 50%,
+      rgba(29, 103, 231, 0.7) 70%,
+      rgba(7, 85, 219, 0) 50%
+  );
+  mask-image: url(#waveMask);
+  -webkit-mask-image: url(#waveMask);
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
+}
+
+.wave-overlay {
+  position: absolute;
+  top: 48%;
+  left: 30%;
+  transform: translate(-70%, -40%);
+  width: 360px;
+  height: 360px;
+  border-radius: 0%;
+  z-index: 10;
+  background: none;
 }
 
 .container {
   display: flex;
   flex-direction: column;
-  min-height: 100%;
+  min-height: 100vh; /* Garante que o contêiner ocupe toda a altura da tela */
 }
 
 .main-header {
@@ -74,12 +114,38 @@ section {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+.content-wrapper {
+  display: flex; /* Organiza o formulário e a imagem lado a lado */
+  justify-content: space-between; /* Espaça os elementos */
+  align-items: flex-start; /* Alinha os elementos no topo */
+  gap: 20px; /* Espaçamento entre o formulário e a imagem */
+  height: 100%;
+}
+
 .right-section {
-  width: 50%;
-  margin-left: 50%;
+  flex: 2; /* Faz o formulário ocupar mais espaço */
+  width: 100%; /* Permite que o formulário ocupe toda a largura */
+  margin: 0 auto; /* Centraliza o conteúdo */
   padding: 30px 70px;
   position: relative;
-  z-index: 2;
+  z-index: 2; /* Certifique-se de que o formulário está acima das ondas */
+  max-height: 90vh
+}
+
+.image-section {
+  flex: 1; /* Faz a imagem ocupar menos espaço */
+  display: flex;
+  justify-content: center; /* Centraliza horizontalmente a imagem */
+  align-items: center; /* Centraliza verticalmente a imagem */
+  height: 80%;
+  position: relative; /* Permite o uso do z-index */
+  z-index: 3;
+}
+
+.image-section img {
+  max-width: 400px; /* Define a largura máxima da imagem */
+  height: auto; /* Mantém a proporção da imagem */
+  border-radius: 8px; /* Adiciona bordas arredondadas, se necessário */
 }
 
 .welcome-text {
@@ -98,11 +164,64 @@ section {
 }
 
 .register-form {
-  max-width: 400px;
+  max-width: 850px;
+  width: 100%; /* Garante que o formulário ocupe toda a largura disponível */
+}
+
+.form-columns {
+  display: flex;
+  justify-content: space-between; /* Garante que as colunas fiquem lado a lado */
+  gap: 30px; /* Espaçamento entre as colunas */
+}
+
+.form-column {
+  flex: 1; /* Faz com que as colunas ocupem o mesmo espaço */
+  max-width: 800px; /* Limita a largura máxima das colunas */
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between; /* Garante que os campos fiquem lado a lado */
+  gap: 20px; /* Espaçamento entre os campos */
+  margin-bottom: 20px; /* Espaçamento entre as linhas */
+}
+
+.button-group {
+  flex: 0 0 auto; /* Impede que o botão ocupe o espaço das colunas */
+  text-align: center; /* Centraliza o botão dentro do grupo */
+}
+
+.button-row {
+  display: flex;
+  justify-content: center; /* Centraliza o botão horizontalmente */
+  margin-top: 20px; /* Espaçamento acima do botão */
+}
+
+.login-row {
+  display: flex;
+  justify-content: center; /* Centraliza a frase horizontalmente */
+  margin-top: 10px; /* Espaçamento acima da frase */
+}
+
+.register-btn {
+  width: 150px; /* Define a largura do botão */
+  padding: 12px;
+  background-color: #004aad;
+  color: white;
+  border: none;
+  border-radius: 8px; /* Adiciona bordas arredondadas */
+  cursor: pointer;
+  font-size: 16px;
+  text-align: center;
+}
+
+.register-btn:hover {
+  background-color: #003a8c;
 }
 
 .form-group {
-  margin-bottom: 20px;
+  flex: 1; /* Faz com que os campos ocupem o mesmo espaço */
+  min-width: 150px; /* Define uma largura mínima para os campos */
 }
 
 .form-group label {
@@ -111,15 +230,13 @@ section {
   font-size: 16px;
 }
 
-.form-group input {
-  width: 100%;
-  padding: 12px 15px;
+.form-group input,
+.form-group select {
+  width: 100%; /* Garante que os campos ocupem toda a largura disponível */
+  padding: 10px;
+  border: 1px solid #ccc;
   border-radius: 8px;
-  border: none;
-  background-color: rgba(244, 250, 251, 0.9);
-  font-size: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  font-size: 14px;
 }
 
 .form-group input:focus {
@@ -128,28 +245,19 @@ section {
 }
 
 .form-links {
-  margin: 20px 0;
-  text-align: right;
+  font-size: 14px;
+  color: #ffffff;
+  text-align: center; /* Centraliza o texto */
 }
 
-.register-btn {
-  background-color: #004aad;
-  color: white;
-  border: none;
-  padding: 12px 40px;
-  border-radius: 30px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: background-color 0.3s;
-  width: 100%;
-  box-shadow: 0 4px 8px rgba(0, 74, 173, 0.3);
+.form-links a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: bold;
 }
 
-.register-btn:hover {
-  background-color: #003a8a;
-  box-shadow: 0 6px 12px rgba(0, 74, 173, 0.4);
+.form-links a:hover {
+  text-decoration: underline;
 }
 
 .error-message {
