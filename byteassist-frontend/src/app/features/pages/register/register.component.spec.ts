@@ -66,4 +66,4 @@ describe('RegisterComponent', () => {
     expect(component.message).toBe('Erro ao registrar. Tente novamente mais tarde.');
     expect(component.showNotification).toBeTrue();
   });
-});
+}); 

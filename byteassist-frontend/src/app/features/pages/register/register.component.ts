@@ -91,4 +91,4 @@ export class RegisterComponent implements OnInit {
       console.log('Form is invalid', this.registerForm);
     }
   }
-}
+} 
