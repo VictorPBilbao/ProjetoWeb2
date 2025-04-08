@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { NotificationComponent } from '../../components/notification/notification.component';
 import { AuthService } from '../../services/auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -19,15 +20,28 @@ export class RegisterComponent implements OnInit {
   message: string = '';
   showNotification: boolean = false;
 
-  constructor(private fb: FormBuilder, private auth: AuthService) { }
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
-      username: ['', [Validators.required]],
-      password: ['', [Validators.required]],
-      confirmPassword: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]]
+      cpf: ['', [Validators.required]],
+      nome: ['', [Validators.required]],
+      dataNascimento: ['', [Validators.required]],
+      sexo: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      telefone: ['', [Validators.required]],
+      cep: ['', [Validators.required]],
+      uf: ['', [Validators.required]],
+      cidade: ['', [Validators.required]],
+      bairro: ['', [Validators.required]],
+      logradouro: ['', [Validators.required]],
+      numero: ['', [Validators.required]],
+      complemento: ['']
     });
+  }
+
+  navigateToLogin(): void {
+    this.router.navigate(['/login']); // Redireciona para a página de login
   }
 
   isFieldInvalid(field: string): boolean {
@@ -61,13 +75,12 @@ export class RegisterComponent implements OnInit {
         return;
       }
 
-      // Adicionando tipos explícitos para response e err
       this.auth.register(this.registerForm.value).subscribe({
-        next: (response: any) => { // Use o tipo correto se souber
+        next: (response: any) => {
           this.message = 'Registro realizado com sucesso!';
           this.showNotification = true;
         },
-        error: (err: any) => { // Use o tipo correto se souber
+        error: (err: any) => {
           this.message = 'Erro ao registrar. Tente novamente mais tarde.';
           this.showNotification = true;
         }
@@ -78,4 +91,4 @@ export class RegisterComponent implements OnInit {
       console.log('Form is invalid', this.registerForm);
     }
   }
-}
+} 
