@@ -1,9 +1,15 @@
+//instalar
+//npm install ng2-charts chart.js --save
+//npm install @types/chart.js --save-dev
+
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -16,6 +22,14 @@ import { RouterModule } from '@angular/router';
   ]
 })
 export class DashboardComponent {
+  
+  constructor(private router: Router) {}
+  
+  shouldShowHeader(): boolean {
+    return !this.router.url.includes('/dashboard');
+  
+  }
+  
   public pieChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     devicePixelRatio: 2,
@@ -28,7 +42,7 @@ export class DashboardComponent {
           font: {
             size: 14
           }, 
-          usePointStyle: true, // Usa ícones ao invés de retângulos
+          usePointStyle: true, // Usa círculos na legenda
           boxWidth: 10, // Tamanho do ícone da legenda
           padding: 20 // Espaçamento
         }
@@ -51,8 +65,13 @@ export class DashboardComponent {
         },
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
         titleColor: '#4BC0C0',
-        bodyColor: '#ffffff',
-        borderColor: '#4BC0C0',
+        //bodyColor: '#ffffff',
+        //borderColor: '#4BC0C0',
+      }
+    },
+    elements: {
+      arc: {
+        borderWidth: 0 //remove as bordas dos gráficos
       }
     }
   };
@@ -62,14 +81,14 @@ export class DashboardComponent {
   public equipamentosChartData: ChartData<'pie'> = {
     labels: ['Notebook', 'Celular', 'Tablet'],
     datasets: [{
-      data: [45, 30, 25],
+      data: [10, 15, 5],
       backgroundColor: [
         'rgb(10, 185, 171)',
         'rgba(12, 63, 97, 0.7)',
         'rgb(7, 129, 17)'
       ],
-      borderColor: '#ffffff',
-      borderWidth: 2,
+      //borderColor: '#ffffff',
+      //borderWidth: 2,
       hoverBackgroundColor: [
         'rgb(8, 165, 151)',
         'rgba(10, 53, 87, 0.8)',
@@ -81,14 +100,14 @@ export class DashboardComponent {
   public servicosChartData: ChartData<'pie'> = {
     labels: ['Solicitação', 'Pagamento', 'Orçamento'],
     datasets: [{
-      data: [50, 30, 20],
+      data: [50, 50, 35],
       backgroundColor: [
         'rgb(92, 233, 226)',
         'rgb(124, 199, 243)',
         'rgb(118, 247, 150)'
       ],
-      borderColor: '#ffffff',
-      borderWidth: 2,
+      //borderColor: '#ffffff',
+      //borderWidth: 2,
       hoverBackgroundColor: [
         'rgb(72, 213, 206)',
         'rgb(104, 179, 223)',
