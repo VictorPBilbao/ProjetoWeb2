@@ -1,0 +1,25 @@
+<div class="dashboard-container">
+    <h1>DASHBOARD</h1>
+  
+    <div class="charts-container">
+      <!-- Gráfico de Equipamentos -->
+      <div class="chart-card">
+        <h2>Meus Equipamentos</h2>
+        <canvas baseChart
+          [data]="equipamentosChartData"
+          [type]="pieChartType"
+          [options]="pieChartOptions">
+        </canvas>
+      </div>
+  
+      <!-- Gráfico de Serviços -->
+      <div class="chart-card">
+        <h2>Meus Serviços</h2>
+        <canvas baseChart
+          [data]="servicosChartData"
+          [type]="pieChartType"
+          [options]="pieChartOptions">
+        </canvas>
+      </div>
+    </div>
+  </div>

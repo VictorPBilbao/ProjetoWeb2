@@ -5,3 +5,17 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+/* Garante que o body ocupe toda a tela sem margens */
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: linear-gradient(90deg, #062685 0%, #4d73e4 50%, #49a2ad 100%);
+}
+
+/* Remove margens padrão do HTML */
+html {
+  margin: 0;
+  padding: 0;
+}
