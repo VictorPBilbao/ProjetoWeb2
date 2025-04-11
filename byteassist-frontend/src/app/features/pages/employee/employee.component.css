@@ -68,14 +68,35 @@ h1{
   border-bottom-right-radius: 20px;
 }
 
-.linha-com-borda{
 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 2px solid white;
-  border-radius: 20px;
-  padding: 10px 20px;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
+.wave-container {
+  position: absolute; /* Alterado para absolute para posicionar em relação ao :host */
+  top: 0; /* Pode ajustar este valor para mover a onda verticalmente */
+  left: 0;
+  width: 100%;
+  height: 200px; /* Ajuste a altura total da área da onda */
+  z-index: 1; /* Garante que a onda fique atrás do conteúdo */
+  pointer-events: none; /* Permite interagir com o conteúdo */
+}
+
+.wave-gradient {
+  position: absolute;
+  bottom: 0; /* Alinha a parte inferior do gradiente com a parte inferior do container da onda */
+  left: 0;
+  width: 100%;
+  height: 100%; /* Ocupa toda a altura do .wave-container */
+  background: linear-gradient(
+    105deg,
+    rgba(1, 3, 14, 0.6) 0%,
+    rgba(13, 75, 184, 0.4) 70%,
+    rgba(7, 85, 219, 0) 100%
+  );
+  mask-image: url(#waveMask);
+  -webkit-mask-image: url(#waveMask);
+  mask-repeat: repeat-x;
+  -webkit-mask-repeat: repeat-x;
+  mask-size: 20% auto; /* Controla a largura da repetição da onda */
+  -webkit-mask-size: 20% auto;
+  transform: translateY(20px); /* Ajuste a posição vertical da onda dentro do container */
+}
 }
