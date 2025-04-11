@@ -1,39 +1,55 @@
-<head>
-<title>Employee's page</title>
-</head>
-<body>
-
-    <div class="titulo">
-    <H1>BEM-VINDO</H1></div>
-
-    <h2>Serviços Pendentes</h2>
-
-<table border="1" cellpadding="8" cellspacing="0">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Cliente</th>
-      <th>Serviço</th>
-      <th>Status</th>
-      <th>Data Agendada</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let servico of pendingServices">
-      <td>{{ servico.id }}</td>
-      <td>{{ servico.cliente }}</td>
-      <td>{{ servico.servico }}</td>
-      <td>{{ servico.status }}</td>
-      <td>{{ servico.data }}</td>
-      <td>
-        <button (click)="concluir(servico.id)">Concluir</button>
-        <button (click)="cancelar(servico.id)">Cancelar</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-     
-      
-    
-</body>
+<header>
+  <h1>Solicitações</h1>
+</header>
+<div class="table-container">
+  <table class="solicitacoes-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Data</th>
+        <th>Hora</th>
+        <th>Equipamento</th>
+        <th>Estado</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>t-01</td>
+        <td>08/04/2025</td>
+        <td>10:25 PM</td>
+        <td>Notebook</td>
+        <td class="estado aprovada">Aprovada <span class="status-icon check"></span></td>
+        <td class="acoes">
+          <button class="add-button">+</button>
+          <button class="edit-button"></button>
+          <button class="delete-button"></button>
+        </td>
+        </tr>
+        <tr>
+        <td>t-01</td>
+        <td>08/04/2025</td>
+        <td>10:25 PM</td>
+        <td>Notebook</td>
+        <td class="estado orcada">Concluída <span class="status-icon check-mark"></span></td>
+        <td class="acoes">
+          <button class="add-button">+</button>
+          <button class="edit-button"></button>
+          <button class="delete-button"></button>
+        </td>
+        </tr>
+        <tr>
+          <td>t-01</td>
+          <td>08/04/2025</td>
+          <td>10:25 PM</td>
+          <td>Notebook</td>
+          <td class="estado orcada">Orçada <span class="status-icon check-mark"></span></td>
+          <td class="acoes">
+            <button class="add-button">+</button>
+            <button class="edit-button"></button>
+            <button class="delete-button"></button>
+          </td>
+          </tr>
+   </tbody>
+  </table>
+</div>
