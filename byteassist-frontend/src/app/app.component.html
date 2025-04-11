@@ -1,13 +1,14 @@
-<!--<app-header
-  [activeSection]="activeSection">
-</app-header> -->
+<app-header
+  [activeSection]="activeSection"
+  *ngIf="!getIsAuthenticated()"
+></app-header>
 
-<app-header *ngIf="showHeader"></app-header>
-<router-outlet></router-outlet>
-
-<!--<main class="main">
-  <router-outlet></router-outlet>
-</main>-->
+<main class="main d-flex full-width">
+  <app-menu-sidebar *ngIf="getIsAuthenticated()"></app-menu-sidebar>
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+</main>
 
 <footer>
   <!-- Conteúdo do footer aqui -->
