@@ -1,6 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './features/components/header/header.component';
+import { MenuSidebarComponent } from './features/components/menu-sidebar/menu-sidebar.component';
+import { AuthService } from './features/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,6 +11,7 @@ import { CommonModule } from '@angular/common';
   imports: [
     RouterOutlet,
     HeaderComponent,
+    MenuSidebarComponent,
     CommonModule
   ],
   templateUrl: './app.component.html',
@@ -18,6 +21,10 @@ export class AppComponent {
   title = 'byteassist-frontend';
   activeSection: string = 'home';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private auth: AuthService) {}
+
+  getIsAuthenticated(): boolean {
+    return this.auth.isAuthenticated();
+  }
 
 }

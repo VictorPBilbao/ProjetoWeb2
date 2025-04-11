@@ -1,0 +1,102 @@
+aside {
+  width: 320px;
+  height: 100vh;
+  background: linear-gradient(90deg, #062685 0%, #4d73e4 50%, #49a2ad 100%);
+  border-radius: 0 30px 30px 0;
+  color: white;
+}
+
+.menu-padding {
+  padding: 20px 30px;
+}
+
+.menu-user-container {
+  border-bottom: 2px solid #d1f2f9;
+  width: 100%;
+  gap: 20px;
+}
+
+.menu-name-initials-container {
+  width: 50px;
+  height: 50px;
+  background-color: #4D73E4;
+}
+
+.menu-search-container {
+  width: 100%;
+  position: relative;
+}
+
+.menu-search-container input {
+  background-color: transparent;
+  border-radius: 20px;
+  height: 40px;
+  cursor: text;
+  color: white;
+}
+
+.menu-search-container input:focus {
+  outline: none;
+  border: 1px solid #d1f2f9;
+  box-shadow: none;
+}
+
+.menu-search-container input::selection {
+  background-color: #4D73E4; /* Cor de fundo do texto selecionado */
+  color: white; /* Cor do texto selecionado */
+}
+
+.menu-search-container input::placeholder {
+  color: white;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.menu-search-container i {
+  position: absolute;
+  top: 10%;
+  right: 20px;
+  z-index: 2;
+  font-size: 20px;
+}
+
+.menu-nav .nav {
+  width: 100%;
+}
+
+.menu-nav .nav-link:focus, .nav-link:hover {
+  text-decoration: none;
+  color: #d1f2f9;
+  background-color: transparent;
+}
+
+.menu-nav .nav-item, .menu-nav .nav-link {
+  width: 100%;
+}
+
+.menu-nav .nav-item {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.menu-nav .nav-link {
+  color: white;
+  font-size: 20px;
+  font-weight: 400;
+  padding: 10px 0;
+  width: 100%;
+  height: 100%;
+}
+
+.nav-item-seperator {
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 20px !important;
+  padding-bottom: 10px !important;
+}
+
+.nav-border {
+  height: 2px;
+  width: 100%;
+  background-color: white;
+}
