@@ -4,6 +4,7 @@ import { HomeComponent } from './features/pages/home/home.component';
 import { EmployeeComponent } from './features/pages/employee/employee.component';
 import { RegisterComponent } from './features/pages/register/register.component';
 import { DashboardComponent } from './features/pages/dashboard/dashboard.component';
+import { NewRequestComponent } from './features/pages/new-request/new-request.component';
 
 export const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -11,6 +12,7 @@ export const routes: Routes = [
   {path: 'employee', component: EmployeeComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'dashboard', component: DashboardComponent },
+  {path: 'new-request', component: NewRequestComponent },
   {path: '**', redirectTo: '' } // Redireciona para home se rota não existir
 
 ];

@@ -4,7 +4,6 @@ import { HeaderComponent } from './features/components/header/header.component';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
 
-
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -26,8 +25,8 @@ export class AppComponent {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
-        const noHeaderRoutes = ['/dashboard', '/register']; // Rotas sem header
-        //const noHeaderRoutes = ['/dashboard'];
+        //const noHeaderRoutes = ['/dashboard', '/register']; // Rotas sem header
+        const noHeaderRoutes = ['/dashboard','/new-request'];
         this.showHeader = !noHeaderRoutes.some(route => 
           event.urlAfterRedirects.includes(route)
         );
