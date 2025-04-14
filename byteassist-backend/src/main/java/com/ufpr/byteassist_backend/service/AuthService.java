@@ -29,7 +29,7 @@ public class AuthService {
         // print the hash of the password
         System.out.println("Password hash: " + passwordEncoder.encode(password));
         User user = userRepo.getUserByUsername(username);
-        if (passwordEncoder.matches(password, user.getPassword())) {
+        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
             String token = jwtService.generateToken(user.getId().toString(), user.getId().toString());
             UserDTO userDTO = new UserDTO(
                     user.getId().toString(),
