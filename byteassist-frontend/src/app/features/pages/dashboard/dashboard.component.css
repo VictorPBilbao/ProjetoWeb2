@@ -1,0 +1,73 @@
+.dashboard-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative; 
+}
+
+.dashboard-wrapper {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.dashboard-wave {
+  position: absolute;
+  top: -80px;
+  width: 100%;
+  height: 45%; /* Altura da onda */
+  /*background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23000b76" fill-opacity="0.5" d="M0,96L34.3,112C68.6,128,137,160,206,181.3C274.3,203,343,213,411,218.7C480,224,549,224,617,224C685.7,224,754,224,823,224C891.4,224,960,224,1029,213.3C1097.1,203,1166,181,1234,192C1302.9,203,1371,245,1406,266.7L1440,288L1440,0L1405.7,0C1371.4,0,1303,0,1234,0C1165.7,0,1097,0,1029,0C960,0,891,0,823,0C754.3,0,686,0,617,0C548.6,0,480,0,411,0C342.9,0,274,0,206,0C137.1,0,69,0,34,0L0,0Z"/></svg>');  */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23000b76" fill-opacity="0.5" d="M0,192L20,192C40,192,80,192,120,208C160,224,200,256,240,277.3C280,299,320,309,360,277.3C400,245,440,171,480,165.3C520,160,560,224,600,250.7C640,277,680,267,720,272C760,277,800,299,840,282.7C880,267,920,213,960,202.7C1000,192,1040,224,1080,229.3C1120,235,1160,213,1200,224C1240,235,1280,277,1320,250.7C1360,224,1400,128,1420,80L1440,32L1440,0L1420,0C1400,0,1360,0,1320,0C1280,0,1240,0,1200,0C1160,0,1120,0,1080,0C1040,0,1000,0,960,0C920,0,880,0,840,0C800,0,760,0,720,0C680,0,640,0,600,0C560,0,520,0,480,0C440,0,400,0,360,0C320,0,280,0,240,0C200,0,160,0,120,0C80,0,40,0,20,0L0,0Z"/></svg>');
+  background-size: cover;
+  background-repeat: no-repeat;
+  z-index: 0;
+  transform: scaleY(0.8); /* Inverte a onda */
+
+}
+
+.dashboard-container {
+  position: relative;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  z-index: 1;
+}
+
+.dashboard-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  padding: 40px;
+  margin: 0 auto 50px;
+  text-align: center;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.charts-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  margin-top: 10px; /*distancia entre o titulo e os graficos*/
+}
+
+.dashboard-container .chart-card {
+  padding: 20px;
+  flex: 1;
+  min-width: 300px; /*tamanho do gráfico*/
+  max-width: 400px;  /*tamanho do gráfico*/
+}
+
+.dashboard-container .chart-card h4 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #ffffff;
+  opacity: 0.7;
+
+}

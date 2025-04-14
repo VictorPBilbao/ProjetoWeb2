@@ -1,0 +1,32 @@
+<div class="dashboard-wrapper">
+  <div class="dashboard-wave">
+  </div>
+  <div class="dashboard-container">
+    <h1 class="dashboard-title">DASHBOARD</h1>
+    <div class="charts-container">
+
+      <div class="charts-container">
+        <!-- Gráfico de Equipamentos -->
+        <div class="chart-card">
+          <h4>Meus Equipamentos</h4>
+          <canvas baseChart
+            [data]="equipamentosChartData"
+            [type]="pieChartType"
+            [options]="pieChartOptions">
+          </canvas>
+        </div>
+    
+        <!-- Gráfico de Serviços -->
+        <div class="chart-card">
+          <h4>Meus Serviços</h4>
+          <canvas baseChart
+            [data]="servicosChartData"
+            [type]="pieChartType"
+            [options]="pieChartOptions">
+          </canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  
