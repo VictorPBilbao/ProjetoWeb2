@@ -26,15 +26,16 @@ public class AuthService {
     }
 
     public ResponseEntity<Object> login(String username, String password) {
+        // print the hash of the password
+        System.out.println("Password hash: " + passwordEncoder.encode(password));
         User user = userRepo.getUserByUsername(username);
-        System.out.println("Hashed password with cost 10: " + user.getPassword());
-        if (passwordEncoder.matches(password, user.getPassword())) {
+        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
             String token = jwtService.generateToken(user.getId().toString(), user.getId().toString());
             UserDTO userDTO = new UserDTO(
                     user.getId().toString(),
                     user.getUsername(),
-                    user.is_active(),
-                    user.getTime().getLast_login_at(),
+                    user.isActive(),
+                    user.getTime().getLastLoginAt(),
                     token);
             // Update last login time
             updateTimeRepo.updateTimeLastLogin(user.getId().toString());

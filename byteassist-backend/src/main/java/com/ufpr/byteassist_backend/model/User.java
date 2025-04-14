@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class User {
     // TODO: Alter to private after SurrealDB update
-    public String email;
     public RecordId id;
-    public String username;
-    public boolean is_active;
+    public String email;
+    public boolean isActive;
     public String password;
     public RecordId person;
     public UserTime time;
     public String type;
+    public String username;
 }
