@@ -1,5 +1,6 @@
 package com.ufpr.byteassist_backend.controller;
 
+import com.ufpr.byteassist_backend.dto.RegistrationRequestDTO;
 import com.ufpr.byteassist_backend.service.AuthService;
 
 import org.springframework.http.ResponseEntity;
@@ -23,5 +24,11 @@ public class AuthController {
     public ResponseEntity<Object> login(@RequestParam String username, @RequestParam String password) {
         System.out.println("Login request received with username: " + username + " and password: " + password);
         return authService.login(username, password);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<Object> register(@ModelAttribute RegistrationRequestDTO registrationRequest) {
+        System.out.println("Registration request received: " + registrationRequest);
+        return ResponseEntity.ok("Registered successfully!");
     }
 }
