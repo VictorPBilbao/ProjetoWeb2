@@ -38,4 +38,14 @@ public class AuthController {
         System.out.println("Form registration request received: " + registrationRequest);
         return authService.register(registrationRequest, bindingResult);
     }
+
+    @GetMapping("/validate/username/{username}")
+    public ResponseEntity<Object> validateUsername(@PathVariable String username) {
+        return authService.validateUsername(username);
+    }
+
+    @GetMapping("/validate/email/{email}")
+    public ResponseEntity<Object> validateEmail(@PathVariable String email) {
+        return authService.validateEmail(email);
+    }
 }

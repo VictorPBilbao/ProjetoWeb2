@@ -95,4 +95,24 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    public ResponseEntity<Object> validateUsername(String username) {
+        boolean isAvailable = userRepo.isUsernameAvailable(username);
+
+        if (isAvailable) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+    public ResponseEntity<Object> validateEmail(String email) {
+        boolean isAvailable = userRepo.isEmailAvailable(email);
+
+        if (isAvailable) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
 }
