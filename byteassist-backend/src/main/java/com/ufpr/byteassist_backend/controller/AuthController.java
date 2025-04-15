@@ -1,10 +1,16 @@
 package com.ufpr.byteassist_backend.controller;
 
 import com.ufpr.byteassist_backend.dto.RegistrationRequestDTO;
+import com.ufpr.byteassist_backend.exception.ErrorResponse;
 import com.ufpr.byteassist_backend.service.AuthService;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
@@ -26,9 +32,10 @@ public class AuthController {
         return authService.login(username, password);
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<Object> register(@ModelAttribute RegistrationRequestDTO registrationRequest) {
-        System.out.println("Registration request received: " + registrationRequest);
-        return ResponseEntity.ok("Registered successfully!");
+    @PostMapping(value = "/register", consumes = { MediaType.APPLICATION_FORM_URLENCODED_VALUE })
+    public ResponseEntity<Object> registerForm(@Valid @ModelAttribute RegistrationRequestDTO registrationRequest,
+            BindingResult bindingResult) {
+        System.out.println("Form registration request received: " + registrationRequest);
+        return authService.register(registrationRequest, bindingResult);
     }
 }

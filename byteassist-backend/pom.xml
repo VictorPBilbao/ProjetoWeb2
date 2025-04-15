@@ -82,6 +82,19 @@
             <artifactId>spring-security-crypto</artifactId>
             <version>6.1.2</version> <!-- Use the latest version -->
         </dependency>
+
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
+        <!-- Add Hibernate Validator - implementation of Jakarta Bean Validation -->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>8.0.1.Final</version>
+        </dependency>
     </dependencies>
 
     <build>
