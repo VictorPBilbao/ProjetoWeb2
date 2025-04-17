@@ -1,94 +1,69 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NotificationComponent } from '../../components/notification/notification.component';
-import { AuthService } from '../../services/auth/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { UserService } from '../../services/user/user.service';
+import { User } from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-register',
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    NotificationComponent
+    FormsModule,
+    NotificationComponent,
+    RouterLink
   ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
-  registerForm!: FormGroup;
+export class RegisterComponent {
+  @ViewChild('registerForm') registerForm: NgForm | undefined;
+  user: User = new User();
   message: string = '';
   showNotification: boolean = false;
+  currentStep: number = 1; // Variável para controlar o passo atual do formulário
 
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {}
+  constructor(
+    private router: Router,
+    private userService: UserService) {}
 
-  ngOnInit(): void {
-    this.registerForm = this.fb.group({
-      cpf: ['', [Validators.required]],
-      nome: ['', [Validators.required]],
-      dataNascimento: ['', [Validators.required]],
-      sexo: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      telefone: ['', [Validators.required]],
-      cep: ['', [Validators.required]],
-      uf: ['', [Validators.required]],
-      cidade: ['', [Validators.required]],
-      bairro: ['', [Validators.required]],
-      logradouro: ['', [Validators.required]],
-      numero: ['', [Validators.required]],
-      complemento: ['']
-    });
+  onSubmit() {
+    if (this.registerForm?.valid) {
+      this.userService.createUser(this.user).subscribe({
+        next: (response) => {
+          if (response) {
+            this.message = 'Cadastro realizado com sucesso!';
+            this.router.navigate(['/login']);
+          } else {
+            this.message = 'Erro ao fazer cadastro. Verifique sua conexão ou tente novamente mais tarde.';
+          }
+          this.showNotification = true;
+        },
+        error: (err) => {
+          this.message = 'Ocorreu um erro ao fazer o cadastro. Erro: ' + (err.error?.message || 'Erro desconhecido.');
+          this.showNotification = true;
+        }
+      });
+    } else {
+      this.message = 'Preencha todos os campos obrigatórios.';
+      this.showNotification = true;
+    }
   }
 
   navigateToLogin(): void {
     this.router.navigate(['/login']); // Redireciona para a página de login
   }
 
-  isFieldInvalid(field: string): boolean {
-    return !!this.registerForm.get(field)?.invalid && !!this.registerForm.get(field)?.touched;
-  }
-
-  getErrorMessage(field: string): string {
-    if (field === 'username') {
-      if (this.registerForm.get(field)?.hasError('required')) return 'Usuário é obrigatório';
-    }
-
-    if (field === 'password') {
-      if (this.registerForm.get(field)?.hasError('required')) return 'Senha é obrigatória';
-    }
-
-    if (field === 'email') {
-      if (this.registerForm.get(field)?.hasError('required')) return 'Email é obrigatório';
-      if (this.registerForm.get(field)?.hasError('email')) return 'Email inválido';
-    }
-
-    return '';
-  }
-
-  onSubmit() {
-    if (this.registerForm.valid) {
-      this.showNotification = false;
-
-      if (this.registerForm.value.password !== this.registerForm.value.confirmPassword) {
-        this.message = 'As senhas não coincidem.';
-        this.showNotification = true;
-        return;
-      }
-
-      this.auth.register(this.registerForm.value).subscribe({
-        next: (response: any) => {
-          this.message = 'Registro realizado com sucesso!';
-          this.showNotification = true;
-        },
-        error: (err: any) => {
-          this.message = 'Erro ao registrar. Tente novamente mais tarde.';
-          this.showNotification = true;
-        }
-      });
-
-    } else {
-      this.registerForm.markAllAsTouched();
-      console.log('Form is invalid', this.registerForm);
+  goToNextStep(): void {
+    if (this.currentStep < 2) {
+      this.currentStep++;
     }
   }
-} 
+
+  goToPreviousStep(): void {
+    if (this.currentStep > 1) {
+      this.currentStep--;
+    }
+  }
+}

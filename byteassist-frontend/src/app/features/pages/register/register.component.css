@@ -1,265 +1,170 @@
-section {
-  background: linear-gradient(90deg, #062685 0%, #4d73e4 50%, #49a2ad 100%);
-  height: 100vh;
-  display: flex;
-  color: #ffffff;
-  overflow: hidden;
-}
-
-.wave-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  z-index: 1; /* Certifique-se de que as ondas estão atrás do formulário */
-}
-
-.wave-gradient {
-  position: absolute;
-  top: 0;
-  left: 0;
+.register-section-container {
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-      180deg,
-      rgba(74, 97, 224, 0.9) 50%,
-      rgba(29, 103, 231, 0.7) 70%,
-      rgba(7, 85, 219, 0) 50%
-  );
-  mask-image: url(#waveMask);
-  -webkit-mask-image: url(#waveMask);
-  mask-size: 100% 100%;
-  -webkit-mask-size: 100% 100%;
-}
-
-.wave-overlay {
-  position: absolute;
-  top: 48%;
-  left: 30%;
-  transform: translate(-70%, -40%);
-  width: 360px;
-  height: 360px;
-  border-radius: 0%;
-  z-index: 10;
-  background: none;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* Garante que o contêiner ocupe toda a altura da tela */
-}
-
-.main-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 265px 20px 140px;
   position: relative;
-  z-index: 10;
-  background: transparent;
 }
 
-.branding {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.branding .logo {
-  width: 45px;
-  height: 45px;
-}
-
-.nav-item h3 {
-  margin: 0;
-  font-weight: 500;
-  color: inherit;
-  white-space: nowrap;
-}
-
-.company-name h1 {
-  font-size: 35px;
-  font-weight: 700;
-  color: white;
-}
-
-.main-nav {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  margin-right: 25px;
-  margin-left: 0px;
-  margin-top: 0px;
-  padding-left: 180px;
-  padding-right: 0px;
-}
-
-.nav-item {
-  color: white;
-  font-size: 20px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  padding: 8px 0px;
-  border-radius: 4px;
-  display: flex;
-}
-
-.nav-item:hover {
-  border-color: rgba(255, 255, 255, 0.8);
-  background-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.content-wrapper {
-  display: flex; /* Organiza o formulário e a imagem lado a lado */
-  justify-content: space-between; /* Espaça os elementos */
-  align-items: flex-start; /* Alinha os elementos no topo */
-  gap: 20px; /* Espaçamento entre o formulário e a imagem */
-  height: 100%;
-}
-
-.right-section {
-  flex: 2; /* Faz o formulário ocupar mais espaço */
-  width: 100%; /* Permite que o formulário ocupe toda a largura */
-  margin: 0 auto; /* Centraliza o conteúdo */
-  padding: 30px 70px;
+.rigister-section-inputs {
+  margin-left: 120px;
+  padding-top: 60px;
   position: relative;
-  z-index: 2; /* Certifique-se de que o formulário está acima das ondas */
-  max-height: 90vh
-}
-
-.image-section {
-  flex: 1; /* Faz a imagem ocupar menos espaço */
-  display: flex;
-  justify-content: center; /* Centraliza horizontalmente a imagem */
-  align-items: center; /* Centraliza verticalmente a imagem */
-  height: 80%;
-  position: relative; /* Permite o uso do z-index */
-  z-index: 3;
-}
-
-.image-section img {
-  max-width: 400px; /* Define a largura máxima da imagem */
-  height: auto; /* Mantém a proporção da imagem */
-  border-radius: 8px; /* Adiciona bordas arredondadas, se necessário */
-}
-
-.welcome-text {
-  font-size: 35px;
-  font-weight: 700;
-  text-transform: uppercase;
-  margin-bottom: 40px;
-  line-height: 1.3;
-  color: white;
-}
-
-.welcome-text {
-  text-shadow:
-  2px 2px 4px rgba(0, 0, 0, 0.3),
-  0 0 10px rgba(255, 255, 255, 0.3);
+  z-index: 20;
 }
 
 .register-form {
-  max-width: 850px;
-  width: 100%; /* Garante que o formulário ocupe toda a largura disponível */
+  gap: 40px;
 }
 
-.form-columns {
-  display: flex;
-  justify-content: space-between; /* Garante que as colunas fiquem lado a lado */
-  gap: 30px; /* Espaçamento entre as colunas */
+.register-form-item {
+  width: 300px;
 }
 
-.form-column {
-  flex: 1; /* Faz com que as colunas ocupem o mesmo espaço */
-  max-width: 800px; /* Limita a largura máxima das colunas */
+.step-container {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: all 0.3s ease-in-out;
+  position: absolute;
+  width: 100%;
 }
 
-.form-row {
-  display: flex;
-  justify-content: space-between; /* Garante que os campos fiquem lado a lado */
-  gap: 20px; /* Espaçamento entre os campos */
-  margin-bottom: 20px; /* Espaçamento entre as linhas */
+.step-container.active {
+  opacity: 1;
+  transform: translateX(0);
+  position: relative;
 }
 
-.button-group {
-  flex: 0 0 auto; /* Impede que o botão ocupe o espaço das colunas */
-  text-align: center; /* Centraliza o botão dentro do grupo */
-}
-
-.button-row {
-  display: flex;
-  justify-content: center; /* Centraliza o botão horizontalmente */
-  margin-top: 20px; /* Espaçamento acima do botão */
-}
-
-.login-row {
-  display: flex;
-  justify-content: center; /* Centraliza a frase horizontalmente */
-  margin-top: 10px; /* Espaçamento acima da frase */
-}
-
-.register-btn {
-  width: 150px; /* Define a largura do botão */
-  padding: 12px;
-  background-color: #004aad;
-  color: white;
-  border: none;
-  border-radius: 8px; /* Adiciona bordas arredondadas */
-  cursor: pointer;
-  font-size: 16px;
-  text-align: center;
-}
-
-.register-btn:hover {
-  background-color: #003a8c;
-}
-
-.form-group {
-  flex: 1; /* Faz com que os campos ocupem o mesmo espaço */
-  min-width: 150px; /* Define uma largura mínima para os campos */
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 16px;
-}
-
-.form-group input,
-.form-group select {
-  width: 100%; /* Garante que os campos ocupem toda a largura disponível */
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.form-group input:focus {
-  box-shadow: 0 6px 12px rgba(0, 98, 204, 0.2);
-  transform: translateY(-2px);
-}
-
-.form-links {
-  font-size: 14px;
-  color: #ffffff;
-  text-align: center; /* Centraliza o texto */
-}
-
-.form-links a {
-  color: #ffffff;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.form-links a:hover {
-  text-decoration: underline;
+.step-container.hidden {
+  display: none;
 }
 
 .error-message {
   color: red;
-} 
+}
+
+.button-step-container {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.register-logo-container {
+  color: white;
+  font-weight: 600;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.register-logo-container img {
+  width: 60px;
+}
+
+.welcome-text {
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 10px 15px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 20px;
+  background-color: #f0f4f8;
+  font-size: 14px;
+}
+
+label {
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.radio-group {
+  margin: 8px 0 16px;
+}
+
+.radio-group label {
+  color: white;
+  margin-right: 10px;
+  font-weight: normal;
+}
+
+.register-wave-container {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  background-color: #004AAD;
+  width: 500px;
+  z-index: 10;
+  border-top-left-radius: 100% 50%;
+  border-bottom-left-radius: 100% 50%;
+}
+
+.register-wave-container img {
+  width: 370px;
+  margin-bottom: 110px;
+}
+
+.regiter-btn {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.btn {
+  border-radius: 20px;
+  background-color: black;
+  color: white;
+  font-weight: 600;
+  width: 150px;
+  height: 50px;
+  border: 0px;
+}
+
+.login-link-container {
+  text-align: center;
+  color: white;
+  font-size: 18px;
+}
+
+.login-link-container p {
+  margin: 0;
+}
+
+.login-link-container a {
+  color: white !important;
+}
+
+@media (max-width: 768px) {
+  .register-section-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .rigister-section-inputs {
+    margin-left: 0px;
+    padding-top: 246px;
+  }
+
+  .register-form {
+    justify-content: center;
+  }
+
+  .register-wave-container {
+    width: 370px;
+  }
+
+  .register-wave-container img {
+    width: 230px;
+  }
+}
+
+@media (max-width: 600px) {
+  .rigister-section-inputs {
+    padding-top: 670px;
+  }
+}

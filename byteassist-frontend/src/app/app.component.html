@@ -1,6 +1,6 @@
 <app-header
   [activeSection]="activeSection"
-  *ngIf="!getIsAuthenticated()"
+  *ngIf="shouldShowHeader() && !getIsAuthenticated()"
 ></app-header>
 
 <main class="main d-flex full-width">
