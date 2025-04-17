@@ -28,4 +28,8 @@ export class AppComponent {
     return this.auth.isAuthenticated();
   }
 
+  shouldShowHeader(): boolean {
+    const currentRoute = this.router.url;
+    return !(currentRoute.includes('login') || currentRoute.includes('register'));
+  }
 }

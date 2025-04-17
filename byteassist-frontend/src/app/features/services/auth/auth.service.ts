@@ -42,16 +42,4 @@ export class AuthService {
     const token = localStorage.getItem('token');
     return !!token; // Retorna true se o token existir, false caso contrário
   }
-
-
-  // Faz a requisição para o endpoint register no backend
-  register(userData: { username: string; email: string; password: string }): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http.post(`${this.apiUrl}/auth/register`, JSON.stringify(userData), { headers }).pipe(
-      catchError(handleErrors.handleError)
-    );
-  }
 }
