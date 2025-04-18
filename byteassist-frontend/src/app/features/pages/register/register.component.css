@@ -146,6 +146,14 @@ label {
   color: white !important;
 }
 
+.eye-input-password {
+  color: black;
+  font-size: 24px;
+  position: absolute;
+  right: 20px;
+  top: 10px;
+}
+
 @media (max-width: 768px) {
   .register-section-container {
     display: flex;

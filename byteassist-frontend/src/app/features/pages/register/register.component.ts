@@ -23,6 +23,7 @@ export class RegisterComponent {
   message: string = '';
   showNotification: boolean = false;
   currentStep: number = 1; // Variável para controlar o passo atual do formulário
+  showPassword: boolean = false; // Variável para controlar a visibilidade da senha
 
   constructor(
     private router: Router,
@@ -73,10 +74,10 @@ export class RegisterComponent {
       this.user.gender = formValues.sexo;
       this.user.email = formValues.email;
       this.user.phone = formValues.telefone.replace(/\D/g, ''); // Remove caracteres não numéricos do telefone
-      this.user.zipCode = formValues.cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
+      this.user.zip = formValues.cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
       this.user.state = formValues.uf;
       this.user.city = formValues.cidade;
-      this.user.neiborhood = formValues.bairro;
+      this.user.neighborhood = formValues.bairro;
       this.user.street = formValues.logradouro;
       this.user.number = formValues.numero;
       this.user.complement = formValues.complemento;
@@ -88,13 +89,6 @@ export class RegisterComponent {
   }
 
   goToNextStep(): void {
-    // Verifica se as senhas coincidem
-    if (this.registerForm?.value.password !== this.registerForm?.value.confirmedPassword) {
-      this.message = 'As senhas não coincidem.';
-      this.showNotification = true;
-      return;
-    }
-
     if (this.currentStep < 2) {
       this.currentStep++;
     }
@@ -140,5 +134,10 @@ export class RegisterComponent {
     input.value = input.value
       .replace(/\D/g, '') // Remove tudo que não é número
       .replace(/(\d{5})(\d)/, '$1-$2'); // Adiciona o traço
+  }
+
+  // Alterna a visibilidade da senha
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
   }
 }

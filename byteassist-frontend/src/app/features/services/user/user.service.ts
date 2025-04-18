@@ -10,7 +10,7 @@ import { LoadingService } from '../utils/loading.service';
   providedIn: 'root'
 })
 export class UserService {
-  private readonly apiUrl = 'https://byteassist-backend.fly.dev/api'
+  private readonly apiUrl = 'https://byteassist-backend.fly.dev/api';
 
   constructor(
     private http: HttpClient,
@@ -29,7 +29,7 @@ export class UserService {
     this.loadingService.show(); // Exibe o loading
 
     console.log('user', user);
-    return this.http.post(`${this.apiUrl}`, body.toString(), { headers }).pipe(
+    return this.http.post(`${this.apiUrl}/auth/register`, body.toString(), { headers }).pipe(
       finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
       catchError(handleErrors.handleError)
     );

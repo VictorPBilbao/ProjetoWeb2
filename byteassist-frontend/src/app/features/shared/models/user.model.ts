@@ -9,12 +9,13 @@ export class User {
     public gender: string = '',
     public email: string = '',
     public phone: string = '',
-    public zipCode: string = '',
+    public zip: string = '',
     public state: string = '',
     public city: string = '',
-    public neiborhood: string = '',
+    public neighborhood: string = '',
     public street: string = '',
     public number: string = '',
-    public complement: string = ''
+    public complement: string = '',
+    public country: string = 'BR',
   ) { }
 }
