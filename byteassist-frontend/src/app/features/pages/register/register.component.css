@@ -55,6 +55,11 @@
   left: 10px;
 }
 
+.register-logo-container a {
+  color: white;
+  text-decoration: none;
+}
+
 .register-logo-container img {
   width: 60px;
 }

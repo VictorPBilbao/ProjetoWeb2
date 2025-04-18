@@ -28,7 +28,7 @@ export class UserService {
 
     this.loadingService.show(); // Exibe o loading
 
-    console.log('user', user);
+    console.log('body', body.toString());
     return this.http.post(`${this.apiUrl}/auth/register`, body.toString(), { headers }).pipe(
       finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
       catchError(handleErrors.handleError)
