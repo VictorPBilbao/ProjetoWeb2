@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { User } from '../../shared/models/user.model';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, finalize } from 'rxjs/operators';
 import { handleErrors } from '../../helpers/errors/handleErrors';
+import { LoadingService } from '../utils/loading.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,10 @@ import { handleErrors } from '../../helpers/errors/handleErrors';
 export class UserService {
   private readonly apiUrl = 'https://byteassist-backend.fly.dev/api'
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private loadingService: LoadingService
+  ) { }
 
   // Método para criar um novo usuário
   createUser(user: User): Observable<any> {
@@ -22,7 +26,11 @@ export class UserService {
       'Content-Type': 'application/x-www-form-urlencoded'
     });
 
-    return this.http.post(`${this.apiUrl}/auth/login`, body.toString(), { headers }).pipe(
+    this.loadingService.show(); // Exibe o loading
+
+    console.log('user', user);
+    return this.http.post(`${this.apiUrl}`, body.toString(), { headers }).pipe(
+      finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
       catchError(handleErrors.handleError)
     );
   }

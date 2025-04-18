@@ -18,7 +18,7 @@ import { User } from '../../shared/models/user.model';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-  @ViewChild('registerForm') registerForm: NgForm | undefined;
+  @ViewChild('registerForm') registerForm!: NgForm | undefined;
   user: User = new User();
   message: string = '';
   showNotification: boolean = false;
@@ -29,7 +29,15 @@ export class RegisterComponent {
     private userService: UserService) {}
 
   onSubmit() {
+    this.showNotification = false; // Reseta a notificação ao submeter o formulário
+    this.message = ''; // Reseta a mensagem ao submeter o formulário
+
     if (this.registerForm?.valid) {
+      this.user = this.verifyFieldsAndCreateUser() as User;
+      if (!this.user) {
+        return;
+      }
+
       this.userService.createUser(this.user).subscribe({
         next: (response) => {
           if (response) {
@@ -51,11 +59,42 @@ export class RegisterComponent {
     }
   }
 
-  navigateToLogin(): void {
-    this.router.navigate(['/login']); // Redireciona para a página de login
+  verifyFieldsAndCreateUser(): User | null {
+    if (this.registerForm) {
+      const formValues = this.registerForm.value; // Obtém os valores do formulário
+      const password = formValues.password;
+
+      // Alimenta o objeto User com os dados do formulário
+      this.user.username = formValues.username;
+      this.user.password = password;
+      this.user.fullName = formValues.nome;
+      this.user.cpf = formValues.cpf.replace(/\D/g, ''); // Remove caracteres não numéricos do CPF
+      this.user.dateOfBirth = new Date(formValues.nascimento); // Converte para Date
+      this.user.gender = formValues.sexo;
+      this.user.email = formValues.email;
+      this.user.phone = formValues.telefone.replace(/\D/g, ''); // Remove caracteres não numéricos do telefone
+      this.user.zipCode = formValues.cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
+      this.user.state = formValues.uf;
+      this.user.city = formValues.cidade;
+      this.user.neiborhood = formValues.bairro;
+      this.user.street = formValues.logradouro;
+      this.user.number = formValues.numero;
+      this.user.complement = formValues.complemento;
+
+      return this.user; // Retorna o objeto User preenchido
+    }
+
+    return null; // Retorna null caso o formulário não esteja definido
   }
 
   goToNextStep(): void {
+    // Verifica se as senhas coincidem
+    if (this.registerForm?.value.password !== this.registerForm?.value.confirmedPassword) {
+      this.message = 'As senhas não coincidem.';
+      this.showNotification = true;
+      return;
+    }
+
     if (this.currentStep < 2) {
       this.currentStep++;
     }
@@ -65,5 +104,41 @@ export class RegisterComponent {
     if (this.currentStep > 1) {
       this.currentStep--;
     }
+  }
+
+  // Máscara para CPF
+  applyCpfMask(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value
+      .replace(/\D/g, '') // Remove tudo que não é número
+      .replace(/(\d{3})(\d)/, '$1.$2') // Adiciona o primeiro ponto
+      .replace(/(\d{3})(\d)/, '$1.$2') // Adiciona o segundo ponto
+      .replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Adiciona o traço
+  }
+
+  // Máscara para Data de Nascimento
+  applyDateMask(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value
+      .replace(/\D/g, '') // Remove tudo que não é número
+      .replace(/(\d{2})(\d)/, '$1/$2') // Adiciona a primeira barra
+      .replace(/(\d{2})(\d)/, '$1/$2'); // Adiciona a segunda barra
+  }
+
+  // Máscara para Telefone
+  applyPhoneMask(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value
+      .replace(/\D/g, '') // Remove tudo que não é número
+      .replace(/(\d{2})(\d)/, '($1) $2') // Adiciona os parênteses
+      .replace(/(\d{5})(\d)/, '$1-$2'); // Adiciona o traço
+  }
+
+  // Máscara para CEP
+  applyCepMask(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value
+      .replace(/\D/g, '') // Remove tudo que não é número
+      .replace(/(\d{5})(\d)/, '$1-$2'); // Adiciona o traço
   }
 }

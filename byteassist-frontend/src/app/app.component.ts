@@ -4,6 +4,7 @@ import { HeaderComponent } from './features/components/header/header.component';
 import { MenuSidebarComponent } from './features/components/menu-sidebar/menu-sidebar.component';
 import { AuthService } from './features/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
+import { LoadingComponent } from './features/components/utils/loading/loading.component';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,8 @@ import { CommonModule } from '@angular/common';
     RouterOutlet,
     HeaderComponent,
     MenuSidebarComponent,
-    CommonModule
+    CommonModule,
+    LoadingComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
