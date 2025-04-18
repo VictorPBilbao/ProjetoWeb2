@@ -25,14 +25,22 @@
         </div>
 
         <!-- Campo Password -->
-        <input
-          type="password"
-          name="password"
-          ngModel
-          #password="ngModel"
-          placeholder="Senha"
-          required
-          minlength="6">
+        <div style="position: relative; width: 250px;">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            name="password"
+            ngModel
+            #password="ngModel"
+            placeholder="Senha"
+            required
+            minlength="6">
+            <i
+              class="bi eye-input-password"
+              [class.bi-eye-slash]="!showPassword"
+              [class.bi-eye]="showPassword"
+              (click)="togglePasswordVisibility()"></i>
+        </div>
+
         <div *ngIf="password.invalid && password.touched" class="error-message">
           <small *ngIf="password.errors?.['required']">O campo Senha é obrigatório.</small>
           <small *ngIf="password.errors?.['minlength']">A senha deve ter pelo menos 6 caracteres.</small>
@@ -40,14 +48,14 @@
 
         <!-- Campo Confirm Password -->
         <input
-          type="password"
+          [type]="showPassword ? 'text' : 'password'"
           name="confirmedPassword"
           ngModel
           #confirmedPassword="ngModel"
           placeholder="Confirme a Senha"
           minlength="6"
           required>
-        <div *ngIf="confirmedPassword.invalid && confirmedPassword.touched" class="error-message">
+        <div *ngIf="confirmedPassword.invalid && confirmedPassword.touched || confirmedPassword.value !== password.value" class="error-message">
           <small *ngIf="confirmedPassword.errors?.['required']">O campo Confirme a Senha é obrigatório.</small>
           <small *ngIf="confirmedPassword.value !== password.value && confirmedPassword.touched">
             As senhas não coincidem.
@@ -55,7 +63,12 @@
         </div>
 
         <div class="button-step-container">
-          <button type="button" class="btn btn-primary" (click)="goToNextStep()">Próximo</button>
+          <button type="button"
+                  class="btn btn-primary"
+                  (click)="goToNextStep()"
+                  [disabled] = "(confirmedPassword.value !== password.value)"
+          >
+            Próximo</button>
         </div>
       </div>
 
