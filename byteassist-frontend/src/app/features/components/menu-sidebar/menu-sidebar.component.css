@@ -19,7 +19,7 @@ aside::-webkit-scrollbar{
 }
 
 .menu-padding {
-  padding: 20px 30px;
+  padding: 15px 20px;
 }
 
 .menu-icon {
@@ -86,24 +86,26 @@ aside::-webkit-scrollbar{
   background-color: #4263C4;
 }
 
-.menu-nav .nav-item, .menu-nav .nav-link {
-  width: 100%;
+.active {
+  background-color: #4263C4;
 }
 
-.menu-nav .nav-item {
-  padding-top: 5px;
-  padding-bottom: 5px;
+.menu-nav .nav-item, .menu-nav .nav-link {
+  width: 100%;
 }
 
 .nav-link {
   gap: 10px;
 }
 
+.nav-link:hover {
+  cursor: pointer;
+}
+
 .menu-nav .nav-link {
   color: white;
   font-size: 20px;
   font-weight: 400;
-  padding: 10px 0;
   width: 100%;
   height: 100%;
 }
@@ -111,8 +113,8 @@ aside::-webkit-scrollbar{
 .nav-item-seperator {
   padding-left: 0;
   padding-right: 0;
-  padding-top: 10px !important;
-  padding-bottom: 5px !important;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .nav-border {
@@ -121,12 +123,20 @@ aside::-webkit-scrollbar{
   background-color: white;
 }
 
+.menu-user-name {
+  margin-left: 10px;
+}
+
 @media (max-width: 768px) {
+  .menu-user-name {
+    margin-left: 0px;
+  }
+
   .nav-link-text,
   .menu-user-name,
   .menu-search-container {
     opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
     width: 0px;
   }
 
