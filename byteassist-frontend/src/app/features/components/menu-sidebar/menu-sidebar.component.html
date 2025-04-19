@@ -1,12 +1,12 @@
-<aside class="d-flex flex-column">
+<aside class="d-flex flex-column sidebar" (click)="openSidebar()">
   <div class="d-flex">
     <div class="menu-user-container d-flex flex-column menu-padding">
-      <div class="d-flex align-items-center gap-2">
+      <div class="d-flex align-items-center">
         <div class="menu-name-initials-container d-flex align-items-center justify-content-center">
           VB
         </div>
 
-        <div>
+        <div class="menu-user-name">
           {{ userName }}
         </div>
       </div>
@@ -21,41 +21,48 @@
   <nav class="menu-nav d-flex">
     <ul class="nav d-flex flex-column">
       <li class="nav-item menu-padding">
-        <a class="nav-link active" aria-current="page" href="#">
-          <img src="/images/menu-sidebar/monitor-graph.svg" class="menu-icon"> Dashbord
+        <a class="nav-link active flex items-center" aria-current="page" href="#">
+          <img src="/images/menu-sidebar/monitor-graph.svg" class="menu-icon">
+          <p class="nav-link-text">Dashbord</p>
         </a>
       </li>
       <li class="nav-item menu-padding">
-        <a class="nav-link" href="#">
-          <img src="/images/menu-sidebar/maintenance.svg" class="menu-icon"> Solitações
+        <a class="nav-link flex items-center" href="#">
+          <img src="/images/menu-sidebar/maintenance.svg" class="menu-icon">
+          <p class="nav-link-text">Solitações</p>
         </a>
       </li>
       <li class="nav-item menu-padding">
-        <a class="nav-link" href="#">
-          <img src="/images/menu-sidebar/money-recive.svg" class="menu-icon"> Orçamentos
+        <a class="nav-link flex items-center" href="#">
+          <img src="/images/menu-sidebar/money-recive.svg" class="menu-icon">
+          <p class="nav-link-text">Orçamentos</p>
         </a>
       </li>
       <li class="nav-item menu-padding">
-        <a class="nav-link" href="#">
-          <img src="/images/menu-sidebar/payment-method.svg" class="menu-icon"> Pagamentos
+        <a class="nav-link flex items-center" href="#">
+          <img src="/images/menu-sidebar/payment-method.svg" class="menu-icon">
+          <p class="nav-link-text">Pagamentos</p>
         </a>
       </li>
       <li class="nav-item menu-padding">
-        <a class="nav-link" href="#">
-          <img src="/images/menu-sidebar/account.svg" class="menu-icon"> Configurações
+        <a class="nav-link flex items-center" href="#">
+          <img src="/images/menu-sidebar/account.svg" class="menu-icon">
+          <p class="nav-link-text">Configurações</p>
         </a>
       </li>
       <li class="nav-item menu-padding">
-        <a class="nav-link" href="#">
-          <img src="/images/menu-sidebar/customer-service.svg" class="menu-icon"> Suporte
+        <a class="nav-link flex items-center" href="#">
+          <img src="/images/menu-sidebar/customer-service.svg" class="menu-icon">
+          <p class="nav-link-text">Suporte</p>
         </a>
       </li>
       <li class="nav-item nav-item-seperator menu-padding">
         <div class="nav-border"></div>
       </li>
       <li class="nav-item menu-padding">
-        <a class="nav-link" href="#">
-          <img src="/images/menu-sidebar/logout.svg" class="menu-icon"> Logout
+        <a class="nav-link flex items-center" href="#">
+          <img src="/images/menu-sidebar/logout.svg" class="menu-icon">
+          <p class="nav-link-text">Logout</p>
         </a>
       </li>
     </ul>
