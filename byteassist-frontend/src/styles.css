@@ -10,6 +10,9 @@ body {
   background: linear-gradient(90deg, #062685 0%, #4d73e4 50%, #49a2ad 100%);
 }
 
+p {
+  margin: 0px;
+}
 
 /* Flex Containers */
 .flex {

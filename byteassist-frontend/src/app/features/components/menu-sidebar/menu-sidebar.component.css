@@ -1,9 +1,21 @@
 aside {
   width: 320px;
-  height: 100vh;
-  background: linear-gradient(90deg, #062685 0%, #4d73e4 50%, #49a2ad 100%);
+  min-height: 100vh;
+  height: auto;
+  background-color: #3355BD;
   border-radius: 0 30px 30px 0;
   color: white;
+  overflow: auto;
+  transition: width 0.3s ease-in-out;
+}
+
+aside::-webkit-scrollbar{
+  width: 0px;
+  height: 0px;
+}
+
+.sidebar.open {
+  width: 320px;
 }
 
 .menu-padding {
@@ -71,7 +83,7 @@ aside {
 .menu-nav .nav-link:focus, .nav-link:hover {
   text-decoration: none;
   color: #d1f2f9;
-  background-color: transparent;
+  background-color: #4263C4;
 }
 
 .menu-nav .nav-item, .menu-nav .nav-link {
@@ -81,6 +93,10 @@ aside {
 .menu-nav .nav-item {
   padding-top: 5px;
   padding-bottom: 5px;
+}
+
+.nav-link {
+  gap: 10px;
 }
 
 .menu-nav .nav-link {
@@ -103,4 +119,39 @@ aside {
   height: 2px;
   width: 100%;
   background-color: white;
+}
+
+@media (max-width: 768px) {
+  .nav-link-text,
+  .menu-user-name,
+  .menu-search-container {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    width: 0px;
+  }
+
+  .menu-padding {
+    padding: 10px;
+  }
+
+  aside {
+    width: 62px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    height: 100vh;
+  }
+
+  .menu-name-initials-container {
+    width: 40px;
+    height: 40px;
+  }
+
+  .nav-item-seperator {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
 }

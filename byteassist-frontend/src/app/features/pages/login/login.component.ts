@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
           if (response && response.id && response.token != "") {
             try {
               this.auth.saveToken(response.token); // Salva o token no localStorage
-              this.router.navigate(['/home']); // Redireciona para a página inicial
+              this.router.navigate(['/dashboard']); // Redireciona para a página inicial
             } catch (error) {
               throw error;
             }
