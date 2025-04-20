@@ -1,9 +1,14 @@
 package com.ufpr.byteassist_backend.service;
 
+import com.surrealdb.RecordId;
 import com.ufpr.byteassist_backend.dto.RegistrationRequestDTO;
 import com.ufpr.byteassist_backend.dto.UserDTO;
 import com.ufpr.byteassist_backend.exception.ErrorResponse;
+import com.ufpr.byteassist_backend.model.Person;
+import com.ufpr.byteassist_backend.model.PersonAddress;
+import com.ufpr.byteassist_backend.model.PersonName;
 import com.ufpr.byteassist_backend.model.User;
+import com.ufpr.byteassist_backend.repository.PersonRepo;
 import com.ufpr.byteassist_backend.repository.UpdateTimeRepo;
 import com.ufpr.byteassist_backend.repository.UserRepo;
 
@@ -14,6 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,13 +32,15 @@ public class AuthService {
     private final UpdateTimeRepo updateTimeRepo;
     private final JwtService jwtService;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final PersonRepo personRepo;
 
     // Constructor injection
-    public AuthService(UserRepo userRepo, UpdateTimeRepo updateTimeRepo, JwtService jwtService) {
+    public AuthService(UserRepo userRepo, UpdateTimeRepo updateTimeRepo, JwtService jwtService, PersonRepo personRepo) {
         this.userRepo = userRepo;
         this.updateTimeRepo = updateTimeRepo;
         this.jwtService = jwtService;
         this.passwordEncoder = new BCryptPasswordEncoder();
+        this.personRepo = personRepo;
     }
 
     public ResponseEntity<Object> login(String username, String password) {
@@ -78,6 +89,15 @@ public class AuthService {
             errors.put("email availability", "Email is already in use");
         }
 
+        // Validate and convert date format
+        ZonedDateTime dobZoned = null;
+        try {
+            LocalDate localDate = LocalDate.parse(user.getDob());
+            dobZoned = localDate.atStartOfDay(ZoneId.systemDefault());
+        } catch (DateTimeParseException e) {
+            errors.put("dob", "Invalid date format. Please use YYYY-MM-DD");
+        }
+
         // If there are any errors (either validation or business rules), return them
         if (!errors.isEmpty()) {
             ErrorResponse errorResponse = ErrorResponse.builder()
@@ -95,6 +115,33 @@ public class AuthService {
 
         // If no errors, proceed with registration
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        PersonName name = new PersonName(user.getFirstName(), user.getLastName());
+        PersonAddress address = new PersonAddress(user.getZip(), user.getNumber(), user.getStreet(), user.getCity(),
+                user.getState(), user.getCountry(), user.getNeighborhood());
+        Person person = new Person(
+                null,
+                user.getCpf(),
+                dobZoned, // Using the converted ZonedDateTime
+                user.getGender(),
+                address,
+                name);
+
+        // Call createPerson method for debugging
+        RecordId createdPerson = personRepo.createPerson(person, user.getUsername());
+
+        User newUser = new User(
+                null,
+                user.getEmail(),
+                true,
+                user.getPassword(),
+                createdPerson,
+                null,
+                "Client",
+                user.getUsername());
+
+        userRepo.createUser(newUser);
+
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

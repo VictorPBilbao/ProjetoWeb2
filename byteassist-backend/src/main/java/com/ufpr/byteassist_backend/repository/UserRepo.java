@@ -2,6 +2,7 @@ package com.ufpr.byteassist_backend.repository;
 
 import org.springframework.stereotype.Repository;
 
+import com.surrealdb.RecordId;
 import com.surrealdb.Response;
 import com.surrealdb.Surreal;
 import com.ufpr.byteassist_backend.model.User;
@@ -37,4 +38,9 @@ public class UserRepo {
         return response.take(0).getArray().len() == 0;
     }
 
+    public void createUser(User user) {
+        System.out.println("Creating user: " + user);
+        db.create(User.class, new RecordId("User", user.getUsername()), user);
+        System.out.println("User created successfully with ID: " + user.getId());
+    }
 }

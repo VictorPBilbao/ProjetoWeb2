@@ -65,4 +65,8 @@ public class RegistrationRequestDTO {
     @NotBlank(message = "Country is required")
     @Pattern(regexp = "^[A-Z]{2}$", message = "Country must be exactly 2 uppercase letters")
     private String country;
+
+    @NotBlank(message = "Gender is required")
+    @Pattern(regexp = "^(Male|Female|Other)$", message = "Gender must be 'Male', 'Female', or 'Other'")
+    private String gender;
 }
