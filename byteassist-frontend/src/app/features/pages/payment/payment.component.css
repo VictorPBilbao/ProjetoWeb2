@@ -1,0 +1,244 @@
+/* Seção principal */
+section {
+  padding: 40px 20px;
+}
+
+.center-container {
+  display: flex;
+  justify-content: center; /* Alinha horizontalmente */
+  align-items: center;     /* Alinha verticalmente */       
+}
+
+/* Estilo do contêiner do título */
+.title-container {
+  background: linear-gradient(135deg, #030e6d); /* Gradiente para o fundo */
+  padding: 20px 40px;
+  border-radius: 30px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* Sombra para dar um efeito de elevação */
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 0; /* Remove a margem do título */
+}
+
+/* Container central do formulário */
+.container {
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 600px;
+  margin: auto;
+}
+
+/* Formulário */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Campos de formulário */
+.form-group {
+  margin-bottom: 20px;
+  border-radius: 12px;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+  color: #ffffff;
+}
+
+input[readonly] {
+  background-color: #e9ecef; /* cor de fundo esmaecida */
+  opacity: 0.7;              /* deixa o campo mais "apagado" */
+  cursor: not-allowed;       /* indica que não é editável */
+}
+
+/* Estilo dos campos de input e select */
+input.form-control,
+select.form-control {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 12px;
+  transition: border-color 0.3s;
+}
+
+input.form-control:focus,
+select.form-control:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Estilo do botão de submit */
+button[type="submit"] {
+  padding: 12px 20px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 12px;
+  margin-top: 15px;
+  transition: background-color 0.3s ease;
+  width: 200px;
+  display: block; /* Torna o botão um bloco para poder alinhar */
+  margin-left: auto; /* Alinha o botão à esquerda */
+  margin-right: auto;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Alertas (Boleto, PIX) */
+.alert.alert-info {
+  background-color: #e9f7fd;
+  color: #0c5460;
+  padding: 15px;
+  border: 1px solid #bee5eb;
+  border-radius: px;
+  margin-top: 10px;
+}
+
+.qrcode-placeholder {
+  width: 150px;          /* define a largura do quadrado */
+  height: 150px;         /* define a altura do quadrado */
+  border: 1px dashed #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  background-color: #f9f9f9;
+  margin-top: 10px;
+}
+
+.qrcode-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.loading-content {
+  text-align: center;
+  color: white;
+  font-size: 18px;
+}
+
+.spinner {
+  margin-top: 20px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid white;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1.2s linear infinite;
+}
+
+/* Animacao do spinner */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Estilo do overlay (fundo semitransparente) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 1000; /* Garante que o modal fique em cima do conteúdo */
+  padding-top: 50px;
+}
+
+/* Estilo do conteúdo do modal */
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content h5 {
+  margin-bottom: 20px;
+}
+
+.modal-content button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  font-size: 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100px;
+  margin-top: 10px; /* Ajuste o espaço entre o botão e o texto */
+  display: block; /* Para garantir que o botão seja tratado como bloco */
+  margin-left: auto; /* Isso vai alinhar o botão ao centro */
+  margin-right: auto; /* Isso vai alinhar o botão ao centro */
+}
+
+.modal-content button:hover {
+  background-color: #0056b3;
+}
+
+
+/* Responsividade para dispositivos móveis */
+@media (max-width: 576px) {
+  .container {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+  }
+
+  .alert.alert-info {
+    font-size: 0.9rem;
+    padding: 12px;
+  }
+
+  .qrcode-placeholder {
+    width: 120px;
+    height: 120px;
+    padding: 20px;
+  }
+
+  /* Ajustes no campo de input para dispositivos móveis */
+  input.form-control,
+  select.form-control {
+    padding: 12px 14px;
+  }
+}

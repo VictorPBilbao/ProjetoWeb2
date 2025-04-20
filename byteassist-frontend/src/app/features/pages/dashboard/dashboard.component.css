@@ -44,9 +44,9 @@
   font-weight: bold;
   color: white;
   padding: 40px;
-  margin: 0 auto 50px;
   text-align: center;
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+  margin: -50px auto 50px;
 }
 
 .charts-container {
