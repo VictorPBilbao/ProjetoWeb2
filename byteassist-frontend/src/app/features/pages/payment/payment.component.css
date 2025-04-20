@@ -36,12 +36,20 @@ h1 {
 form {
   display: flex;
   flex-direction: column;
+  margin-bottom: 20px;
 }
 
-/* Campos de formulário */
-.form-group {
-  margin-bottom: 20px;
-  border-radius: 12px;
+/* Linha de campos lado a lado */
+.input-row {
+  display: flex; /* Usando Flexbox para alinhar os itens lado a lado */
+  gap: 20px; /* Espaçamento entre os campos */
+  flex-wrap: wrap; /* Para permitir que os campos quebrem linha em dispositivos menores */
+}
+
+.input-row .form-group {
+  flex: 1; /* Faz com que os campos ocupem o mesmo espaço disponível */
+  min-width: 250px;
+  margin-bottom: 10px; /* Garantir que cada campo tenha largura mínima */
 }
 
 label {
@@ -60,7 +68,7 @@ input[readonly] {
 /* Estilo dos campos de input e select */
 input.form-control,
 select.form-control {
-  width: 100%;
+  width: 100%; /* Garantir que os campos ocupem a largura disponível */
   padding: 10px 12px;
   font-size: 1rem;
   border: 1px solid #ced4da;
@@ -98,26 +106,34 @@ button[type="submit"]:hover {
   color: #0c5460;
   padding: 15px;
   border: 1px solid #bee5eb;
-  border-radius: px;
-  margin-top: 10px;
+  border-radius: 12px;
 }
 
-.qrcode-placeholder {
-  width: 150px;          /* define a largura do quadrado */
-  height: 150px;         /* define a altura do quadrado */
-  border: 1px dashed #ccc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  background-color: #f9f9f9;
-  margin-top: 10px;
+.form-group p strong {
+  color: #ffffff; /* ou outra cor desejada */
+}
+.form-group p {
+  color: white;
 }
 
-.qrcode-img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+.pix-text {
+  color: white;
+  margin-bottom: 10px;
+}
+
+.btn-copiar {
+  padding: 8px 16px;
+  background-color: #7bdaeb3b;
+  color: white;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-copiar:hover {
+  background-color: #0056b3;
 }
 
 .loading-overlay {
@@ -150,12 +166,6 @@ button[type="submit"]:hover {
 }
 
 /* Animacao do spinner */
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -210,7 +220,6 @@ button[type="submit"]:hover {
   background-color: #0056b3;
 }
 
-
 /* Responsividade para dispositivos móveis */
 @media (max-width: 576px) {
   .container {
@@ -240,5 +249,15 @@ button[type="submit"]:hover {
   input.form-control,
   select.form-control {
     padding: 12px 14px;
+  }
+
+  /* Ajustes para a linha de campos lado a lado em telas pequenas */
+  .input-row {
+    flex-direction: column; /* Torna os campos empilhados em telas pequenas */
+  }
+
+  .input-row .form-group {
+    width: 100%; /* Faz com que os campos ocupem 100% da largura em telas pequenas */
+    margin-bottom: 20px; /* Dá um espaço entre os campos em telas pequenas */
   }
 }

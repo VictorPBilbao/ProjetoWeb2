@@ -18,7 +18,7 @@ export class PaymentComponent implements OnInit {
 
   tiposServico = ['Atualização', 'Formatação', 'Configuração', 'Limpeza', 'Manutenção', 'Troca de peças'];
   opcoesParcelas = [1, 2, 3, 4, 5, 6, 10, 12];
-  task = ['001', '002', '003', '004', '005', '006', '010', '012'];
+  task = ['001', '005', '007', '009', '011', '013', '017', '018'];
 
   codigoBarras = '1234 5678 9012 3456 7890 1234 5678';
   chavePix = 'byte-assist@pix.com.br';
