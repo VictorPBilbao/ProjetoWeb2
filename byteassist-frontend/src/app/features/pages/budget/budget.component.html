@@ -1,3 +1,65 @@
-<section>
-  <h1>Orçamento</h1>
+<section class="budget-container flex flex-column items-center">
+  <div class="budget-title-container flex items-center justify-center">
+    <h1>ORÇAMENTOS</h1>
+  </div>
+
+  <div class="budgets-list-container">
+    <div class="table-header flex items-center justify-between">
+      <div class="header-item">ID</div>
+      <div class="header-item">Data</div>
+      <div class="header-item">Hora</div>
+      <div class="header-item">Equipamento</div>
+      <div class="header-item">Status</div>
+      <div class="header-item">Valor</div>
+    </div>
+
+    <div class="table-card" *ngFor="let budget of budgets; let i = index">
+      <div class="table-header">
+        <div class="info flex items-center justify-between" (click)="openBudget(i)">
+          <div class="header-item">{{ budget.id }}</div>
+          <div class="header-item">{{ budget.date | date:'dd/MM/yyyy' }}</div>
+          <div class="header-item">{{ budget.time }}</div>
+          <div class="header-item">{{ budget.equipment }}</div>
+          <div class="header-item">{{ budget.status }}</div>
+          <div class="header-item">{{ budget.budgetValue | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</div>
+        </div>
+        <span class="table-caret">
+          <i class="bi bi-caret-down-fill"></i>
+        </span>
+      </div>
+
+      <div class="accordion" [class.ativo]="activeAccordion === i">
+        <div class="budget-details flex justify-between">
+          <div class="descricao">
+            <div class="secao">
+              <h3>Peças</h3>
+              <p>{{ budget.partsDescription }}</p>
+            </div>
+            <div class="secao">
+              <h3>Mão de Obra</h3>
+              <p>{{ budget.laborDescription }}</p>
+            </div>
+          </div>
+
+          <div class="painel-lateral">
+            <p><strong>{{ budget.date | date:'dd/MM/yyyy' }}</strong><br>{{ budget.time }}</p>
+            <div class="detalhes">
+              <p>Peças: R$950</p>
+              <p>Pessoal: R$500</p>
+              <p>Mão de Obra: R$550</p>
+              <p><strong>Orçamento:</strong> R$3.000,00</p>
+              <p>Contador: Adriano<br>Tesoureiro: Guilherme Arthur</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="servico">Serviço: <span>Manutenção</span></div>
+
+        <div class="botoes">
+          <button class="aprovar"><i class="bi bi-check-circle"></i> Aprovar</button>
+          <button class="rejeitar"><i class="bi bi-x-circle"></i> Rejeitar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
