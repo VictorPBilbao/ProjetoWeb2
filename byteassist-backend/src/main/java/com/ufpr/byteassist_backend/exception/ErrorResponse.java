@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 
 import lombok.Builder;
 import lombok.Data;
+import java.util.Map;
 
 @Data
 @Builder
@@ -12,4 +13,5 @@ public class ErrorResponse {
     private int statusCode;
     private HttpStatus errorCode;
     private String errorDescription;
+    private Map<String, String> validationErrors;
 }
