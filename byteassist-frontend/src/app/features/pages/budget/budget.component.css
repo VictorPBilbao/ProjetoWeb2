@@ -1,0 +1,141 @@
+.budget-container {
+  width: 100%;
+  height: auto;
+  padding-bottom: 60px;
+}
+
+.budget-title-container {
+  color: white;
+  background-color: #2B4EB6;
+  width: 350px;
+  height: 200px;
+  border-bottom-left-radius: 100% 50%;
+  border-bottom-right-radius: 100% 50%;
+}
+
+.budgets-list-container {
+  margin-top: 60px;
+}
+
+.budget-details {
+  gap: 10px;
+}
+
+.table-header {
+  width: 800px;
+  padding: 10px;
+  position: relative;
+}
+
+.header-item {
+  width: 14.28%;
+  text-align: center;
+  color: white;
+}
+
+.table-card {
+  max-width: 900px;
+  margin: auto;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.info {
+  gap: 15px;
+  position: relative;
+  border-radius: 15px;
+  border: 2px solid white;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.table-caret {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+}
+
+.accordion {
+  opacity: 0;
+  height: 0px;
+  transition: opacity 1s ease-in-out, height 1s ease-in-out;
+  padding: 10px;
+}
+
+.accordion.ativo {
+  opacity: 1;
+  height: auto;
+}
+
+.descricao .secao {
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.descricao {
+  width: 100%;
+}
+
+.secao {
+  background-color: white;
+}
+
+.secao p {
+  color: gray;
+}
+
+.servico {
+  background-color: #ffffff20;
+  color: #333;
+  font-weight: bold;
+  display: inline-block;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.painel-lateral {
+  background-color: white;
+  padding: 15px;
+  border-radius: 15px;
+  width: 260px;
+}
+
+.botoes {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.aprovar, .rejeitar {
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.aprovar {
+  background-color: #4caf50;
+  color: white;
+}
+
+.rejeitar {
+  background-color: #f44336;
+  color: white;
+}
+
+.botoes {
+  font-size: 20px;
+}
