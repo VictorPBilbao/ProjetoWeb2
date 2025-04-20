@@ -8,6 +8,26 @@ import lombok.Data;
 
 @Data
 public class RegistrationRequestDTO {
+
+    @NotBlank(message = "First name is required")
+    @Size(max = 50, message = "First name must not exceed 50 characters")
+    private String firstName;
+
+    @NotBlank(message = "Last name is required")
+    @Size(max = 50, message = "Last name must not exceed 50 characters")
+    private String lastName;
+
+    @NotBlank(message = "CPF is required")
+    @Pattern(regexp = "^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$", message = "CPF must be in the format XXX.XXX.XXX-XX")
+    private String cpf;
+
+    @NotBlank(message = "Date of birth is required")
+    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "Date of birth must be in the format YYYY-MM-DD")
+    private String dob;
+
+    @Size(max = 100, message = "Complemento must not exceed 100 characters")
+    private String complemento;
+
     @NotBlank(message = "Username is required")
     @Pattern(regexp = "^[a-z0-9._-]+$", message = "Username must be lowercase and can only contain letters, numbers, dots, underscores, and hyphens")
     @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
