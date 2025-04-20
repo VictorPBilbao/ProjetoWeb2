@@ -5,6 +5,8 @@ import { MenuSidebarComponent } from './features/components/menu-sidebar/menu-si
 import { AuthService } from './features/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from './features/components/utils/loading/loading.component';
+import { FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-root',
@@ -14,7 +16,8 @@ import { LoadingComponent } from './features/components/utils/loading/loading.co
     HeaderComponent,
     MenuSidebarComponent,
     CommonModule,
-    LoadingComponent
+    LoadingComponent,
+    FormsModule,
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']

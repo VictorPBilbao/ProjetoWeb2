@@ -1,3 +1,129 @@
 <section>
-  <h1>Pagamentos</h1>
+     
+  <div class="center-container">
+    <div class="title-container">
+      <h1>Pagamentos</h1>
+    </div>
+  </div>
+    
+  <div class="container">
+
+    <form (ngSubmit)="submitForm()" #pagamentoForm="ngForm">
+
+      <!-- Tipo de Serviço -->
+      <div class="form-group">
+        <label for="tipoServico">Tipo de Serviço</label>
+        <select class="form-control" id="tipoServico" [(ngModel)]="pagamento.tipoServico" name="tipoServico" required>
+          <option value="" disabled selected>Selecione...</option>
+          <option *ngFor="let servico of tiposServico" [value]="servico">{{ servico }}</option>
+        </select>
+      </div>
+
+      <!-- Data do Serviço -->
+      <div class="form-group">
+        <label for="dataServico">Data do Serviço</label>
+        <input type="date" class="form-control" id="dataServico" [(ngModel)]="pagamento.dataServico" name="dataServico" required>
+      </div>
+
+       <!-- Solicitação que o cliente deseja pagar -->
+      <div class="form-group">
+        <label for="task">Solicitação</label>
+        <select class="form-control" id="task" [(ngModel)]="pagamento.task" name="task" required>
+    
+        <option value="" disabled selected>Selecione...</option>
+        <option *ngFor="let codigo of task" [value]="codigo">{{ codigo }}</option>
+        </select>
+      </div>
+
+      <!-- Empresa e CNPJ -->
+      <div class="form-group">
+        <label for="empresa">Nome da Empresa</label>
+        <input type="text" class="form-control" id="empresa" [(ngModel)]="pagamento.empresa" name="empresa" readonly required>
+      </div>
+
+      <div class="form-group">
+        <label for="cnpj">CNPJ</label>
+        <input type="text" class="form-control" id="cnpj" [(ngModel)]="pagamento.cnpj" name="cnpj" readonly required>
+      </div>
+
+      <!-- Valor -->
+      <div class="form-group">
+        <label for="valor">Valor (R$)</label>
+        <input type="number" class="form-control" id="valor" [(ngModel)]="pagamento.valor" name="valor" step="0.01" required>
+      </div>
+
+      <!-- Tipo de Pagamento -->
+      <div class="form-group">
+        <label for="tipoPagamento">Tipo de Pagamento</label>
+        <select class="form-control" id="tipoPagamento" [(ngModel)]="pagamento.tipoPagamento" name="tipoPagamento" 
+                (change)="onTipoPagamentoChange()" required>
+          <option value="" disabled selected>Selecione...</option>
+          <option value="BOLETO">Boleto</option>
+          <option value="CARTAO">Cartão de Crédito</option>
+          <option value="PIX">PIX</option>
+        </select>
+      </div>
+
+      <!-- Boleto -->
+      <div *ngIf="pagamento.tipoPagamento === 'BOLETO'" class="alert alert-info">
+        <p>Código de barras: <strong>{{ codigoBarras }}</strong></p>
+      </div>
+
+      <!-- Cartão -->
+      <div *ngIf="pagamento.tipoPagamento === 'CARTAO'">
+        <div class="form-group">
+          <label for="numeroCartao">Número do Cartão</label>
+          <input type="text" class="form-control" id="numeroCartao" [(ngModel)]="pagamento.numeroCartao" 
+                 name="numeroCartao" required>
+        </div>
+
+        <div class="form-group">
+          <label for="vencimentoCartao">Vencimento</label>
+          <input type="text" class="form-control" id="vencimentoCartao" [(ngModel)]="pagamento.vencimentoCartao" 
+                 name="vencimentoCartao" placeholder="MM/AA" required>
+        </div>
+
+        <div class="form-group">
+          <label for="nomeTitular">Nome do Titular</label>
+          <input type="text" class="form-control" id="nomeTitular" [(ngModel)]="pagamento.nomeTitular" 
+                 name="nomeTitular" required>
+        </div>
+
+        <div class="form-group">
+          <label for="parcelas">Parcelas</label>
+          <select class="form-control" id="parcelas" [(ngModel)]="pagamento.parcelas" name="parcelas" required>
+            <option *ngFor="let parcela of opcoesParcelas" [value]="parcela">{{ parcela }}x</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- PIX -->
+      <div *ngIf="pagamento.tipoPagamento === 'PIX'" class="alert alert-info">
+        <p>Chave PIX: <strong>{{ chavePix }}</strong></p>
+        <div class="qrcode-placeholder">
+        <img src="images/qrCode.png" alt="QR Code Pix" class="qrcode-img">
+        </div>
+
+        </div>
+      <button type="submit" class="btn btn-primary" [disabled]="!pagamentoForm.valid">Pagar</button>
+    </form>
+
+    <!-- Spinner de Carregamento (loading) -->
+    <div *ngIf="isLoading" class="loading-overlay">
+      <div class="loading-content">
+       <span>Verificando...</span>
+     <div class="spinner"></div>
+    </div>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div *ngIf="isModalVisible && !isLoading" class="modal-overlay">
+    <div class="modal-content">
+    <h5>Pagamento confirmado com sucesso!</h5>
+    <button (click)="fecharModal()">OK</button>
+  </div>
+</div>
+</div>
 </section>
+
+
