@@ -5,7 +5,7 @@ import { EmployeeService } from '../../services/employee/employee.service';
 import { Employee } from '../../models/employee.model';
 import { Router } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
-
+import Swal from 'sweetalert2';
 
 declare var bootstrap: any; // Importa os modais do Bootstrap
 
@@ -24,15 +24,50 @@ export class EmployeeComponent implements OnInit {
   marcas: string[] = ['Acer', 'Dell', 'Le Novo', 'LG', 'Samsung', 'Vaio', 'Outro'];
   servicos: string[] = ['Atualização', 'Formatação', 'Configuração', 'Limpeza', 'Manutenção', 'Troca de peças']
 
+  campoOrdenado: string = '';
+  ordemCrescente: boolean = true;
+
   constructor(private service: EmployeeService, private router: Router, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.service.listar().subscribe(s => {
       console.log('Solicitações recebidas:', s);  // Verifique os dados recebidos
       this.solicitacoes = s;
+      this.ordenarPor('data'); 
     });
   }
 
+  ordenarPor(campo: keyof Employee): void {  // Garante que 'campo' seja uma chave válida de Employee
+    if (this.campoOrdenado === campo) {
+      this.ordemCrescente = !this.ordemCrescente;
+    } else {
+      this.campoOrdenado = campo;
+      this.ordemCrescente = true;
+    }
+  
+    this.solicitacoes.sort((a, b) => {
+      let valA: any;
+      let valB: any;
+  
+      if (campo === 'data') {
+        valA = new Date(`${a.data}T${a.hora}`);
+        valB = new Date(`${b.data}T${b.hora}`);
+      } else {
+        valA = a[campo];  // Agora 'campo' é garantido como chave válida de 'Employee'
+        valB = b[campo];
+      }
+  
+      if (typeof valA === 'string') {
+        valA = valA.toLowerCase();
+        valB = valB.toLowerCase();
+      }
+  
+      if (valA < valB) return this.ordemCrescente ? -1 : 1;
+      if (valA > valB) return this.ordemCrescente ? 1 : -1;
+      return 0;
+    });
+  }
+  
   selecionar(s: Employee) {
     this.selecionado = { ...s };
   }
@@ -48,8 +83,7 @@ export class EmployeeComponent implements OnInit {
     const modal = new bootstrap.Modal(document.getElementById('visualizarModal'));
     modal.show();
   }
-
-
+  
   editar(s: Employee) {
     this.selecionado = { ...s };
     const modal = new bootstrap.Modal(document.getElementById('editarModal'));
@@ -58,7 +92,8 @@ export class EmployeeComponent implements OnInit {
 
   salvarEdicao() {
     this.service.editar(this.selecionado);
-    this.ngOnInit(); // Atualiza a lista
+    this.ngOnInit(); // Atualiza a lista exibida
+    bootstrap.Modal.getInstance(document.getElementById('editarModal'))?.hide(); // Fecha o modal
   }
 
   remover(id: number) {
@@ -102,9 +137,6 @@ export class EmployeeComponent implements OnInit {
       case 'pagar':
         this.pagarServico();
         break;
-      case 'finalizar':
-        this.finalizarServico();
-        break;
       default:
         console.log('Ação desconhecida');
     }
@@ -117,26 +149,52 @@ export class EmployeeComponent implements OnInit {
 
   aprovarOrcamento(): void {
     console.log('Orçamento aprovado');
-    // Lógica para aprovar orçamento
+    this.router.navigate(['/orcamentos']).then(() => {
+      window.location.reload(); // força o reload após a navegação
+    });
   }
-
+  
   rejeitarOrcamento(): void {
     console.log('Orçamento rejeitado');
-    // Lógica para rejeitar orçamento
+    this.router.navigate(['/orcamentos']).then(() => {
+      window.location.reload(); // força o reload após a navegação
+    });
   }
 
   resgatarServico(): void {
-    console.log('Serviço resgatado');
-    // Lógica para resgatar serviço
+    // Atualiza o estado da solicitação
+    this.selecionado.estado = 'APROVADA';
+  
+    // Atualiza o array principal, se necessário
+    const index = this.solicitacoes.findIndex(s => s.id === this.selecionado.id);
+    if (index !== -1) {
+      this.solicitacoes[index].estado = 'APROVADA';
+    }
+  
+    // Exibe o popup de sucesso
+    Swal.fire({
+      title: 'Serviço Resgatado!',
+      text: 'O serviço foi resgatado, solicitação APROVADA.',
+      icon: 'success',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#198754'
+    });
   }
-
+  
   pagarServico(): void {
-    console.log('Serviço pago');
-    // Lógica para pagar serviço
+    // Exibe o popup de confirmação
+    Swal.fire({
+      title: 'Confirme o pagamento!\nValor: R$100,00',
+      text: 'Redirecionando para a tela de pagamento...',
+      icon: 'success',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#0d6efd'
+    }).then(() => {
+      // Redireciona para /payment e força refresh
+      this.router.navigateByUrl('/pagamentos').then(() => {
+        window.location.reload();  // Força recarregamento da tela
+      });
+    });
   }
-
-  finalizarServico(): void {
-    console.log('Serviço finalizado');
-    // Lógica para finalizar serviço
-  }
+  
 }

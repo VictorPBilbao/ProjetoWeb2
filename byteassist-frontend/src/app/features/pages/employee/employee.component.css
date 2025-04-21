@@ -7,9 +7,9 @@ h1.titulo-solicitacoes {
   font-size: 2rem;
   margin-bottom: 20px;
   font-weight: bold;
-  display: inline-block; /* Faz o elemento ocupar apenas o espaço do conteúdo */
-  background: linear-gradient(135deg, #030e6d, #0a1a9e); /* Gradiente ajustado */
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* Sombra */
+  display: inline-block; 
+  background: linear-gradient(135deg, #030e6d); 
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); 
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -18,8 +18,12 @@ h1.titulo-solicitacoes {
   text-align: center;
 }
 
+input[readonly] {
+  background-color: #c7dbee6e; /* cor cinza clara */
+  opacity: 0.7;
+  cursor: not-allowed;
+}
 
-/* Botão para Nova Solicitação */
 button.btn-success {
   background-color: #28a745;
   border-color: #28a745;
@@ -29,7 +33,7 @@ button.btn-success {
   border-radius: 12px;
   margin-bottom: 20px;
   font-weight: bold;
-  margin-left: 65px;
+  margin-left: 55px;
 }
 
 button.btn-success:hover {
@@ -38,17 +42,17 @@ button.btn-success:hover {
 }
 
 button i {
-  color: #fff; /* Cor branca para os ícones */
+  color: #fff; 
 }
 
 table.table {
   width: 90%;
-  margin: 0 auto 1rem auto; /* centraliza horizontalmente */
+  margin: 0 auto 1rem auto; 
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid #ffffff00;
   background-color: #ffffff00;
-  color: white; /* já aproveita pra definir o texto como branco */
+  color: white; 
 }
 
 
@@ -66,28 +70,26 @@ table th {
 }
 
 
-/* Estilo para o cabeçalho da tabela */
 thead.table-light {
-  background-color: #007bff; /* Cor de fundo do cabeçalho */
-  color: rgb(255, 255, 255); /* Cor da fonte no cabeçalho */
+  background-color: #030e6d; 
+  color: rgb(255, 255, 255); 
   text-align: left;
   font-weight: bold;
+  border-radius: 12px;
 }
 
-/* Estilo para as linhas alternadas da tabela */
 tbody tr:nth-child(even) {
-  background-color:  #79bbe200;  /* Cor de fundo das linhas pares */
+  background-color:  #79bbe200; 
 }
 
 tbody tr:nth-child(odd) {
-  background-color: #79bbe200; /* Cor de fundo das linhas ímpares (branca) */
+  background-color: #79bbe200; 
 }
 
-/* Estilo para as células da tabela */
 table td {
   padding: 10px;
   text-align: left;
-  border-top: 1px solid #ffffff00; /* Adiciona uma borda entre as linhas */
+  border-top: 1px solid #ffffff00; 
 }
 
 /* Estilo para os botões de ação */
@@ -117,7 +119,7 @@ table.table th {
 }
 
 .modal-footer {
-  background-color: #ffffff;
+  background-color: #bec3ee42;
   padding: 15px;
 }
 
@@ -147,32 +149,69 @@ table.table th {
   transform: scale(0.97);       /* Aperta quando clica */
 }
 
-
-/* Estilos para os botões nos modais */
-button.btn-info {
-  background-color: #1dc0b23b;
+/* Estilo geral para todos os botões de ação */
+.modal-content .btn {
+  font-weight: 600;
   border-radius: 12px;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  border: 1px solid transparent;
+  color: #ffffff;
+  }
+  
+
+/* Margem entre os botões */
+.modal-content .btn + .btn {
+  margin-left: 10px;
 }
 
-button.btn-warning {
-  background-color: #13c73a7c;
+/* Botões de orçamento */
+.btn-warning {
+  background-color: #08b961;
+  border: solid  #0abe6400;
+  color: #ffffff; 
   border-radius: 12px;
-  border: solid  #13c73a7c;;
+  }
+  
+.btn-warning:hover {
+  background-color: #1eb80a;
 }
 
-button.btn-danger {
-  background-color: #dc354696;
+/* Botão de rejeição */
+.btn-danger {
+  background-color: #970917;
+  border: solid #dc354600;
   border-radius: 12px;
-  border: solid  #dc354696;
+}
+.btn-danger:hover {
+  background-color: #bd2130;
 }
 
-button.btn-success {
+/* Botão de resgate */
+.btn-info {
+  background-color: #5accdd;
+  border: none;
+  border-radius: 12px;
+}
+.btn-info:hover {
+  background-color: #1d73d6;
+}
+
+/* Botão de pagamento */
+.btn-success {
   background-color: #28a745;
-  border-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 12px;
 }
+.btn-success:hover {
+  background-color: #218838;
+}
+
 
 .btn.btn-secondary {
-  background-color: #13bbd1;
+  background-color: #56c6d4;
   border-radius: 12px;
   color: #fff;
   padding: 10px 20px;
@@ -214,37 +253,15 @@ button.btn-danger {
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
   }
   
-  
-  button.btn-info:hover,
-  button.btn-warning:hover,
-  button.btn-danger:hover,
-  button.btn-success:hover,
-  button.btn-secondary:hover {
-    opacity: 0.8; /* Mantém a opacidade reduzida */
-    background-color: #0056b3; /* Exemplo: cor de fundo mais escura ao passar o mouse */
-    color: #fff; /* Cor do texto e ícones em branco durante o hover */
-  }
-
-  button.btn-info:hover,
-  button.btn-warning:hover,
-  button.btn-danger:hover,
-  button.btn-success:hover,
-  button.btn-secondary:hover {
-    opacity: 0.8;
-    background-color: #0056b3;
-    color: #fff;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Sombra ao passar o mouse */
-  }
-  
 /* Modal - Estilos específicos para cada estado */
-.text-secondary { color: #6c757d; }
-.text-warning { color: #12ac52; }
-.text-info { color: #17a2b8; }
-.text-danger { color: #dc3545; }
-.text-primary { color: #007bff; }
-.text-success { color: #28a745; }
-.text-orange { color: #fd7e14; }
-.text-purple { color: #6f42c1; }
+.text-secondary { color: #4f565c; } /* Cinza */
+.text-brown    { color: #795548; }  /* Marrom */
+.text-danger   { color: #dc3545; }  /* Vermelho */
+.text-warning  { color: #ffc107; }  /* Amarelo */
+.text-purple   { color: #6f42c1; }  /* Roxo */
+.text-primary  { color: #007bff; }  /* Azul */
+.text-orange   { color: #fd7e14; }  /* Laranja */
+.text-success  { color: #28a745; }  /* Verde */
 
 /* Estilos responsivos */
 @media (max-width: 768px) {
@@ -267,4 +284,5 @@ button.btn-danger {
   .modal-dialog {
     max-width: 90%;
   }
+}
 }

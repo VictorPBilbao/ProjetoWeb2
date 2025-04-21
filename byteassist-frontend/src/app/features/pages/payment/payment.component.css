@@ -14,14 +14,14 @@ section {
   background: linear-gradient(135deg, #030e6d); /* Gradiente para o fundo */
   padding: 20px 40px;
   border-radius: 30px;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* Sombra para dar um efeito de elevação */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  margin-top: -20px; /* Sombra para dar um efeito de elevação */
 }
 
 h1 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: bold;
   color: #ffffff;
-  margin: 0; /* Remove a margem do título */
 }
 
 /* Container central do formulário */
