@@ -20,6 +20,7 @@ registerLocaleData(ptBr);
 export class BudgetComponent {
   budgets: Budget[] = [];
   activeAccordion: number | null = null;
+  modalVisible = false;
 
   constructor(private budgetService: BudgetService) { }
 
@@ -29,5 +30,23 @@ export class BudgetComponent {
 
   openBudget(index: number): void {
     this.activeAccordion = this.activeAccordion === index ? null : index;
+  }
+
+  approvalBudget(id: string): void {
+    this.budgetService.approveBudget(id);
+    this.closeModal();
+  }
+
+  rejectBudget(id: string): void {
+    this.budgetService.rejectBudget(id);
+    this.closeModal();
+  }
+
+  openModal() {
+    this.modalVisible = true;
+  }
+
+  closeModal() {
+    this.modalVisible = false;
   }
 }

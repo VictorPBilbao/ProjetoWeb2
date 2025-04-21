@@ -39,24 +39,23 @@
               <h3>Mão de Obra</h3>
               <p>{{ budget.laborDescription }}</p>
             </div>
+            <div class="servico">Serviço: <span>{{ budget.serviceName }}</span></div>
           </div>
 
           <div class="painel-lateral">
             <p><strong>{{ budget.date | date:'dd/MM/yyyy' }}</strong><br>{{ budget.time }}</p>
             <div class="detalhes">
-              <p>Peças: R$950</p>
-              <p>Pessoal: R$500</p>
-              <p>Mão de Obra: R$550</p>
-              <p><strong>Orçamento:</strong> R$3.000,00</p>
-              <p>Contador: Adriano<br>Tesoureiro: Guilherme Arthur</p>
+              <p>Peças: {{ budget.budgetPartsValue | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+              <p>Pessoal: verificar</p>
+              <p>Mão de Obra: {{ budget.budgetLaborValue | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+              <p><strong>Orçamento: </strong>{{ budget.budgetValue | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+              <p>Contador: {{ budget.accountantName }}<br>Tesoureiro: {{ budget.treasurerName }}</p>
             </div>
           </div>
         </div>
 
-        <div class="servico">Serviço: <span>Manutenção</span></div>
-
         <div class="botoes">
-          <button class="aprovar"><i class="bi bi-check-circle"></i> Aprovar</button>
+          <button class="aprovar" (click)="openModal()"><i class="bi bi-check-circle"></i> Aprovar</button>
           <button class="rejeitar"><i class="bi bi-x-circle"></i> Rejeitar</button>
         </div>
       </div>
