@@ -5,15 +5,24 @@
 <!-- Link para o Font Awesome -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
-<!-- Botão para redirecionar para a página de nova solicitação -->
-<button class="btn btn-success mb-3" (click)="abrirFormulario()">Nova Solicitação</button>
+<button class="btn btn-success" (click)="abrirFormulario()">
+  <i class="fas fa-plus me-2"></i> Nova Solicitação
+</button>
 
 <!-- Tabela de Solicitações -->
 <table class="table table-bordered">
   <thead class="table-light">
     <tr>
       <th>ID</th>
-      <th>Data</th>
+      <th (click)="ordenarPor('data')" style="cursor: pointer;">
+        Data
+        <i class="fas"
+           [ngClass]="{
+             'fa-sort-up': campoOrdenado === 'data' && ordemCrescente,
+             'fa-sort-down': campoOrdenado === 'data' && !ordemCrescente,
+             'fa-sort': campoOrdenado !== 'data'
+           }"></i>
+      </th>
       <th>Hora</th>
       <th>Equipamento</th>
       <th>Estado</th>
@@ -21,6 +30,7 @@
     </tr>
   </thead>
   <tbody>
+    
     <tr *ngFor="let s of solicitacoes">
       <td>{{ s.id }}</td>
       <td>{{ s.data }}</td>
@@ -57,55 +67,58 @@
       </div>
 
       <div class="modal-body">
-        <p><strong>ID da Solicitação:</strong> {{ selecionado.id }}</p>
+        <p><strong>Categoria:</strong> {{ selecionado.categoria }}</p>
         <p><strong>Data:</strong> {{ selecionado.data }}</p>
-        <p><strong>Hora:</strong> {{ selecionado.hora }}</p>
+        <p><strong>Defeito Relatado:</strong> {{ selecionado.defeitoRelatado }}</p>
+        <p><strong>Descrição do Serviço:</strong> {{ selecionado.descricaoServico }}</p>
+        <p><strong>Equipamento:</strong> {{ selecionado.equipamento }}</p>
         <p><strong>Estado:</strong>
           <span [ngClass]="{
             'text-secondary': selecionado.estado === 'ABERTA',
-            'text-warning': selecionado.estado === 'APROVADA',
-            'text-info': selecionado.estado === 'REDIRECIONADA',
+            'text-brown': selecionado.estado === 'ORÇADA',
             'text-danger': selecionado.estado === 'REJEITADA',
+            'text-warning': selecionado.estado === 'APROVADA',
+            'text-purple': selecionado.estado === 'REDIRECIONADA',
             'text-primary': selecionado.estado === 'ARRUMADA',
-            'text-success': selecionado.estado === 'FINALIZADA',
             'text-orange': selecionado.estado === 'PAGA',
-            'text-purple': selecionado.estado === 'ORÇADA'
+            'text-success': selecionado.estado === 'FINALIZADA'
           }">{{ selecionado.estado }}</span>
         </p>
-
-        <p><strong>Orçamento:</strong> {{ selecionado.orcamento }}</p>
-        <p><strong>Categoria:</strong> {{ selecionado.categoria }}</p>
-        <p><strong>Marca:</strong> {{ selecionado.marca }}</p>
-        <p><strong>Serviço:</strong> {{ selecionado.servico }}</p>
-        <p><strong>Descrição do Serviço:</strong> {{ selecionado.descricaoServico }}</p>
-        <p><strong>Defeito Relatado:</strong> {{ selecionado.defeitoRelatado }}</p>
-
-        <p><strong>Equipamento:</strong> {{ selecionado.equipamento }}</p>
         <p><strong>Funcionário Responsável:</strong> {{ selecionado.funcionario }}</p>
         <p><strong>Histórico:</strong> {{ selecionado.historico }}</p>
-
+        <p><strong>Hora:</strong> {{ selecionado.hora }}</p>
+        <p><strong>ID da Solicitação:</strong> {{ selecionado.id }}</p>
+        <p><strong>Marca:</strong> {{ selecionado.marca }}</p>
+        <p><strong>Orçamento:</strong> {{ selecionado.orcamento }}</p>
+        <p><strong>Serviço:</strong> {{ selecionado.servico }}</p>
+      
         <p *ngIf="selecionado.estado === 'REDIRECIONADA'">
           <strong>Redirecionada para:</strong> {{ selecionado.destinoFuncionario }}
         </p>
-
-        <!-- Botões de Ação com base no estado -->
-        <div *ngIf="selecionado.estado === 'ORÇADA'">
-          <button class="btn btn-warning" (click)="realizarAcao('aprovar')">Aprovar Orçamento</button>
-          <button class="btn btn-danger" (click)="realizarAcao('rejeitar')">Rejeitar Orçamento</button>
-        </div>
-        <div *ngIf="selecionado.estado === 'REJEITADA'">
-          <button class="btn btn-info" (click)="realizarAcao('resgatar')">Resgatar Serviço</button>
-        </div>
-        <div *ngIf="selecionado.estado === 'ARRUMADA'">
-          <button class="btn btn-success" (click)="realizarAcao('pagar')">Pagar Serviço</button>
-        </div>
-        <div *ngIf="selecionado.estado === 'FINALIZADA'">
-          <button class="btn btn-success" (click)="realizarAcao('finalizar')">Finalizar</button>
-        </div>
       </div>
+      
+      <!-- Modal Footer com botões à esquerda e OK à direita -->
+      <div class="modal-footer d-flex justify-content-between">
+        <!-- Botões de ação conforme o estado -->
+        <div>
+          <ng-container [ngSwitch]="selecionado.estado">
+            <ng-container *ngSwitchCase="'ORÇADA'">
+              <button class="btn btn-warning me-2" (click)="realizarAcao('aprovar')">Aprovar Orçamento</button>
+              <button class="btn btn-danger" (click)="realizarAcao('rejeitar')">Rejeitar Orçamento</button>
+            </ng-container>
+            <ng-container *ngSwitchCase="'REJEITADA'">
+              <button class="btn btn-info" (click)="realizarAcao('resgatar')">Resgatar Serviço</button>
+            </ng-container>
+            <ng-container *ngSwitchCase="'ARRUMADA'">
+              <button class="btn btn-success" (click)="realizarAcao('pagar')">Pagar Serviço</button>
+            </ng-container>
+          </ng-container>
+        </div>
 
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+        <!-- Botão OK à direita -->
+        <div>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+        </div>
       </div>
     </div>
   </div>
@@ -120,33 +133,10 @@
           <h5 class="modal-title">Editar Solicitação</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
+
         <div class="modal-body">
 
-          <!-- ID (readonly) -->
-          <div class="mb-3">
-            <label class="form-label">ID</label>
-            <input type="text" class="form-control" [(ngModel)]="selecionado.id" name="id" readonly>
-          </div>
-
-          <!-- Data -->
-          <div class="mb-3">
-            <label class="form-label">Data</label>
-            <input type="date" class="form-control" [(ngModel)]="selecionado.data" name="data">
-          </div>
-
-          <!-- Hora -->
-          <div class="mb-3">
-            <label class="form-label">Hora</label>
-            <input type="time" class="form-control" [(ngModel)]="selecionado.hora" name="hora">
-          </div>
-
-          <!-- Estado (readonly) -->
-          <div class="mb-3">
-            <label class="form-label">Estado</label>
-            <input type="text" class="form-control" [(ngModel)]="selecionado.estado" name="estado" readonly>
-          </div>
-
-          <!-- Categoria (ComboBox) -->
+          <!-- Categoria -->
           <div class="mb-3">
             <label class="form-label">Categoria</label>
             <select class="form-select" [(ngModel)]="selecionado.categoria" name="categoria">
@@ -154,26 +144,10 @@
             </select>
           </div>
 
-          <!-- Marca (ComboBox) -->
+         <!-- Data (readonly) -->
           <div class="mb-3">
-            <label class="form-label">Marca</label>
-            <select class="form-select" [(ngModel)]="selecionado.marca" name="marca">
-              <option *ngFor="let m of marcas" [value]="m">{{ m }}</option>
-            </select>
-          </div>
-
-          <!-- Serviço (ComboBox) -->
-          <div class="mb-3">
-            <label class="form-label">Serviço</label>
-            <select class="form-select" [(ngModel)]="selecionado.servico" name="servico">
-              <option *ngFor="let s of servicos" [value]="s">{{ s }}</option>
-            </select>
-          </div>
-
-          <!-- Descrição do Serviço -->
-          <div class="mb-3">
-            <label class="form-label">Descrição do Serviço</label>
-            <textarea class="form-control" rows="3" [(ngModel)]="selecionado.descricaoServico" name="descricaoServico"></textarea>
+            <label class="form-label">Data</label>
+            <input type="date" class="form-control" [(ngModel)]="selecionado.data" name="data" readonly>
           </div>
 
           <!-- Defeito Relatado -->
@@ -182,10 +156,50 @@
             <textarea class="form-control" rows="2" [(ngModel)]="selecionado.defeitoRelatado" name="defeitoRelatado"></textarea>
           </div>
 
-          <!-- Orçamento (condicional: só se estado === 'ORÇADO') -->
-          <div class="mb-3" *ngIf="selecionado.estado === 'ORÇADO'">
+          <!-- Descrição do Serviço -->
+          <div class="mb-3">
+            <label class="form-label">Descrição do Serviço</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="selecionado.descricaoServico" name="descricaoServico"></textarea>
+          </div>
+
+          <!-- Estado (readonly) -->
+          <div class="mb-3">
+            <label class="form-label">Estado</label>
+            <input type="text" class="form-control" [(ngModel)]="selecionado.estado" name="estado" readonly>
+          </div>
+
+          <!-- Hora -->
+          <div class="mb-3">
+            <label class="form-label">Hora</label>
+            <input type="time" class="form-control" [(ngModel)]="selecionado.hora" name="hora" readonly>
+          </div>
+
+          <!-- ID (readonly) -->
+          <div class="mb-3">
+            <label class="form-label">ID</label>
+            <input type="text" class="form-control" [(ngModel)]="selecionado.id" name="id" readonly>
+          </div>
+
+          <!-- Marca -->
+          <div class="mb-3">
+            <label class="form-label">Marca</label>
+            <select class="form-select" [(ngModel)]="selecionado.marca" name="marca">
+              <option *ngFor="let m of marcas" [value]="m">{{ m }}</option>
+            </select>
+          </div>
+
+          <!-- Orçamento (readonly sempre) -->
+          <div class="mb-3">
             <label class="form-label">Orçamento</label>
-            <input type="text" class="form-control" [(ngModel)]="selecionado.orcamento" name="orcamento">
+            <input type="text" class="form-control" [(ngModel)]="selecionado.orcamento" name="orcamento" readonly>
+          </div>
+
+          <!-- Serviço -->
+          <div class="mb-3">
+            <label class="form-label">Serviço</label>
+            <select class="form-select" [(ngModel)]="selecionado.servico" name="servico">
+              <option *ngFor="let s of servicos" [value]="s">{{ s }}</option>
+            </select>
           </div>
 
         </div>
@@ -198,6 +212,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- Modal: Remover -->
 <div class="modal fade" id="removerModal" tabindex="-1" aria-hidden="true">

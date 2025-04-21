@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { EmployeeService } from '../../services/employee/employee.service';  // Importando o serviço
+import { Router } from '@angular/router';  // Para redirecionar após o cadastro
+import { Employee } from '../../models/employee.model';  // Caminho correto da sua interface Employee
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-new-request',
@@ -12,33 +17,34 @@ import { FormsModule } from '@angular/forms';
 export class NewRequestComponent {
   // Dados para os combobox
   categories = ['Desktop', 'Notebook', 'Smartphone', 'Tablet'];
-  brands = ['Acer', 'Dell', 'Lenovo', 'LG', 'Samsung', 'Vaio'];
-  //equipments = ['Acer Aspire', 'Dell inspiron', 'Ideapad', 'Galaxy Book', 'Shell Efi'];
+  brands = ['Acer', 'Apple', 'Dell', 'Lenovo', 'LG', 'Samsung','Outro'];
   services = ['Atualização', 'Formatação', 'Configuração', 'Limpeza', 'Manutenção', 'Troca de peças'];
   
   // Modelo do formulário
-  solicitation = {
-    id: this.generateId(),
-    date: this.getCurrentDate(),
-    time: this.getCurrentTime(),
-    status: 'Aberto', // Definido como 'Aberto' por padrão
-    budget: '',
-    category: '',
-    brand: '',
-    //equipment: '',
-    service: '',
-    description: '',
-    defect: ''
+  solicitation: Employee = {
+    id: 0,  // O ID será gerado automaticamente pelo serviço
+    data: this.getCurrentDate(), // A data será gerada aqui, diretamente no componente
+    hora: this.getCurrentTime(),
+    equipamento: '', 
+    estado: 'ABERTA',
+    orcamento: '',
+    categoria: '',
+    marca: '',
+    servico: '',
+    descricaoServico: '',
+    defeitoRelatado: ''
   };
 
-  // Gerar ID automático
-  private generateId(): number {
-    return Math.floor(Math.random() * 90000) + 10000;
-  }
+  solicitacoes: Employee[] = [];  // Defina solicitacoes como um array de Employee
+  campoOrdenado: keyof Employee = 'data';  // Campo padrão para ordenar
+  ordemCrescente: boolean = true; // Ordenação crescente ou decrescente
 
-  // Obter data atual
-  private getCurrentDate(): string {
-    return new Date().toLocaleDateString('pt-BR');
+  // Injeção de dependências
+  constructor(private employeeService: EmployeeService, private router: Router) {}
+
+  // Método de inicialização (ngOnInit)
+  ngOnInit(): void {
+    this.carregarSolicitacoes();
   }
 
   // Obter hora atual
@@ -46,27 +52,83 @@ export class NewRequestComponent {
     return new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
   }
 
+  private getCurrentDate(): string {
+    const now = new Date();
+    return now.toISOString().split('T')[0];  // 'yyyy-mm-dd'
+  }
+  
   // Método para cadastrar
   register() {
-    console.log('Solicitação cadastrada:', this.solicitation);
-    alert(`Solicitação ${this.solicitation.id} cadastrada com sucesso!`);
+    // Chama o serviço para adicionar a solicitação
+    this.employeeService.adicionar(this.solicitation);
+    
+    Swal.fire({
+      title: 'Sucesso!',
+      text: `Solicitação ${this.solicitation.id} cadastrada com sucesso!`,
+      icon: 'success',
+      confirmButtonText: 'OK'
+    });
+    
+    // Redireciona para a página de lista ou outra página que você escolher
+    this.router.navigate(['/solicitacoes']); // Ou o caminho da lista de solicitações
+    
+    // Limpar formulário após cadastro
     this.resetForm();
+  }
+
+  private carregarSolicitacoes() {
+    this.solicitacoes = this.employeeService.obterSolicitacoes();
+    this.ordenarPor(this.campoOrdenado);  // Ordena logo após carregar as solicitações
   }
 
   // Limpar formulário
   private resetForm() {
     this.solicitation = {
-      id: this.generateId(),
-      date: this.getCurrentDate(),
-      time: this.getCurrentTime(),
-      status: 'Aberto',
-      budget: '',
-      category: '',
-      brand: '',
-      //equipment: '',
-      service: '',
-      description: '',
-      defect: ''
+      id: 0,  // O ID será gerado automaticamente pelo serviço
+      data: this.getCurrentDate(), // A data será gerada aqui, diretamente no componente
+      hora: this.getCurrentTime(),
+      estado: 'ABERTA',
+      orcamento: '',
+      categoria: '',
+      marca: '',
+      equipamento: '',
+      servico: '',
+      descricaoServico: '',
+      defeitoRelatado: ''
     };
+  }
+
+  // Método de ordenação
+  ordenarPor(campo: keyof Employee): void {
+    if (this.campoOrdenado === campo) {
+      this.ordemCrescente = !this.ordemCrescente;
+    } else {
+      this.campoOrdenado = campo;
+      this.ordemCrescente = true;
+    }
+
+    this.solicitacoes.sort((a, b) => {
+      let valA: any;
+      let valB: any;
+
+      if (campo === 'data') {
+        const [diaA, mesA, anoA] = a.data.split('/').map(Number);
+        const [horaA, minutoA] = a.hora.split(':').map(Number);
+        const [diaB, mesB, anoB] = b.data.split('/').map(Number);
+        const [horaB, minutoB] = b.hora.split(':').map(Number);
+      
+        valA = new Date(anoA, mesA - 1, diaA, horaA, minutoA);
+        valB = new Date(anoB, mesB - 1, diaB, horaB, minutoB);
+      }
+      
+      if (typeof valA === 'string') {
+        valA = valA.toLowerCase();
+        valB = valB.toLowerCase();
+      }
+
+      if (valA < valB) return this.ordemCrescente ? -1 : 1;
+      if (valA > valB) return this.ordemCrescente ? 1 : -1;
+      return 0;
+    });
   }
 }
