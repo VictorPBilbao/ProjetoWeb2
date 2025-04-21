@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Budget } from '../../shared/models/budget.model';
+import { LoadingService } from '../utils/loading.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BudgetService {
 
-  constructor() { }
+  constructor(private loadingService: LoadingService) { }
 
   getBudgets(): Budget[] {
     return [
@@ -20,8 +21,12 @@ export class BudgetService {
         3000,
         'Substituição de placa-mãe, teclado e cooler.',
         'Limpeza interna completa e reinstalação do sistema operacional.',
+        'Manutenção',
         'Manutenção preventiva e corretiva.',
-        'Peças: R$950 | Pessoal: R$500 | Mão de Obra: R$550 | Contador: Adriano | Tesoureiro: Guilherme Arthur'
+        950, // budgetPartsValue
+        550, // budgetLaborValue
+        'Guilherme Arthur', // treasurerName
+        'Adriano' // accountantName
       ),
       new Budget(
         't-02',
@@ -33,8 +38,12 @@ export class BudgetService {
         1250,
         'Troca de cartucho, correia de tração e ajuste de roletes.',
         'Teste de impressão, alinhamento e limpeza externa.',
+        'Manutenção',
         'Serviço de calibração e troca de consumíveis.',
-        'Peças: R$500 | Pessoal: R$300 | Mão de Obra: R$450 | Contador: Carla | Tesoureiro: Henrique Dias'
+        500, // budgetPartsValue
+        450, // budgetLaborValue
+        'Henrique Dias', // treasurerName
+        'Carla' // accountantName
       ),
       new Budget(
         't-03',
@@ -46,10 +55,34 @@ export class BudgetService {
         7850,
         'Atualização de SSDs, expansão de memória e troca da fonte.',
         'Backup completo, configuração de RAID e testes de desempenho.',
+        'Upgrade',
         'Atualização de hardware com otimização de performance.',
-        'Peças: R$5000 | Pessoal: R$1200 | Mão de Obra: R$1650 | Contador: Bruno | Tesoureiro: Juliana Ramos'
+        5000, // budgetPartsValue
+        1650, // budgetLaborValue
+        'Juliana Ramos', // treasurerName
+        'Bruno' // accountantName
       )
     ];
   }
 
+  approveBudget(budgetId: string): void {
+
+    this.loadingService.show(); // Exibe o loading
+
+    setInterval(() => {
+      this.loadingService.hide(); // Esconde o loading após a requisição
+    }, 2000);
+    // Logic to approve the budget goes here
+    console.log(`Budget with ID ${budgetId} approved.`);
+  }
+
+  rejectBudget(budgetId: string): void {
+    this.loadingService.show(); // Exibe o loading
+
+    setInterval(() => {
+      this.loadingService.hide(); // Esconde o loading após a requisição
+    }, 2000);
+    // Logic to reject the budget goes here
+    console.log(`Budget with ID ${budgetId} rejected.`);
+  }
 }

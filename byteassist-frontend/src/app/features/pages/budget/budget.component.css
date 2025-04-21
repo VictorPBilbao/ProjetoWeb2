@@ -68,14 +68,14 @@
 
 .accordion {
   opacity: 0;
-  height: 0px;
-  transition: opacity 1s ease-in-out, height 1s ease-in-out;
+  max-height: 0px;
+  transition: max-height 0.8s ease, opacity 0.8s ease;
   padding: 10px;
 }
 
 .accordion.ativo {
   opacity: 1;
-  height: auto;
+  max-height: 1000px;
 }
 
 .descricao .secao {
@@ -106,10 +106,13 @@
 }
 
 .painel-lateral {
-  background-color: white;
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+  font-weight: 600;
   padding: 15px;
   border-radius: 15px;
-  width: 260px;
+  width: 300px;
 }
 
 .botoes {

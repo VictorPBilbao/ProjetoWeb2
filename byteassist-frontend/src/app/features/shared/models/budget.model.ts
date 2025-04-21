@@ -9,7 +9,11 @@ export class Budget {
     public budgetValue: number = 0,
     public partsDescription: string = '',
     public laborDescription: string = '',
+    public serviceName: string = '',
     public serviceDescription: string = '',
-    public budgetDetails: string = '',
+    public budgetPartsValue: number = 0,
+    public budgetLaborValue: number = 0,
+    public treasurerName: string = '',
+    public accountantName: string = '',
   ) { }
 }

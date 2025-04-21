@@ -19,7 +19,7 @@ declare var bootstrap: any; // Importa os modais do Bootstrap
 export class EmployeeComponent implements OnInit {
   solicitacoes: Employee[] = [];
   selecionado: Employee = {} as Employee;
-  
+
   categorias: string[] = ['Desktop', 'Notebook', 'Smartphone', 'Tablet'];
   marcas: string[] = ['Acer', 'Dell', 'Le Novo', 'LG', 'Samsung', 'Vaio', 'Outro'];
   servicos: string[] = ['Atualização', 'Formatação', 'Configuração', 'Limpeza', 'Manutenção', 'Troca de peças']
@@ -32,23 +32,23 @@ export class EmployeeComponent implements OnInit {
       this.solicitacoes = s;
     });
   }
-  
+
   selecionar(s: Employee) {
     this.selecionado = { ...s };
   }
 
   abrirFormulario() {
-    this.router.navigate(['/new-request']);
+    this.router.navigate(['/nova-solicitacao']);
   }
 
   ver(s: Employee) {
     this.selecionado = { ...s };
     this.cdr.detectChanges(); // Força o Angular a atualizar a view
-  
+
     const modal = new bootstrap.Modal(document.getElementById('visualizarModal'));
     modal.show();
   }
-  
+
 
   editar(s: Employee) {
     this.selecionado = { ...s };
@@ -72,18 +72,18 @@ export class EmployeeComponent implements OnInit {
 
   confirmarRemocao() {
     this.service.remover(this.selecionado.id);
-    
+
     // Fecha o modal manualmente (com Bootstrap JS)
     const modalElement = document.getElementById('removerModal');
     const modal = bootstrap.Modal.getInstance(modalElement);
     modal?.hide();
-  
+
     // Recarrega a lista de solicitações com delay para garantir sincronia
     setTimeout(() => {
       this.ngOnInit();
     }, 300);
   }
-  
+
   // Função para realizar a ação conforme o estado
   realizarAcao(acao: string): void {
     switch (acao) {

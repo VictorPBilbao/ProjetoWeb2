@@ -35,6 +35,6 @@ export class AppComponent {
 
   shouldShowHeader(): boolean {
     const currentRoute = this.router.url;
-    return !(currentRoute.includes('login') || currentRoute.includes('register'));
+    return !(currentRoute.includes('login') || currentRoute.includes('cadastro'));
   }
 }
