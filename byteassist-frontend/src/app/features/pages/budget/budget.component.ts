@@ -1,7 +1,9 @@
 import { Component, LOCALE_ID } from '@angular/core';
 import { CommonModule, registerLocaleData } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Budget } from '../../shared/models/budget.model';
 import { BudgetService } from '../../services/budget/budget.service';
+import { NotificationComponent } from '../../components/notification/notification.component';
 import ptBr from '@angular/common/locales/pt';
 
 registerLocaleData(ptBr);
@@ -9,7 +11,9 @@ registerLocaleData(ptBr);
 @Component({
   selector: 'app-budget',
   imports: [
-    CommonModule
+    CommonModule,
+    NotificationComponent,
+    FormsModule
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'pt-BR' }
@@ -21,6 +25,9 @@ export class BudgetComponent {
   budgets: Budget[] = [];
   activeAccordion: number | null = null;
   modalVisible = false;
+  selectedBudget: Budget | null = null;
+  message: string = '';
+  showNotification: boolean = false;
 
   constructor(private budgetService: BudgetService) { }
 
@@ -32,18 +39,48 @@ export class BudgetComponent {
     this.activeAccordion = this.activeAccordion === index ? null : index;
   }
 
-  approvalBudget(id: string): void {
-    this.budgetService.approveBudget(id);
-    this.closeModal();
+  async approvalBudget(id: string): Promise<void> {
+    this.selectedBudget = this.budgets.find(budget => budget.id === id) || null;
+    if (!this.selectedBudget) {
+      this.message = 'Erro ao encontrar o orçamento selecionado.';
+      this.showNotification = true;
+      return;
+    }
+
+    this.selectedBudget.status = "Aprovado";
+    console.log('Chamando approveBudget...');
+    await this.budgetService.approveBudget(id);
+    console.log('approveBudget finalizado, abrindo modal');
+    this.openModal();
   }
 
-  rejectBudget(id: string): void {
-    this.budgetService.rejectBudget(id);
-    this.closeModal();
+  async rejectBudget(id: string): Promise<void> {
+    if (!this.selectedBudget) {
+      this.message = 'Erro ao encontrar o orçamento selecionado.';
+      this.showNotification = true;
+      return;
+    }
+
+    await this.budgetService.rejectBudget(id);
+    this.selectedBudget.status = 'Rejeitado';
+    this.openModal();
+  }
+
+  openRejectBudgetModal(id: string): void {
+    this.selectedBudget = this.budgets.find(budget => budget.id === id) || null;
+    if (!this.selectedBudget) {
+      this.message = 'Erro ao encontrar o orçamento selecionado.';
+      this.showNotification = true;
+      return;
+    }
+
+    this.selectedBudget.status = "Orçada";
+    this.openModal();
   }
 
   openModal() {
     this.modalVisible = true;
+    console.log('Modal opened');
   }
 
   closeModal() {

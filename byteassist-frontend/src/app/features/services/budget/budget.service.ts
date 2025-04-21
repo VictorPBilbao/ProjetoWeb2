@@ -65,24 +65,31 @@ export class BudgetService {
     ];
   }
 
-  approveBudget(budgetId: string): void {
+  approveBudget(budgetId: string): Promise<void> {
 
     this.loadingService.show(); // Exibe o loading
 
-    setInterval(() => {
-      this.loadingService.hide(); // Esconde o loading após a requisição
-    }, 2000);
-    // Logic to approve the budget goes here
-    console.log(`Budget with ID ${budgetId} approved.`);
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        this.loadingService.hide(); // Esconde o loading após a requisição
+        // Logic to approve the budget goes here
+        console.log(`Budget with ID ${budgetId} approved.`);
+        resolve(); // Resolve a Promise após a lógica de aprovação
+      }, 2000);
+    });
+
   }
 
-  rejectBudget(budgetId: string): void {
+  rejectBudget(budgetId: string): Promise<void> {
     this.loadingService.show(); // Exibe o loading
 
-    setInterval(() => {
-      this.loadingService.hide(); // Esconde o loading após a requisição
-    }, 2000);
-    // Logic to reject the budget goes here
-    console.log(`Budget with ID ${budgetId} rejected.`);
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        this.loadingService.hide(); // Esconde o loading após a requisição
+        // Logic to reject the budget goes here
+        console.log(`Budget with ID ${budgetId} rejected.`);
+        resolve();
+      }, 2000);
+    });
   }
 }
