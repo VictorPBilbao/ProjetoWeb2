@@ -15,5 +15,6 @@ export class Budget {
     public budgetLaborValue: number = 0,
     public treasurerName: string = '',
     public accountantName: string = '',
+    public rejectDescription: string = '',
   ) { }
 }

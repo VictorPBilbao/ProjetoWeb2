@@ -1,3 +1,4 @@
+<app-notification [message]="message" [visible]="showNotification"></app-notification>
 <section class="budget-container flex flex-column items-center">
   <div class="budget-title-container flex items-center justify-center">
     <h1>ORÇAMENTOS</h1>
@@ -55,10 +56,36 @@
         </div>
 
         <div class="botoes">
-          <button class="aprovar" (click)="openModal()"><i class="bi bi-check-circle"></i> Aprovar</button>
-          <button class="rejeitar"><i class="bi bi-x-circle"></i> Rejeitar</button>
+          <button class="aprovar" (click)="approvalBudget(budget.id)"><i class="bi bi-check-circle"></i> Aprovar</button>
+          <button class="rejeitar" (click)="openRejectBudgetModal(budget.id)"><i class="bi bi-x-circle"></i> Rejeitar</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="budget-modal flex items-center justify-center" *ngIf="modalVisible">
+    <div class="modal-content" *ngIf="selectedBudget && selectedBudget.status === 'Aprovado'">
+      <span class="close" (click)="closeModal()"><i class="bi bi-x"></i></span>
+      <h2>Orçamento Aprovado</h2>
+      <p>Valor: {{ selectedBudget.budgetValue | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+      <button class="btn-ok" (click)="closeModal()">Ok</button>
+    </div>
+
+    <div class="modal-content" *ngIf="selectedBudget && selectedBudget.status === 'Orçada'">
+      <span class="close" (click)="closeModal()"><i class="bi bi-x"></i></span>
+      <h2>Motivo de rejeição:</h2>
+      <textarea [(ngModel)]="selectedBudget.rejectDescription" placeholder="Digite o motivo da rejeição"></textarea>
+      <button class="btn-reject" (click)="rejectBudget(selectedBudget.id)">Rejeitar</button>
+    </div>
+
+    <div class="modal-content" *ngIf="selectedBudget && selectedBudget.status === 'Rejeitado'">
+      <h2>Orçamento rejeitado</h2>
+      <button
+        class="btn-ok"
+        style="background-color: black; width: 120px; margin: auto;"
+        (click)="closeModal()">
+          Ok
+      </button>
     </div>
   </div>
 </section>
