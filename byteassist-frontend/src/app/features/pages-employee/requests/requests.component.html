@@ -1,3 +1,290 @@
-<section>
-  <h1>Solitações do funcionario</h1>
-</section>
+<div class="container-do-titulo">
+  <h1 class="titulo-solicitacoes">SOLICITAÇÕES</h1>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- Filtro por Estado -->
+<div class="mb-3">
+  <label for="filtroEstado" class="form-label"></label>
+  <select id="filtroEstado" class="form-select" [(ngModel)]="filtroEstado" (change)="filtrarSolicitacoes()">
+    <option value="">Todos</option>
+    <option value="ABERTA">Aberta</option>
+    <option value="ORÇADA">Orçada</option>
+    <option value="APROVADA">Aprovada</option>
+    <option value="REJEITADA">Rejeitada</option>
+    <option value="REDIRECIONADA">Redirecionada</option>
+    <option value="ARRUMADA">Arrumada</option>
+    <option value="PAGA">Paga</option>
+    <option value="FINALIZADA">Finalizada</option>
+  </select>
+</div>
+
+<div class="table-responsive-container">
+  <table class="table-custom">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Data</th>
+        <th>Hora</th>
+        <th>Equipamento</th>
+        <th>Funcionário</th>
+        <th>Estado</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of solicitacoesFiltradas">
+        <td>{{ s.id }}</td>
+        <td>{{ s.data | date:'dd/MM/yyyy' }}</td>
+        <td>{{ s.hora }}</td>
+        <td>{{ s.equipamento }}</td>
+        <td>{{ s.funcionario }}</td>
+        <td>
+          <span class="badge" [ngClass]="{
+            'bg-secondary': s.estado === 'ABERTA',
+            'bg-brown': s.estado === 'ORÇADA',
+            'bg-danger': s.estado === 'REJEITADA',
+            'bg-warning': s.estado === 'APROVADA',
+            'bg-purple': s.estado === 'REDIRECIONADA',
+            'bg-primary': s.estado === 'ARRUMADA',
+            'bg-orange': s.estado === 'PAGA',
+            'bg-success': s.estado === 'FINALIZADA'
+          }">
+            {{ s.estado }}
+          </span>
+        </td>
+        <td class="text-nowrap">
+          <!-- Visualizar -->
+          <button class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#visualizarModal" (click)="selecionar(s)" title="Visualizar">
+            <i class="fas fa-eye"></i>
+          </button>
+
+          <!-- Editar/Manutenção -->
+          <button class="btn btn-sm btn-warning me-1" data-bs-toggle="modal" data-bs-target="#manutencaoModal" 
+                  (click)="selecionar(s)" [disabled]="s.estado === 'FINALIZADA'" title="Editar">
+            <i class="fas fa-tools"></i>
+          </button>
+
+          <!-- Orçar -->
+          <button class="btn btn-sm btn-secondary me-1" (click)="irParaOrcamento(s)" 
+                  [disabled]="!['ABERTA', 'REJEITADA'].includes(s.estado)" title="Orçar">
+            <i class="fas fa-dollar-sign"></i>
+          </button>
+
+          <!-- Redirecionar -->
+          <button class="btn btn-sm btn-dark me-1" (click)="irParaRedirecionamento(s)" 
+                  [disabled]="!['ABERTA', 'ORÇADA', 'APROVADA'].includes(s.estado)" title="Redirecionar">
+            <i class="fas fa-share"></i>
+          </button>
+
+          <!-- Finalizar -->
+          <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#finalizarModal" 
+                  (click)="selecionar(s)" [disabled]="s.estado !== 'PAGA'" title="Finalizar">
+            <i class="fas fa-check-circle"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal: Visualizar Solicitação -->
+<div class="modal fade" id="visualizarModal" tabindex="-1" aria-labelledby="visualizarModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title" id="visualizarModalLabel">Detalhes da Solicitação #{{selecionado?.id}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="OK"></button>
+      </div>
+
+      <div class="modal-body" *ngIf="selecionado">
+        <div class="row">
+          <!-- Coluna com informações -->
+          <div class="col-12">
+            <p><strong>Categoria:</strong> {{ selecionado.categoria }}</p>
+            <p><strong>Cor:</strong> {{ selecionado.cor }}</p>
+            
+            <!-- Data e Hora lado a lado -->
+            <div class="d-flex">
+              <p class="me-3"><strong>Data:</strong> {{ selecionado.data | date:'dd/MM/yyyy' }}</p>
+              <p><strong>Hora:</strong> {{ selecionado.hora }}</p>
+            </div>
+
+            <p><strong>Defeito Relatado:</strong></p>
+            <p class="p-2 bg-light rounded">{{ selecionado.defeitoRelatado }}</p>
+            <p><strong>Descrição do Serviço:</strong></p>
+            <p class="p-2 bg-light rounded">{{ selecionado.descricaoServico }}</p>
+            <p><strong>Equipamento:</strong> {{ selecionado.equipamento }}</p>
+            <p><strong>Estado:</strong> 
+              <span class="badge" [ngClass]="{
+                'bg-secondary': selecionado.estado === 'ABERTA',
+                'bg-brown': selecionado.estado === 'ORÇADA',
+                'bg-danger': selecionado.estado === 'REJEITADA',
+                'bg-warning': selecionado.estado === 'APROVADA',
+                'bg-purple': selecionado.estado === 'REDIRECIONADA',
+                'bg-primary': selecionado.estado === 'ARRUMADA',
+                'bg-orange': selecionado.estado === 'PAGA',
+                'bg-success': selecionado.estado === 'FINALIZADA'
+              }">
+                {{ selecionado.estado }}
+              </span>
+            </p>
+            <p><strong>Funcionário:</strong> {{ selecionado.funcionario }}</p>
+            <p><strong>Histórico:</strong></p>
+            <p class="p-2 bg-light rounded" *ngIf="selecionado.historico">{{ selecionado.historico }}</p>
+            <p><strong>Marca:</strong> {{ selecionado.marca }}</p>
+            <p><strong>Orçamento:</strong> {{ selecionado.orcamento }}</p>
+            <p><strong>Serviço:</strong> {{ selecionado.servico }}</p>
+          
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Editar Solicitação -->
+<div class="modal fade" id="manutencaoModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" *ngIf="selecionado">
+      <form (ngSubmit)="salvarEdicao()">
+        <div class="modal-header bg-warning text-white">
+          <h5 class="modal-title">Editar Solicitação #{{selecionado.id}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Categoria -->
+          <div class="mb-3">
+            <label class="form-label">Categoria</label>
+            <select class="form-select" [(ngModel)]="selecionado.categoria" name="categoria" required>
+              <option value="" disabled>Selecione uma categoria</option>
+              <option *ngFor="let c of categorias" [value]="c">{{ c }}</option>
+            </select>
+          </div>
+
+          <!-- Cor -->
+          <div class="mb-3">
+            <label class="form-label">Cor</label>
+            <input type="text" class="form-control" [(ngModel)]="selecionado.cor" name="cor" required>
+          </div>
+
+          <!-- Data e Hora lado a lado -->
+          <div class="mb-3 d-flex">
+            <div class="me-3">
+              <label class="form-label">Data</label>
+              <input type="text" class="form-control" [value]="selecionado.data | date:'dd/MM/yyyy'" readonly>
+            </div>
+            <div>
+              <label class="form-label">Hora</label>
+              <input type="text" class="form-control" [value]="selecionado.hora" readonly>
+            </div>
+          </div>
+
+          <!-- Defeito Relatado (readonly) -->
+          <div class="mb-3">
+            <label class="form-label">Defeito Relatado</label>
+            <textarea class="form-control" rows="3" [value]="selecionado.defeitoRelatado" readonly></textarea>
+          </div>
+
+          <!-- Descrição do Serviço (readonly) -->
+          <div class="mb-3">
+            <label class="form-label">Descrição do Serviço</label>
+            <textarea class="form-control" rows="4" [value]="selecionado.descricaoServico" readonly></textarea>
+          </div>
+
+          <!-- Equipamento -->
+          <div class="mb-3">
+            <label class="form-label">Equipamento</label>
+            <input type="text" class="form-control" [(ngModel)]="selecionado.equipamento" name="equipamento" required>
+          </div>
+
+          <!-- Estado -->
+          <div class="mb-3">
+            <label class="form-label">Estado</label>
+            <select class="form-select" [(ngModel)]="selecionado.estado" name="estado" required>
+              <option value="ABERTA">ABERTA</option>
+              <option value="ORÇADA">ORÇADA</option>
+              <option value="APROVADA">APROVADA</option>
+              <option value="REJEITADA">REJEITADA</option>
+              <option value="REDIRECIONADA">REDIRECIONADA</option>
+              <option value="ARRUMADA">ARRUMADA</option>
+              <option value="PAGA">PAGA</option>
+              <option value="FINALIZADA">FINALIZADA</option>
+            </select>
+          </div>
+
+          <!-- Funcionário -->
+          <div class="mb-3">
+            <label class="form-label">Funcionário</label>
+            <input type="text" class="form-control" [(ngModel)]="selecionado.funcionario" name="funcionario" required>
+          </div>
+
+          <!-- Histórico -->
+          <div class="mb-3">
+            <label class="form-label">Histórico</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="selecionado.historico" name="historico" required></textarea>
+          </div>
+
+          <!-- Marca -->
+          <div class="mb-3">
+            <label class="form-label">Marca</label>
+            <input type="text" class="form-control" [(ngModel)]="selecionado.marca" name="marca" required>
+          </div>
+
+          <!-- Orçamento -->
+          <div class="mb-3">
+            <label class="form-label">Orçamento</label>
+            <input type="text" class="form-control" [(ngModel)]="selecionado.orcamento" name="orcamento" required>
+          </div>
+
+          <!-- Serviço -->
+          <div class="mb-3">
+            <label class="form-label">Serviço</label>
+            <input type="text" class="form-control" [(ngModel)]="selecionado.servico" name="servico" required>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Finalizar Solicitação -->
+<div class="modal fade" id="finalizarModal" tabindex="-1" aria-labelledby="finalizarModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" *ngIf="selecionado">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="finalizarModalLabel">Finalizar Solicitação #{{selecionado.id}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+
+      <div class="modal-body">
+        <p>Tem certeza que deseja finalizar esta solicitação?</p>
+        <div class="alert alert-info mt-3">
+          <strong>Equipamento:</strong> {{selecionado.equipamento}}<br>
+          <strong>Estado atual:</strong> {{selecionado.estado}}
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="finalizarSolicitacao()" data-bs-dismiss="modal">
+          Confirmar Finalização
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

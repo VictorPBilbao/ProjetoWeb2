@@ -1,0 +1,353 @@
+/* RESET DE FUNDO PARA TODAS AS CÉLULAS */
+.table.table-bordered td,
+.table.table-bordered th,
+.table.table-bordered thead th,
+.table.table-bordered tbody td,
+.table.table-bordered tbody tr:hover td {
+  background-color: inherit !important;
+  color: inherit !important;
+  border-color: rgba(173, 216, 19, 0) !important;
+}
+
+.container-do-titulo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0rem;
+    text-align: center;
+    padding: 10px 0;
+  }
+  
+  .titulo-solicitacoes {
+    position: relative;
+    z-index: 1;
+    color: white;
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    
+    /* Estilo do retângulo arredondado */
+    padding: 15px 40px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #030e6d 0%, #0a1a8e 100%);
+    
+    /* Transição para hover */
+    transition: all 0.3s ease;
+    
+    /* Centraliza o título */
+    display: inline-block;
+    margin: 0 auto;
+  }
+  
+  /* Efeito ao passar o mouse */
+  .titulo-solicitacoes:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+      0 15px 30px rgba(0, 0, 0, 0.2),
+      0 10px 10px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #0a1a8e 0%, #030e6d 100%);
+  }
+  
+/* Container para manter a responsividade da tabela */
+.table-responsive-container {
+    width: 1200px;
+    max-width: 100%;
+    max-height: 600px;
+    overflow-y: auto;
+    overflow-x: auto;
+    padding: 8px;
+    border-radius: 8px;
+    margin: 1rem auto; /* centraliza horizontalmente */;
+  }
+
+  /* Estilização do texto da tabela */
+.table-responsive-container table {
+  width: 100%;
+  color: white; /* cor do texto */
+  font-size: 14px;
+}
+
+  
+  /* Estilo principal da tabela */
+  .table-custom {
+    width: 100%;
+    min-width: 700px;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    background-color: rgba(172, 238, 250, 0.096);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  /* Cabeçalho com fundo azul escuro e texto branco */
+  .table-custom thead th {
+    background-color: #0a1a8e;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    text-align: left;
+  }
+  
+  /* Linhas da tabela */
+  .table-custom tbody tr {
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Hover suave nas linhas */
+  .table-custom tbody tr:hover {
+    background-color:#0a198e31;
+  }
+  
+  /* Células da tabela */
+  .table-custom th,
+  .table-custom td {
+    padding: 10px 14px;
+    border: none;
+    vertical-align: middle;
+  }
+  
+  /* Tamanho fixo para coluna de ações (se desejar) */
+  .table-custom td.text-nowrap {
+    white-space: nowrap;
+  }
+  
+  /* Badges de estado com cores personalizadas */
+  .badge {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+  }
+  
+  /* Cores específicas dos estados */
+  .bg-brown { background-color: #795548 !important; }
+  .bg-purple { background-color: #6f42c1 !important; }
+  .bg-orange { background-color: #fd7e14 !important; }
+  
+  /* Botões com ícones */
+  .table-custom button.btn {
+    padding: 4px 8px;
+    font-size: 12px;
+    border: none;
+    border-radius: 12px;
+    transition: background-color 0.2s ease;
+    color: white;
+  }
+  
+  .btn-info    { background-color: #0b8699; }
+  .btn-warning { background-color: #1606a0; color: #212529;  }
+  .btn-secondary { background-color: #0eb1c7; }
+  .btn-dark    { background-color: #343a40; }
+  .btn-success { background-color: #28a745; }
+  
+  .btn-warning:hover {
+    background-color: #1a07c2;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(22, 6, 160, 0.4);
+  }
+  
+
+
+  /* Espaçamento entre botões */
+  .btn + .btn {
+    margin-left: 6px;
+  }
+  
+  /* Ícones dentro dos botões */
+  .table-custom i {
+    margin: 0;
+  }
+  
+  /* Estiliza o select como um botão pequeno */
+select#filtroEstado {
+    padding: 4px 10px;
+    font-size: 0.875rem; /* equivalente ao btn-sm */
+    background-color: #0a1a8e; /* cor azul Bootstrap */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    appearance: none; /* remove setinha padrão do select em alguns navegadores */
+    background-image: url("data:image/svg+xml,%3Csvg fill='%23fff' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 12px;
+    padding-right: 30px;
+    transition: background-color 0.2s ease;
+    width: 100px;
+    margin-left: 15px;
+  }
+  
+  select#filtroEstado:hover {
+    background-color: #0a1a8e;
+  }
+
+  /* Estilo para todos os inputs e textareas readonly */
+input[readonly], 
+textarea[readonly] {
+  background-color: #f8f9fa !important; /* Cor de fundo mais clara */
+  color: #6c757d !important;           /* Texto mais claro */
+  border-color: #dee2e6 !important;    /* Borda mais clara */
+  cursor: not-allowed !important;      /* Cursor indicando não permitido */
+  opacity: 0.8 !important;             /* Leve transparência */
+}
+
+/* Estilo para selects readonly (simulado) */
+select[readonly] {
+  background-color: #f8f9fa !important;
+  color: #6c757d !important;
+  border-color: #dee2e6 !important;
+  cursor: not-allowed !important;
+  opacity: 0.8 !important;
+}
+
+/* Estilo para inputs readonly quando em foco */
+input[readonly]:focus, 
+textarea[readonly]:focus,
+select[readonly]:focus {
+  box-shadow: none !important;         /* Remove sombra de foco */
+  border-color: #dee2e6 !important;    /* Mantém borda clara */
+}
+
+/* ESTILOS GERAIS PARA TODOS OS MODAIS */
+.modal {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.modal-content {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* HEADER DOS MODAIS */
+.modal-header {
+  border-bottom: none;
+  padding: 1.2rem 1.5rem;
+  border-radius: 10px 10px 0 0;
+}
+
+/* Estilos específicos para cada tipo de modal */
+.modal-header.bg-light {
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+.modal-header.bg-warning {
+  background: linear-gradient(#030e6d);
+  color: white;
+}
+
+.modal-header.bg-success {
+  background: linear-gradient(135deg, #28a745, #218838);
+  color: white;
+}
+
+.modal-title {
+  font-weight: 600;
+  font-size: 1.3rem;
+}
+
+.modal-header .btn-close {
+  filter: brightness(0) invert(1);
+  opacity: 0.8;
+  transition: all 0.2s;
+}
+
+.modal-header .btn-close:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* BODY DOS MODAIS */
+.modal-body {
+  padding: 1.5rem;
+  color: #495057;
+}
+
+.modal-body p {
+  margin-bottom: 0.8rem;
+}
+
+.modal-body strong {
+  color: #343a40;
+}
+
+/* FOOTER DOS MODAIS */
+.modal-footer {
+  border-top: none;
+  padding: 1rem 1.5rem;
+  border-radius: 0 0 10px 10px;
+}
+
+.modal-footer .btn {
+  padding: 0.5rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+/* ESTILOS ESPECÍFICOS PARA O MODAL DE VISUALIZAÇÃO */
+#visualizarModal .modal-body {
+  background-color: #f8fafc;
+}
+
+#visualizarModal .bg-light.rounded {
+  background-color: #e9ecef !important;
+  padding: 0.8rem;
+  border-radius: 6px !important;
+}
+
+/* ESTILOS PARA O MODAL DE EDIÇÃO */
+#manutencaoModal .form-label {
+  font-weight: 500;
+  color: #495057;
+  margin-bottom: 0.4rem;
+}
+
+#manutencaoModal .form-control, 
+#manutencaoModal .form-select {
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+}
+
+#manutencaoModal .form-control:focus, 
+#manutencaoModal .form-select:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* ESTILOS PARA O MODAL DE FINALIZAÇÃO */
+#finalizarModal .alert-info {
+  background-color: #e7f5ff;
+  border-color: #d0ebff;
+  color: #1864ab;
+}
+
+#visualizarModal .modal-header {
+  background: linear-gradient(#4ca1af);
+  color: white;
+  padding: 1.5rem;
+  border-bottom: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+#visualizarModal .modal-footer {
+  background-color: #4ca2af2a;
+  border-top: 1px solid #e9ecef;
+  padding: 1rem 2rem;
+}
+
+#manutencaoModal .modal-footer {
+  background-color: #030e6d0e;
+  border-top: 1px solid #e9ecef;
+  padding: 1rem 2rem;
+}
