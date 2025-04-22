@@ -1,288 +1,370 @@
+.container-do-titulo {
+  text-align: center;
+  position: relative;
+  margin: 60px 0;
+}
+
+.titulo-wrapper {
+  display: inline-block;
+  position: relative;
+  padding: 20px 40px; /* Espaço para o blob */
+}
+
+.titulo-blob {
+  position: absolute;
+  top: -90%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180%; /* Controla o tamanho do blob */
+  height: auto;
+  z-index: 0;
+  opacity: 1;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  margin-left: 30px;
+}
 
 h1.titulo-solicitacoes {
   color: white;
-  padding: 15px 20px;
-  border-radius: 30px;
-  text-align: center;
   font-size: 2rem;
-  margin-bottom: 20px;
   font-weight: bold;
-  display: inline-block; 
-  background: linear-gradient(135deg, #030e6d); 
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); 
-  margin-top: 20px;
-  margin-bottom: 20px;
+  position: relative;
+  z-index: 1; /* Garante que o texto fique acima do SVG */
+  margin: 0;
+  padding: 15px 30px;
+  background: transparent;
+  border-radius: 0; /* Removido como solicitado */
+  margin-top: -60px;
 }
 
-.container-do-titulo {
-  text-align: center;
+.titulo-solicitacoes i {
+  font-size: 1.8rem;
+  vertical-align: middle;
+  margin-right: 10px;
 }
 
-input[readonly] {
-  background-color: #c7dbee6e; /* cor cinza clara */
-  opacity: 0.7;
-  cursor: not-allowed;
+/* Opcional: Efeito de pulsar suave */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
 }
 
-button.btn-success {
+.titulo-solicitacoes i {
+  animation: pulse 2s infinite;
+}
+
+/* Button Container */
+.btn-container {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 0 15px; /* Mesmo padding da tabela */
+  box-sizing: border-box;
+}
+
+/* Buttons */
+.btn {
+  border-radius: 12px !important;
+}
+
+.btn-success {
   background-color: #28a745;
   border-color: #28a745;
-  color: rgb(255, 255, 255);
-  font-size: 1rem;
-  padding: 10px 20px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  font-weight: bold;
-  margin-left: 55px;
 }
 
-button.btn-success:hover {
+.btn-success:hover {
   background-color: #218838;
   border-color: #1e7e34;
 }
 
-button i {
-  color: #fff; 
+/* Container principal - sem sombra */
+.table-container {
+  background: transparent;
+  border-radius: 15px;
+  margin: 20px auto;
+  width: 1400px;
+  max-width: 95%;
+  overflow-x: auto; /* Scroll horizontal */
+  padding: 2px; /* Espaço para a sombra não ser cortada */
 }
 
-table.table {
-  width: 90%;
-  margin: 0 auto 1rem auto; 
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid #ffffff00;
-  background-color: #ffffff00;
-  color: white; 
+/* Tabela com sombra */
+.table-custom {
+  width: 100%; /* Alterado para 100% para preencher o container */
+  background-color: rgba(255, 255, 255, 0.05);
+  border-collapse: collapse;
+  table-layout: auto;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra mais suave */
+  border-radius: 12px; /* Bordas arredondadas na tabela */
+  overflow: hidden; /* Para as bordas arredondadas funcionarem */
 }
 
 
-table.table td {
-  color: white !important;
+.table-custom thead {
+  background-color: #030e6d;
+  color: white;
 }
 
-
-table th {
-  background-color: #007bff;
-  color: rgb(255, 255, 255);
-  padding: 10px;
+.table-custom th {
+  padding: 12px 15px;
   text-align: left;
-  border: solid 0px;
+  font-weight: 600;
 }
 
-
-thead.table-light {
-  background-color: #030e6d; 
-  color: rgb(255, 255, 255); 
-  text-align: left;
-  font-weight: bold;
-  border-radius: 12px;
+.table-custom td {
+  padding: 12px 15px;
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-tbody tr:nth-child(even) {
-  background-color:  #79bbe200; 
+.table-custom tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
-tbody tr:nth-child(odd) {
-  background-color: #79bbe200; 
+/* Borda arredondada na primeira e última célula */
+.table-custom tr:first-child th:first-child {
+  border-top-left-radius: 12px;
 }
 
-table td {
-  padding: 10px;
-  text-align: left;
-  border-top: 1px solid #ffffff00; 
+.table-custom tr:first-child th:last-child {
+  border-top-right-radius: 12px;
 }
 
-/* Estilo para os botões de ação */
-table td button {
-  margin-right: 5px;
+.table-custom tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
 }
 
-/* Evita que células brancas do Bootstrap sobreponham */
-table.table td,
-table.table th {
-  background-color: inherit !important;
+.table-custom tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
 }
 
-/* Modais */
-.modal-header {
-  background-color: #ffffff;
-  color: rgb(5, 0, 0); /*titulo do modal*/
-  border-bottom: 1px solid #ddd;
+/* Action Icons */
+.btn-info i {
+  color: #ffffff;
 }
 
-.modal-title {
-  font-size: 1.25rem;
+.btn-warning i {
+  color: #ffffff;
 }
 
-.modal-body {
-  padding: 20px;
+.btn-danger i {
+  color: #ffffff;
 }
 
-.modal-footer {
-  background-color: #bec3ee42;
-  padding: 15px;
+btn-sm {
+  border-radius: 10px !important;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
 }
 
-.modal-footer .btn {
+/* Botão Visualizar */
+.btn-info {
+  background-color: #118597;
+  color: white;
+  border: none;
+}
+
+.btn-info:hover {
+  background-color: #138496;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+}
+
+.btn-info .fas.fa-eye {
+  color: white;
   font-size: 0.9rem;
 }
 
-.btn.btn-primary {
-  background-color: #007bff;     /* Azul padrão Bootstrap */
-  color: #fff;                   /* Cor do texto */
-  padding: 10px 20px;            /* Espaçamento interno */
-  border: none;                  /* Sem borda */
-  border-radius: 12px;            /* Cantos arredondados */
-  font-size: 16px;               /* Tamanho da fonte */
-  font-weight: 500;              /* Peso da fonte */
-  cursor: pointer;              /* Mãozinha ao passar */
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra leve */
-}
-
-.btn.btn-primary:hover {
-  background-color: #0056b3;    /* Azul mais escuro no hover */
-  transform: scale(1.03);       /* Leve aumento no hover */
-}
-
-.btn.btn-primary:active {
-  transform: scale(0.97);       /* Aperta quando clica */
-}
-
-/* Estilo geral para todos os botões de ação */
-.modal-content .btn {
-  font-weight: 600;
-  border-radius: 12px;
-  padding: 8px 16px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  border: 1px solid transparent;
-  color: #ffffff;
-  }
-  
-
-/* Margem entre os botões */
-.modal-content .btn + .btn {
-  margin-left: 10px;
-}
-
-/* Botões de orçamento */
+/* Botão Editar */
 .btn-warning {
-  background-color: #08b961;
-  border: solid  #0abe6400;
-  color: #ffffff; 
-  border-radius: 12px;
-  }
-  
+  background-color: #0755ff;
+  color: #ffffff;
+  border: none;
+}
+
 .btn-warning:hover {
-  background-color: #1eb80a;
+  background-color: #071c5f;
+  transform: translateY(-1px);
 }
 
-/* Botão de rejeição */
+.btn-warning .fas.fa-pencil-alt {
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+/* Botão Remover */
 .btn-danger {
-  background-color: #970917;
-  border: solid #dc354600;
-  border-radius: 12px;
-}
-.btn-danger:hover {
-  background-color: #bd2130;
-}
-
-/* Botão de resgate */
-.btn-info {
-  background-color: #5accdd;
-  border: none;
-  border-radius: 12px;
-}
-.btn-info:hover {
-  background-color: #1d73d6;
-}
-
-/* Botão de pagamento */
-.btn-success {
-  background-color: #28a745;
+  background-color: #dc3545;
   color: white;
-  border: none;
-  border-radius: 12px;
 }
-.btn-success:hover {
-  background-color: #218838;
+
+.btn-danger:hover {
+  background-color: #c82333;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-danger .fas.fa-trash-alt {
+  color: white;
+  font-size: 0.9rem;
+}
+
+/* Efeito ao clicar */
+.btn-sm:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+/* Espaçamento entre ícone e texto (se tiver) */
+.btn-sm i {
+  margin-right: 3px;
 }
 
 
-.btn.btn-secondary {
-  background-color: #56c6d4;
+/* State Highlights */
+.text-secondary {
+  color: #6c757d !important;
+  font-weight: bold;
+}
+
+.text-brown {
+  color: #8d6e63 !important;
+  font-weight: bold;
+}
+
+.text-danger {
+  color: #dc3546a1 !important;
+  font-weight: bold;
+}
+
+.text-warning {
+  color: #1bc584 !important;
+  font-weight: bold;
+}
+
+.text-purple {
+  color: #6f42c1 !important;
+  font-weight: bold;
+}
+
+.text-primary {
+  color: #007bff !important;
+  font-weight: bold;
+}
+
+.text-orange {
+  color: #fd7e14 !important;
+  font-weight: bold;
+}
+
+.text-success {
+  color: #28a745 !important;
+  font-weight: bold;
+}
+
+/* Modal Styles */
+.modal-header {
+  background-color: #f8f9fa !important;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-footer {
+  background-color: #f8f9fa !important;
+  border-top: 1px solid #dee2e6;
+}
+
+.modal-body {
+  background-color: white;
+  color: #212529;
+}
+
+.modal-title {
+  color: #212529;
+  font-weight: bold;
+}
+
+/* Form Inputs */
+.form-control, .form-select {
   border-radius: 12px;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  font-size: 16px;
+  padding: 8px 12px;
+}
+
+.form-label {
   font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.btn.btn-secondary:hover {
-  background-color: #10a4b8;
-  transform: scale(1.03);
+input[readonly] {
+  background-color: #c7dbee6e;
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
-.btn.btn-secondary:active {
-  transform: scale(0.97);
+/* Improved Icons */
+.fas.fa-eye {
+  color: #17a3b85b;
 }
 
-button.btn-danger {
-  button.btn.btn-sm.btn-danger {
-    background-color: #e74c3c;   /* Vermelho elegante */
-    border-radius: 12px;
-    border: none;
-    padding: 6px 12px;           /* Tamanho menor, por ser .btn-sm */
-    cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Hover sem alterar o ícone */
-  button.btn.btn-sm.btn-danger:hover {
-    background-color: #c0392b;
-  }
-  
-  /* Clique sem aplicar transform no conteúdo */
-  button.btn.btn-sm.btn-danger:active {
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-  }
-  
-/* Modal - Estilos específicos para cada estado */
-.text-secondary { color: #4f565c; } /* Cinza */
-.text-brown    { color: #795548; }  /* Marrom */
-.text-danger   { color: #dc3545; }  /* Vermelho */
-.text-warning  { color: #ffc107; }  /* Amarelo */
-.text-purple   { color: #6f42c1; }  /* Roxo */
-.text-primary  { color: #007bff; }  /* Azul */
-.text-orange   { color: #fd7e14; }  /* Laranja */
-.text-success  { color: #28a745; }  /* Verde */
+.fas.fa-pencil-alt {
+  color: #085bc960;
+}
 
-/* Estilos responsivos */
+.fas.fa-trash-alt {
+  color: #dc35466e;
+}
+
+.fas.fa-plus {
+  color: white;
+}
+
+/* Sort Icons */
+.fas.fa-sort-up, .fas.fa-sort-down {
+  margin-left: 5px;
+}
+
+/* Estilo dos estados - versão "mini-tag" */
+.table-custom td:nth-child(5) {
+  text-align: center; /* Centraliza o conteúdo da célula */
+}
+
+.table-custom td:nth-child(5) span {
+  display: inline-block; /* Faz o span comportar-se como um bloco */
+  padding: 3px 10px;    /* Espaçamento interno reduzido */
+  border-radius: 12px;    /* Bordas arredondadas */
+  font-weight: 500;      /* Peso médio para o texto */
+  font-size: 0.8rem;     /* Texto um pouco menor */
+  white-space: nowrap;   /* Impede quebra de linha */
+  text-align: center;    /* Centraliza o texto */
+  line-height: 1.3; 
+  border: solid 2px;
+  background-color:#ffffff;    
+}
+
+/* Cores personalizadas (borda + texto) */
+.estado-ABERTA       {color:#585d68;}
+.estado-ORÇADA       {color: #8a6e63;}
+.estado-REJEITADA    { color: #dc3545;}
+.estado-APROVADA     { color: #ffc107;}
+.estado-REDIRECIONADA{ color: #6f42c1; }
+.estado-ARRUMADA     { color: #007bff; }
+.estado-PAGA         { color: #fd7e14; }
+.estado-FINALIZADA   { color: #28a745; }
+
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  table th, table td {
-    padding: 8px;
+  .table-custom {
+    display: block;
+    overflow-x: auto;
   }
-
+  
   h1.titulo-solicitacoes {
     font-size: 1.5rem;
-    padding: 10px;
+    padding: 10px 15px;
   }
-
-  button.btn-success {
-    font-size: 0.9rem;
-    padding: 8px 16px;
-    border-radius: 12px;
-  }
-
-  /* Modificar o tamanho dos modais para telas menores */
-  .modal-dialog {
-    max-width: 90%;
-  }
-}
 }
