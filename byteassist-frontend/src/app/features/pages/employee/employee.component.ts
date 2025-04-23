@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EmployeeService } from '../../services/employee/employee.service';
-import { Employee } from '../../models/employee.model';
+import { Employee } from '../../shared/models/employee.model';
 import { Router } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
 import Swal from 'sweetalert2';
@@ -33,7 +33,7 @@ export class EmployeeComponent implements OnInit {
     this.service.listar().subscribe(s => {
       console.log('Solicitações recebidas:', s);  // Verifique os dados recebidos
       this.solicitacoes = s;
-      this.ordenarPor('data'); 
+      this.ordenarPor('data');
     });
   }
 
@@ -44,11 +44,11 @@ export class EmployeeComponent implements OnInit {
       this.campoOrdenado = campo;
       this.ordemCrescente = true;
     }
-  
+
     this.solicitacoes.sort((a, b) => {
       let valA: any;
       let valB: any;
-  
+
       if (campo === 'data') {
         valA = new Date(`${a.data}T${a.hora}`);
         valB = new Date(`${b.data}T${b.hora}`);
@@ -56,18 +56,18 @@ export class EmployeeComponent implements OnInit {
         valA = a[campo];  // Agora 'campo' é garantido como chave válida de 'Employee'
         valB = b[campo];
       }
-  
+
       if (typeof valA === 'string') {
         valA = valA.toLowerCase();
         valB = valB.toLowerCase();
       }
-  
+
       if (valA < valB) return this.ordemCrescente ? -1 : 1;
       if (valA > valB) return this.ordemCrescente ? 1 : -1;
       return 0;
     });
   }
-  
+
   selecionar(s: Employee) {
     this.selecionado = { ...s };
   }
@@ -83,7 +83,7 @@ export class EmployeeComponent implements OnInit {
     const modal = new bootstrap.Modal(document.getElementById('visualizarModal'));
     modal.show();
   }
-  
+
   editar(s: Employee) {
     this.selecionado = { ...s };
     const modal = new bootstrap.Modal(document.getElementById('editarModal'));
@@ -153,7 +153,7 @@ export class EmployeeComponent implements OnInit {
       window.location.reload(); // força o reload após a navegação
     });
   }
-  
+
   rejeitarOrcamento(): void {
     console.log('Orçamento rejeitado');
     this.router.navigate(['/orcamentos']).then(() => {
@@ -164,13 +164,13 @@ export class EmployeeComponent implements OnInit {
   resgatarServico(): void {
     // Atualiza o estado da solicitação
     this.selecionado.estado = 'APROVADA';
-  
+
     // Atualiza o array principal, se necessário
     const index = this.solicitacoes.findIndex(s => s.id === this.selecionado.id);
     if (index !== -1) {
       this.solicitacoes[index].estado = 'APROVADA';
     }
-  
+
     // Exibe o popup de sucesso
     Swal.fire({
       title: 'Serviço Resgatado!',
@@ -180,7 +180,7 @@ export class EmployeeComponent implements OnInit {
       confirmButtonColor: '#198754'
     });
   }
-  
+
   pagarServico(): void {
     // Exibe o popup de confirmação
     Swal.fire({
@@ -196,5 +196,5 @@ export class EmployeeComponent implements OnInit {
       });
     });
   }
-  
+
 }

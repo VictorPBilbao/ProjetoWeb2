@@ -85,7 +85,7 @@ h1.titulo-solicitacoes {
   background: transparent;
   border-radius: 15px;
   margin: 20px auto;
-  width: 1400px;
+  width: auto;
   max-width: 95%;
   overflow-x: auto; /* Scroll horizontal */
   padding: 2px; /* Espaço para a sombra não ser cortada */
@@ -94,6 +94,7 @@ h1.titulo-solicitacoes {
 /* Tabela com sombra */
 .table-custom {
   width: 100%; /* Alterado para 100% para preencher o container */
+  max-width: 990px;
   background-color: rgba(255, 255, 255, 0.05);
   border-collapse: collapse;
   table-layout: auto;
@@ -112,7 +113,7 @@ h1.titulo-solicitacoes {
   padding: 12px 15px;
   text-align: left;
   font-weight: 600;
-  text-align: left; 
+  text-align: left;
   padding-left: 15px;
 }
 
@@ -366,7 +367,7 @@ input[readonly] {
     display: block;
     overflow-x: auto;
   }
-  
+
   h1.titulo-solicitacoes {
     font-size: 1.5rem;
     padding: 10px 15px;

@@ -1,10 +1,9 @@
 aside {
-  min-height: 100vh;
-  height: auto;
+  height: 100vh;
   background-color: #030E6D;
   border-radius: 0 30px 30px 0;
   color: white;
-  overflow: auto;
+  overflow-y: auto;
   transition: width 0.3s ease-in-out;
   position: relative;
 }
