@@ -1,5 +1,4 @@
 aside {
-  width: 320px;
   min-height: 100vh;
   height: auto;
   background-color: #3355BD;
@@ -7,15 +6,29 @@ aside {
   color: white;
   overflow: auto;
   transition: width 0.3s ease-in-out;
+  position: relative;
 }
 
-aside::-webkit-scrollbar{
+aside::-webkit-scrollbar {
   width: 0px;
   height: 0px;
 }
 
 .sidebar.open {
   width: 320px;
+}
+
+.sidebar.close {
+  width: 62px;
+}
+
+.close-sidebar-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
 }
 
 .menu-padding {
@@ -127,25 +140,9 @@ aside::-webkit-scrollbar{
   margin-left: 10px;
 }
 
+
 @media (max-width: 768px) {
-  .menu-user-name {
-    margin-left: 0px;
-  }
-
-  .nav-link-text,
-  .menu-user-name,
-  .menu-search-container {
-    opacity: 0;
-    transition: all 0.3s ease-in-out;
-    width: 0px;
-  }
-
-  .menu-padding {
-    padding: 10px;
-  }
-
-  aside {
-    width: 62px;
+  .sidebar.open {
     overflow-x: hidden;
     overflow-y: auto;
     position: fixed;
@@ -155,13 +152,31 @@ aside::-webkit-scrollbar{
     height: 100vh;
   }
 
+  .close-sidebar-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+  }
+
+  .nav-link-text, .menu-user-name, .menu-search-container {
+    display: none;
+  }
+
+  .menu-padding {
+    padding: 14px;
+  }
+
+  .menu-name-initials-container {
+    margin-top: 50px;
+    width: 30px;
+    height: 30px;
+  }
+
   .menu-name-initials-container {
     width: 40px;
     height: 40px;
-  }
-
-  .nav-item-seperator {
-    padding-left: 0px;
-    padding-right: 0px;
   }
 }

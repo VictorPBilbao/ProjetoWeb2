@@ -1,0 +1,310 @@
+.budget-container {
+  width: 100%;
+  height: auto;
+  padding-bottom: 60px;
+}
+
+.budget-title-container {
+  color: white;
+  background-color: #2B4EB6;
+  width: 350px;
+  height: 200px;
+  border-bottom-left-radius: 100% 50%;
+  border-bottom-right-radius: 100% 50%;
+  text-align: center;
+}
+
+.budgets-list-container {
+  margin-top: 60px;
+}
+
+.budget-details {
+  gap: 10px;
+}
+
+.table-header {
+  width: 100%;
+  max-width: 800px;
+  padding: 10px;
+  position: relative;
+}
+
+.table-header1 {
+  font-weight: 900;
+}
+
+.header-item {
+  width: 14.28%;
+  text-align: center;
+  color: white;
+}
+
+.table-card {
+  max-width: 900px;
+  margin: auto;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.info {
+  gap: 15px;
+  position: relative;
+  border-radius: 15px;
+  border: 2px solid white;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.table-caret {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  left: 15px;
+}
+
+.accordion {
+  opacity: 0;
+  max-height: 0px;
+  transition: max-height 0.8s ease, opacity 0.8s ease;
+  padding: 10px;
+}
+
+.accordion.ativo {
+  opacity: 1;
+  max-height: 1000px;
+}
+
+.descricao .secao {
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.descricao {
+  width: 100%;
+}
+
+.secao {
+  background-color: white;
+}
+
+.secao p {
+  color: gray;
+}
+
+.descricao-detalhe-item {
+  background-color: white;
+  color: #333;
+  font-weight: bold;
+  display: inline-block;
+  padding: 20px 32px;
+  border-radius: 20px;
+  width: fit-content;
+}
+
+.descricao-detalhe {
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.descricao-detalhe-item span {
+  color: #808080;
+}
+
+.painel-lateral {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+  font-weight: 600;
+  padding: 15px;
+  border-radius: 15px;
+  width: 300px;
+}
+
+.botoes {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.aprovar, .rejeitar {
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.aprovar {
+  background-color: #4caf50;
+  color: white;
+}
+
+.rejeitar {
+  background-color: #f44336;
+  color: white;
+}
+
+.botoes {
+  font-size: 20px;
+}
+
+.budget-modal {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 25px;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  width: 300px;
+  position: relative;
+  text-align: center;
+}
+
+.modal-content h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.modal-content p {
+  font-size: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.modal-content textarea {
+  width: 100%;
+  height: 80px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  resize: none;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
+}
+
+.btn-ok {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-ok:hover {
+  background-color: #2fa360;
+}
+
+.btn-reject {
+  background-color: #e3342f;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-reject:hover {
+  background-color: #cc1f1a;
+}
+
+.quote-container {
+  gap: 10px;
+  padding: 10px 0px;
+  border-radius: 12px;
+}
+
+.quote-item {
+  background-color: #a3ccff;
+  padding: 8px 12px;
+  border-radius: 20px;
+  min-width: 150px;
+  min-height: 60px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.quote-title {
+  font-weight: bold;
+}
+
+.quote-description {
+  color: #222;
+}
+
+.quote-button {
+  background-color: #56d1e4;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 150px;
+  min-height: 60px;
+}
+
+.quote-button:hover {
+  background-color: #44bdd0;
+}
+
+@media (max-width: 900px) {
+  .table-header, .info  {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .budget-details {
+    flex-direction: column;
+  }
+
+  .painel-lateral {
+    width: 100%;
+  }
+}

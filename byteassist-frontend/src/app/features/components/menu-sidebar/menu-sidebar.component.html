@@ -1,4 +1,4 @@
-<aside class="d-flex flex-column sidebar" (click)="openSidebar()">
+<aside class="d-flex flex-column sidebar open">
   <div class="d-flex">
     <div class="menu-user-container d-flex flex-column menu-padding">
       <div class="d-flex align-items-center">
@@ -27,7 +27,7 @@
           routerLink="/dashboard"
           routerLinkActive="active"
         >
-          <img src="/images/menu-sidebar/monitor-graph.svg" class="menu-icon">
+          <img src="/images/menu-sidebar/home.png" class="menu-icon">
           <p class="nav-link-text">Dashbord</p>
         </a>
       </li>
@@ -37,7 +37,7 @@
           routerLink="/solicitacoes"
           routerLinkActive="active"
         >
-          <img src="/images/menu-sidebar/maintenance.svg" class="menu-icon">
+          <img src="/images/menu-sidebar/technical-support.png" class="menu-icon">
           <p class="nav-link-text">Solitações</p>
         </a>
       </li>
@@ -47,7 +47,7 @@
           routerLink="/orcamentos"
           routerLinkActive="active"
         >
-          <img src="/images/menu-sidebar/money-recive.svg" class="menu-icon">
+          <img src="/images/menu-sidebar/value-chain.png" class="menu-icon">
           <p class="nav-link-text">Orçamentos</p>
         </a>
       </li>
@@ -57,7 +57,7 @@
           routerLink="/pagamentos"
           routerLinkActive="active"
         >
-          <img src="/images/menu-sidebar/payment-method.svg" class="menu-icon">
+          <img src="/images/menu-sidebar/payment.png" class="menu-icon">
           <p class="nav-link-text">Pagamentos</p>
         </a>
       </li>
@@ -67,7 +67,7 @@
           routerLink="/conta"
           routerLinkActive="active"
         >
-          <img src="/images/menu-sidebar/account.svg" class="menu-icon">
+          <img src="/images/menu-sidebar/user.png" class="menu-icon">
           <p class="nav-link-text">Configurações</p>
         </a>
       </li>
@@ -77,7 +77,7 @@
           routerLink="/ajuda"
           routerLinkActive="active"
         >
-          <img src="/images/menu-sidebar/customer-service.svg" class="menu-icon">
+          <img src="/images/menu-sidebar/customer-support.png" class="menu-icon">
           <p class="nav-link-text">Suporte</p>
         </a>
       </li>
@@ -95,4 +95,13 @@
       </li>
     </ul>
   </nav>
+
+  <div class="close-sidebar-container" (click)="openSidebar()">
+    <i
+      class="bi "
+      [class.bi-arrow-left-square-fill]="sidebarVisible"
+        [class.bi-arrow-right-square-fill]="!sidebarVisible"
+    >
+    </i>
+  </div>
 </aside>
