@@ -36,4 +36,27 @@ export class BudgetingComponent {
   openBudget(index: number): void {
     this.activeAccordion = this.activeAccordion === index ? null : index;
   }
+
+  async budgetingRequest(id: string): Promise<void> {
+    this.selectedBudget = this.budgets.find(budget => budget.id === id) || null;
+    if (!this.selectedBudget) {
+      this.message = 'Erro ao encontrar o orçamento selecionado.';
+      this.showNotification = true;
+      return;
+    }
+
+    this.selectedBudget.status = "Orçada";
+    console.log('Chamando approveBudget...');
+    await this.budgetService.approveBudget(id);
+    this.openModal();
+  }
+
+  openModal() {
+    this.modalVisible = true;
+    console.log('Modal opened');
+  }
+
+  closeModal() {
+    this.modalVisible = false;
+  }
 }
