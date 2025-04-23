@@ -4,7 +4,7 @@
     <svg class="titulo-blob" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path fill="#030e6d" d="M46.9,-64.5C62.6,-53.2,78.3,-41.9,78.6,-28.4C79,-15,64.1,0.5,54.9,14.4C45.7,28.4,42.1,40.7,33.9,41.7C25.7,42.7,12.9,32.4,2.4,29.1C-8.1,25.8,-16.1,29.6,-30.2,30.4C-44.2,31.3,-64.2,29.4,-71.9,20C-79.5,10.7,-74.8,-6,-67,-19.2C-59.2,-32.3,-48.3,-41.9,-36.6,-54.5C-25,-67.1,-12.5,-82.7,1.6,-84.9C15.6,-87.1,31.3,-75.8,46.9,-64.5Z" transform="translate(100 100)"/>
     </svg>
-    
+
     <!-- Título com ícone de cliente -->
     <h1 class="titulo-solicitacoes">
       <i class="fas fa-user-tie me-2"></i> SOLICITAÇÕES
@@ -18,28 +18,28 @@
 <div class="table-responsive-container">
 
 <!-- Filtro por Data de Abertura -->
-<div class="row mb-2">
-  
+<div class="flex items-center" style="gap: 10px;">
+
   <!-- Período: Início -->
-  <div class="col-md-1">
+  <div class="">
     <label class="form-label">Data Início</label>
     <input type="date" class="form-control" [(ngModel)]="filtroDataInicio" (ngModelChange)="filtroData()">
   </div>
 
   <!-- Período: Fim -->
-  <div class="col-md-1" style="margin-left: 2rem;">
+  <div class="">
     <label class="form-label">Data Fim</label>
     <input type="date" class="form-control" [(ngModel)]="filtroDataFim" (ngModelChange)="filtroData()">
   </div>
 
   <!-- Limpar Filtro -->
-  <div class="col-md-2">
+  <div class="self-end" style="height: 100%;">
     <button class="btn-sm btn-clear ms-2" (click)="limparFiltro()">Limpar</button>
 
   </div>
-  
+
 </div>
-  
+
   <!-- Filtro por Estado -->
   <div class="mb-3">
     <label for="filtroEstado" class="form-label"></label>
@@ -55,7 +55,7 @@
       <option value="FINALIZADA">Finalizada</option>
     </select>
   </div>
-  
+
 
 <!--Tabela-->
   <table class="table-custom">
@@ -98,19 +98,19 @@
           </button>
 
           <!-- Editar/Manutenção -->
-          <button class="btn btn-sm btn-warning me-1" data-bs-toggle="modal" data-bs-target="#manutencaoModal" 
+          <button class="btn btn-sm btn-warning me-1" data-bs-toggle="modal" data-bs-target="#manutencaoModal"
                   (click)="selecionar(s)" title="Editar">
             <i class="fas fa-tools"></i>
           </button>
 
           <!-- Orçar -->
-          <button class="btn btn-sm btn-secondary me-1" (click)="irParaOrcamento(s)" 
+          <button class="btn btn-sm btn-secondary me-1" (click)="irParaOrcamento(s)"
                   [disabled]="['FINALIZADA'].includes(s.estado)" title="Orçar">
             <i class="fas fa-dollar-sign"></i>
           </button>
 
           <!-- Finalizar -->
-          <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#finalizarModal" 
+          <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#finalizarModal"
                   (click)="selecionar(s)" [disabled]="s.estado !== 'PAGA'" title="Finalizar">
             <i class="fas fa-check-circle"></i>
           </button>
@@ -150,7 +150,7 @@
 
             <p><strong>Equipamento:</strong> {{ selecionado.equipamento }}</p>
 
-            <p><strong>Estado:</strong> 
+            <p><strong>Estado:</strong>
               <span class="badge" [ngClass]="{
                 'bg-secondary': selecionado.estado === 'ABERTA',
                 'bg-brown': selecionado.estado === 'ORÇADA',
@@ -291,7 +291,7 @@
 
             <div class="col-md-6 mb-3">
               <label class="form-label"><i class="bi bi-pencil-square"></i> Funcionário</label>
-              <input type="text" class="form-control" [(ngModel)]="selecionado.funcionario" name="funcionario" required>
+              <input type="text" class="form-control" [(ngModel)]="funcionarioDestino" name="funcionario" required>
             </div>
           </div>
 

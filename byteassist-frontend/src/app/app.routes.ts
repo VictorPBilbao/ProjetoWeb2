@@ -16,7 +16,6 @@ import { PaymentComponent } from './features/pages/payment/payment.component';
 
 // Páginas do funcionário
 import { BudgetingComponent } from './features/pages-employee/budgeting/budgeting.component';
-import { MaintenanceComponent } from './features/pages-employee/maintenance/maintenance.component';
 import { RequestsComponent } from './features/pages-employee/requests/requests.component';
 
 
@@ -32,7 +31,6 @@ export const routes: Routes = [
   {path: 'ajuda', component: HelpComponent },
   {path: 'pagamentos', component: PaymentComponent },
   {path: 'funcionario/orcamentos', component: BudgetingComponent },
-  {path: 'funcionario/manutencao', component: MaintenanceComponent },
   {path: 'funcionario/solicitacoes', component: RequestsComponent },
   {path: '**', redirectTo: '' } // Redireciona para home se rota não existir
 
