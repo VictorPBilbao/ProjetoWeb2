@@ -1,34 +1,67 @@
-/* Seção principal */
 section {
   padding: 40px 20px;
 }
 
 .center-container {
   display: flex;
-  justify-content: center; /* Alinha horizontalmente */
-  align-items: center;     /* Alinha verticalmente */       
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  max-width: 650px;
+  margin: 0 auto;
+  margin-bottom: 30px;
 }
 
-/* Estilo do contêiner do título */
+/* Container do título - removido o gradiente e borda */
 .title-container {
-  background: linear-gradient(135deg, #030e6d); /* Gradiente para o fundo */
-  padding: 20px 40px;
-  border-radius: 30px;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-  margin-top: -20px; /* Sombra para dar um efeito de elevação */
+  padding: 20px 0; /* Ajuste o padding conforme necessário */
+  position: relative;
+  margin-bottom: 40px;
 }
 
+/* Estilo do wrapper do título com blob */
+.titulo-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Estilo do blob */
+.titulo-blob {
+  position: absolute;
+  top: -20px;
+  transform: translateY(-50%);
+  width: 150%;
+  height: auto;
+  z-index: -1;
+  opacity: 1;
+  margin-left: -13%;
+}
+
+/* Estilo do título */
 h1 {
   font-size: 2rem;
   font-weight: bold;
   color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding-left: 40px; /* Espaço para o blob */
+  margin-top: -40px;
+}
+
+/* Ícone de pagamentos */
+h1 i {
+  color: #ffffff;
+  margin-right: 10px;
+  font-size: 1.8rem;
 }
 
 /* Container central do formulário */
 .container {
   padding: 30px;
   border-radius: 12px;
-  max-width: 600px;
+  max-width: 620px;
   margin: auto;
 }
 
@@ -36,7 +69,6 @@ h1 {
 form {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
 }
 
 /* Linha de campos lado a lado */
