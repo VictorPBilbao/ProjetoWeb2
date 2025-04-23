@@ -25,7 +25,11 @@
           <div class="header-item">{{ budget.budgetValue | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</div>
         </div>
         <span class="table-caret">
-          <i class="bi bi-caret-down-fill"></i>
+          <i
+            class="bi "
+            [class.bi-caret-down-fill]="activeAccordion !== i"
+            [class.bi-caret-up-fill]="activeAccordion === i">
+          </i>
         </span>
       </div>
 

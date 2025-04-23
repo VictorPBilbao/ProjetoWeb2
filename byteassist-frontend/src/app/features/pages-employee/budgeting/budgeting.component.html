@@ -19,12 +19,16 @@
           <div class="header-item">{{ budget.id }}</div>
           <div class="header-item">{{ budget.date | date:'dd/MM/yyyy' }}</div>
           <div class="header-item">{{ budget.time }}</div>
-          <div class="header-item">{{ budget.equipment }}</div>
+          <div class="header-item">{{ budget.clientName }}</div>
           <div class="header-item">{{ budget.status }}</div>
           <div class="header-item">{{ budget.budgetValue | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</div>
         </div>
         <span class="table-caret">
-          <i class="bi bi-caret-down-fill"></i>
+          <i
+            class="bi "
+            [class.bi-caret-down-fill]="activeAccordion !== i"
+            [class.bi-caret-up-fill]="activeAccordion === i">
+          </i>
         </span>
       </div>
 
@@ -34,15 +38,15 @@
             <div class="descricao-detalhe flex items-center flex-wrap">
               <div class="descricao-detalhe-item">
                 <p>Categoria</p>
-                <span>Desktop</span>
+                <span>{{ budget.equipmentCategory }}</span>
               </div>
               <div class="descricao-detalhe-item">
                 <p>Marca</p>
-                <span>Acer</span>
+                <span>{{ budget.equipmentBrand }}</span>
               </div>
               <div class="descricao-detalhe-item">
                 <p>Equipamento</p>
-                <span>Aspire 3</span>
+                <span>{{ budget.equipment }}</span>
               </div>
               <div class="descricao-detalhe-item">
                 <p>Serviço</p>
@@ -51,12 +55,12 @@
 
             <div class="secao">
               <h3>Descrição</h3>
-              <p>{{ budget.partsDescription }}</p>
+              <p>{{ budget.budgetDescription }}</p>
             </div>
 
             <div class="secao">
               <h3>Defeito</h3>
-              <p>{{ budget.laborDescription }}</p>
+              <p>{{ budget.defectDescription }}</p>
             </div>
           </div>
 
@@ -75,23 +79,41 @@
         <div class="quote-container flex items-center justify-between">
           <div class="quote-item">
             <p class="quote-title">Peças</p>
-            <span class="quote-description">Processor - R$950</span>
+            <div *ngFor="let part of budget.parts">
+              <span class="quote-description">
+                {{ part.partName }} - {{ part.partTotalValue | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+              </span>
+            </div>
           </div>
           <div class="quote-item">
             <p class="quote-title">Técnico</p>
-            <span class="quote-description">Patrick - R$50/H</span>
+            <span class="quote-description">
+              {{ budget.technicalName }} - {{ budget.technicalHourValue | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}/H
+            </span>
           </div>
           <div class="quote-item">
             <p class="quote-title">Taxas</p>
-            <span class="quote-description">R$550</span>
+            <span class="quote-description"> {{ budget.fees | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</span>
           </div>
           <div class="quote-item">
             <p class="quote-title">Total</p>
-            <span class="quote-description">R$3,000.00</span>
+            <span class="quote-description">{{ budget.budgetValue | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</span>
           </div>
-          <button class="quote-button">ORÇAR</button>
+          <button class="quote-button" (click)="budgetingRequest(budget.id)">ORÇAR</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="budget-modal flex items-center justify-center" *ngIf="modalVisible && selectedBudget">
+    <div class="modal-content" >
+      <h2>Solicitação #{{ selectedBudget.id }} Orçada!</h2>
+      <button
+        class="btn-ok"
+        style="background-color: black; width: 120px; margin: auto;"
+        (click)="closeModal()">
+          Ok
+      </button>
     </div>
   </div>
 </section>
