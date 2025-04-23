@@ -34,4 +34,15 @@ export class UserService {
       catchError(handleErrors.handleError)
     );
   }
+
+  // getUseRuleTemporaria
+  getUserRule(userId: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.get(`${this.apiUrl}/user/${userId}`, { headers }).pipe(
+      catchError(handleErrors.handleError)
+    );
+  }
 }

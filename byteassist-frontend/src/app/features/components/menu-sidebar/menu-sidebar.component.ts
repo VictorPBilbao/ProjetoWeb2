@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
@@ -14,10 +14,34 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 export class MenuSidebarComponent {
   userName: string = 'Victor Bilbao';
   searchTerm : string = '';
+  sidebarVisible: boolean = true;
 
   constructor(
     private authService: AuthService,
     private router: Router) {}
+
+  ngOnInit(): void {
+    this.checkScreenSize(); // Verifica o tamanho da tela ao carregar o componente
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.checkScreenSize(); // Verifica o tamanho da tela ao redimensionar
+  }
+
+  checkScreenSize(): void {
+    const sidebar = document.querySelector('.sidebar') as HTMLElement;
+
+    if (window.innerWidth < 768) {
+      this.sidebarVisible = false; // Define o estado como fechado
+      sidebar.classList.add('close');
+      sidebar.classList.remove('open');
+    } else {
+      this.sidebarVisible = true; // Define o estado como aberto
+      sidebar.classList.add('open');
+      sidebar.classList.remove('close');
+    }
+  }
 
   getUserInitals(): string {
     if (!this.userName) return '';
@@ -29,35 +53,33 @@ export class MenuSidebarComponent {
   }
 
   openSidebar(): void {
-    const widthScreen = window.innerWidth;
+    this.sidebarVisible = !this.sidebarVisible;
+    const sidebar = document.querySelector('.sidebar') as HTMLElement;
+    const textsSidebar = document.querySelectorAll('.nav-link-text') as NodeListOf<HTMLElement>;
+    const menuUserName = document.querySelector('.menu-user-name') as HTMLElement;
+    const menuSearchContainer = document.querySelector('.menu-search-container') as HTMLElement;
+    const menuPaddings = document.querySelectorAll('.menu-padding') as NodeListOf<HTMLElement>;
+    const initialsContainer = document.querySelector('.menu-name-initials-container') as HTMLElement;
 
-    if (widthScreen <= 768) {
-      const sidebar = document.querySelector('.sidebar') as HTMLElement;
-      const textsSidebar = document.querySelectorAll('.nav-link-text') as NodeListOf<HTMLElement>;
-      const menuUserName = document.querySelector('.menu-user-name') as HTMLElement;
-      const menuSearchContainer = document.querySelector('.menu-search-container') as HTMLElement;
-      var opacity = "0";
-      var width = "0px";
-      var marginLeft = "0px";
+    // Alterna entre classes 'open' e 'close'
+    const isOpening = !sidebar.classList.contains('open');
+    sidebar.classList.toggle('open', isOpening);
+    sidebar.classList.toggle('close', !isOpening);
 
-      opacity = sidebar.classList.contains('open') ? '0' : '1';
-      width = sidebar.classList.contains('open') ? '0px' : 'auto';
-      marginLeft = sidebar.classList.contains('open') ? '0px' : '10px';
+    // Aplica estilos diretamente
+    textsSidebar.forEach(text => {
+      text.style.display = isOpening ? 'flex' : 'none';
+    });
 
-      sidebar.classList.toggle('open');
-
-      textsSidebar.forEach((text) => {
-        text.style.opacity = opacity;
-        text.style.width = width;
-      });
-
-      menuUserName.style.opacity = opacity;
-      menuUserName.style.width = width;
-      menuUserName.style.marginLeft = marginLeft;
-
-      menuSearchContainer.style.opacity = opacity;
-      menuSearchContainer.style.width = width;
-    }
+    // Aplica no menu user/search
+    menuUserName.style.display = isOpening ? 'block' : 'none';
+    menuSearchContainer.style.display = isOpening ? 'block' : 'none';
+    menuPaddings.forEach(el => {
+      el.style.padding = isOpening ? '15px 20px' : '14px';
+    });
+    initialsContainer.style.width = isOpening ? '40px' : '30px';
+    initialsContainer.style.height = isOpening ? '40px' : '30px';
+    initialsContainer.style.marginTop = isOpening ? '0px' : '50px';
   }
 
   logout(): void {
