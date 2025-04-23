@@ -1,35 +1,51 @@
 .solicitation-section {
-    width: 100%;
-    padding: 0px 0 20px; 
-    overflow: hidden;
-    position: relative;
-  }
-  
-  .solicitation-title {
-    position: relative;
-    z-index: 1; /* coloca o texto acima da wave */
-    color: white;
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: center;
-  
-    /* Novos estilos para o retângulo arredondado */
-    padding: 15px 25px;
-    border-radius: 30px;
-    background: linear-gradient(135deg, #030e6d);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-    display: inline-block;
-    margin-top: 5px;
-  }
-  
-  .container-do-titulo {
-    display: flex;
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: center;     /* Centraliza verticalmente, se quiser */
-    margin-top: 20px;
-    text-align: center;
-  }
-  
+  width: 100%;
+  padding: 20px 0;
+  position: relative;
+}
+
+.container-do-titulo {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  position: relative;
+  max-width: 650px;
+}
+
+.titulo-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.titulo-blob {
+  position: absolute;
+  top: 70%;
+  transform: translateY(-50%);
+  width:160%;
+  height: auto;
+  z-index: -1; /* Garante que fique atrás de tudo */
+  opacity: 1; /* Opcional: deixa o blob mais suave */
+  margin-left: -70px;
+}
+
+.solicitation-title {
+  position: relative;
+  color: #ffffff; /* Cor do texto igual à do blob */
+  font-size: 2rem;
+  font-weight: bold;
+  padding: 0 15px;
+  display: inline-block;
+  margin: 0;
+  background: none; /* Remove qualquer fundo */
+  box-shadow: none; /* Remove sombra */
+  margin-top: 25px;
+}
+
+.solicitation-title i {
+  color: #ffffff; /* Cor do ícone igual à do blob */
+}
+
 .solicitation-container {
     max-width: 650px;
     padding: 20px;
@@ -42,7 +58,7 @@
     border-radius: 12px;
     padding: 25px;
     color: white; 
-    margin-top: 5px; /*distancia entre o texto e a tabela*/
+    margin-top: 100px; /*distancia entre o texto e a tabela*/
   }
   
   .solicitation-table {
@@ -54,7 +70,6 @@
     margin-bottom: 10px;
     background-color: #9fbcec2a;
     color: white; 
-
   }
   
   .solicitation-table th {

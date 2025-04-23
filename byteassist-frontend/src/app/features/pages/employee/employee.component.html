@@ -1,17 +1,28 @@
-<div class="container-do-titulo">
-  <h1 class="titulo-solicitacoes">SOLICITAÇÕES</h1>
-</div>
-
+<section>
+  <div class="container-do-titulo">
+    <div class="titulo-wrapper">
+      <!-- Novo blob SVG com o formato especificado -->
+      <svg class="titulo-blob" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path fill="#030e6d" d="M46.9,-64.5C62.6,-53.2,78.3,-41.9,78.6,-28.4C79,-15,64.1,0.5,54.9,14.4C45.7,28.4,42.1,40.7,33.9,41.7C25.7,42.7,12.9,32.4,2.4,29.1C-8.1,25.8,-16.1,29.6,-30.2,30.4C-44.2,31.3,-64.2,29.4,-71.9,20C-79.5,10.7,-74.8,-6,-67,-19.2C-59.2,-32.3,-48.3,-41.9,-36.6,-54.5C-25,-67.1,-12.5,-82.7,1.6,-84.9C15.6,-87.1,31.3,-75.8,46.9,-64.5Z" transform="translate(100 100)"/>
+      </svg>
+      <h1 class="titulo-solicitacoes">
+        <i class="fas fa-clipboard-list me-2"></i> SOLICITAÇÕES
+      </h1>
+    </div>
+  </div>
+  
 <!-- Link para o Font Awesome -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
-<button class="btn btn-success" (click)="abrirFormulario()">
-  <i class="fas fa-plus me-2"></i> Nova Solicitação
-</button>
-
 <!-- Tabela de Solicitações -->
-<table class="table table-bordered">
-  <thead class="table-light">
+<div class="table-container">
+  <div class="btn-container">
+    <button class="btn btn-success" (click)="abrirFormulario()">
+      <i class="fas fa-plus me-2"></i> Nova Solicitação
+    </button>
+  </div>
+<table class="table-custom">
+  <thead>
     <tr>
       <th>ID</th>
       <th (click)="ordenarPor('data')" style="cursor: pointer;">
@@ -30,32 +41,38 @@
     </tr>
   </thead>
   <tbody>
-    
     <tr *ngFor="let s of solicitacoes">
       <td>{{ s.id }}</td>
       <td>{{ s.data }}</td>
       <td>{{ s.hora }}</td>
       <td>{{ s.equipamento }}</td>
-      <td>{{ s.estado }}</td>
+      <td>
+        <span [ngClass]="{
+          'estado-ABERTA': s.estado === 'ABERTA',
+          'estado-ORÇADA': s.estado === 'ORÇADA',
+          'estado-REJEITADA': s.estado === 'REJEITADA',
+          'estado-APROVADA': s.estado === 'APROVADA',
+          'estado-REDIRECIONADA': s.estado === 'REDIRECIONADA',
+          'estado-ARRUMADA': s.estado === 'ARRUMADA',
+          'estado-PAGA': s.estado === 'PAGA',
+          'estado-FINALIZADA': s.estado === 'FINALIZADA'
+        }">{{ s.estado }}</span>
+      </td>
       <td>
         <button class="btn btn-sm btn-info me-1" data-bs-toggle="modal" data-bs-target="#visualizarModal" (click)="selecionar(s)">
-          <i class="fas fa-eye"></i> <!-- Ícone de olho -->
+          <i class="fas fa-eye"></i>
         </button>
-
-        <!-- Editar -->
         <button class="btn btn-sm btn-warning me-1" data-bs-toggle="modal" data-bs-target="#editarModal" (click)="selecionar(s)">
-        <i class="fas fa-pencil-alt"></i> <!-- Ícone de lápis -->
+          <i class="fas fa-pencil-alt"></i>
         </button>
-
-        <!-- Remover -->
         <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#removerModal" (click)="selecionar(s)">
-        <i class="fas fa-trash-alt"></i> <!-- Ícone de lixeira -->
+          <i class="fas fa-trash-alt"></i>
         </button>
-
       </td>
     </tr>
   </tbody>
 </table>
+</div>
 
 <!-- Modal: Visualizar Solicitação -->
 <div class="modal fade" id="visualizarModal" tabindex="-1" aria-labelledby="visualizarModalLabel" aria-hidden="true">
@@ -232,3 +249,4 @@
     </div>
   </div>
 </div>
+</section>
