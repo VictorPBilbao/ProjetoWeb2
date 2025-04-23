@@ -112,12 +112,15 @@ h1.titulo-solicitacoes {
   padding: 12px 15px;
   text-align: left;
   font-weight: 600;
+  text-align: left; 
+  padding-left: 15px;
 }
 
 .table-custom td {
   padding: 12px 15px;
   color: white;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-left: 15px;
 }
 
 .table-custom tbody tr:hover {
@@ -193,7 +196,7 @@ btn-sm {
 }
 
 .btn-warning:hover {
-  background-color: #071c5f;
+  background-color: #7593f3;
   transform: translateY(-1px);
 }
 
@@ -248,7 +251,7 @@ btn-sm {
 }
 
 .text-warning {
-  color: #1bc584 !important;
+  color: #ffc107!important;
   font-weight: bold;
 }
 
@@ -331,21 +334,19 @@ input[readonly] {
   margin-left: 5px;
 }
 
-/* Estilo dos estados - versão "mini-tag" */
-.table-custom td:nth-child(5) {
-  text-align: center; /* Centraliza o conteúdo da célula */
-}
-
 .table-custom td:nth-child(5) span {
-  display: inline-block; /* Faz o span comportar-se como um bloco */
-  padding: 3px 10px;    /* Espaçamento interno reduzido */
-  border-radius: 12px;    /* Bordas arredondadas */
-  font-weight: 500;      /* Peso médio para o texto */
-  font-size: 0.8rem;     /* Texto um pouco menor */
-  white-space: nowrap;   /* Impede quebra de linha */
-  text-align: center;    /* Centraliza o texto */
-  line-height: 1.3; 
+  display: inline-flex; /* Mantém o alinhamento vertical */
+  justify-content: flex-start; /* Alinha o conteúdo à esquerda */
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  line-height: 1.2;
   color: white;
+  text-align: left; /* Alinhamento do texto à esquerda */
+  width: auto; /* Largura automática baseada no conteúdo */
+  margin-right: auto; /* Empurra para a esquerda */
 }
 
 /* Cores personalizadas (borda + texto) */

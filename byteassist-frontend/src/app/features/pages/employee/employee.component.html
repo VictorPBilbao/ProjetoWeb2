@@ -85,7 +85,10 @@
 
       <div class="modal-body">
         <p><strong>Categoria:</strong> {{ selecionado.categoria }}</p>
-        <p><strong>Data:</strong> {{ selecionado.data }}</p>
+        <p>
+          <strong>Data:</strong> {{ selecionado.data }}
+          <strong class="ms-3">Hora:</strong> {{ selecionado.hora }}
+        </p>
         <p><strong>Defeito Relatado:</strong> {{ selecionado.defeitoRelatado }}</p>
         <p><strong>Descrição do Serviço:</strong> {{ selecionado.descricaoServico }}</p>
         <p><strong>Equipamento:</strong> {{ selecionado.equipamento }}</p>
@@ -103,7 +106,6 @@
         </p>
         <p><strong>Funcionário Responsável:</strong> {{ selecionado.funcionario }}</p>
         <p><strong>Histórico:</strong> {{ selecionado.historico }}</p>
-        <p><strong>Hora:</strong> {{ selecionado.hora }}</p>
         <p><strong>ID da Solicitação:</strong> {{ selecionado.id }}</p>
         <p><strong>Marca:</strong> {{ selecionado.marca }}</p>
         <p><strong>Orçamento:</strong> {{ selecionado.orcamento }}</p>
@@ -161,10 +163,16 @@
             </select>
           </div>
 
-         <!-- Data (readonly) -->
-          <div class="mb-3">
-            <label class="form-label">Data</label>
-            <input type="date" class="form-control" [(ngModel)]="selecionado.data" name="data" readonly>
+          <!-- Data e Hora na mesma linha -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Data</label>
+              <input type="date" class="form-control" [(ngModel)]="selecionado.data" name="data" readonly>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Hora</label>
+              <input type="time" class="form-control" [(ngModel)]="selecionado.hora" name="hora" readonly>
+            </div>
           </div>
 
           <!-- Defeito Relatado -->
@@ -183,12 +191,6 @@
           <div class="mb-3">
             <label class="form-label">Estado</label>
             <input type="text" class="form-control" [(ngModel)]="selecionado.estado" name="estado" readonly>
-          </div>
-
-          <!-- Hora -->
-          <div class="mb-3">
-            <label class="form-label">Hora</label>
-            <input type="time" class="form-control" [(ngModel)]="selecionado.hora" name="hora" readonly>
           </div>
 
           <!-- ID (readonly) -->

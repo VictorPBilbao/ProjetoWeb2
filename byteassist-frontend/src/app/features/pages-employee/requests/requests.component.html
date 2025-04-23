@@ -1,26 +1,63 @@
 <div class="container-do-titulo">
-  <h1 class="titulo-solicitacoes">SOLICITAÇÕES</h1>
+  <div class="titulo-wrapper">
+    <!-- Blob SVG -->
+    <svg class="titulo-blob" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path fill="#030e6d" d="M46.9,-64.5C62.6,-53.2,78.3,-41.9,78.6,-28.4C79,-15,64.1,0.5,54.9,14.4C45.7,28.4,42.1,40.7,33.9,41.7C25.7,42.7,12.9,32.4,2.4,29.1C-8.1,25.8,-16.1,29.6,-30.2,30.4C-44.2,31.3,-64.2,29.4,-71.9,20C-79.5,10.7,-74.8,-6,-67,-19.2C-59.2,-32.3,-48.3,-41.9,-36.6,-54.5C-25,-67.1,-12.5,-82.7,1.6,-84.9C15.6,-87.1,31.3,-75.8,46.9,-64.5Z" transform="translate(100 100)"/>
+    </svg>
+    
+    <!-- Título com ícone de cliente -->
+    <h1 class="titulo-solicitacoes">
+      <i class="fas fa-user-tie me-2"></i> SOLICITAÇÕES
+    </h1>
+  </div>
 </div>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<!-- Filtro por Estado -->
-<div class="mb-3">
-  <label for="filtroEstado" class="form-label"></label>
-  <select id="filtroEstado" class="form-select" [(ngModel)]="filtroEstado" (change)="filtrarSolicitacoes()">
-    <option value="">Todos</option>
-    <option value="ABERTA">Aberta</option>
-    <option value="ORÇADA">Orçada</option>
-    <option value="APROVADA">Aprovada</option>
-    <option value="REJEITADA">Rejeitada</option>
-    <option value="REDIRECIONADA">Redirecionada</option>
-    <option value="ARRUMADA">Arrumada</option>
-    <option value="PAGA">Paga</option>
-    <option value="FINALIZADA">Finalizada</option>
-  </select>
-</div>
 
 <div class="table-responsive-container">
+
+<!-- Filtro por Data de Abertura -->
+<div class="row mb-2">
+  
+  <!-- Período: Início -->
+  <div class="col-md-1">
+    <label class="form-label">Data Início</label>
+    <input type="date" class="form-control" [(ngModel)]="filtroDataInicio" (ngModelChange)="filtroData()">
+  </div>
+
+  <!-- Período: Fim -->
+  <div class="col-md-1" style="margin-left: 2rem;">
+    <label class="form-label">Data Fim</label>
+    <input type="date" class="form-control" [(ngModel)]="filtroDataFim" (ngModelChange)="filtroData()">
+  </div>
+
+  <!-- Limpar Filtro -->
+  <div class="col-md-2">
+    <button class="btn-sm btn-clear ms-2" (click)="limparFiltro()">Limpar</button>
+
+  </div>
+  
+</div>
+  
+  <!-- Filtro por Estado -->
+  <div class="mb-3">
+    <label for="filtroEstado" class="form-label"></label>
+    <select id="filtroEstado" class="form-select" [(ngModel)]="filtroEstado" (change)="filtrarSolicitacoes()">
+      <option value="">Todos</option>
+      <option value="ABERTA">Aberta</option>
+      <option value="ORÇADA">Orçada</option>
+      <option value="APROVADA">Aprovada</option>
+      <option value="REJEITADA">Rejeitada</option>
+      <option value="REDIRECIONADA">Redirecionada</option>
+      <option value="ARRUMADA">Arrumada</option>
+      <option value="PAGA">Paga</option>
+      <option value="FINALIZADA">Finalizada</option>
+    </select>
+  </div>
+  
+
+<!--Tabela-->
   <table class="table-custom">
     <thead>
       <tr>
@@ -62,20 +99,14 @@
 
           <!-- Editar/Manutenção -->
           <button class="btn btn-sm btn-warning me-1" data-bs-toggle="modal" data-bs-target="#manutencaoModal" 
-                  (click)="selecionar(s)" [disabled]="s.estado === 'FINALIZADA'" title="Editar">
+                  (click)="selecionar(s)" title="Editar">
             <i class="fas fa-tools"></i>
           </button>
 
           <!-- Orçar -->
           <button class="btn btn-sm btn-secondary me-1" (click)="irParaOrcamento(s)" 
-                  [disabled]="!['ABERTA', 'REJEITADA'].includes(s.estado)" title="Orçar">
+                  [disabled]="['FINALIZADA'].includes(s.estado)" title="Orçar">
             <i class="fas fa-dollar-sign"></i>
-          </button>
-
-          <!-- Redirecionar -->
-          <button class="btn btn-sm btn-dark me-1" (click)="irParaRedirecionamento(s)" 
-                  [disabled]="!['ABERTA', 'ORÇADA', 'APROVADA'].includes(s.estado)" title="Redirecionar">
-            <i class="fas fa-share"></i>
           </button>
 
           <!-- Finalizar -->
@@ -100,22 +131,25 @@
 
       <div class="modal-body" *ngIf="selecionado">
         <div class="row">
-          <!-- Coluna com informações -->
-          <div class="col-12">
+          <!-- Coluna da esquerda: campos originais -->
+          <div class="col-md-6">
             <p><strong>Categoria:</strong> {{ selecionado.categoria }}</p>
             <p><strong>Cor:</strong> {{ selecionado.cor }}</p>
-            
+
             <!-- Data e Hora lado a lado -->
-            <div class="d-flex">
+            <div class="d-flex mb-2">
               <p class="me-3"><strong>Data:</strong> {{ selecionado.data | date:'dd/MM/yyyy' }}</p>
               <p><strong>Hora:</strong> {{ selecionado.hora }}</p>
             </div>
 
             <p><strong>Defeito Relatado:</strong></p>
             <p class="p-2 bg-light rounded">{{ selecionado.defeitoRelatado }}</p>
+
             <p><strong>Descrição do Serviço:</strong></p>
             <p class="p-2 bg-light rounded">{{ selecionado.descricaoServico }}</p>
+
             <p><strong>Equipamento:</strong> {{ selecionado.equipamento }}</p>
+
             <p><strong>Estado:</strong> 
               <span class="badge" [ngClass]="{
                 'bg-secondary': selecionado.estado === 'ABERTA',
@@ -130,13 +164,28 @@
                 {{ selecionado.estado }}
               </span>
             </p>
+
             <p><strong>Funcionário:</strong> {{ selecionado.funcionario }}</p>
+
             <p><strong>Histórico:</strong></p>
             <p class="p-2 bg-light rounded" *ngIf="selecionado.historico">{{ selecionado.historico }}</p>
+
             <p><strong>Marca:</strong> {{ selecionado.marca }}</p>
+
             <p><strong>Orçamento:</strong> {{ selecionado.orcamento }}</p>
+
             <p><strong>Serviço:</strong> {{ selecionado.servico }}</p>
-          
+          </div>
+
+          <!-- Coluna da direita: campos de manutenção -->
+          <div class="col-md-6">
+            <p><strong>Descrição da Manutenção:</strong></p>
+            <p class="p-2 bg-light rounded">{{ selecionado.descricaoManutencao }}</p>
+
+            <p><strong>Funcionário Destino:</strong> {{ selecionado.funcionarioDestino }}</p>
+
+            <p><strong>Orientações para o Cliente:</strong></p>
+            <p class="p-2 bg-light rounded">{{ selecionado.orientacoesCliente }}</p>
           </div>
         </div>
       </div>
@@ -150,110 +199,159 @@
 
 <!-- Modal: Editar Solicitação -->
 <div class="modal fade" id="manutencaoModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content" *ngIf="selecionado">
       <form (ngSubmit)="salvarEdicao()">
+
+        <!-- Cabeçalho -->
         <div class="modal-header bg-warning text-white">
           <h5 class="modal-title">Editar Solicitação #{{selecionado.id}}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
 
+        <!-- Corpo do Modal -->
         <div class="modal-body">
-          <!-- Categoria -->
-          <div class="mb-3">
-            <label class="form-label">Categoria</label>
-            <select class="form-select" [(ngModel)]="selecionado.categoria" name="categoria" required>
-              <option value="" disabled>Selecione uma categoria</option>
-              <option *ngFor="let c of categorias" [value]="c">{{ c }}</option>
-            </select>
+
+          <!-- 🟡 Bloco: Informações Iniciais -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label"><i class="bi bi-pencil-square"></i> Categoria</label>
+              <select class="form-select" [(ngModel)]="selecionado.categoria" name="categoria" required>
+                <option value="" disabled>Selecione uma categoria</option>
+                <option *ngFor="let c of categorias" [value]="c">{{ c }}</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label"><i class="bi bi-pencil-square"></i> Cor</label>
+              <input type="text" class="form-control" [(ngModel)]="selecionado.cor" name="cor" required>
+            </div>
           </div>
 
-          <!-- Cor -->
-          <div class="mb-3">
-            <label class="form-label">Cor</label>
-            <input type="text" class="form-control" [(ngModel)]="selecionado.cor" name="cor" required>
-          </div>
-
-          <!-- Data e Hora lado a lado -->
-          <div class="mb-3 d-flex">
-            <div class="me-3">
-              <label class="form-label">Data</label>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label"><i class="bi bi-pencil-square"></i> Data</label>
               <input type="text" class="form-control" [value]="selecionado.data | date:'dd/MM/yyyy'" readonly>
             </div>
-            <div>
-              <label class="form-label">Hora</label>
+            <div class="col-md-6 mb-3">
+              <label class="form-label"><i class="bi bi-pencil-square"></i> Hora</label>
               <input type="text" class="form-control" [value]="selecionado.hora" readonly>
             </div>
           </div>
 
-          <!-- Defeito Relatado (readonly) -->
+          <hr>
+
+          <!-- 🛠️ Bloco: Descrição do Problema -->
           <div class="mb-3">
-            <label class="form-label">Defeito Relatado</label>
+            <label class="form-label"><i class="bi bi-pencil-square"></i> Defeito Relatado</label>
             <textarea class="form-control" rows="3" [value]="selecionado.defeitoRelatado" readonly></textarea>
           </div>
 
-          <!-- Descrição do Serviço (readonly) -->
           <div class="mb-3">
-            <label class="form-label">Descrição do Serviço</label>
+            <label class="form-label"><i class="bi bi-pencil-square"></i> Descrição do Serviço</label>
             <textarea class="form-control" rows="4" [value]="selecionado.descricaoServico" readonly></textarea>
           </div>
 
-          <!-- Equipamento -->
-          <div class="mb-3">
-            <label class="form-label">Equipamento</label>
-            <input type="text" class="form-control" [(ngModel)]="selecionado.equipamento" name="equipamento" required>
+          <hr>
+
+          <!-- 🔧 Bloco: Informações Técnicas -->
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label"><i class="bi bi-pencil-square"></i> Equipamento</label>
+              <input type="text" class="form-control" [(ngModel)]="selecionado.equipamento" name="equipamento" required>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label"><i class="bi bi-pencil-square"></i> Marca</label>
+              <input type="text" class="form-control" [(ngModel)]="selecionado.marca" name="marca" required>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label"><i class="bi bi-pencil-square"></i> Orçamento</label>
+              <input type="text" class="form-control" [(ngModel)]="selecionado.orcamento" name="orcamento" required>
+            </div>
           </div>
 
-          <!-- Estado -->
           <div class="mb-3">
-            <label class="form-label">Estado</label>
-            <select class="form-select" [(ngModel)]="selecionado.estado" name="estado" required>
-              <option value="ABERTA">ABERTA</option>
-              <option value="ORÇADA">ORÇADA</option>
-              <option value="APROVADA">APROVADA</option>
-              <option value="REJEITADA">REJEITADA</option>
-              <option value="REDIRECIONADA">REDIRECIONADA</option>
-              <option value="ARRUMADA">ARRUMADA</option>
-              <option value="PAGA">PAGA</option>
-              <option value="FINALIZADA">FINALIZADA</option>
-            </select>
+            <label class="form-label"><i class="bi bi-pencil-square"></i> Serviço</label>
+            <input type="text" class="form-control" [(ngModel)]="selecionado.servico" name="servico" required>
           </div>
 
-          <!-- Funcionário -->
-          <div class="mb-3">
-            <label class="form-label">Funcionário</label>
-            <input type="text" class="form-control" [(ngModel)]="selecionado.funcionario" name="funcionario" required>
+          <hr>
+
+          <!-- 🔄 Bloco: Status e Histórico -->
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label"><i class="bi bi-pencil-square"></i> Estado</label>
+              <select class="form-select"
+                [(ngModel)]="selecionado.estado"
+                name="estado"
+                required>
+                <option value="" disabled>Selecione um estado</option>
+                <option *ngFor="let estado of ['ABERTA', 'ORÇADA', 'REJEITADA', 'APROVADA', 'REDIRECIONADA', 'ARRUMADA', 'PAGA', 'FINALIZADA']" [value]="estado">{{ estado }}</option>
+              </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label"><i class="bi bi-pencil-square"></i> Funcionário</label>
+              <input type="text" class="form-control" [(ngModel)]="selecionado.funcionario" name="funcionario" required>
+            </div>
           </div>
 
-          <!-- Histórico -->
           <div class="mb-3">
-            <label class="form-label">Histórico</label>
+            <label class="form-label"><i class="bi bi-pencil-square"></i> Histórico</label>
             <textarea class="form-control" rows="3" [(ngModel)]="selecionado.historico" name="historico" required></textarea>
           </div>
 
-          <!-- Marca -->
+          <hr>
+
+          <!-- 🛠️ Bloco: Realizar Manutenção -->
+          <h5 class="mt-3">Realizar Manutenção</h5>
+
           <div class="mb-3">
-            <label class="form-label">Marca</label>
-            <input type="text" class="form-control" [(ngModel)]="selecionado.marca" name="marca" required>
+            <label class="form-label"><i class="bi bi-tools"></i> Descrição da Manutenção</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="selecionado.descricaoManutencao" name="descricaoManutencao" required></textarea>
           </div>
 
-          <!-- Orçamento -->
           <div class="mb-3">
-            <label class="form-label">Orçamento</label>
-            <input type="text" class="form-control" [(ngModel)]="selecionado.orcamento" name="orcamento" required>
+            <label class="form-label"><i class="bi bi-tools"></i> Orientações para o Cliente</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="selecionado.orientacoesCliente" name="orientacoesCliente" required></textarea>
           </div>
 
-          <!-- Serviço -->
-          <div class="mb-3">
-            <label class="form-label">Serviço</label>
-            <input type="text" class="form-control" [(ngModel)]="selecionado.servico" name="servico" required>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label"><i class="bi bi-tools"></i> Data/Hora da Manutenção</label>
+              <input type="text" class="form-control" [value]="dataHoraAtual | date:'dd/MM/yyyy HH:mm'" readonly>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label"><i class="bi bi-tools"></i> Funcionário Responsável</label>
+              <input type="text" class="form-control" [value]="selecionado.funcionario" readonly>
+            </div>
           </div>
+
+          <hr>
+
+          <!-- 🔁 Bloco: Redirecionar Manutenção -->
+          <h5 class="mt-3">Redirecionar Manutenção</h5>
+
+          <div class="mb-3">
+            <label class="form-label"><i class="bi bi-arrow-right"></i> Redirecionar Para</label>
+            <select class="form-select" [(ngModel)]="selecionado.funcionarioDestino" name="funcionarioDestino" required>
+              <option value="" disabled>Selecione um funcionário</option>
+              <option *ngFor="let f of funcionarios" [value]="f" [disabled]="f === selecionado.funcionario">{{ f }}</option>
+            </select>
+          </div>
+
+          <div class="mb-3" *ngIf="selecionado.funcionarioDestino">
+            <label class="form-label"><i class="bi bi-person-check"></i> Funcionário Destino</label>
+            <input type="text" class="form-control" [value]="selecionado.funcionarioDestino" readonly>
+          </div>
+
         </div>
 
+        <!-- Rodapé -->
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary">Salvar Alterações</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
         </div>
+
       </form>
     </div>
   </div>

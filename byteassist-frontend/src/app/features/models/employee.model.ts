@@ -15,4 +15,11 @@ export interface Employee {
   descricaoServico?: string;
   defeitoRelatado?: string;
   orcamento: string;
+  dataAbertura?: string;
+  nome?: string;
+  descricaoManutencao?: string;
+  orientacoesCliente?: string;
+  dataHoraManutencao?: Date;
+  funcionarioDestino?: string;
+
 }

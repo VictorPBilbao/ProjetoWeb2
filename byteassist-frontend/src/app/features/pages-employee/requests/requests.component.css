@@ -10,57 +10,69 @@
 }
 
 .container-do-titulo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 0rem;
-    text-align: center;
-    padding: 10px 0;
-  }
-  
-  .titulo-solicitacoes {
-    position: relative;
-    z-index: 1;
-    color: white;
-    font-size: 2rem;
-    font-weight: 700;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    
-    /* Estilo do retângulo arredondado */
-    padding: 15px 40px;
-    border-radius: 30px;
-    background: linear-gradient(135deg, #030e6d 0%, #0a1a8e 100%);
-    
-    /* Transição para hover */
-    transition: all 0.3s ease;
-    
-    /* Centraliza o título */
-    display: inline-block;
-    margin: 0 auto;
-  }
-  
-  /* Efeito ao passar o mouse */
-  .titulo-solicitacoes:hover {
-    transform: translateY(-3px);
-    box-shadow: 
-      0 15px 30px rgba(0, 0, 0, 0.2),
-      0 10px 10px rgba(0, 0, 0, 0.15);
-    background: linear-gradient(135deg, #0a1a8e 0%, #030e6d 100%);
-  }
-  
+  text-align: center;
+  position: relative;
+  margin: 60px 0;
+}
+
+.titulo-wrapper {
+  display: inline-block;
+  position: relative;
+  padding: 20px 40px;
+}
+
+.titulo-blob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: auto;
+  z-index: 0;
+  opacity: 1;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+h1.titulo-solicitacoes {
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: 15px 30px;
+  background: transparent;
+  margin-top: -45px; /* Ajuste fino para posicionamento */
+}
+
+.titulo-solicitacoes i {
+  font-size: 1.8rem;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+/* Efeito de pulsar opcional para o ícone */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.titulo-solicitacoes i {
+  animation: pulse 2s infinite;
+}
+
 /* Container para manter a responsividade da tabela */
 .table-responsive-container {
-    width: 1200px;
-    max-width: 100%;
-    max-height: 600px;
-    overflow-y: auto;
-    overflow-x: auto;
-    padding: 8px;
-    border-radius: 8px;
-    margin: 1rem auto; /* centraliza horizontalmente */;
-  }
+  width: 90%; /* Ajusta à largura da tela/pai */
+  max-width: 100%;
+  max-height: 600px;
+  overflow-y: auto; /* Scroll vertical apenas se necessário */
+  overflow-x: hidden; /* Remove scroll horizontal */
+  padding: 8px;
+  border-radius: 8px;
+  margin: 1rem auto;
+}
 
   /* Estilização do texto da tabela */
 .table-responsive-container table {
@@ -69,7 +81,7 @@
   font-size: 14px;
 }
 
-  
+
   /* Estilo principal da tabela */
   .table-custom {
     width: 100%;
@@ -151,8 +163,6 @@
     box-shadow: 0 4px 12px rgba(22, 6, 160, 0.4);
   }
   
-
-
   /* Espaçamento entre botões */
   .btn + .btn {
     margin-left: 6px;
@@ -180,12 +190,42 @@ select#filtroEstado {
     padding-right: 30px;
     transition: background-color 0.2s ease;
     width: 100px;
-    margin-left: 15px;
+    margin-left: 5px;
   }
   
   select#filtroEstado:hover {
     background-color: #0a1a8e;
   }
+
+  /* Container do filtro */
+.row.mb-1 {
+  margin-bottom: 10px;
+}
+
+/* Labels */
+.form-label {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+/* Inputs de data */
+.form-control[type="date"] {
+  border: 2px solid #030e6d;
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 14px;
+  color: #030e6d;
+  background-color: #f9f9ff;
+  transition: border-color 0.3s ease;
+  width: 120px;
+}
+
+/* Estilo ao focar no input */
+.form-control[type="date"]:focus {
+  border-color: #030e6d;
+  box-shadow: 0 0 5px rgba(3, 14, 109, 0.5);
+  outline: none;
+}
 
   /* Estilo para todos os inputs e textareas readonly */
 input[readonly], 
@@ -214,6 +254,34 @@ select[readonly]:focus {
   border-color: #dee2e6 !important;    /* Mantém borda clara */
 }
 
+/* Estilos para o botão Limpar */
+.btn-clear {
+  background-color: #030e6d;
+  color: white;
+  border: none;
+  border-radius: 12px;
+}
+
+.btn-clear:hover {
+  background-color: #97c7eb56;
+  cursor: pointer;
+}
+
+.btn-clear:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.ms-2 {
+  margin-left: 0.5rem;
+}
+
+.btn-sm {
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+}
+
+
 /* ESTILOS GERAIS PARA TODOS OS MODAIS */
 .modal {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -225,34 +293,32 @@ select[readonly]:focus {
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* HEADER DOS MODAIS */
+/* HEADER DOS MODAIS - PADRONIZADO */
 .modal-header {
+  background-color: #030e6d !important;
+  color: white !important;
   border-bottom: none;
   padding: 1.2rem 1.5rem;
   border-radius: 10px 10px 0 0;
 }
 
-/* Estilos específicos para cada tipo de modal */
-.modal-header.bg-light {
-  background-color: #f8f9fa;
-  color: #212529;
+/* FOOTER DOS MODAIS - PADRONIZADO */
+.modal-footer {
+  background-color: #030e6d !important;
+  color: white !important;
+  border-top: none;
+  padding: 1rem 1.5rem;
+  border-radius: 0 0 10px 10px;
 }
 
-.modal-header.bg-warning {
-  background: linear-gradient(#030e6d);
-  color: white;
-}
-
-.modal-header.bg-success {
-  background: linear-gradient(135deg, #28a745, #218838);
-  color: white;
-}
-
+/* TÍTULO DO MODAL */
 .modal-title {
   font-weight: 600;
   font-size: 1.3rem;
+  color: inherit; /* Herda a cor do header (branco) */
 }
 
+/* BOTÃO DE FECHAR */
 .modal-header .btn-close {
   filter: brightness(0) invert(1);
   opacity: 0.8;
@@ -278,18 +344,17 @@ select[readonly]:focus {
   color: #343a40;
 }
 
-/* FOOTER DOS MODAIS */
-.modal-footer {
-  border-top: none;
-  padding: 1rem 1.5rem;
-  border-radius: 0 0 10px 10px;
-}
-
+/* BOTÕES DO FOOTER */
 .modal-footer .btn {
   padding: 0.5rem 1.2rem;
   border-radius: 12px;
   font-weight: 500;
   transition: all 0.2s;
+}
+
+/* Garante que os textos nos footers padronizados sejam brancos */
+.modal-footer * {
+  color: white !important;
 }
 
 /* ESTILOS ESPECÍFICOS PARA O MODAL DE VISUALIZAÇÃO */
@@ -310,14 +375,14 @@ select[readonly]:focus {
   margin-bottom: 0.4rem;
 }
 
-#manutencaoModal .form-control, 
+#manutencaoModal .form-control,
 #manutencaoModal .form-select {
   border: 1px solid #ced4da;
   border-radius: 6px;
   padding: 0.5rem 0.75rem;
 }
 
-#manutencaoModal .form-control:focus, 
+#manutencaoModal .form-control:focus,
 #manutencaoModal .form-select:focus {
   border-color: #80bdff;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
@@ -328,26 +393,4 @@ select[readonly]:focus {
   background-color: #e7f5ff;
   border-color: #d0ebff;
   color: #1864ab;
-}
-
-#visualizarModal .modal-header {
-  background: linear-gradient(#4ca1af);
-  color: white;
-  padding: 1.5rem;
-  border-bottom: none;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  position: relative;
-  overflow: hidden;
-}
-
-#visualizarModal .modal-footer {
-  background-color: #4ca2af2a;
-  border-top: 1px solid #e9ecef;
-  padding: 1rem 2rem;
-}
-
-#manutencaoModal .modal-footer {
-  background-color: #030e6d0e;
-  border-top: 1px solid #e9ecef;
-  padding: 1rem 2rem;
 }
