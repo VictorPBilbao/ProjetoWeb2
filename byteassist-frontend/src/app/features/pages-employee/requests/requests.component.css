@@ -250,8 +250,8 @@ select[readonly] {
 input[readonly]:focus, 
 textarea[readonly]:focus,
 select[readonly]:focus {
-  box-shadow: none !important;         /* Remove sombra de foco */
-  border-color: #dee2e6 !important;    /* Mantém borda clara */
+  box-shadow: none !important;        
+  border-color: #dee2e6 !important;   
 }
 
 /* Estilos para o botão Limpar */
