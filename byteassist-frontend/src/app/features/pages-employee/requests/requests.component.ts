@@ -91,8 +91,8 @@ export class RequestsComponent implements OnInit {
     }
 
     // Caso haja redirecionamento
-    if ((this.selecionado.funcionario && this.selecionado.funcionarioDestino !== this.selecionado.funcionario) ||
-          (this.funcionarioDestino && this.funcionarioDestino !== this.selecionado.funcionario)) {
+    if ((this.selecionado.funcionarioDestino !== '' && this.selecionado.funcionarioDestino !== this.selecionado.funcionario) ||
+          (this.funcionarioDestino !== '' && this.funcionarioDestino !== this.selecionado.funcionario)) {
       const funcionarioAnterior = this.selecionado.funcionario;
 
       // Atualiza o histórico antes de mudar o funcionário
@@ -106,6 +106,7 @@ export class RequestsComponent implements OnInit {
 
       console.log('Redirecionando para:', this.funcionarioDestino);
       this.funcionarioDestino = '';
+      this.selecionado.funcionarioDestino = '';
     }
 
     // Chama o método para salvar

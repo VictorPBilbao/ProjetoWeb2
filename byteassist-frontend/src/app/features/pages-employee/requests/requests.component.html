@@ -332,7 +332,7 @@
             <h5 class="mt-3">Redirecionar Manutenção</h5>
             <label class="form-label"><i class="bi bi-arrow-right"></i> Redirecionar Para</label>
             <select class="form-select" [(ngModel)]="selecionado.funcionarioDestino" name="funcionarioDestino" required>
-              <option value="" disabled>Selecione um funcionário</option>
+              <option value="">Selecione um funcionário</option>
               <option *ngFor="let f of funcionarios" [value]="f" [disabled]="f === selecionado.funcionario">{{ f }}</option>
             </select>
           </div>
