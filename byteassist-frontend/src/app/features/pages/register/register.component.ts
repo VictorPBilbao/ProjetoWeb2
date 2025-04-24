@@ -19,62 +19,116 @@ import { User } from '../../shared/models/user.model';
 })
 export class RegisterComponent {
   @ViewChild('registerForm') registerForm!: NgForm | undefined;
-  user: User = new User();
-  message: string = '';
-  showNotification: boolean = false;
-  currentStep: number = 1; // Variável para controlar o passo atual do formulário
-  showPassword: boolean = false; // Variável para controlar a visibilidade da senha
+
+  // Variáveis do componente
+  user: User = new User(); // Objeto do usuário
+  message: string = ''; // Mensagem de notificação
+  showNotification: boolean = false; // Controle de exibição de notificação
+  currentStep: number = 1; // Passo atual do formulário
+  showPassword: boolean = false; // Controle de visibilidade da senha
 
   constructor(
     private router: Router,
-    private userService: UserService) {}
+    private userService: UserService
+  ) {}
 
+  /**
+   * Método chamado ao submeter o formulário.
+   */
   onSubmit() {
-    this.showNotification = false; // Reseta a notificação ao submeter o formulário
-    this.message = ''; // Reseta a mensagem ao submeter o formulário
+    this.resetNotification();
 
-    if (this.registerForm?.valid) {
+    if (this.isFormValid()) {
       this.user = this.verifyFieldsAndCreateUser() as User;
+
       if (!this.user) {
         return;
       }
 
-      this.userService.createUser(this.user).subscribe({
-        next: (response) => {
-          if (response) {
-            this.message = 'Cadastro realizado com sucesso!';
-            this.router.navigate(['/login']);
-          } else {
-            this.message = 'Erro ao fazer cadastro. Verifique sua conexão ou tente novamente mais tarde.';
-          }
-          this.showNotification = true;
-        },
-        error: (err) => {
-          this.message = 'Ocorreu um erro ao fazer o cadastro. Erro: ' + (err.error?.message || 'Erro desconhecido.');
-          this.showNotification = true;
-        }
-      });
+      this.createUser();
     } else {
-      this.message = 'Preencha todos os campos obrigatórios.';
-      this.showNotification = true;
+      this.showErrorMessage('Preencha todos os campos obrigatórios.');
     }
   }
 
+  /**
+   * Reseta a notificação e a mensagem.
+   */
+  private resetNotification(): void {
+    this.showNotification = false;
+    this.message = '';
+  }
+
+  /**
+   * Verifica se o formulário é válido.
+   */
+  private isFormValid(): boolean {
+    return this.registerForm?.valid || false;
+  }
+
+  /**
+   * Cria o usuário chamando o serviço.
+   */
+  private createUser(): void {
+    this.userService.createUser(this.user).subscribe({
+      next: (response) => this.handleSuccessResponse(response),
+      error: (err) => this.handleErrorResponse(err)
+    });
+  }
+
+  /**
+   * Lida com a resposta de sucesso do serviço.
+   */
+  private handleSuccessResponse(response: any): void {
+    if (response) {
+      this.showSuccessMessage('Cadastro realizado com sucesso!');
+      this.router.navigate(['/login']);
+    } else {
+      this.showErrorMessage('Erro ao fazer cadastro. Verifique sua conexão ou tente novamente mais tarde.');
+    }
+  }
+
+  /**
+   * Lida com a resposta de erro do serviço.
+   */
+  private handleErrorResponse(err: any): void {
+    const errorMessage = err.error?.message || 'Erro desconhecido.';
+    this.showErrorMessage(`Ocorreu um erro ao fazer o cadastro. Erro: ${errorMessage}`);
+  }
+
+  /**
+   * Exibe uma mensagem de sucesso.
+   */
+  private showSuccessMessage(message: string): void {
+    this.message = message;
+    this.showNotification = true;
+  }
+
+  /**
+   * Exibe uma mensagem de erro.
+   */
+  private showErrorMessage(message: string): void {
+    this.message = message;
+    this.showNotification = true;
+  }
+
+  /**
+   * Verifica os campos do formulário e cria o objeto User.
+   */
   verifyFieldsAndCreateUser(): User | null {
     if (this.registerForm) {
-      const formValues = this.registerForm.value; // Obtém os valores do formulário
-      const password = formValues.password;
+      const formValues = this.registerForm.value;
 
       // Alimenta o objeto User com os dados do formulário
       this.user.username = formValues.username;
-      this.user.password = password;
+      this.user.password = formValues.password;
       this.user.fullName = formValues.nome;
-      this.user.cpf = formValues.cpf.replace(/\D/g, ''); // Remove caracteres não numéricos do CPF
-      this.user.dateOfBirth = new Date(formValues.nascimento); // Converte para Date
+      this.user.cpf = this.cleanInput(formValues.cpf);
+      this.user.dateOfBirth = new Date(formValues.nascimento);
       this.user.gender = formValues.sexo;
       this.user.email = formValues.email;
-      this.user.phone = formValues.telefone.replace(/\D/g, ''); // Remove caracteres não numéricos do telefone
-      this.user.zip = formValues.cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
+      this.user.phone = this.cleanInput(formValues.telefone);
+      this.user.zip = this.cleanInput(formValues.cep);
       this.user.state = formValues.uf;
       this.user.city = formValues.cidade;
       this.user.neighborhood = formValues.bairro;
@@ -82,61 +136,83 @@ export class RegisterComponent {
       this.user.number = formValues.numero;
       this.user.complement = formValues.complemento;
 
-      return this.user; // Retorna o objeto User preenchido
+      return this.user;
     }
 
-    return null; // Retorna null caso o formulário não esteja definido
+    return null;
   }
 
+  /**
+   * Remove caracteres não numéricos de uma string.
+   */
+  private cleanInput(input: string): string {
+    return input.replace(/\D/g, '');
+  }
+
+  /**
+   * Avança para o próximo passo do formulário.
+   */
   goToNextStep(): void {
     if (this.currentStep < 2) {
       this.currentStep++;
     }
   }
 
+  /**
+   * Retorna ao passo anterior do formulário.
+   */
   goToPreviousStep(): void {
     if (this.currentStep > 1) {
       this.currentStep--;
     }
   }
 
-  // Máscara para CPF
+  // Máscaras de entrada
   applyCpfMask(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value
-      .replace(/\D/g, '') // Remove tudo que não é número
-      .replace(/(\d{3})(\d)/, '$1.$2') // Adiciona o primeiro ponto
-      .replace(/(\d{3})(\d)/, '$1.$2') // Adiciona o segundo ponto
-      .replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Adiciona o traço
+    this.applyMask(event, [
+      { regex: /(\d{3})(\d)/, replacement: '$1.$2' },
+      { regex: /(\d{3})(\d)/, replacement: '$1.$2' },
+      { regex: /(\d{3})(\d{1,2})$/, replacement: '$1-$2' }
+    ]);
   }
 
-  // Máscara para Data de Nascimento
   applyDateMask(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value
-      .replace(/\D/g, '') // Remove tudo que não é número
-      .replace(/(\d{2})(\d)/, '$1/$2') // Adiciona a primeira barra
-      .replace(/(\d{2})(\d)/, '$1/$2'); // Adiciona a segunda barra
+    this.applyMask(event, [
+      { regex: /(\d{2})(\d)/, replacement: '$1/$2' },
+      { regex: /(\d{2})(\d)/, replacement: '$1/$2' }
+    ]);
   }
 
-  // Máscara para Telefone
   applyPhoneMask(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value
-      .replace(/\D/g, '') // Remove tudo que não é número
-      .replace(/(\d{2})(\d)/, '($1) $2') // Adiciona os parênteses
-      .replace(/(\d{5})(\d)/, '$1-$2'); // Adiciona o traço
+    this.applyMask(event, [
+      { regex: /(\d{2})(\d)/, replacement: '($1) $2' },
+      { regex: /(\d{5})(\d)/, replacement: '$1-$2' }
+    ]);
   }
 
-  // Máscara para CEP
   applyCepMask(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value
-      .replace(/\D/g, '') // Remove tudo que não é número
-      .replace(/(\d{5})(\d)/, '$1-$2'); // Adiciona o traço
+    this.applyMask(event, [
+      { regex: /(\d{5})(\d)/, replacement: '$1-$2' }
+    ]);
   }
 
-  // Alterna a visibilidade da senha
+  /**
+   * Aplica uma máscara genérica a um campo de entrada.
+   */
+  private applyMask(event: Event, patterns: { regex: RegExp; replacement: string }[]): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, ''); // Remove tudo que não é número
+
+    patterns.forEach((pattern) => {
+      value = value.replace(pattern.regex, pattern.replacement);
+    });
+
+    input.value = value;
+  }
+
+  /**
+   * Alterna a visibilidade da senha.
+   */
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }
