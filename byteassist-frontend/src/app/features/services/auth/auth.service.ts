@@ -33,19 +33,32 @@ export class AuthService {
     );
   }
 
-  // Salva o token na localStorage
+  // Salva o token em um cookie
   saveToken(token: string): void {
-    localStorage.setItem('token', token);
+    const expires = new Date();
+    expires.setTime(expires.getTime() + 7 * 24 * 60 * 60 * 1000); // Expira em 7 dias
+    document.cookie = `token=${token}; path=/; secure; samesite=strict; expires=${expires.toUTCString()}`;
   }
 
-  // Remove o token da localStorage
+  // Remove o token do cookie
   removeToken(): void {
-    localStorage.removeItem('token');
+    document.cookie = 'token=; path=/; secure; samesite=strict; expires=Thu, 01 Jan 1970 00:00:00 UTC;';
+  }
+
+  getToken(): string | null {
+    const cookies = document.cookie.split(';'); // Divide os cookies em um array
+    for (const cookie of cookies) {
+      const [key, value] = cookie.trim().split('='); // Divide cada cookie em chave e valor
+      if (key === 'token') {
+        return value; // Retorna o valor do token se encontrado
+      }
+    }
+    return null; // Retorna null se o token não for encontrado
   }
 
   // Verifica se o usuário está autenticado (Vamos implementar um endpoint para fazer essa verificação e consumi-lo aqui)
   isAuthenticated(): boolean {
-    const token = localStorage.getItem('token');
-    return !!token; // Retorna true se o token existir, false caso contrário
+    const token = this.getToken();
+    return !!token;
   }
 }
