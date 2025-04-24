@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeeService } from '../../services/employee/employee.service';
-import { Employee } from '../../models/employee.model';
+import { Employee } from '../../shared/models/employee.model';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -54,19 +54,19 @@ export class RequestsComponent implements OnInit {
     // Limpa os filtros
     this.filtroDataInicio = '';
     this.filtroDataFim = '';
-  
+
     // Recarrega a lista sem filtros
     this.filtrarSolicitacoes();
   }
-  
+
   selecionar(solicitacao: Employee): void {
     this.selecionado = { ...solicitacao };
   }
 
-  
+
   nFuncionarioDestinoChange() {
     if (!this.selecionado) return;
-  
+
     // Se o funcionário de destino for diferente do funcionário atual, redirecionar
     if (this.funcionarioDestino && this.funcionarioDestino !== this.selecionado.funcionario) {
       Swal.fire({
@@ -79,42 +79,38 @@ export class RequestsComponent implements OnInit {
       });
     }
   }
-  
+
   salvarEdicao() {
     if (!this.selecionado) return;
-  
+
     // Caso a solicitação seja finalizada
     if (this.selecionado.estado === 'ARRUMADA') {
       this.selecionado.dataHoraManutencao = this.dataHoraAtual;
-      this.selecionado.historico = (this.selecionado.historico || '') + 
+      this.selecionado.historico = (this.selecionado.historico || '') +
         `\n[${this.dataHoraAtual.toLocaleString()}] Manutenção feita por ${this.selecionado.funcionario}`;
     }
-  
+
     // Caso haja redirecionamento
-    if (this.funcionarioDestino && this.funcionarioDestino !== this.selecionado.funcionario) {
+    if ((this.selecionado.funcionario && this.selecionado.funcionarioDestino !== this.selecionado.funcionario) ||
+          (this.funcionarioDestino && this.funcionarioDestino !== this.selecionado.funcionario)) {
       const funcionarioAnterior = this.selecionado.funcionario;
-  
+
       // Atualiza o histórico antes de mudar o funcionário
-      this.selecionado.historico = (this.selecionado.historico || '') + 
+      this.selecionado.historico = (this.selecionado.historico || '') +
         `\n[${this.dataHoraAtual.toLocaleString()}] Redirecionado de ${funcionarioAnterior} para ${this.funcionarioDestino}`;
-      
+
       // Atualiza o estado e o funcionário
-<<<<<<< Updated upstream
-      this.selecionado.estado = 'REDIRECIONADA';
-      this.selecionado.funcionario = this.funcionarioDestino;
-=======
       this.selecionado.estado = this.funcionarioDestino === '' ? 'REDIRECIONADA' : 'ABERTA';
       this.selecionado.funcionario = this.funcionarioDestino !== '' ?
                                       this.funcionarioDestino : this.selecionado.funcionarioDestino;
 
       console.log('Redirecionando para:', this.funcionarioDestino);
       this.funcionarioDestino = '';
->>>>>>> Stashed changes
     }
-  
+
     // Chama o método para salvar
     this.salvarSolicitacao(this.selecionado);
-  
+
     // Exibe confirmação
     Swal.fire({
       icon: 'success',
@@ -125,12 +121,12 @@ export class RequestsComponent implements OnInit {
       timer: 3000
     });
   }
-  
+
   salvarSolicitacao(solicitacao: Employee): void {
     this.employeeService.editar(solicitacao);
     this.carregarSolicitacoes();
   }
-  
+
 
   limitarDescricao(descricao: string): string {
     return descricao.length > 30 ? `${descricao.substring(0, 30)}...` : descricao;
@@ -139,23 +135,23 @@ export class RequestsComponent implements OnInit {
   filtrarSolicitacoes() {
     const hoje = new Date();
     hoje.setHours(0, 0, 0, 0);
-  
+
     this.solicitacoesFiltradas = this.solicitacoes.filter(s => {
       const dataSolicitacao = new Date(s.data);
       dataSolicitacao.setHours(0, 0, 0, 0);
-  
+
       // Filtro por estado
       const estadoValido = !this.filtroEstado || s.estado === this.filtroEstado;
-  
+
       // Filtro por intervalo de datas
       const inicioValido = this.filtroDataInicio ? new Date(this.filtroDataInicio) <= dataSolicitacao : true;
       const fimValido = this.filtroDataFim ? dataSolicitacao <= new Date(this.filtroDataFim) : true;
-  
+
       return estadoValido && inicioValido && fimValido;
 
     });
   }
-  
+
   efetuarOrcamento(s: Employee): void {
     console.log('Efetuar orçamento:', s);
     // Implemente conforme necessário

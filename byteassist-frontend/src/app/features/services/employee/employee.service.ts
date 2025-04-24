@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Employee } from '../../models/employee.model';
+import { Employee } from '../../shared/models/employee.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,23 +11,16 @@ export class EmployeeService {
   private solicitacoesKey = 'solicitacoes';
 
    private solicitacoesIniciais: Employee[] = [
-    { 
-      id: 1, 
-      data: '2025-02-27', 
-      hora: '14:00', 
-      equipamento: 'Samsung Book4 360 Intel Core', 
+    {
+      id: 1,
+      data: '2025-02-27',
+      hora: '14:00',
+      equipamento: 'Samsung Book4 360 Intel Core',
       estado: 'ABERTA',
-<<<<<<< Updated upstream
-      servico: 'Manutenção', 
-      orcamento: '', 
-      funcionario: 'Guilherme Arthur', 
-      historico: 'Solicitação criada', 
-=======
       servico: 'Manutenção',
       orcamento: '',
-      funcionario: '',
+      funcionario: 'Guilherme Arthur',
       historico: 'Solicitação criada',
->>>>>>> Stashed changes
       acao: 'Efetuar Orçamento',
       cor: 'Cinza',
       categoria: 'Notebook',
@@ -35,27 +28,18 @@ export class EmployeeService {
       descricaoServico: 'Verificar funcionamento geral do notebook.',
       defeitoRelatado: 'Desligamento inesperado.'
     },
-    { 
-      id: 2, 
-      data: '2025-03-19', 
-      hora: '10:30', 
-      equipamento: 'Galaxy S23', 
+    {
+      id: 2,
+      data: '2025-03-19',
+      hora: '10:30',
+      equipamento: 'Galaxy S23',
       estado: 'ORÇADA',
-<<<<<<< Updated upstream
-      servico: 'Atualização', 
-      orcamento: 'R$ 200,00', 
-      funcionario: 'Guilherme Arthur', 
-      historico: 'Aguardando aprovação', 
-      acao: 'Efetuar Orçamento',
-      cor: 'marrom',
-=======
       servico: 'Atualização',
       orcamento: 'R$ 200,00',
       funcionario: 'Guilherme Arthur',
-      historico: 'Orçamento disponível.',
-      acao: 'Aguardando aprovação.',
-      cor: 'Marrom',
->>>>>>> Stashed changes
+      historico: 'Aguardando aprovação',
+      acao: 'Efetuar Orçamento',
+      cor: 'marrom',
       categoria: 'Smartphone',
       marca: 'Samsung',
       descricaoServico: 'Atualização de hardware e sistema.',
@@ -165,7 +149,7 @@ export class EmployeeService {
       defeitoRelatado: 'Dificuldade para configurar e-mail.'
     }
   ];
-  
+
   // Variável para controlar o último ID utilizado
   private lastId: number;
 
@@ -178,10 +162,10 @@ export class EmployeeService {
     const maioresId = solicitacoes.length > 0
       ? Math.max(...solicitacoes.map(s => s.id))
       : 0;
-  
+
     this.lastId = maioresId;
-  
-  
+
+
     // Se o localStorage estiver vazio, mescla as solicitações iniciais
     if (solicitacoes.length === 0) {
       this.salvarSolicitacoesNoStorage(this.solicitacoesIniciais);
@@ -205,7 +189,7 @@ export class EmployeeService {
     return this.solicitacoes$;
   }
 
- 
+
   adicionar(solicitacao: Employee) {
     // Incrementa o último ID para garantir sequência
     this.lastId++;
@@ -220,7 +204,7 @@ export class EmployeeService {
 
     // Obtém as solicitações atuais
     const solicitacoes = this.obterSolicitacoesDoStorage();
-    
+
     // Adiciona a nova solicitação ao array
     solicitacoes.push(solicitacao);
 
@@ -230,14 +214,14 @@ export class EmployeeService {
       const dataHoraB = new Date(`${b.data}T${b.hora}:00`).getTime();
       return dataHoraB - dataHoraA;
     });
-    
+
     // Salva novamente no localStorage
     this.salvarSolicitacoesNoStorage(sortedSolicitacoes);
 
     // Atualiza o BehaviorSubject com o novo array
     this.solicitacoesSubject.next(sortedSolicitacoes);
   }
-  
+
   // Método para editar uma solicitação existente
   editar(solicitacao: Employee) {
     const solicitacoes = this.obterSolicitacoesDoStorage();
