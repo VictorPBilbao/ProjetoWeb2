@@ -1,4 +1,243 @@
+<app-notification [message]="message" [visible]="showNotification"></app-notification>
 <section>
-  <h1>Account</h1>
-  <p>Account page content goes here.</p>
+  <div class="container">
+    <h1>Editar e Verificar Dados do Usuário</h1>
+    <form
+      class="user-form flex flex-column gap-24"
+      #userForm="ngForm"
+      (ngSubmit)="onSubmit()"
+    >
+
+      <!-- Identificação -->
+      <section class="card">
+        <h2>Identificação</h2>
+        <div class="flex flex-row flex-wrap gap-16">
+
+          <div class="field">
+            <label for="username">Usuário</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              required
+              [(ngModel)]="user.username"
+            >
+          </div>
+
+          <div class="field">
+            <label for="fullName">Nome Completo</label>
+            <input
+              type="text"
+              id="fullName"
+              name="fullName"
+              required
+              [(ngModel)]="user.fullName"
+            >
+          </div>
+
+          <div class="field">
+            <label for="email">E‑mail</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              [(ngModel)]="user.email"
+            >
+          </div>
+
+          <div class="field">
+            <label for="phone">Telefone</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              placeholder="(XX) XXXXX‑XXXX"
+              [(ngModel)]="user.phone"
+              (input)="applyPhoneMask($event)"
+              maxlength="15"
+            >
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Dados Pessoais -->
+      <section class="card">
+        <h2>Dados Pessoais</h2>
+        <div class="flex flex-row flex-wrap gap-16">
+
+          <div class="field">
+            <label for="cpf">CPF</label>
+            <input
+              type="text"
+              id="cpf"
+              name="cpf"
+              placeholder="000.000.000-00"
+              [(ngModel)]="user.cpf"
+              (input)="applyCpfMask($event)"
+              maxlength="14"
+            >
+          </div>
+
+          <div class="field">
+            <label for="dateOfBirth">Data de Nascimento</label>
+            <input
+              type="date"
+              id="dateOfBirth"
+              name="dateOfBirth"
+              [(ngModel)]="user.dateOfBirth"
+            >
+          </div>
+
+          <div class="field">
+            <label for="gender">Gênero</label>
+            <select
+              id="gender"
+              name="gender"
+              [(ngModel)]="user.gender"
+            >
+              <option value="">Selecione...</option>
+              <option value="M">Masculino</option>
+              <option value="F">Feminino</option>
+              <option value="O">Outro</option>
+            </select>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Endereço -->
+      <section class="card">
+        <h2>Endereço</h2>
+        <div class="flex flex-row flex-wrap gap-16">
+
+          <div class="field">
+            <label for="zip">CEP</label>
+            <input
+              type="text"
+              id="zip"
+              name="zip"
+              placeholder="00000‑000"
+              [(ngModel)]="user.zip"
+              (input)="applyCepMask($event)"
+              maxlength="9"
+            >
+          </div>
+
+          <div class="field">
+            <label for="street">Rua / Av.</label>
+            <input
+              type="text"
+              id="street"
+              name="street"
+              [(ngModel)]="user.street"
+            >
+          </div>
+
+          <div class="field">
+            <label for="number">Número</label>
+            <input
+              type="text"
+              id="number"
+              name="number"
+              [(ngModel)]="user.number"
+            >
+          </div>
+
+          <div class="field">
+            <label for="complement">Complemento</label>
+            <input
+              type="text"
+              id="complement"
+              name="complement"
+              [(ngModel)]="user.complement"
+            >
+          </div>
+
+          <div class="field">
+            <label for="neighborhood">Bairro</label>
+            <input
+              type="text"
+              id="neighborhood"
+              name="neighborhood"
+              [(ngModel)]="user.neighborhood"
+            >
+          </div>
+
+          <div class="field">
+            <label for="city">Cidade</label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              [(ngModel)]="user.city"
+            >
+          </div>
+
+          <div class="field">
+            <label for="state">Estado</label>
+            <select
+              id="state"
+              name="state"
+              [(ngModel)]="user.state"
+            >
+              <option value="">Selecione...</option>
+              <option value="AC">AC</option>
+              <option value="AL">AL</option>
+              <option value="AP">AP</option>
+              <option value="AM">AM</option>
+              <option value="BA">BA</option>
+              <option value="CE">CE</option>
+              <option value="DF">DF</option>
+              <option value="ES">ES</option>
+              <option value="GO">GO</option>
+              <option value="MA">MA</option>
+              <option value="MT">MT</option>
+              <option value="MS">MS</option>
+              <option value="MG">MG</option>
+              <option value="PA">PA</option>
+              <option value="PB">PB</option>
+              <option value="PR">PR</option>
+              <option value="PE">PE</option>
+              <option value="PI">PI</option>
+              <option value="RJ">RJ</option>
+              <option value="RN">RN</option>
+              <option value="RS">RS</option>
+              <option value="RO">RO</option>
+              <option value="RR">RR</option>
+              <option value="SC">SC</option>
+              <option value="SP">SP</option>
+              <option value="SE">SE</option>
+              <option value="TO">TO</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="country">País</label>
+            <select
+              id="country"
+              name="country"
+              [(ngModel)]="user.country"
+            >
+              <option value="BR">Brasil</option>
+              <!-- demais países -->
+            </select>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Ações -->
+      <div class="actions flex flex-row justify-end gap-16">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="userForm.invalid"
+        >
+          Salvar Alterações
+        </button>
+      </div>
+    </form>
+  </div>
 </section>

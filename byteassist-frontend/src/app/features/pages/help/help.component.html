@@ -1,3 +1,125 @@
+<app-notification [message]="message" [visible]="showNotification"></app-notification>
 <section>
-  <h1>Ajuda</h1>
+  <div class="container">
+    <h1>Suporte ao Cliente</h1>
+
+    <section class="card">
+      <h2>Como podemos ajudar?</h2>
+
+      <form class="support-form flex flex-column gap-24" #supportForm="ngForm" (ngSubmit)="onSubmitSupport()">
+
+        <!-- Seletor de Categoria -->
+        <div class="field flex flex-column">
+          <label for="category">Categoria</label>
+          <select id="category" name="category" required [(ngModel)]="ticket.category">
+            <option value="">Selecione...</option>
+            <option value="billing">Cobrança</option>
+            <option value="technical">Técnico</option>
+            <option value="account">Conta</option>
+            <option value="feedback">Feedback</option>
+            <option value="other">Outro</option>
+          </select>
+        </div>
+
+        <!-- Assunto -->
+        <div class="field flex flex-column">
+          <label for="subject">Assunto</label>
+          <input
+            type="text"
+            id="subject"
+            name="subject"
+            required
+            [(ngModel)]="ticket.subject"
+            placeholder="Resuma brevemente o seu problema"
+          >
+        </div>
+
+        <!-- Descrição -->
+        <div class="field flex flex-column">
+          <label for="description">Descrição</label>
+          <textarea
+            id="description"
+            name="description"
+            rows="6"
+            required
+            [(ngModel)]="ticket.description"
+            placeholder="Descreva em detalhes o que está acontecendo..."
+          ></textarea>
+        </div>
+
+        <!-- Anexo -->
+        <div class="field flex flex-column">
+          <label for="attachment">Anexo (opcional)</label>
+          <input
+            type="file"
+            id="attachment"
+            name="attachment"
+            [(ngModel)]="ticket.attachment"
+            accept=".jpg,.png,.pdf,.docx"
+          >
+        </div>
+
+        <!-- Mídia de Contato -->
+        <section class="card">
+          <h3>Preferência de Retorno</h3>
+          <div class="flex flex-row gap-16 items-center">
+            <label class="flex flex-inline items-center gap-8">
+              <input
+                type="radio"
+                name="contactMethod"
+                value="email"
+                [(ngModel)]="ticket.contactMethod"
+                required
+              > E‑mail
+            </label>
+            <label class="flex flex-inline items-center gap-8">
+              <input
+                type="radio"
+                name="contactMethod"
+                value="phone"
+                [(ngModel)]="ticket.contactMethod"
+              > Telefone
+            </label>
+            <label class="flex flex-inline items-center gap-8">
+              <input
+                type="radio"
+                name="contactMethod"
+                value="whatsapp"
+                [(ngModel)]="ticket.contactMethod"
+              > WhatsApp
+            </label>
+          </div>
+        </section>
+
+        <!-- Ações -->
+        <div class="actions flex flex-row justify-end gap-16">
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="supportForm.invalid"
+          >
+            Enviar Solicitação
+          </button>
+        </div>
+
+      </form>
+    </section>
+
+    <!-- Informações de Contato Rápido -->
+    <section class="card">
+      <h2>Outras formas de contato</h2>
+      <div class="flex flex-row flex-wrap gap-24 justify-around">
+        <div class="contact-card flex flex-column items-center gap-8">
+          <span class="icon">📞</span>
+          <strong>Telefone</strong>
+          <span>(11) 4000‑1234</span>
+        </div>
+        <div class="contact-card flex flex-column items-center gap-8">
+          <span class="icon">✉️</span>
+          <strong>E‑mail</strong>
+          <span>suporte&#64;empresa.com</span>
+        </div>
+      </div>
+    </section>
+  </div>
 </section>
