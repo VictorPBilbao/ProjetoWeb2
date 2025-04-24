@@ -1,3 +1,67 @@
 <section>
-  <h1>Conteudo dos cadastros</h1>
+  <div style="text-align: center;"> <div class="titulo-wrapper">
+    <svg class="titulo-blob" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+       <path fill="#030e6d" d="M46.9,-64.5C62.6,-53.2,78.3,-41.9,78.6,-28.4C79,-15,64.1,0.5,54.9,14.4C45.7,28.4,42.1,40.7,33.9,41.7C25.7,42.7,12.9,32.4,2.4,29.1C-8.1,25.8,-16.1,29.6,-30.2,30.4C-44.2,31.3,-64.2,29.4,-71.9,20C-79.5,10.7,-74.8,-6,-67,-19.2C-59.2,-32.3,-48.3,-41.9,-36.6,-54.5C-25,-67.1,-12.5,-82.7,1.6,-84.9C15.6,-87.1,31.3,-75.8,46.9,-64.5Z" transform="translate(100 100)"/>
+    </svg>
+    <h1>Gerenciamento de Categorias de Equipamentos</h1>
+  </div>
+</div>
+  
+  <hr>
+  <div>
+    <h2>{{ modoEdicao ? 'Editar Categoria' : 'Adicionar Nova Categoria' }}</h2>
+
+    <form #formCategoria="ngForm" (ngSubmit)="salvarCategoria()">
+      <div>
+        <label for="nomeCategoria">Nome:</label>
+        <input
+          type="text"
+          id="nomeCategoria"
+          name="nomeCategoria"
+          placeholder="Ex: Notebook, Monitor"
+          [(ngModel)]="categoriaAtual.nome"
+          required
+          #nomeInput="ngModel"
+          style="margin-left: 5px;"
+        >
+        <button type="submit" [disabled]="formCategoria.invalid || !categoriaAtual.nome?.trim()" style="margin-left: 10px;">
+          {{ modoEdicao ? 'Atualizar Categoria' : 'Adicionar Categoria' }}
+        </button>
+        <button type="button" *ngIf="modoEdicao" (click)="cancelarEdicao()" style="margin-left: 10px;">
+          Cancelar Edição
+        </button>
+        <br>
+        <div *ngIf="nomeInput.invalid && (nomeInput.dirty || nomeInput.touched)" style="color: red; margin-left: 45px;">
+          <small *ngIf="nomeInput.errors?.['required']">O nome da categoria é obrigatório.</small>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <hr style="margin-top: 20px;">
+
+  <div>
+    <h2>Categorias Cadastradas</h2>
+    <table border="1" style="width: 50%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th style="text-align: center; padding: 5px;">Nome da Categoria</th>
+          <th style="text-align: center; padding: 5px;">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cat of listaCategorias">
+          <td style="padding: 5px;">{{ cat.nome }}</td>
+          <td style="text-align: center; padding: 5px;">
+            <button type="button" (click)="editarCategoria(cat)">Editar</button>
+            <button type="button" (click)="excluirCategoria(cat.id)" style="margin-left: 5px; color: rgb(255, 255, 255);">Excluir</button>
+          </td>
+        </tr>
+        <tr *ngIf="!listaCategorias || listaCategorias.length === 0">
+          <td colspan="2" style="text-align: center; padding: 10px; font-style: italic;">Nenhuma categoria cadastrada ainda.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
 </section>
