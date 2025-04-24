@@ -20,7 +20,7 @@
 
   <nav class="menu-nav d-flex">
     <ul class="nav d-flex flex-column">
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="clientLinksVisible">
         <a
           class="nav-link active flex items-center menu-padding"
           aria-current="page"
@@ -31,7 +31,7 @@
           <p class="nav-link-text">Dashbord</p>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="clientLinksVisible">
         <a
           class="nav-link flex items-center menu-padding"
           routerLink="/solicitacoes"
@@ -41,7 +41,7 @@
           <p class="nav-link-text">Solitações</p>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="clientLinksVisible">
         <a
           class="nav-link flex items-center menu-padding"
           routerLink="/orcamentos"
@@ -51,7 +51,7 @@
           <p class="nav-link-text">Orçamentos</p>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="clientLinksVisible">
         <a
           class="nav-link flex items-center menu-padding"
           routerLink="/pagamentos"
@@ -63,7 +63,7 @@
       </li>
 
       <!--Emplyee-->
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="employeeLinksVisible">
         <a
           class="nav-link flex items-center menu-padding"
           routerLink="/funcionario/solicitacoes"
@@ -73,7 +73,7 @@
           <p class="nav-link-text">Solitações</p>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="employeeLinksVisible">
         <a
           class="nav-link flex items-center menu-padding"
           routerLink="/funcionario/orcamentos"
@@ -83,7 +83,7 @@
           <p class="nav-link-text">Orçamentos</p>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="employeeLinksVisible">
         <a
           class="nav-link flex items-center menu-padding"
           routerLink="/funcionario/manutencao"
@@ -95,7 +95,7 @@
       </li>
       <!--Employee- END -->
 
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="clientLinksVisible">
         <a
           class="nav-link flex items-center menu-padding"
           routerLink="/conta"
@@ -105,7 +105,7 @@
           <p class="nav-link-text">Configurações</p>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="clientLinksVisible">
         <a
           class="nav-link flex items-center menu-padding"
           routerLink="/ajuda"
@@ -118,7 +118,7 @@
       <li class="nav-item nav-item-seperator">
         <div class="nav-border"></div>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="clientLinksVisible">
         <a
           class="nav-link flex items-center menu-padding"
           (click)="logout()"

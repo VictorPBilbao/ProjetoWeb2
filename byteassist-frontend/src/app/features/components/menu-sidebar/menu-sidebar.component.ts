@@ -1,12 +1,15 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth/auth.service';
+import { UserService } from '../../services/user/user.service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-menu-sidebar',
   imports: [
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    CommonModule
   ],
   templateUrl: './menu-sidebar.component.html',
   styleUrl: './menu-sidebar.component.css'
@@ -15,13 +18,22 @@ export class MenuSidebarComponent {
   userName: string = 'Victor Bilbao';
   searchTerm : string = '';
   sidebarVisible: boolean = true;
+  clientLinksVisible: boolean = false;
+  employeeLinksVisible: boolean = false;
 
   constructor(
     private authService: AuthService,
-    private router: Router) {}
+    private router: Router,
+    private userService: UserService
+  ) {}
 
   ngOnInit(): void {
     this.checkScreenSize(); // Verifica o tamanho da tela ao carregar o componente
+    this.clientLinksVisible =
+      this.userService.getUserRule() === 'RULE_CLIENT';
+
+    this.employeeLinksVisible =
+      this.userService.getUserRule() === 'RULE_EMPLOYEE';
   }
 
   @HostListener('window:resize', ['$event'])
