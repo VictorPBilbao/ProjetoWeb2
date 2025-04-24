@@ -99,8 +99,17 @@ export class RequestsComponent implements OnInit {
         `\n[${this.dataHoraAtual.toLocaleString()}] Redirecionado de ${funcionarioAnterior} para ${this.funcionarioDestino}`;
       
       // Atualiza o estado e o funcionário
+<<<<<<< Updated upstream
       this.selecionado.estado = 'REDIRECIONADA';
       this.selecionado.funcionario = this.funcionarioDestino;
+=======
+      this.selecionado.estado = this.funcionarioDestino === '' ? 'REDIRECIONADA' : 'ABERTA';
+      this.selecionado.funcionario = this.funcionarioDestino !== '' ?
+                                      this.funcionarioDestino : this.selecionado.funcionarioDestino;
+
+      console.log('Redirecionando para:', this.funcionarioDestino);
+      this.funcionarioDestino = '';
+>>>>>>> Stashed changes
     }
   
     // Chama o método para salvar

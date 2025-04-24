@@ -111,9 +111,6 @@
         <p><strong>Orçamento:</strong> {{ selecionado.orcamento }}</p>
         <p><strong>Serviço:</strong> {{ selecionado.servico }}</p>
       
-        <p *ngIf="selecionado.estado === 'REDIRECIONADA'">
-          <strong>Redirecionada para:</strong> {{ selecionado.destinoFuncionario }}
-        </p>
       </div>
       
       <!-- Modal Footer com botões à esquerda e OK à direita -->
@@ -142,7 +139,6 @@
     </div>
   </div>
 </div>
-
 <!-- Modal: Editar -->
 <div class="modal fade" id="editarModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
@@ -158,12 +154,12 @@
           <!-- Categoria -->
           <div class="mb-3">
             <label class="form-label">Categoria</label>
-            <select class="form-select" [(ngModel)]="selecionado.categoria" name="categoria">
+            <select class="form-select" [(ngModel)]="selecionado.categoria" name="categoria" [disabled]="selecionado.estado === 'FINALIZADA'">
               <option *ngFor="let c of categorias" [value]="c">{{ c }}</option>
             </select>
           </div>
 
-          <!-- Data e Hora na mesma linha -->
+          <!-- Data e Hora (readonly sempre) -->
           <div class="row mb-3">
             <div class="col-md-6">
               <label class="form-label">Data</label>
@@ -178,22 +174,22 @@
           <!-- Defeito Relatado -->
           <div class="mb-3">
             <label class="form-label">Defeito Relatado</label>
-            <textarea class="form-control" rows="2" [(ngModel)]="selecionado.defeitoRelatado" name="defeitoRelatado"></textarea>
+            <textarea class="form-control" rows="2" [(ngModel)]="selecionado.defeitoRelatado" name="defeitoRelatado" [disabled]="selecionado.estado === 'FINALIZADA'"></textarea>
           </div>
 
           <!-- Descrição do Serviço -->
           <div class="mb-3">
             <label class="form-label">Descrição do Serviço</label>
-            <textarea class="form-control" rows="3" [(ngModel)]="selecionado.descricaoServico" name="descricaoServico"></textarea>
+            <textarea class="form-control" rows="3" [(ngModel)]="selecionado.descricaoServico" name="descricaoServico" [disabled]="selecionado.estado === 'FINALIZADA'"></textarea>
           </div>
 
-          <!-- Estado (readonly) -->
+          <!-- Estado (readonly sempre) -->
           <div class="mb-3">
             <label class="form-label">Estado</label>
             <input type="text" class="form-control" [(ngModel)]="selecionado.estado" name="estado" readonly>
           </div>
 
-          <!-- ID (readonly) -->
+          <!-- ID (readonly sempre) -->
           <div class="mb-3">
             <label class="form-label">ID</label>
             <input type="text" class="form-control" [(ngModel)]="selecionado.id" name="id" readonly>
@@ -202,7 +198,7 @@
           <!-- Marca -->
           <div class="mb-3">
             <label class="form-label">Marca</label>
-            <select class="form-select" [(ngModel)]="selecionado.marca" name="marca">
+            <select class="form-select" [(ngModel)]="selecionado.marca" name="marca" [disabled]="selecionado.estado === 'FINALIZADA'">
               <option *ngFor="let m of marcas" [value]="m">{{ m }}</option>
             </select>
           </div>
@@ -216,7 +212,7 @@
           <!-- Serviço -->
           <div class="mb-3">
             <label class="form-label">Serviço</label>
-            <select class="form-select" [(ngModel)]="selecionado.servico" name="servico">
+            <select class="form-select" [(ngModel)]="selecionado.servico" name="servico" [disabled]="selecionado.estado === 'FINALIZADA'">
               <option *ngFor="let s of servicos" [value]="s">{{ s }}</option>
             </select>
           </div>
@@ -224,7 +220,7 @@
         </div>
 
         <div class="modal-footer">
-          <button class="btn btn-primary" type="submit">Salvar</button>
+          <button class="btn btn-primary" type="submit" *ngIf="selecionado.estado !== 'FINALIZADA'">Salvar</button>
           <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
         </div>
       </form>

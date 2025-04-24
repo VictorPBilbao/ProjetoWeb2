@@ -104,8 +104,13 @@
           </button>
 
           <!-- Orçar -->
+<<<<<<< Updated upstream
           <button class="btn btn-sm btn-secondary me-1" (click)="irParaOrcamento(s)" 
                   [disabled]="['FINALIZADA'].includes(s.estado)" title="Orçar">
+=======
+          <button class="btn btn-sm btn-secondary me-1" (click)="irParaOrcamento(s)"
+                  [disabled]="['FINALIZADA','ORÇADA', 'APROVADA','PAGA'].includes(s.estado)" title="Orçar">
+>>>>>>> Stashed changes
             <i class="fas fa-dollar-sign"></i>
           </button>
 
@@ -212,7 +217,7 @@
         <!-- Corpo do Modal -->
         <div class="modal-body">
 
-          <!-- 🟡 Bloco: Informações Iniciais -->
+          <!-- Informações Iniciais -->
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label"><i class="bi bi-pencil-square"></i> Categoria</label>
@@ -240,7 +245,7 @@
 
           <hr>
 
-          <!-- 🛠️ Bloco: Descrição do Problema -->
+          <!-- Descrição do Problema -->
           <div class="mb-3">
             <label class="form-label"><i class="bi bi-pencil-square"></i> Defeito Relatado</label>
             <textarea class="form-control" rows="3" [value]="selecionado.defeitoRelatado" readonly></textarea>
@@ -253,7 +258,7 @@
 
           <hr>
 
-          <!-- 🔧 Bloco: Informações Técnicas -->
+          <!-- Informações Técnicas -->
           <div class="row">
             <div class="col-md-4 mb-3">
               <label class="form-label"><i class="bi bi-pencil-square"></i> Equipamento</label>
@@ -265,7 +270,7 @@
             </div>
             <div class="col-md-4 mb-3">
               <label class="form-label"><i class="bi bi-pencil-square"></i> Orçamento</label>
-              <input type="text" class="form-control" [(ngModel)]="selecionado.orcamento" name="orcamento" required>
+              <input type="text" class="form-control" [(ngModel)]="selecionado.orcamento" name="orcamento" readonly required>
             </div>
           </div>
 
@@ -276,7 +281,7 @@
 
           <hr>
 
-          <!-- 🔄 Bloco: Status e Histórico -->
+          <!-- Status e Histórico -->
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label"><i class="bi bi-pencil-square"></i> Estado</label>
@@ -302,7 +307,7 @@
 
           <hr>
 
-          <!-- 🛠️ Bloco: Realizar Manutenção -->
+          <!-- Realizar Manutenção -->
           <h5 class="mt-3">Realizar Manutenção</h5>
 
           <div class="mb-3">
@@ -328,10 +333,9 @@
 
           <hr>
 
-          <!-- 🔁 Bloco: Redirecionar Manutenção -->
-          <h5 class="mt-3">Redirecionar Manutenção</h5>
-
-          <div class="mb-3">
+          <!-- Redirecionar Manutenção -->
+          <div class="mb-3" *ngIf="selecionado.estado !== 'FINALIZADA'">
+            <h5 class="mt-3">Redirecionar Manutenção</h5>
             <label class="form-label"><i class="bi bi-arrow-right"></i> Redirecionar Para</label>
             <select class="form-select" [(ngModel)]="selecionado.funcionarioDestino" name="funcionarioDestino" required>
               <option value="" disabled>Selecione um funcionário</option>
@@ -343,7 +347,6 @@
             <label class="form-label"><i class="bi bi-person-check"></i> Funcionário Destino</label>
             <input type="text" class="form-control" [value]="selecionado.funcionarioDestino" readonly>
           </div>
-
         </div>
 
         <!-- Rodapé -->
