@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Employee } from '../../shared/models/employee.model';
+import { Employee } from '../../models/employee.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,35 +11,51 @@ export class EmployeeService {
   private solicitacoesKey = 'solicitacoes';
 
    private solicitacoesIniciais: Employee[] = [
-    {
-      id: 1,
-      data: '2025-02-27',
-      hora: '14:00',
-      equipamento: 'Samsung Book4 360 Intel Core',
+    { 
+      id: 1, 
+      data: '2025-02-27', 
+      hora: '14:00', 
+      equipamento: 'Samsung Book4 360 Intel Core', 
       estado: 'ABERTA',
+<<<<<<< Updated upstream
+      servico: 'Manutenção', 
+      orcamento: '', 
+      funcionario: 'Guilherme Arthur', 
+      historico: 'Solicitação criada', 
+=======
       servico: 'Manutenção',
       orcamento: '',
-      funcionario: 'Guilherme Arthur',
+      funcionario: '',
       historico: 'Solicitação criada',
+>>>>>>> Stashed changes
       acao: 'Efetuar Orçamento',
-      cor: 'cinza',
+      cor: 'Cinza',
       categoria: 'Notebook',
       marca: 'Dell',
       descricaoServico: 'Verificar funcionamento geral do notebook.',
       defeitoRelatado: 'Desligamento inesperado.'
     },
-    {
-      id: 2,
-      data: '2025-03-19',
-      hora: '10:30',
-      equipamento: 'Galaxy S23',
+    { 
+      id: 2, 
+      data: '2025-03-19', 
+      hora: '10:30', 
+      equipamento: 'Galaxy S23', 
       estado: 'ORÇADA',
+<<<<<<< Updated upstream
+      servico: 'Atualização', 
+      orcamento: 'R$ 200,00', 
+      funcionario: 'Guilherme Arthur', 
+      historico: 'Aguardando aprovação', 
+      acao: 'Efetuar Orçamento',
+      cor: 'marrom',
+=======
       servico: 'Atualização',
       orcamento: 'R$ 200,00',
       funcionario: 'Guilherme Arthur',
-      historico: 'Aguardando aprovação',
-      acao: 'Efetuar Orçamento',
-      cor: 'marrom',
+      historico: 'Orçamento disponível.',
+      acao: 'Aguardando aprovação.',
+      cor: 'Marrom',
+>>>>>>> Stashed changes
       categoria: 'Smartphone',
       marca: 'Samsung',
       descricaoServico: 'Atualização de hardware e sistema.',
@@ -53,10 +69,10 @@ export class EmployeeService {
       estado: 'REJEITADA',
       servico: 'Limpeza',
       orcamento: 'R$ 50,00',
-      funcionario: 'Victor Bilbao',
+      funcionario: 'Guilherme Arthur',
       historico: 'Rejeitada pelo cliente',
-      acao: '',
-      cor: 'vermelho',
+      acao: 'Resgatar serviço.',
+      cor: 'Vermelho',
       categoria: 'Tablet',
       marca: 'Samsung',
       descricaoServico: 'Limpeza interna e externa.',
@@ -70,10 +86,10 @@ export class EmployeeService {
       estado: 'APROVADA',
       servico: 'Formatação',
       orcamento: 'R$ 300,00',
-      funcionario: 'Guilherme Arthur',
+      funcionario: 'Iman de Lacerda',
       historico: 'Orçamento aprovado',
       acao: 'Efetuar Manutenção',
-      cor: 'amarelo',
+      cor: 'Amarelo',
       categoria: 'Smartphone',
       marca: 'Apple',
       descricaoServico: 'Formatação completa com backup.',
@@ -87,11 +103,11 @@ export class EmployeeService {
       estado: 'REDIRECIONADA',
       servico: 'Configuração',
       orcamento: 'R$ 150,00',
-      funcionario: 'Guilherme Arthur',
+      funcionario: 'Iman de Lacerda',
       historico: 'Solicitação redirecionada',
-      destinoFuncionario: 'Carlos Pereira',
+      destinoFuncionario: '',
       acao: 'Efetuar Manutenção',
-      cor: 'roxo',
+      cor: 'Roxo',
       categoria: 'Notebook',
       marca: 'Acer',
       descricaoServico: 'Configuração inicial de sistema e rede.',
@@ -105,10 +121,10 @@ export class EmployeeService {
       estado: 'ARRUMADA',
       servico: 'Limpeza',
       orcamento: 'R$100,00',
-      funcionario: 'Victor Bilbao',
+      funcionario: 'Iman de Lacerda',
       historico: 'Manutenção concluída',
       acao: '',
-      cor: 'azul',
+      cor: 'Azul',
       categoria: 'Tablet',
       marca: 'Le Novo',
       descricaoServico: 'Limpeza técnica.',
@@ -122,10 +138,10 @@ export class EmployeeService {
       estado: 'PAGA',
       servico: 'Troca de peças',
       orcamento: 'R$ 800,00',
-      funcionario: 'Guilherme Arthur',
+      funcionario: '',
       historico: 'Pagamento efetuado',
       acao: 'Finalizar Solicitação',
-      cor: 'alaranjado',
+      cor: 'Alaranjado',
       categoria: 'Desktop',
       marca: 'Dell',
       descricaoServico: 'Substituição de fonte e memória.',
@@ -139,7 +155,7 @@ export class EmployeeService {
       estado: 'FINALIZADA',
       servico: 'Configuração',
       orcamento: 'R$ 250,00',
-      funcionario: 'Guilherme Arthur',
+      funcionario: 'Iman de Lacerda',
       historico: 'Solicitação finalizada',
       acao: '',
       cor: 'verde',
@@ -149,7 +165,7 @@ export class EmployeeService {
       defeitoRelatado: 'Dificuldade para configurar e-mail.'
     }
   ];
-
+  
   // Variável para controlar o último ID utilizado
   private lastId: number;
 
@@ -162,10 +178,10 @@ export class EmployeeService {
     const maioresId = solicitacoes.length > 0
       ? Math.max(...solicitacoes.map(s => s.id))
       : 0;
-
+  
     this.lastId = maioresId;
-
-
+  
+  
     // Se o localStorage estiver vazio, mescla as solicitações iniciais
     if (solicitacoes.length === 0) {
       this.salvarSolicitacoesNoStorage(this.solicitacoesIniciais);
@@ -189,7 +205,7 @@ export class EmployeeService {
     return this.solicitacoes$;
   }
 
-
+ 
   adicionar(solicitacao: Employee) {
     // Incrementa o último ID para garantir sequência
     this.lastId++;
@@ -204,7 +220,7 @@ export class EmployeeService {
 
     // Obtém as solicitações atuais
     const solicitacoes = this.obterSolicitacoesDoStorage();
-
+    
     // Adiciona a nova solicitação ao array
     solicitacoes.push(solicitacao);
 
@@ -214,14 +230,14 @@ export class EmployeeService {
       const dataHoraB = new Date(`${b.data}T${b.hora}:00`).getTime();
       return dataHoraB - dataHoraA;
     });
-
+    
     // Salva novamente no localStorage
     this.salvarSolicitacoesNoStorage(sortedSolicitacoes);
 
     // Atualiza o BehaviorSubject com o novo array
     this.solicitacoesSubject.next(sortedSolicitacoes);
   }
-
+  
   // Método para editar uma solicitação existente
   editar(solicitacao: Employee) {
     const solicitacoes = this.obterSolicitacoesDoStorage();
