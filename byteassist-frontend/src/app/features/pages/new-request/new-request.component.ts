@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EmployeeService } from '../../services/employee/employee.service';  // Importando o serviço
 import { Router } from '@angular/router';  // Para redirecionar após o cadastro
-import { Employee } from '../../models/employee.model';  // Caminho correto da sua interface Employee
+import { Employee } from '../../shared/models/employee.model';  // Caminho correto da sua interface Employee
 import Swal from 'sweetalert2';
 
 
@@ -19,13 +19,13 @@ export class NewRequestComponent {
   categories = ['Desktop', 'Notebook', 'Smartphone', 'Tablet'];
   brands = ['Acer', 'Apple', 'Dell', 'Lenovo', 'LG', 'Samsung','Outro'];
   services = ['Atualização', 'Formatação', 'Configuração', 'Limpeza', 'Manutenção', 'Troca de peças'];
-  
+
   // Modelo do formulário
   solicitation: Employee = {
     id: 0,  // O ID será gerado automaticamente pelo serviço
     data: this.getCurrentDate(), // A data será gerada aqui, diretamente no componente
     hora: this.getCurrentTime(),
-    equipamento: '', 
+    equipamento: '',
     estado: 'ABERTA',
     orcamento: '',
     categoria: '',
@@ -56,22 +56,22 @@ export class NewRequestComponent {
     const now = new Date();
     return now.toISOString().split('T')[0];  // 'yyyy-mm-dd'
   }
-  
+
   // Método para cadastrar
   register() {
     // Chama o serviço para adicionar a solicitação
     this.employeeService.adicionar(this.solicitation);
-    
+
     Swal.fire({
       title: 'Sucesso!',
       text: `Solicitação ${this.solicitation.id} cadastrada com sucesso!`,
       icon: 'success',
       confirmButtonText: 'OK'
     });
-    
+
     // Redireciona para a página de lista ou outra página que você escolher
     this.router.navigate(['/solicitacoes']); // Ou o caminho da lista de solicitações
-    
+
     // Limpar formulário após cadastro
     this.resetForm();
   }
@@ -116,11 +116,11 @@ export class NewRequestComponent {
         const [horaA, minutoA] = a.hora.split(':').map(Number);
         const [diaB, mesB, anoB] = b.data.split('/').map(Number);
         const [horaB, minutoB] = b.hora.split(':').map(Number);
-      
+
         valA = new Date(anoA, mesA - 1, diaA, horaA, minutoA);
         valB = new Date(anoB, mesB - 1, diaB, horaB, minutoB);
       }
-      
+
       if (typeof valA === 'string') {
         valA = valA.toLowerCase();
         valB = valB.toLowerCase();

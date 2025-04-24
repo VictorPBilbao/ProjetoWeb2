@@ -20,7 +20,7 @@
 
   <nav class="menu-nav d-flex">
     <ul class="nav d-flex flex-column">
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="clientLinksVisible">
         <a
           class="nav-link active flex items-center menu-padding"
           aria-current="page"
@@ -31,7 +31,7 @@
           <p class="nav-link-text">Dashbord</p>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="clientLinksVisible">
         <a
           class="nav-link flex items-center menu-padding"
           routerLink="/solicitacoes"
@@ -41,7 +41,7 @@
           <p class="nav-link-text">Solitações</p>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="clientLinksVisible">
         <a
           class="nav-link flex items-center menu-padding"
           routerLink="/orcamentos"
@@ -51,7 +51,7 @@
           <p class="nav-link-text">Orçamentos</p>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="clientLinksVisible">
         <a
           class="nav-link flex items-center menu-padding"
           routerLink="/pagamentos"
@@ -61,7 +61,41 @@
           <p class="nav-link-text">Pagamentos</p>
         </a>
       </li>
-      <li class="nav-item">
+
+      <!--Emplyee-->
+      <li class="nav-item" *ngIf="employeeLinksVisible">
+        <a
+          class="nav-link flex items-center menu-padding"
+          routerLink="/funcionario/solicitacoes"
+          routerLinkActive="active"
+        >
+          <img src="/images/menu-sidebar/technical-support.png" class="menu-icon">
+          <p class="nav-link-text">Solitações</p>
+        </a>
+      </li>
+      <li class="nav-item" *ngIf="employeeLinksVisible">
+        <a
+          class="nav-link flex items-center menu-padding"
+          routerLink="/funcionario/orcamentos"
+          routerLinkActive="active"
+        >
+          <img src="/images/menu-sidebar/value-chain.png" class="menu-icon">
+          <p class="nav-link-text">Orçamentos</p>
+        </a>
+      </li>
+      <li class="nav-item" *ngIf="employeeLinksVisible">
+        <a
+          class="nav-link flex items-center menu-padding"
+          routerLink="/funcionario/manutencao"
+          routerLinkActive="active"
+        >
+          <img src="/images/menu-sidebar/maintenance-f.png" class="menu-icon">
+          <p class="nav-link-text">Cadastros</p>
+        </a>
+      </li>
+      <!--Employee- END -->
+
+      <li class="nav-item" *ngIf="clientLinksVisible">
         <a
           class="nav-link flex items-center menu-padding"
           routerLink="/conta"
@@ -71,7 +105,7 @@
           <p class="nav-link-text">Configurações</p>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="clientLinksVisible">
         <a
           class="nav-link flex items-center menu-padding"
           routerLink="/ajuda"
@@ -99,8 +133,8 @@
   <div class="close-sidebar-container" (click)="openSidebar()">
     <i
       class="bi "
-      [class.bi-arrow-left-square-fill]="sidebarVisible"
-        [class.bi-arrow-right-square-fill]="!sidebarVisible"
+      [class.bi-arrow-left-circle]="sidebarVisible"
+      [class.bi-arrow-right-circle]="!sidebarVisible"
     >
     </i>
   </div>

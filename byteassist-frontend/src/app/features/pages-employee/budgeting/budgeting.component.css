@@ -6,7 +6,7 @@
 
 .budget-title-container {
   color: white;
-  background-color: #2B4EB6;
+  background-color: #030E6D;
   width: 350px;
   height: 200px;
   border-bottom-left-radius: 100% 50%;
@@ -16,6 +16,7 @@
 
 .budgets-list-container {
   margin-top: 60px;
+  width: fit-content;
 }
 
 .budget-details {
@@ -24,7 +25,7 @@
 
 .table-header {
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
   padding: 10px;
   position: relative;
 }
@@ -40,8 +41,7 @@
 }
 
 .table-card {
-  max-width: 900px;
-  margin: auto;
+  max-width: 1000px;
   overflow: hidden;
 }
 
@@ -57,7 +57,7 @@
   position: relative;
   border-radius: 15px;
   border: 2px solid white;
-  padding: 10px;
+  padding: 10px 0px;
   cursor: pointer;
 }
 
@@ -129,34 +129,6 @@
   padding: 15px;
   border-radius: 15px;
   width: 300px;
-}
-
-.botoes {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.aprovar, .rejeitar {
-  padding: 10px 20px;
-  margin: 0 10px;
-  border: none;
-  border-radius: 30px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.aprovar {
-  background-color: #4caf50;
-  color: white;
-}
-
-.rejeitar {
-  background-color: #f44336;
-  color: white;
-}
-
-.botoes {
-  font-size: 20px;
 }
 
 .budget-modal {
@@ -237,21 +209,6 @@
   background-color: #2fa360;
 }
 
-.btn-reject {
-  background-color: #e3342f;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 999px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.btn-reject:hover {
-  background-color: #cc1f1a;
-}
-
 .quote-container {
   gap: 10px;
   padding: 10px 0px;
@@ -292,6 +249,12 @@
   background-color: #44bdd0;
 }
 
+@media (max-width: 1228px) {
+  .quote-container {
+    flex-wrap: wrap;
+  }
+}
+
 @media (max-width: 900px) {
   .table-header, .info  {
     flex-direction: column;
@@ -306,5 +269,13 @@
 
   .painel-lateral {
     width: 100%;
+  }
+
+  .budget-title-container {
+    width: 100%;
+  }
+
+  .accordion.ativo {
+    max-height: 2000px;
   }
 }

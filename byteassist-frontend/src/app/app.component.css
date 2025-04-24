@@ -1,8 +1,8 @@
 .content {
   flex-grow: 1; /* Faz o conteúdo ocupar o espaço restante */
   width: 100%; /* Garante que ocupe toda a largura */
-  overflow: auto;
-  height: 100vh;;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 router-outlet {

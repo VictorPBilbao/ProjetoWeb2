@@ -1,3 +1,5 @@
+import { EquipmenteParts } from "./equipmenteParts.model";
+
 export class Budget {
   constructor(
     public id: string = '',
@@ -5,7 +7,9 @@ export class Budget {
     public date: Date = new Date(),
     public time: string = '',
     public equipment: string = '',
+    public equipmentBrand : string = '',
     public status: string = 'Orçada',
+    public equipmentCategory: string = '',
     public budgetValue: number = 0,
     public partsDescription: string = '',
     public laborDescription: string = '',
@@ -16,5 +20,12 @@ export class Budget {
     public treasurerName: string = '',
     public accountantName: string = '',
     public rejectDescription: string = '',
+    public defectDescription: string = '',
+    public budgetDescription: string = '',
+    public parts: EquipmenteParts[] = [],
+    public clientName: string = '',
+    public technicalName: string = '',
+    public technicalHourValue: number = 0,
+    public fees: number = 0,
   ) { }
 }

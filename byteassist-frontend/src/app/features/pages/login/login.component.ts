@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common'; // Importa o CommonModule para u
 import { NotificationComponent } from '../../components/notification/notification.component'; // Importa o componente de notificação
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,11 @@ export class LoginComponent implements OnInit {
   message: string = '';
   showNotification: boolean = false;
 
-  constructor (private fb: FormBuilder, private auth: AuthService, private router: Router) { }
+  constructor (
+    private fb: FormBuilder,
+    private auth: AuthService,
+    private router: Router,
+    private userService: UserService) { }
 
   ngOnInit(): void {
     // Cria o formulário de login com campos e validações
@@ -56,8 +61,12 @@ export class LoginComponent implements OnInit {
         next: (response) => {
           if (response && response.id && response.token != "") {
             try {
-              this.auth.saveToken(response.token); // Salva o token no localStorage
-              this.router.navigate(['/dashboard']); // Redireciona para a página inicial
+              this.auth.saveToken(response.token);
+              this.userService.saveUserRule(response.username);
+
+              (this.userService.getUserRule() === 'RULE_EMPLOYEE') ?
+                this.router.navigate(['/funcionario/solicitacoes']) :
+                  this.router.navigate(['/dashboard']);
             } catch (error) {
               throw error;
             }
