@@ -1,10 +1,8 @@
 package com.ufpr.byteassist_backend.controller;
 
 import com.ufpr.byteassist_backend.dto.RegistrationRequestDTO;
-import com.ufpr.byteassist_backend.exception.ErrorResponse;
 import com.ufpr.byteassist_backend.service.AuthService;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
