@@ -4,23 +4,32 @@ import org.springframework.stereotype.Repository;
 
 import com.surrealdb.RecordId;
 import com.surrealdb.Surreal;
+import com.surrealdb.UpType;
 import com.ufpr.byteassist_backend.model.Person;
 import com.ufpr.byteassist_backend.service.DatabaseService;
 
 @Repository
-public class PersonRepo {
+public class PersonRepo implements PersonRepoInterface {
     private final Surreal db;
 
     public PersonRepo(DatabaseService databaseService) {
         this.db = databaseService.getDatabase();
     }
-
+    
+    @Override
     public RecordId createPerson(Person person, String username) {
-        System.out.println("Creating person with username: " + username);
-        System.out.println("Person details: " + person);
         Person created = db.create(Person.class, new RecordId("Person", username), person);
-        System.out.println("Person created successfully with ID: " + created.getId());
         return created.getId();
     }
+    
+    @Override
+    public Person getPerson(String username) {
+        return db.select(Person.class, new RecordId("Person", username))
+                 .orElseThrow(() -> new RuntimeException("Person not found for username: " + username));
+    }
 
+    @Override
+    public Person updatePerson(Person person, String username) {
+        return db.update(Person.class, new RecordId("Person", username), UpType.CONTENT, person);
+    }
 }
