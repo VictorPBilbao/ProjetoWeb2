@@ -44,11 +44,7 @@ public class AuthService {
     }
 
     public ResponseEntity<Object> login(String username, String password) {
-        // print the hash of the password
-        System.out.println("Password hash: " + passwordEncoder.encode(password));
         User user = userRepo.getUserByUsername(username);
-        System.out.println("User found: ");
-        System.out.println("User found: " + user);
         if (user != null && passwordEncoder.matches(password, user.getPassword())) {
             String token = jwtService.generateToken(user.getId().toString(), user.getId().toString());
             UserDTO userDTO = new UserDTO(
@@ -147,21 +143,11 @@ public class AuthService {
 
     public ResponseEntity<Object> validateUsername(String username) {
         boolean isAvailable = userRepo.isUsernameAvailable(username);
-
-        if (isAvailable) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
+        return new ResponseEntity<>(isAvailable ? HttpStatus.OK : HttpStatus.CONFLICT);
     }
 
     public ResponseEntity<Object> validateEmail(String email) {
         boolean isAvailable = userRepo.isEmailAvailable(email);
-
-        if (isAvailable) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
+        return new ResponseEntity<>(isAvailable ? HttpStatus.OK : HttpStatus.CONFLICT);
     }
 }
