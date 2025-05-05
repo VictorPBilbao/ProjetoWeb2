@@ -32,4 +32,9 @@ public class PersonRepo implements PersonRepoInterface {
     public Person updatePerson(Person person, String username) {
         return db.update(Person.class, new RecordId("Person", username), UpType.CONTENT, person);
     }
+    
+    @Override
+    public void deletePerson(String username) {
+        db.delete(new RecordId("Person", username));
+    }
 }

@@ -8,12 +8,10 @@ import com.ufpr.byteassist_backend.repository.PersonRepoInterface;
 @Service
 public class PersonService {
     private final PersonRepoInterface personRepo;
-    private final JwtService jwtService;
     
     
-    public PersonService(PersonRepoInterface personRepo, JwtService jwtService) {
+    public PersonService(PersonRepoInterface personRepo) {
         this.personRepo = personRepo;
-        this.jwtService = jwtService;
     }
     
     public Person getPerson(String username) {
@@ -22,5 +20,9 @@ public class PersonService {
     
     public Person updatePerson(Person person, String username) {
         return personRepo.updatePerson(person, username);
+    }
+    
+    public void deletePerson(String username) {
+        personRepo.deletePerson(username);
     }
 }

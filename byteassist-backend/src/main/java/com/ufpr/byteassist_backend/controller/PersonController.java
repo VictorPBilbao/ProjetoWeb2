@@ -24,4 +24,10 @@ public class PersonController {
     public Person updatePerson(@PathVariable String username, @RequestBody Person person) {
         return personService.updatePerson(person, username);
     }
+    
+    @DeleteMapping("/{username}")
+    public void deletePerson(@PathVariable String username) {
+        personService.deletePerson(username);
+    }
+    
 }

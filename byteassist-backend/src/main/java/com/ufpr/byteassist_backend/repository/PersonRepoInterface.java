@@ -7,4 +7,5 @@ public interface PersonRepoInterface {
     public Person getPerson(String username); // Retrieve a person record by username
     public RecordId createPerson(Person person, String username); // Create a new person record in the database
     public Person updatePerson(Person person, String username); // Update an existing person record by username
+    public void deletePerson(String username); // Delete a person record by username
 }
