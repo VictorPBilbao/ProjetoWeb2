@@ -1,5 +1,7 @@
 package com.ufpr.byteassist_backend.repository;
 
+import java.util.Iterator;
+
 import org.springframework.stereotype.Repository;
 
 import com.surrealdb.RecordId;
@@ -35,5 +37,10 @@ public class PersonRepo implements PersonRepoInterface {
     @Override
     public void deletePerson(String username) {
         db.delete(new RecordId("Person", username));
+    }
+    
+    @Override
+    public Iterator<Person> getAllPersons() {
+        return db.select(Person.class, "Person");
     }
 }

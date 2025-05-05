@@ -1,5 +1,7 @@
 package com.ufpr.byteassist_backend.service;
 
+import java.util.Iterator;
+
 import org.springframework.stereotype.Service;
 
 import com.ufpr.byteassist_backend.model.Person;
@@ -28,5 +30,9 @@ public class PersonService {
     
     public void deletePerson(String username) {
         personRepo.deletePerson(username);
+    }
+    
+    public Iterator<Person> getAllPersons() {
+        return personRepo.getAllPersons();
     }
 }

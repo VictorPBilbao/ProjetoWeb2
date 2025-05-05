@@ -26,8 +26,6 @@ public class Person {
     @NonNull public String cpf;
     @NonNull public ZonedDateTime dob;
     @NonNull public String gender;
-    
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NonNull public PersonAddress address;
     @NonNull public PersonName name;
 }

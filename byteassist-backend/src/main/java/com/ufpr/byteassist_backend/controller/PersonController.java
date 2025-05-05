@@ -1,6 +1,7 @@
 package com.ufpr.byteassist_backend.controller;
 
-import org.springframework.http.MediaType;
+import java.util.Iterator;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.ufpr.byteassist_backend.model.Person;
@@ -35,4 +36,8 @@ public class PersonController {
         personService.deletePerson(username);
     }
     
+    @GetMapping("/all")
+    public Iterator<Person> getAllPersons() {
+        return personService.getAllPersons();
+    }
 }
