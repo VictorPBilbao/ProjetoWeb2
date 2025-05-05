@@ -5,16 +5,33 @@ import org.springframework.stereotype.Repository;
 import com.surrealdb.RecordId;
 import com.surrealdb.Response;
 import com.surrealdb.Surreal;
+import com.ufpr.byteassist_backend.model.Person;
 import com.ufpr.byteassist_backend.model.User;
 
 import com.ufpr.byteassist_backend.service.DatabaseService;
 
 @Repository
-public class UserRepo {
+public class UserRepo implements UserRepoInterface {
     private final Surreal db;
 
     public UserRepo(DatabaseService databaseService) {
         this.db = databaseService.getDatabase();
+    }
+    
+    @Override
+    public User getUser(String username) {
+        return db.select(User.class, new RecordId("User", username))
+                 .orElseThrow(() -> new RuntimeException("User not found for username: " + username));
+    }
+    
+    @Override
+    public User createUser(User user, String username) {
+        return db.create(User.class, new RecordId("User", username), user);
+    }
+    
+    @Override
+    public void deleteUser(String username) {
+        db.delete("User:" + username + ";");
     }
 
     public User getUserByUsername(String username) {
