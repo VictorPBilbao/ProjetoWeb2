@@ -20,7 +20,12 @@ public class PersonController {
         return personService.getPerson(username);
     }
     
-    @PutMapping(value = "/{username}", consumes = { MediaType.APPLICATION_FORM_URLENCODED_VALUE })
+    @PostMapping("/{username}")
+    public Person createPerson(@PathVariable String username, @RequestBody Person person) {
+        return personService.createPerson(person, username);
+    }
+    
+    @PutMapping(value = "/{username}")
     public Person updatePerson(@PathVariable String username, @RequestBody Person person) {
         return personService.updatePerson(person, username);
     }

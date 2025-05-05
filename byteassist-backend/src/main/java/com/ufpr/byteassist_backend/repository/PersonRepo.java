@@ -17,9 +17,8 @@ public class PersonRepo implements PersonRepoInterface {
     }
     
     @Override
-    public RecordId createPerson(Person person, String username) {
-        Person created = db.create(Person.class, new RecordId("Person", username), person);
-        return created.getId();
+    public Person createPerson(Person person, String username) {
+        return db.create(Person.class, new RecordId("Person", username), person);
     }
     
     @Override

@@ -124,7 +124,7 @@ public class AuthService {
                 name);
 
         // Call createPerson method for debugging
-        RecordId createdPerson = personRepo.createPerson(person, user.getUsername());
+        RecordId createdPerson = personRepo.createPerson(person, user.getUsername()).getId();
 
         User newUser = new User(
                 null,

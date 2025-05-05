@@ -18,6 +18,10 @@ public class PersonService {
         return personRepo.getPerson(username);
     }
     
+    public Person createPerson(Person person, String username) {
+        return personRepo.createPerson(person, username);
+    }
+    
     public Person updatePerson(Person person, String username) {
         return personRepo.updatePerson(person, username);
     }
