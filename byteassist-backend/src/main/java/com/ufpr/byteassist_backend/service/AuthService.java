@@ -138,7 +138,7 @@ public class AuthService {
                 "Client",
                 user.getUsername());
 
-        userRepo.createUser(newUser);
+        userRepo.createUser(newUser, user.getUsername());
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

@@ -1,9 +1,14 @@
 package com.ufpr.byteassist_backend.repository;
 
+import java.util.Iterator;
+import java.util.Optional;
+
 import com.ufpr.byteassist_backend.model.User;
 
 public interface UserRepoInterface {
-    User getUser(String username); // Retrieve a user record by username
-    User createUser(User user, String username); // Create a new user record in the database
-    void deleteUser(String username);
+    Optional<User> getUser(String username);
+    Optional<User> createUser(User user, String username);
+    Optional<User> updateUser(User user, String username);
+    Boolean deleteUser(String username);
+    Optional<Iterator<User>> getAllUsers();
 }

@@ -1,7 +1,5 @@
 package com.ufpr.byteassist_backend.controller;
 
-import java.util.Iterator;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,7 +7,7 @@ import com.ufpr.byteassist_backend.model.Person;
 import com.ufpr.byteassist_backend.service.PersonService;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/api/person")
 public class PersonController {
     private final PersonService personService;
 

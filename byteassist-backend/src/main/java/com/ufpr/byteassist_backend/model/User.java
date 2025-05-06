@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class User {
-    // TODO: Alter to private after SurrealDB update
     @JsonSerialize(using = RecordIdSerializer.class)
     @JsonDeserialize(using = RecordIdDeserializer.class)
     public RecordId id;
@@ -29,7 +28,10 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NonNull public String password;
     
-    @NonNull public RecordId person;
+    @JsonSerialize(using = RecordIdSerializer.class)
+    @JsonDeserialize(using = RecordIdDeserializer.class)
+    public RecordId person;
+    
     @NonNull public UserTime time;
     @NonNull public String type;
     @NonNull public String username;
