@@ -124,7 +124,9 @@ public class AuthService {
                 name);
 
         // Call createPerson method for debugging
-        RecordId createdPerson = personRepo.createPerson(person, user.getUsername()).getId();
+        RecordId createdPerson = personRepo.createPerson(person, user.getUsername())
+                .map(Person::getId)
+                .orElseThrow(() -> new IllegalStateException("Person creation failed"));
 
         User newUser = new User(
                 null,

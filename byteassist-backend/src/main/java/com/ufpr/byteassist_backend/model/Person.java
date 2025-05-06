@@ -2,7 +2,6 @@ package com.ufpr.byteassist_backend.model;
 
 import java.time.ZonedDateTime;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.surrealdb.RecordId;
@@ -23,6 +22,7 @@ public class Person {
     @JsonSerialize(using = RecordIdSerializer.class)
     @JsonDeserialize(using = RecordIdDeserializer.class)
     public RecordId id;
+    
     @NonNull public String cpf;
     @NonNull public ZonedDateTime dob;
     @NonNull public String gender;

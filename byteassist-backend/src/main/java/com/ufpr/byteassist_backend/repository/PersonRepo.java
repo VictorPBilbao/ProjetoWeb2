@@ -1,6 +1,7 @@
 package com.ufpr.byteassist_backend.repository;
 
 import java.util.Iterator;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -19,28 +20,49 @@ public class PersonRepo implements PersonRepoInterface {
     }
     
     @Override
-    public Person createPerson(Person person, String username) {
-        return db.create(Person.class, new RecordId("Person", username), person);
+    public Optional<Person> getPerson(String username) {
+        try {
+            return db.select(Person.class, new RecordId("Person", username));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
     
     @Override
-    public Person getPerson(String username) {
-        return db.select(Person.class, new RecordId("Person", username))
-                 .orElseThrow(() -> new RuntimeException("Person not found for username: " + username));
+    public Optional<Person> createPerson(Person person, String username) {
+        try {
+            return Optional.ofNullable(db.create(Person.class, new RecordId("Person", username), person));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     @Override
-    public Person updatePerson(Person person, String username) {
-        return db.update(Person.class, new RecordId("Person", username), UpType.CONTENT, person);
+    public Optional<Person> updatePerson(Person person, String username) {
+        try {
+            return Optional.ofNullable(db.update(Person.class, new RecordId("Person", username), UpType.CONTENT, person));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
     
     @Override
-    public void deletePerson(String username) {
-        db.delete(new RecordId("Person", username));
+    public Boolean deletePerson(String username) {
+        try {
+            db.delete(new RecordId("Person", username));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
     
     @Override
-    public Iterator<Person> getAllPersons() {
-        return db.select(Person.class, "Person");
+    public Optional<Iterator<Person>> getAllPersons() {
+        try {
+            Iterator<Person> persons = db.select(Person.class, "Person");
+            return Optional.ofNullable(persons);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 }
