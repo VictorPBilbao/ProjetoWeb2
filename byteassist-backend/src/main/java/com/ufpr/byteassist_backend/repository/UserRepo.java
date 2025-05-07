@@ -43,7 +43,7 @@ public class UserRepo implements UserRepoInterface {
     @Override
     public Optional<User> updateUser(User user, String username) {
         try {
-            return Optional.ofNullable(db.update(User.class, new RecordId("User", username), UpType.CONTENT, user));
+            return Optional.ofNullable(db.update(User.class, new RecordId("User", username), UpType.MERGE, user));
         } catch (Exception e) {
             return Optional.empty();
         }

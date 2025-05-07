@@ -40,7 +40,7 @@ public class PersonRepo implements PersonRepoInterface {
     @Override
     public Optional<Person> updatePerson(Person person, String username) {
         try {
-            return Optional.ofNullable(db.update(Person.class, new RecordId("Person", username), UpType.CONTENT, person));
+            return Optional.ofNullable(db.update(Person.class, new RecordId("Person", username), UpType.MERGE, person));
         } catch (Exception e) {
             return Optional.empty();
         }

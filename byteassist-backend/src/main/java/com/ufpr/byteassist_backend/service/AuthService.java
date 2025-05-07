@@ -49,7 +49,6 @@ public class AuthService {
             String token = jwtService.generateToken(user.getId().toString(), user.getId().toString());
             UserDTO userDTO = new UserDTO(
                     user.getId().toString(),
-                    user.getUsername(),
                     user.isActive(),
                     user.getTime().getLastLoginAt(),
                     token);
@@ -135,8 +134,8 @@ public class AuthService {
                 user.getPassword(),
                 createdPerson,
                 null,
-                "Client",
-                user.getUsername());
+                "Client"
+                );
 
         userRepo.createUser(newUser, user.getUsername());
 

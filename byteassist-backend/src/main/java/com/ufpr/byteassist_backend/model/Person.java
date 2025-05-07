@@ -7,25 +7,46 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.surrealdb.RecordId;
 import com.ufpr.byteassist_backend.serializer.RecordIdDeserializer;
 import com.ufpr.byteassist_backend.serializer.RecordIdSerializer;
+import com.ufpr.byteassist_backend.serializer.SimpleDateDeserializer;
+import com.ufpr.byteassist_backend.validation.ValidationGroups;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class Person {
     @JsonSerialize(using = RecordIdSerializer.class)
     @JsonDeserialize(using = RecordIdDeserializer.class)
+    @Null(groups = ValidationGroups.Update.class, message = "ID must not be provided in update requests")
     public RecordId id;
     
-    @NonNull public String cpf;
-    @NonNull public ZonedDateTime dob;
-    @NonNull public String gender;
-    @NonNull public PersonAddress address;
-    @NonNull public PersonName name;
+    @NotBlank
+    @Pattern(regexp = "\\d{11}", message = "CPF must contain exactly 11 digits")
+    public String cpf;
+    
+    @NotNull
+    @Past(message = "Date of birth must be in the past")
+    @JsonDeserialize(using = SimpleDateDeserializer.class)
+    public ZonedDateTime dob;
+    
+    @NotBlank
+    @Pattern(regexp = "^(Male|Female|Other)$", message = "Gender must be 'Male', 'Female', or 'Other'")
+    public String gender;
+    
+    @NotNull
+    @Valid
+    public PersonAddress address;
+    
+    @NotNull 
+    @Valid
+    public PersonName name;
 }

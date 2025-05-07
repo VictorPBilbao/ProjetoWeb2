@@ -9,6 +9,8 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -82,5 +84,38 @@ public class GlobalExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        Map<String, Object> body = new HashMap<>();
+        
+        String paramName = ex.getName();
+        if ("username".equals(paramName)) {
+            body.put("error", "Invalid username format");
+            body.put("message", "Username must be 3-30 characters long and contain only lowercase letters, numbers, dots, and underscores");
+        } else {
+            body.put("error", "Invalid parameter: " + paramName);
+            body.put("message", ex.getMessage());
+        }
+        
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+    
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<Object> handleNoHandlerFound(NoHandlerFoundException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("error", "Resource not found");
+        
+        // Check if this might be a username path variable issue
+        String path = ex.getRequestURL();
+        if (path.contains("/api/user/") || path.contains("/api/person/")) {
+            body.put("message", "The requested resource was not found. If you're trying to access a user profile, " +
+                    "make sure the username follows the required format (3-30 lowercase letters, numbers, dots, or underscores)");
+        } else {
+            body.put("message", "The requested resource was not found");
+        }
+        
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 }
