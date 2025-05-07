@@ -29,8 +29,8 @@ public class Person {
     @Null(groups = ValidationGroups.Update.class, message = "ID must not be provided in update requests")
     public RecordId id;
     
-    @NotBlank
-    @Pattern(regexp = "\\d{11}", message = "CPF must contain exactly 11 digits")
+    @NotBlank(message = "CPF is required", groups = {ValidationGroups.Create.class, ValidationGroups.Update.class})
+    @Pattern(regexp = "\\d{11}", message = "CPF must contain exactly 11 digits", groups = {ValidationGroups.Create.class, ValidationGroups.Update.class})
     public String cpf;
     
     @NotNull

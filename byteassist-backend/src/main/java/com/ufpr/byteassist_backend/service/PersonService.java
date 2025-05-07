@@ -41,7 +41,7 @@ public class PersonService {
                     .message("Failed to create person")
                     .errorCode(HttpStatus.CONFLICT)
                     .statusCode(HttpStatus.CONFLICT.value())
-                    .errorDescription("Person with username " + username + " already exists")
+                    .errorDescription("Person with username " + username + " already exists or database error occurred")
                     .build();
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
         }

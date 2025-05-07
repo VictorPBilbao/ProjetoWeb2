@@ -33,6 +33,8 @@ public class PersonRepo implements PersonRepoInterface {
         try {
             return Optional.ofNullable(db.create(Person.class, new RecordId("Person", username), person));
         } catch (Exception e) {
+            System.err.println("Error creating person: " + e.getMessage());
+            e.printStackTrace(); // Add stack trace for more detailed debugging
             return Optional.empty();
         }
     }

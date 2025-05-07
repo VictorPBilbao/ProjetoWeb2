@@ -32,10 +32,8 @@ public class GlobalExceptionHandler {
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .errorCode(HttpStatus.BAD_REQUEST)
                 .errorDescription("The provided data is invalid")
+                .validationErrors(errors)  // Set errors directly in the builder
                 .build();
-
-        // Manually set validation errors since builder may not be updated
-        errorResponse.setValidationErrors(errors);
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
