@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.ufpr.byteassist_backend.exception.ErrorResponse;
+import com.ufpr.byteassist_backend.exception.EnhancedStatusException;
 import com.ufpr.byteassist_backend.model.User;
 import com.ufpr.byteassist_backend.repository.UserRepoInterface;
 
@@ -19,73 +19,62 @@ public class UserService {
         this.userRepo = userRepo;
     }
     
-    public ResponseEntity<Object> getUser(String username) {
+    public ResponseEntity<User> getUser(String username) {
         Optional<User> user = userRepo.getUser(username);
         if (user.isEmpty()) {
-            ErrorResponse errorResponse = ErrorResponse.builder()
-                    .message("User not found")
-                    .errorCode(HttpStatus.NOT_FOUND)
-                    .statusCode(HttpStatus.NOT_FOUND.value())
-                    .errorDescription("User with username " + username + " not found")
-                    .build();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            throw new EnhancedStatusException(
+                HttpStatus.NOT_FOUND,
+                "User with username " + username + " not found",
+                "The user with the specified username does not exist"
+            );
         }
         return ResponseEntity.ok(user.get());
     }
     
-    public ResponseEntity<Object> createUser(User user, String username) {
+    public ResponseEntity<User> createUser(User user, String username) {
         Optional<User> createdUser = userRepo.createUser(user, username);
-        System.out.println("Created user: " + createdUser);
         if (createdUser.isEmpty()) {
-            ErrorResponse errorResponse = ErrorResponse.builder()
-                    .message("Failed to create user")
-                    .errorCode(HttpStatus.CONFLICT)
-                    .statusCode(HttpStatus.CONFLICT.value())
-                    .errorDescription("User with username " + username + " already exists")
-                    .build();
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+            throw new EnhancedStatusException(
+                HttpStatus.CONFLICT,
+                "User with username " + username + " already exists or database error occurred",
+                "The user could not be created because the username is already taken or there was a database error"
+            );
         }
         return ResponseEntity.ok(createdUser.get());
     }
     
-    public ResponseEntity<Object> updateUser(User user, String username) {
+    public ResponseEntity<User> updateUser(User user, String username) {
         Optional<User> updatedUser = userRepo.updateUser(user, username);
         if (updatedUser.isEmpty()) {
-            ErrorResponse errorResponse = ErrorResponse.builder()
-                    .message("Failed to update user")
-                    .errorCode(HttpStatus.NOT_FOUND)
-                    .statusCode(HttpStatus.NOT_FOUND.value())
-                    .errorDescription("User with username " + username + " not found")
-                    .build();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            throw new EnhancedStatusException(
+                HttpStatus.NOT_FOUND,
+                "User with username " + username + " not found",
+                "The user with the specified username does not exist and cannot be updated"
+            );
         }
         return ResponseEntity.ok(updatedUser.get());
     }
     
-    public ResponseEntity<Object> deleteUser(String username) {
+    public ResponseEntity<Void> deleteUser(String username) {
         boolean deleted = userRepo.deleteUser(username);
         if (!deleted) {
-            ErrorResponse errorResponse = ErrorResponse.builder()
-                    .message("Failed to delete user")
-                    .errorCode(HttpStatus.NOT_FOUND)
-                    .statusCode(HttpStatus.NOT_FOUND.value())
-                    .errorDescription("User with username " + username + " not found")
-                    .build();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            throw new EnhancedStatusException(
+                HttpStatus.NOT_FOUND,
+                "User with username " + username + " not found",
+                "The user with the specified username does not exist and cannot be deleted"
+            );
         }
         return ResponseEntity.noContent().build();
     }
     
-    public ResponseEntity<Object> getAllUsers() {
+    public ResponseEntity<Iterator<User>> getAllUsers() {
         Optional<Iterator<User>> users = userRepo.getAllUsers();
         if (users.isEmpty()) {
-            ErrorResponse errorResponse = ErrorResponse.builder()
-                    .message("Failed to retrieve users")
-                    .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                    .errorDescription("Error retrieving all users from database")
-                    .build();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            throw new EnhancedStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Error retrieving all users from database",
+                "There was a problem accessing the database to retrieve the list of users"
+            );
         }
         return ResponseEntity.ok(users.get());
     }

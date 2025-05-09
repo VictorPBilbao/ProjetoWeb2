@@ -1,5 +1,6 @@
 package com.ufpr.byteassist_backend.controller;
 
+import java.util.Iterator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,27 +19,27 @@ public class UserController {
     }
     
     @GetMapping("/{username:[a-z0-9._]{3,30}}")
-    public ResponseEntity<Object> getUser(@PathVariable String username) {
+    public ResponseEntity<User> getUser(@PathVariable String username) {
         return userService.getUser(username);
     }
     
     @PostMapping("/{username:[a-z0-9._]{3,30}}")
-    public ResponseEntity<Object> createUser(@Validated(ValidationGroups.Create.class) @RequestBody User user, @PathVariable String username) {
+    public ResponseEntity<User> createUser(@Validated(ValidationGroups.Create.class) @RequestBody User user, @PathVariable String username) {
         return userService.createUser(user, username);
     }
     
     @PutMapping("/{username:[a-z0-9._]{3,30}}")
-    public ResponseEntity<Object> updateUser(@Validated(ValidationGroups.Update.class) @RequestBody User user, @PathVariable String username) {
+    public ResponseEntity<User> updateUser(@Validated(ValidationGroups.Update.class) @RequestBody User user, @PathVariable String username) {
         return userService.updateUser(user, username);
     }
     
     @DeleteMapping("/{username:[a-z0-9._]{3,30}}")
-    public ResponseEntity<Object> deleteUser(@PathVariable String username) {
+    public ResponseEntity<Void> deleteUser(@PathVariable String username) {
         return userService.deleteUser(username);
     }
     
-    @GetMapping("/all")
-    public ResponseEntity<Object> getAllUsers() {
+    @GetMapping()
+    public ResponseEntity<Iterator<User>> getAllUsers() {
         return userService.getAllUsers();
     }
 }

@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class Person {
     @JsonSerialize(using = RecordIdSerializer.class)
     @JsonDeserialize(using = RecordIdDeserializer.class)
-    @Null(groups = ValidationGroups.Update.class, message = "ID must not be provided in update requests")
+    @Null(message = "ID should not be provided in the request body, use the URL instead")
     public RecordId id;
     
     @NotBlank(message = "CPF is required", groups = {ValidationGroups.Create.class, ValidationGroups.Update.class})

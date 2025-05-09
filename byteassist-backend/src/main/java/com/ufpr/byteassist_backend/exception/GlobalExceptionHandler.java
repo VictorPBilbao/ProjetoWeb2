@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.HashMap;
@@ -17,6 +18,28 @@ import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ErrorResponse> handleResponseStatusException(ResponseStatusException ex) {
+    ErrorResponse errorResponse = ErrorResponse.builder()
+            .message(ex.getReason())
+            .statusCode(ex.getStatusCode().value())
+            .errorCode(HttpStatus.valueOf(ex.getStatusCode().value()))
+            .build();
+
+    return new ResponseEntity<>(errorResponse, ex.getStatusCode());
+}
+
+    @ExceptionHandler(EnhancedStatusException.class)
+    public ResponseEntity<ErrorResponse> handleEnhancedStatusException(EnhancedStatusException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message(ex.getReason())
+                .statusCode(ex.getStatusCode().value())
+                .errorCode(HttpStatus.valueOf(ex.getStatusCode().value()))
+                .errorDescription(ex.getDescription())
+                .build();
+        return new ResponseEntity<>(errorResponse, ex.getStatusCode());
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {

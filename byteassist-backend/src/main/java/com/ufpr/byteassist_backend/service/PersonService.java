@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.ufpr.byteassist_backend.exception.ErrorResponse;
+import com.ufpr.byteassist_backend.exception.EnhancedStatusException;
 import com.ufpr.byteassist_backend.model.Person;
 import com.ufpr.byteassist_backend.repository.PersonRepoInterface;
 
@@ -20,72 +20,62 @@ public class PersonService {
         this.personRepo = personRepo;
     }
     
-    public ResponseEntity<Object> getPerson(String username) {
+    public ResponseEntity<Person> getPerson(String username) {
         Optional<Person> person = personRepo.getPerson(username);
         if (person.isEmpty()) {
-            ErrorResponse errorResponse = ErrorResponse.builder()
-                    .message("Person not found")
-                    .errorCode(HttpStatus.NOT_FOUND)
-                    .statusCode(HttpStatus.NOT_FOUND.value())
-                    .errorDescription("Person with username " + username + " not found")
-                    .build();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            throw new EnhancedStatusException(
+                HttpStatus.NOT_FOUND,
+                "Person with username " + username + " not found",
+                "The person with the specified username does not exist"
+            );
         }
         return ResponseEntity.ok(person.get());
     }
     
-    public ResponseEntity<Object> createPerson(Person person, String username) {
+    public ResponseEntity<Person> createPerson(Person person, String username) {
         Optional<Person> createdPerson = personRepo.createPerson(person, username);
         if (createdPerson.isEmpty()) {
-            ErrorResponse errorResponse = ErrorResponse.builder()
-                    .message("Failed to create person")
-                    .errorCode(HttpStatus.CONFLICT)
-                    .statusCode(HttpStatus.CONFLICT.value())
-                    .errorDescription("Person with username " + username + " already exists or database error occurred")
-                    .build();
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+            throw new EnhancedStatusException(
+                HttpStatus.CONFLICT,
+                "Person with username " + username + " already exists or database error occurred",
+                "The person could not be created because the username is already taken or there was a database error"
+            );
         }
         return ResponseEntity.ok(createdPerson.get());
     }
     
-    public ResponseEntity<Object> updatePerson(Person person, String username) {
+    public ResponseEntity<Person> updatePerson(Person person, String username) {
         Optional<Person> updatedPerson = personRepo.updatePerson(person, username);
         if (updatedPerson.isEmpty()) {
-            ErrorResponse errorResponse = ErrorResponse.builder()
-                    .message("Failed to update person")
-                    .errorCode(HttpStatus.NOT_FOUND)
-                    .statusCode(HttpStatus.NOT_FOUND.value())
-                    .errorDescription("Person with username " + username + " not found")
-                    .build();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            throw new EnhancedStatusException(
+                HttpStatus.NOT_FOUND,
+                "Person with username " + username + " not found",
+                "The person with the specified username does not exist and cannot be updated"
+            );
         }
         return ResponseEntity.ok(updatedPerson.get());
     }
     
-    public ResponseEntity<Object> deletePerson(String username) {
+    public ResponseEntity<Void> deletePerson(String username) {
         boolean deleted = personRepo.deletePerson(username);
         if (!deleted) {
-            ErrorResponse errorResponse = ErrorResponse.builder()
-                    .message("Failed to delete person")
-                    .errorCode(HttpStatus.NOT_FOUND)
-                    .statusCode(HttpStatus.NOT_FOUND.value())
-                    .errorDescription("Person with username " + username + " not found")
-                    .build();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            throw new EnhancedStatusException(
+                HttpStatus.NOT_FOUND,
+                "Person with username " + username + " not found",
+                "The person with the specified username does not exist and cannot be deleted"
+            );
         }
         return ResponseEntity.noContent().build();
     }
     
-    public ResponseEntity<Object> getAllPersons() {
+    public ResponseEntity<Iterator<Person>> getAllPersons() {
         Optional<Iterator<Person>> persons = personRepo.getAllPersons();
         if (persons.isEmpty()) {
-            ErrorResponse errorResponse = ErrorResponse.builder()
-                    .message("Failed to retrieve persons")
-                    .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                    .errorDescription("Error retrieving all persons from database")
-                    .build();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            throw new EnhancedStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Error retrieving all persons from database",
+                "There was a problem accessing the database to retrieve the list of persons"
+            );
         }
         return ResponseEntity.ok(persons.get());
     }

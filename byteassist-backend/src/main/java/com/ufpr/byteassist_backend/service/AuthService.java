@@ -3,6 +3,7 @@ package com.ufpr.byteassist_backend.service;
 import com.surrealdb.RecordId;
 import com.ufpr.byteassist_backend.dto.RegistrationRequestDTO;
 import com.ufpr.byteassist_backend.dto.UserDTO;
+import com.ufpr.byteassist_backend.exception.EnhancedStatusException;
 import com.ufpr.byteassist_backend.exception.ErrorResponse;
 import com.ufpr.byteassist_backend.model.Person;
 import com.ufpr.byteassist_backend.model.PersonAddress;
@@ -25,6 +26,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -44,25 +46,24 @@ public class AuthService {
     }
 
     public ResponseEntity<Object> login(String username, String password) {
-        User user = userRepo.getUserByUsername(username);
-        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-            String token = jwtService.generateToken(user.getId().toString(), user.getId().toString());
-            UserDTO userDTO = new UserDTO(
-                    user.getId().toString(),
-                    user.isActive(),
-                    user.getTime().getLastLoginAt(),
-                    token);
-            // Update last login time
-            updateTimeRepo.updateTimeLastLogin(user.getId().toString());
-            return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        Optional<User> user = userRepo.getUser(username);
+        if (user.isEmpty() || !passwordEncoder.matches(password, user.get().getPassword())) {
+            throw new EnhancedStatusException(
+                HttpStatus.UNAUTHORIZED,
+                "Authentication failed",
+                "The provided username or password is incorrect."
+            );
         }
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .message("Not authenticated")
-                .errorCode(HttpStatus.UNAUTHORIZED)
-                .statusCode(HttpStatus.UNAUTHORIZED.value())
-                .errorDescription("The provided username or password is incorrect.")
-                .build();
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+
+        String token = jwtService.generateToken(user.get().getId().toString(), user.get().getId().toString());
+        UserDTO userDTO = new UserDTO(
+            user.get().getId().toString(),
+            user.get().isActive(),
+            user.get().getTime().getLastLoginAt(),
+            token);
+        // Update last login time
+        updateTimeRepo.updateTimeLastLogin(user.get().getId().toString());
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     public ResponseEntity<Object> register(RegistrationRequestDTO user, BindingResult bindingResult) {
@@ -142,13 +143,11 @@ public class AuthService {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    public ResponseEntity<Object> validateUsername(String username) {
-        boolean isAvailable = userRepo.isUsernameAvailable(username);
-        return new ResponseEntity<>(isAvailable ? HttpStatus.OK : HttpStatus.CONFLICT);
+    public ResponseEntity<HttpStatus> validateUsername(String username) {
+        return new ResponseEntity<>(userRepo.isUsernameAvailable(username) ? HttpStatus.OK : HttpStatus.CONFLICT);
     }
 
-    public ResponseEntity<Object> validateEmail(String email) {
-        boolean isAvailable = userRepo.isEmailAvailable(email);
-        return new ResponseEntity<>(isAvailable ? HttpStatus.OK : HttpStatus.CONFLICT);
+    public ResponseEntity<HttpStatus> validateEmail(String email) {
+        return new ResponseEntity<>(userRepo.isEmailAvailable(email) ? HttpStatus.OK : HttpStatus.CONFLICT);
     }
 }

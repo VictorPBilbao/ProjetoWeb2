@@ -69,20 +69,9 @@ public class UserRepo implements UserRepoInterface {
         }
     }
 
-    public User getUserByUsername(String username) {
-        Response response = db
-                .query("SELECT *, id.id() AS username FROM User WHERE id.id() = '" + username + "' OR email = '"
-                        + username + "';");
-        try {
-            return response.take(0).getArray().get(0).get(User.class);
-        } catch (NullPointerException e) {
-            return null;
-        }
-    }
-
     public boolean isUsernameAvailable(String username) {
-        Response response = db.query("SELECT * FROM User:" + username + ";");
-        return response.take(0).getArray().len() == 0;
+        Optional<User> user = getUser(username);
+        return user.isEmpty();
     }
 
     public boolean isEmailAvailable(String email) {

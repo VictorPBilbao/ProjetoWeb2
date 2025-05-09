@@ -3,6 +3,7 @@ package com.ufpr.byteassist_backend.controller;
 import com.ufpr.byteassist_backend.dto.RegistrationRequestDTO;
 import com.ufpr.byteassist_backend.service.AuthService;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -38,12 +39,12 @@ public class AuthController {
     }
 
     @GetMapping("/validate/username/{username}")
-    public ResponseEntity<Object> validateUsername(@PathVariable String username) {
+    public ResponseEntity<HttpStatus> validateUsername(@PathVariable String username) {
         return authService.validateUsername(username);
     }
 
     @GetMapping("/validate/email/{email}")
-    public ResponseEntity<Object> validateEmail(@PathVariable String email) {
+    public ResponseEntity<HttpStatus> validateEmail(@PathVariable String email) {
         return authService.validateEmail(email);
     }
 }
