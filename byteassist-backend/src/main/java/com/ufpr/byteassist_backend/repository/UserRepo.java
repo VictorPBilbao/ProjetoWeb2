@@ -33,7 +33,6 @@ public class UserRepo implements UserRepoInterface {
     @Override
     public Optional<User> createUser(User user, String username) {
         try {
-            System.out.println("Creating user: " + user);
             return Optional.ofNullable(db.create(User.class, new RecordId("User", username), user));
         } catch (Exception e) {
             return Optional.empty();

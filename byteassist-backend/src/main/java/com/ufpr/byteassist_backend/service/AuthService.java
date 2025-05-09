@@ -45,7 +45,7 @@ public class AuthService {
         this.personRepo = personRepo;
     }
 
-    public ResponseEntity<Object> login(String username, String password) {
+    public ResponseEntity<UserDTO> login(String username, String password) {
         Optional<User> user = userRepo.getUser(username);
         if (user.isEmpty() || !passwordEncoder.matches(password, user.get().getPassword())) {
             throw new EnhancedStatusException(
@@ -54,7 +54,6 @@ public class AuthService {
                 "The provided username or password is incorrect."
             );
         }
-
         String token = jwtService.generateToken(user.get().getId().toString(), user.get().getId().toString());
         UserDTO userDTO = new UserDTO(
             user.get().getId().toString(),
@@ -66,81 +65,51 @@ public class AuthService {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
-    public ResponseEntity<Object> register(RegistrationRequestDTO user, BindingResult bindingResult) {
-        Map<String, String> errors = new HashMap<>();
+    public ResponseEntity<UserDTO> register(RegistrationRequestDTO user, String username) {
 
-        // First, process any Jakarta validation errors from the annotations in the DTO
-        if (bindingResult.hasErrors()) {
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
+        if (!userRepo.isUsernameAvailable(username)) {
+            throw new EnhancedStatusException(
+                HttpStatus.CONFLICT,
+                "Username already exists",
+                "The provided username is already taken."
+            );
         }
 
-        // Then, check business rules (username and email availability)
-        if (!userRepo.isUsernameAvailable(user.getUsername())) {
-            errors.put("username availability", "Username is already taken");
+        if (!userRepo.isEmailAvailable(user.getUser().getEmail())) {
+            throw new EnhancedStatusException(
+                HttpStatus.CONFLICT,
+                "Email already exists",
+                "The provided email is already in use."
+            );
         }
-
-        if (!userRepo.isEmailAvailable(user.getEmail())) {
-            errors.put("email availability", "Email is already in use");
+        
+        // Create Person object
+        Optional<Person> person = personRepo.createPerson(user.getPerson(), username);
+        
+        System.out.println("Person created: " + person);
+        
+        // Create User object
+        Optional<User> newUser = userRepo.createUser(user.getUser(), username);
+        
+        System.out.println("User created: " + newUser);
+        
+        // Generate JWT token
+        if (newUser.isPresent()) {
+            String token = jwtService.generateToken(newUser.get().getId().toString(), newUser.get().getId().toString());
+            UserDTO userDTO = new UserDTO(
+                newUser.get().getId().toString(),
+                newUser.get().isActive(),
+                newUser.get().getTime().getLastLoginAt(),
+                token
+            );
+            return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
+        } else {
+            throw new EnhancedStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "User creation failed",
+                "Unable to create a new user."
+            );
         }
-
-        // Validate and convert date format
-        ZonedDateTime dobZoned = null;
-        try {
-            LocalDate localDate = LocalDate.parse(user.getDob());
-            dobZoned = localDate.atStartOfDay(ZoneId.systemDefault());
-        } catch (DateTimeParseException e) {
-            errors.put("dob", "Invalid date format. Please use YYYY-MM-DD");
-        }
-
-        // If there are any errors (either validation or business rules), return them
-        if (!errors.isEmpty()) {
-            ErrorResponse errorResponse = ErrorResponse.builder()
-                    .message("Validation Error")
-                    .errorCode(HttpStatus.BAD_REQUEST)
-                    .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .errorDescription("The provided registration data is invalid")
-                    .build();
-
-            // Set all validation errors
-            errorResponse.setValidationErrors(errors);
-
-            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-        }
-
-        // If no errors, proceed with registration
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        PersonName name = new PersonName(user.getFirstName(), user.getLastName());
-        PersonAddress address = new PersonAddress(user.getZip(), user.getNumber(), user.getStreet(), user.getCity(),
-                user.getState(), user.getCountry(), user.getNeighborhood());
-        Person person = new Person(
-                null,
-                user.getCpf(),
-                dobZoned, // Using the converted ZonedDateTime
-                user.getGender(),
-                address,
-                name);
-
-        // Call createPerson method for debugging
-        RecordId createdPerson = personRepo.createPerson(person, user.getUsername())
-                .map(Person::getId)
-                .orElseThrow(() -> new IllegalStateException("Person creation failed"));
-
-        User newUser = new User(
-                null,
-                user.getEmail(),
-                true,
-                user.getPassword(),
-                createdPerson,
-                null,
-                "Client"
-                );
-
-        userRepo.createUser(newUser, user.getUsername());
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     public ResponseEntity<HttpStatus> validateUsername(String username) {
