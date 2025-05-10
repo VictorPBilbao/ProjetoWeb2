@@ -84,14 +84,15 @@ public class AuthService {
         }
         
         // Create Person object
-        Optional<Person> person = personRepo.createPerson(user.getPerson(), username);
+        personRepo.createPerson(user.getPerson(), username);
         
-        System.out.println("Person created: " + person);
+        // Hash password using BCrypt
+        String hashedPassword = passwordEncoder.encode(user.getUser().getPassword());
+        user.getUser().setPassword(hashedPassword);
         
         // Create User object
         Optional<User> newUser = userRepo.createUser(user.getUser(), username);
         
-        System.out.println("User created: " + newUser);
         
         // Generate JWT token
         if (newUser.isPresent()) {

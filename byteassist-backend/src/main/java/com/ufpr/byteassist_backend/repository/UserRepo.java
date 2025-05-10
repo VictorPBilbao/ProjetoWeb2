@@ -10,6 +10,9 @@ import com.surrealdb.Response;
 import com.surrealdb.Surreal;
 import com.surrealdb.UpType;
 import com.ufpr.byteassist_backend.model.User;
+import com.ufpr.byteassist_backend.model.UserTime;
+
+import java.time.ZonedDateTime;
 
 import com.ufpr.byteassist_backend.service.DatabaseService;
 
@@ -32,6 +35,7 @@ public class UserRepo implements UserRepoInterface {
     
     @Override
     public Optional<User> createUser(User user, String username) {
+        user.setPerson(new RecordId("Person", username));
         try {
             return Optional.ofNullable(db.create(User.class, new RecordId("User", username), user));
         } catch (Exception e) {
@@ -41,6 +45,8 @@ public class UserRepo implements UserRepoInterface {
     
     @Override
     public Optional<User> updateUser(User user, String username) {
+        user.setTime(new UserTime());
+        user.getTime().setUpdatedAt(ZonedDateTime.now());
         try {
             return Optional.ofNullable(db.update(User.class, new RecordId("User", username), UpType.MERGE, user));
         } catch (Exception e) {

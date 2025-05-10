@@ -24,8 +24,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Person {
-    @JsonSerialize(using = RecordIdSerializer.class)
-    @JsonDeserialize(using = RecordIdDeserializer.class)
     @Null(message = "ID should not be provided in the request body, use the URL instead")
     public RecordId id;
     
