@@ -15,7 +15,7 @@ export class EmployeeService {
       id: 1,
       data: '2025-02-27',
       hora: '14:00',
-      equipamento: 'Samsung Book4 360 Intel Core',
+      equipamento: 'Book4',
       estado: 'ABERTA',
       servico: 'Manutenção',
       orcamento: '',
