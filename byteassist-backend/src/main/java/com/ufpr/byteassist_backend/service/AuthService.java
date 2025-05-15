@@ -3,6 +3,7 @@ package com.ufpr.byteassist_backend.service;
 import com.surrealdb.RecordId;
 import com.ufpr.byteassist_backend.dto.RegistrationRequestDTO;
 import com.ufpr.byteassist_backend.dto.UserDTO;
+import com.ufpr.byteassist_backend.exception.EnhancedStatusException;
 import com.ufpr.byteassist_backend.exception.ErrorResponse;
 import com.ufpr.byteassist_backend.model.Person;
 import com.ufpr.byteassist_backend.model.PersonAddress;
@@ -25,6 +26,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -43,125 +45,79 @@ public class AuthService {
         this.personRepo = personRepo;
     }
 
-    public ResponseEntity<Object> login(String username, String password) {
-        // print the hash of the password
-        System.out.println("Password hash: " + passwordEncoder.encode(password));
-        User user = userRepo.getUserByUsername(username);
-        System.out.println("User found: ");
-        System.out.println("User found: " + user);
-        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
-            String token = jwtService.generateToken(user.getId().toString(), user.getId().toString());
+    public ResponseEntity<UserDTO> login(String username, String password) {
+        Optional<User> user = userRepo.getUser(username);
+        if (user.isEmpty() || !passwordEncoder.matches(password, user.get().getPassword())) {
+            throw new EnhancedStatusException(
+                HttpStatus.UNAUTHORIZED,
+                "Authentication failed",
+                "The provided username or password is incorrect."
+            );
+        }
+        String token = jwtService.generateToken(user.get().getId().toString(), user.get().getId().toString());
+        UserDTO userDTO = new UserDTO(
+            user.get().getId().toString(),
+            user.get().isActive(),
+            user.get().getTime().getLastLoginAt(),
+            token);
+        // Update last login time
+        updateTimeRepo.updateTimeLastLogin(user.get().getId().toString());
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
+    public ResponseEntity<UserDTO> register(RegistrationRequestDTO user, String username) {
+
+        if (!userRepo.isUsernameAvailable(username)) {
+            throw new EnhancedStatusException(
+                HttpStatus.CONFLICT,
+                "Username already exists",
+                "The provided username is already taken."
+            );
+        }
+
+        if (!userRepo.isEmailAvailable(user.getUser().getEmail())) {
+            throw new EnhancedStatusException(
+                HttpStatus.CONFLICT,
+                "Email already exists",
+                "The provided email is already in use."
+            );
+        }
+        
+        // Create Person object
+        personRepo.createPerson(user.getPerson(), username);
+        
+        // Hash password using BCrypt
+        String hashedPassword = passwordEncoder.encode(user.getUser().getPassword());
+        user.getUser().setPassword(hashedPassword);
+        
+        // Create User object
+        Optional<User> newUser = userRepo.createUser(user.getUser(), username);
+        
+        
+        // Generate JWT token
+        if (newUser.isPresent()) {
+            String token = jwtService.generateToken(newUser.get().getId().toString(), newUser.get().getId().toString());
             UserDTO userDTO = new UserDTO(
-                    user.getId().toString(),
-                    user.getUsername(),
-                    user.isActive(),
-                    user.getTime().getLastLoginAt(),
-                    token);
-            // Update last login time
-            updateTimeRepo.updateTimeLastLogin(user.getId().toString());
-            return new ResponseEntity<>(userDTO, HttpStatus.OK);
-        }
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .message("Not authenticated")
-                .errorCode(HttpStatus.UNAUTHORIZED)
-                .statusCode(HttpStatus.UNAUTHORIZED.value())
-                .errorDescription("The provided username or password is incorrect.")
-                .build();
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
-    }
-
-    public ResponseEntity<Object> register(RegistrationRequestDTO user, BindingResult bindingResult) {
-        Map<String, String> errors = new HashMap<>();
-
-        // First, process any Jakarta validation errors from the annotations in the DTO
-        if (bindingResult.hasErrors()) {
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-        }
-
-        // Then, check business rules (username and email availability)
-        if (!userRepo.isUsernameAvailable(user.getUsername())) {
-            errors.put("username availability", "Username is already taken");
-        }
-
-        if (!userRepo.isEmailAvailable(user.getEmail())) {
-            errors.put("email availability", "Email is already in use");
-        }
-
-        // Validate and convert date format
-        ZonedDateTime dobZoned = null;
-        try {
-            LocalDate localDate = LocalDate.parse(user.getDob());
-            dobZoned = localDate.atStartOfDay(ZoneId.systemDefault());
-        } catch (DateTimeParseException e) {
-            errors.put("dob", "Invalid date format. Please use YYYY-MM-DD");
-        }
-
-        // If there are any errors (either validation or business rules), return them
-        if (!errors.isEmpty()) {
-            ErrorResponse errorResponse = ErrorResponse.builder()
-                    .message("Validation Error")
-                    .errorCode(HttpStatus.BAD_REQUEST)
-                    .statusCode(HttpStatus.BAD_REQUEST.value())
-                    .errorDescription("The provided registration data is invalid")
-                    .build();
-
-            // Set all validation errors
-            errorResponse.setValidationErrors(errors);
-
-            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-        }
-
-        // If no errors, proceed with registration
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        PersonName name = new PersonName(user.getFirstName(), user.getLastName());
-        PersonAddress address = new PersonAddress(user.getZip(), user.getNumber(), user.getStreet(), user.getCity(),
-                user.getState(), user.getCountry(), user.getNeighborhood());
-        Person person = new Person(
-                null,
-                user.getCpf(),
-                dobZoned, // Using the converted ZonedDateTime
-                user.getGender(),
-                address,
-                name);
-
-        // Call createPerson method for debugging
-        RecordId createdPerson = personRepo.createPerson(person, user.getUsername());
-
-        User newUser = new User(
-                null,
-                user.getEmail(),
-                true,
-                user.getPassword(),
-                createdPerson,
-                null,
-                "Client",
-                user.getUsername());
-
-        userRepo.createUser(newUser);
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    public ResponseEntity<Object> validateUsername(String username) {
-        boolean isAvailable = userRepo.isUsernameAvailable(username);
-
-        if (isAvailable) {
-            return new ResponseEntity<>(HttpStatus.OK);
+                newUser.get().getId().toString(),
+                newUser.get().isActive(),
+                newUser.get().getTime().getLastLoginAt(),
+                token
+            );
+            return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+            throw new EnhancedStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "User creation failed",
+                "Unable to create a new user."
+            );
         }
     }
 
-    public ResponseEntity<Object> validateEmail(String email) {
-        boolean isAvailable = userRepo.isEmailAvailable(email);
+    public ResponseEntity<HttpStatus> validateUsername(String username) {
+        return new ResponseEntity<>(userRepo.isUsernameAvailable(username) ? HttpStatus.OK : HttpStatus.CONFLICT);
+    }
 
-        if (isAvailable) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
+    public ResponseEntity<HttpStatus> validateEmail(String email) {
+        return new ResponseEntity<>(userRepo.isEmailAvailable(email) ? HttpStatus.OK : HttpStatus.CONFLICT);
     }
 }

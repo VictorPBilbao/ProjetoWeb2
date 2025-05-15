@@ -1,16 +1,18 @@
 package com.ufpr.byteassist_backend.repository;
 
+import java.util.Iterator;
+import java.util.Optional;
+
 import org.springframework.stereotype.Repository;
 
 import com.surrealdb.RecordId;
 import com.surrealdb.Surreal;
+import com.surrealdb.UpType;
 import com.ufpr.byteassist_backend.model.Person;
 import com.ufpr.byteassist_backend.service.DatabaseService;
 
 @Repository
-public class PersonRepo {
-
-    // Instância do banco de dados SurrealDB
+public class PersonRepo implements PersonRepoInterface {
     private final Surreal db;
 
     /**
@@ -21,26 +23,53 @@ public class PersonRepo {
     public PersonRepo(DatabaseService databaseService) {
         this.db = databaseService.getDatabase();
     }
+    
+    @Override
+    public Optional<Person> getPerson(String username) {
+        try {
+            return db.select(Person.class, new RecordId("Person", username));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    
+    @Override
+    public Optional<Person> createPerson(Person person, String username) {
+        try {
+            return Optional.ofNullable(db.create(Person.class, new RecordId("Person", username), person));
+        } catch (Exception e) {
+            System.err.println("Error creating person: " + e.getMessage());
+            e.printStackTrace(); // Add stack trace for more detailed debugging
+            return Optional.empty();
+        }
+    }
 
-    /**
-     * Cria um novo registro de pessoa no banco de dados.
-     * 
-     * @param person   Objeto Person contendo os dados da pessoa a ser criada.
-     * @param username Nome de usuário associado à pessoa.
-     * @return O ID do registro criado.
-     */
-    public RecordId createPerson(Person person, String username) {
-        // Log para indicar o início do processo de criação
-        System.out.println("Iniciando a criação de uma pessoa com o nome de usuário: " + username);
-        System.out.println("Detalhes da pessoa: " + person);
-
-        // Cria o registro no banco de dados com o ID baseado no nome de usuário
-        Person created = db.create(Person.class, new RecordId("Person", username), person);
-
-        // Log para indicar o sucesso da criação
-        System.out.println("Pessoa criada com sucesso com ID: " + created.getId());
-
-        // Retorna o ID do registro criado
-        return created.getId();
+    @Override
+    public Optional<Person> updatePerson(Person person, String username) {
+        try {
+            return Optional.ofNullable(db.update(Person.class, new RecordId("Person", username), UpType.MERGE, person));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    
+    @Override
+    public Boolean deletePerson(String username) {
+        try {
+            db.delete(new RecordId("Person", username));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    @Override
+    public Optional<Iterator<Person>> getAllPersons() {
+        try {
+            Iterator<Person> persons = db.select(Person.class, "Person");
+            return Optional.ofNullable(persons);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 }

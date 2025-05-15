@@ -10,7 +10,6 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 public class UserDTO {
     private String id;
-    private String username;
     private boolean active;
     private ZonedDateTime lastLoginAt;
     private String token;

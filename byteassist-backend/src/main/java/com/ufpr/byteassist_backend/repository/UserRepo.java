@@ -1,42 +1,77 @@
 package com.ufpr.byteassist_backend.repository;
 
+import java.util.Iterator;
+import java.util.Optional;
+
 import org.springframework.stereotype.Repository;
 
 import com.surrealdb.RecordId;
 import com.surrealdb.Response;
 import com.surrealdb.Surreal;
+import com.surrealdb.UpType;
 import com.ufpr.byteassist_backend.model.User;
+import com.ufpr.byteassist_backend.model.UserTime;
+
+import java.time.ZonedDateTime;
+
 import com.ufpr.byteassist_backend.service.DatabaseService;
 
 @Repository
-public class UserRepo {
-
-    // Instância do banco de dados SurrealDB
+public class UserRepo implements UserRepoInterface {
     private final Surreal db;
 
     // Construtor que inicializa o banco de dados a partir do serviço de banco de dados
     public UserRepo(DatabaseService databaseService) {
         this.db = databaseService.getDatabase();
     }
-
-    /**
-     * Busca um usuário pelo nome de usuário ou e-mail.
-     * 
-     * @param username Nome de usuário ou e-mail.
-     * @return Objeto User se encontrado, ou null caso contrário.
-     */
-    public User getUserByUsername(String username) {
-        String query = String.format(
-                "SELECT *, id.id() AS username FROM User WHERE id.id() = '%s' OR email = '%s';",
-                username, username);
-        Response response = db.query(query);
-
+    
+    @Override
+    public Optional<User> getUser(String username) {
         try {
-            // Retorna o primeiro resultado da consulta como um objeto User
-            return response.take(0).getArray().get(0).get(User.class);
-        } catch (NullPointerException e) {
-            // Retorna null se nenhum usuário for encontrado
-            return null;
+            return db.select(User.class, new RecordId("User", username));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    
+    @Override
+    public Optional<User> createUser(User user, String username) {
+        user.setPerson(new RecordId("Person", username));
+        try {
+            return Optional.ofNullable(db.create(User.class, new RecordId("User", username), user));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    
+    @Override
+    public Optional<User> updateUser(User user, String username) {
+        user.setTime(new UserTime());
+        user.getTime().setUpdatedAt(ZonedDateTime.now());
+        try {
+            return Optional.ofNullable(db.update(User.class, new RecordId("User", username), UpType.MERGE, user));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    
+    @Override
+    public Boolean deleteUser(String username) {
+        try {
+            db.delete(new RecordId("User", username));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    @Override
+    public Optional<Iterator<User>> getAllUsers() {
+        try {
+            Iterator<User> users = db.select(User.class, "User");
+            return Optional.ofNullable(users);
+        } catch (Exception e) {
+            return Optional.empty();
         }
     }
 
@@ -47,11 +82,8 @@ public class UserRepo {
      * @return true se o nome de usuário estiver disponível, false caso contrário.
      */
     public boolean isUsernameAvailable(String username) {
-        String query = String.format("SELECT * FROM User:%s;", username);
-        Response response = db.query(query);
-
-        // Verifica se a consulta retornou resultados
-        return response.take(0).getArray().len() == 0;
+        Optional<User> user = getUser(username);
+        return user.isEmpty();
     }
 
     /**
@@ -66,19 +98,5 @@ public class UserRepo {
 
         // Verifica se a consulta retornou resultados
         return response.take(0).getArray().len() == 0;
-    }
-
-    /**
-     * Cria um novo usuário no banco de dados.
-     * 
-     * @param user Objeto User contendo os dados do novo usuário.
-     */
-    public void createUser(User user) {
-        System.out.println("Criando usuário: " + user);
-
-        // Cria um novo registro no banco de dados com o ID baseado no nome de usuário
-        db.create(User.class, new RecordId("User", user.getUsername()), user);
-
-        System.out.println("Usuário criado com sucesso com ID: " + user.getId());
     }
 }
