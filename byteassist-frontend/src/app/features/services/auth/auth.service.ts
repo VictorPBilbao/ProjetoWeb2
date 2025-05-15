@@ -9,7 +9,7 @@ import { LoadingService } from '../utils/loading.service';
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly apiUrl = 'https://byteassist-backend.fly.dev/api';
+  private readonly apiUrl = 'https://byteassist-backend.fly.dev';
 
   constructor(
     private http: HttpClient,
