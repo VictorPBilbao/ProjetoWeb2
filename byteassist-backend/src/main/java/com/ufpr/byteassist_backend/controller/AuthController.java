@@ -6,13 +6,9 @@ import com.ufpr.byteassist_backend.service.AuthService;
 import com.ufpr.byteassist_backend.validation.ValidationGroups;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")

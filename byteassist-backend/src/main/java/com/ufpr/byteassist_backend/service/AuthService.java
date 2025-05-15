@@ -1,32 +1,19 @@
 package com.ufpr.byteassist_backend.service;
 
-import com.surrealdb.RecordId;
 import com.ufpr.byteassist_backend.dto.RegistrationRequestDTO;
 import com.ufpr.byteassist_backend.dto.UserDTO;
 import com.ufpr.byteassist_backend.exception.EnhancedStatusException;
-import com.ufpr.byteassist_backend.exception.ErrorResponse;
-import com.ufpr.byteassist_backend.model.Person;
-import com.ufpr.byteassist_backend.model.PersonAddress;
-import com.ufpr.byteassist_backend.model.PersonName;
 import com.ufpr.byteassist_backend.model.User;
 import com.ufpr.byteassist_backend.repository.PersonRepo;
 import com.ufpr.byteassist_backend.repository.UpdateTimeRepo;
 import com.ufpr.byteassist_backend.repository.UserRepo;
 
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeParseException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class AuthService {
