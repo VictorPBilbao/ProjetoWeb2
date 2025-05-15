@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.ufpr.byteassist_backend.dto.DetailedUserDTO;
 import com.ufpr.byteassist_backend.exception.EnhancedStatusException;
 import com.ufpr.byteassist_backend.model.User;
 import com.ufpr.byteassist_backend.repository.UserRepoInterface;
@@ -77,5 +78,17 @@ public class UserService {
             );
         }
         return ResponseEntity.ok(users.get());
+    }
+    
+    public ResponseEntity<DetailedUserDTO> getDetailedUser(String username) {
+        Optional<DetailedUserDTO> user = userRepo.getDetailedUser(username);
+        if (user.isEmpty()) {
+            throw new EnhancedStatusException(
+                HttpStatus.NOT_FOUND,
+                "User with username " + username + " not found",
+                "The user with the specified username does not exist"
+            );
+        }
+        return ResponseEntity.ok(user.get());
     }
 }
