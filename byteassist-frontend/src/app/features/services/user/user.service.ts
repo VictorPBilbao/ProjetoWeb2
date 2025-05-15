@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { User } from '../../shared/models/user.model';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
+import { catchError, finalize, map } from 'rxjs/operators';
 import { handleErrors } from '../../helpers/errors/handleErrors';
 import { LoadingService } from '../utils/loading.service';
 import { AuthService } from '../auth/auth.service';
@@ -83,6 +83,43 @@ export class UserService {
     );
 
     return of(mockUser);
+  }
+
+  // Vai substuir o método getInfoUser
+  getPersonByToken<T>(): Observable<T> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': `Bearer ${this.authService.getToken()}` // Adiciona o token no header
+    })
+
+    return this.http.get<T>(`${this.apiUrl}/person`, { headers }).pipe(
+      catchError(handleErrors.handleError)
+    );
+  }
+
+  getInfoUserV2(): Observable<User> {
+    return this.getPersonByToken<any>().pipe(
+      map(data => new User(
+        data.id,
+        '',
+        '',
+        `${data.name.first} ${data.name.last}`,
+        data.cpf,
+        new Date(data.dob),
+        data.gender,
+        '',
+        '',
+        data.address.zip,
+        data.address.state,
+        data.address.city,
+        data.address.neighborhood,
+        data.address.street,
+        data.address.number,
+        '',
+        data.address.country
+      )),
+      catchError(handleErrors.handleError)
+    );
   }
 
   updateUser(user: User): Observable<any> {

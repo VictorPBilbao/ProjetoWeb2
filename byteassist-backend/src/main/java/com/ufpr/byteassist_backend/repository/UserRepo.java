@@ -20,6 +20,7 @@ import com.ufpr.byteassist_backend.service.DatabaseService;
 public class UserRepo implements UserRepoInterface {
     private final Surreal db;
 
+    // Construtor que inicializa o banco de dados a partir do serviço de banco de dados
     public UserRepo(DatabaseService databaseService) {
         this.db = databaseService.getDatabase();
     }
@@ -74,13 +75,28 @@ public class UserRepo implements UserRepoInterface {
         }
     }
 
+    /**
+     * Verifica se um nome de usuário está disponível.
+     * 
+     * @param username Nome de usuário a ser verificado.
+     * @return true se o nome de usuário estiver disponível, false caso contrário.
+     */
     public boolean isUsernameAvailable(String username) {
         Optional<User> user = getUser(username);
         return user.isEmpty();
     }
 
+    /**
+     * Verifica se um e-mail está disponível.
+     * 
+     * @param email E-mail a ser verificado.
+     * @return true se o e-mail estiver disponível, false caso contrário.
+     */
     public boolean isEmailAvailable(String email) {
-        Response response = db.query("SELECT * FROM User WHERE email = '" + email + "';");
+        String query = String.format("SELECT * FROM User WHERE email = '%s';", email);
+        Response response = db.query(query);
+
+        // Verifica se a consulta retornou resultados
         return response.take(0).getArray().len() == 0;
     }
 }

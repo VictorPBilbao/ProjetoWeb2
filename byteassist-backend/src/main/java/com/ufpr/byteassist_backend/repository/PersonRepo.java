@@ -15,6 +15,11 @@ import com.ufpr.byteassist_backend.service.DatabaseService;
 public class PersonRepo implements PersonRepoInterface {
     private final Surreal db;
 
+    /**
+     * Construtor que inicializa o banco de dados a partir do serviço de banco de dados.
+     * 
+     * @param databaseService Serviço que fornece a instância do banco de dados.
+     */
     public PersonRepo(DatabaseService databaseService) {
         this.db = databaseService.getDatabase();
     }
