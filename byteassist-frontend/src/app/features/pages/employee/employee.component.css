@@ -2,7 +2,7 @@
 .container-do-titulo {
   text-align: center;
   position: relative;
-  margin: 30px 0;
+  margin: 0;
 }
 
 .titulo-wrapper {
@@ -16,7 +16,7 @@
   top: 70%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 180%;
+  width: 155%;
   height: auto;
   z-index: 0;
   opacity: 1;
@@ -27,7 +27,7 @@
 
 .titulo-solicitacoes {
   color: white;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: bold;
   position: relative;
   z-index: 1;
@@ -35,18 +35,81 @@
   padding: 15px 30px;
   background: transparent;
   border-radius: 0;
-  top: -70px;
+  top: -45px;
 }
 
 .titulo-solicitacoes i {
   animation: pulse 2s infinite;
 }
 
+.descricao-solicitacoes {
+  font-size: 1rem;
+  color: #444;
+  text-align: center;
+  max-width: 700px;
+  margin: 20px auto 10px auto;
+  line-height: 1.6;
+  padding: 0 10px;
+}
+
+
 @keyframes pulse {
   0% { transform: scale(1); }
   50% { transform: scale(1.05); }
   100% { transform: scale(1); }
 }
+
+.carrossel-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 10px;
+}
+
+.carrossel-conteudo {
+  display: flex;
+  gap: 16px;
+}
+
+/* cor para os parágrafos */
+.card-solicitacao p {
+  color: #000000; /* cor do texto dos parágrafos */
+}
+
+/* cor para textos em negrito */
+.card-solicitacao p strong {
+  color: hsl(0, 0%, 0%); /* cor dos textos fortes/negrito */
+}
+
+.card-solicitacao {
+  flex: 0 0 auto;
+  width: 250px;
+  background: #d5e4fce1;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  scroll-snap-align: start;
+  word-wrap: break-word;  
+  overflow-wrap: break-word;
+  white-space: normal;
+  
+  min-height: 200px; /* aumenta a altura mínima para garantir espaço */
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
+
+.card-solicitacao p {
+  margin: 4px 0;
+}
+
+.botoes {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 10px;
+  border-radius: 20px;
+}
+
 
 /* ------------------ CONTAINER E TABELA ------------------ */
 
@@ -55,9 +118,8 @@ div.table-section {
   border-radius: 20px !important;
 }
 
-
 .table-section {
-  max-width: 1200px;
+  max-width: 900px;
   margin: 6rem auto 0 auto;
   padding: 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -67,7 +129,7 @@ div.table-section {
 .table-container {
   margin: 40px auto 20px auto;
   width: 100%;
-  max-width: 1000px;
+  max-width: 900px;
   overflow: hidden; /* Adicione esta linha */
   padding: 2px;
   display: flex;
@@ -79,7 +141,7 @@ div.table-section {
 .table-custom {
   margin-bottom: 200px;
   width: 100%;
-  max-width: 1100px;
+  max-width: 800px;
   background-color: rgba(192, 224, 240, 0.384);
   border-collapse: separate; /* Altere para 'separate' para não colapsar as bordas */
   table-layout: auto;
@@ -123,11 +185,11 @@ div.table-section {
 }
 
 /* ------------------ ESTADO DAS SOLICITAÇÕES ------------------ */
-.table-custom td:nth-child(5) span {
+.card-solicitacao span {
   display: inline-flex;
   justify-content: flex-start;
   padding: 2px 8px;
-  border-radius: 10px;
+  border-radius: 20px;
   font-weight: 500;
   font-size: 0.75rem;
   white-space: nowrap;
@@ -156,7 +218,8 @@ div.table-section {
 }
 
 .btn {
-  border-radius: 12px !important;
+  border-radius: 20px !important; 
+  font-weight: bold;
 }
 
 .btn-sm {
