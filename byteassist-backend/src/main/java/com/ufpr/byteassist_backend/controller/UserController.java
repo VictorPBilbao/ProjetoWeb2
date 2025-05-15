@@ -1,6 +1,7 @@
 package com.ufpr.byteassist_backend.controller;
 
-import java.util.Iterator;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +40,7 @@ public class UserController {
     }
     
     @GetMapping()
-    public ResponseEntity<Iterator<User>> getAllUsers() {
+    public ResponseEntity<List<User>> getAllUsers() {
         return userService.getAllUsers();
     }
 }

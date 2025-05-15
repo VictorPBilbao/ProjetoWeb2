@@ -1,6 +1,8 @@
 package com.ufpr.byteassist_backend.repository;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -66,32 +68,22 @@ public class UserRepo implements UserRepoInterface {
     }
     
     @Override
-    public Optional<Iterator<User>> getAllUsers() {
+    public Optional<List<User>> getAllUsers() {
         try {
             Iterator<User> users = db.select(User.class, "User");
-            return Optional.ofNullable(users);
+            List<User> userList = new ArrayList<>();
+            users.forEachRemaining(userList::add);
+            return Optional.ofNullable(userList);
         } catch (Exception e) {
             return Optional.empty();
         }
     }
 
-    /**
-     * Verifica se um nome de usuário está disponível.
-     * 
-     * @param username Nome de usuário a ser verificado.
-     * @return true se o nome de usuário estiver disponível, false caso contrário.
-     */
     public boolean isUsernameAvailable(String username) {
         Optional<User> user = getUser(username);
         return user.isEmpty();
     }
 
-    /**
-     * Verifica se um e-mail está disponível.
-     * 
-     * @param email E-mail a ser verificado.
-     * @return true se o e-mail estiver disponível, false caso contrário.
-     */
     public boolean isEmailAvailable(String email) {
         String query = String.format("SELECT * FROM User WHERE email = '%s';", email);
         Response response = db.query(query);

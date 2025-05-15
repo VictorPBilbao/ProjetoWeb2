@@ -1,6 +1,8 @@
 package com.ufpr.byteassist_backend.repository;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -15,11 +17,6 @@ import com.ufpr.byteassist_backend.service.DatabaseService;
 public class PersonRepo implements PersonRepoInterface {
     private final Surreal db;
 
-    /**
-     * Construtor que inicializa o banco de dados a partir do serviço de banco de dados.
-     * 
-     * @param databaseService Serviço que fornece a instância do banco de dados.
-     */
     public PersonRepo(DatabaseService databaseService) {
         this.db = databaseService.getDatabase();
     }
@@ -64,10 +61,12 @@ public class PersonRepo implements PersonRepoInterface {
     }
     
     @Override
-    public Optional<Iterator<Person>> getAllPersons() {
+    public Optional<List<Person>> getAllPersons() {
         try {
             Iterator<Person> persons = db.select(Person.class, "Person");
-            return Optional.ofNullable(persons);
+            List<Person> personList = new ArrayList<>();
+            persons.forEachRemaining(personList::add);
+            return Optional.ofNullable(personList);
         } catch (Exception e) {
             return Optional.empty();
         }
