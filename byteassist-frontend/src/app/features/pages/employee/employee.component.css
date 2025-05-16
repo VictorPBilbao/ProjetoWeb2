@@ -47,7 +47,7 @@
   color: #444;
   text-align: center;
   max-width: 700px;
-  margin: 20px auto 10px auto;
+  margin: 0px auto 10px auto;
   line-height: 1.6;
   padding: 0 10px;
 }
@@ -59,69 +59,14 @@
   100% { transform: scale(1); }
 }
 
-.carrossel-container {
-  overflow-x: auto;
-  white-space: nowrap;
-  padding: 10px;
-}
-
-.carrossel-conteudo {
-  display: flex;
-  gap: 16px;
-}
-
-/* cor para os parágrafos */
-.card-solicitacao p {
-  color: #000000; /* cor do texto dos parágrafos */
-}
-
-/* cor para textos em negrito */
-.card-solicitacao p strong {
-  color: hsl(0, 0%, 0%); /* cor dos textos fortes/negrito */
-}
-
-.card-solicitacao {
-  flex: 0 0 auto;
-  width: 250px;
-  background: #d5e4fce1;
-  border-radius: 12px;
-  padding: 15px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  scroll-snap-align: start;
-  word-wrap: break-word;  
-  overflow-wrap: break-word;
-  white-space: normal;
-  
-  min-height: 200px; /* aumenta a altura mínima para garantir espaço */
-  display: flex;
-  flex-direction: column;
-  overflow: visible;
-}
-
-
-.card-solicitacao p {
-  margin: 4px 0;
-}
-
-.botoes {
-  display: flex;
-  justify-content: flex-start;
-  margin-top: 10px;
-  border-radius: 20px;
-}
-
-
 /* ------------------ CONTAINER E TABELA ------------------ */
-
-div.table-section {
-  background-color: #ffffffde !important;
-  border-radius: 20px !important;
-}
 
 .table-section {
   max-width: 900px;
   margin: 6rem auto 0 auto;
   padding: 2rem;
+  background-color: #ffffffde !important;
+  border-radius: 20px !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
@@ -130,44 +75,48 @@ div.table-section {
   margin: 40px auto 20px auto;
   width: 100%;
   max-width: 900px;
-  overflow: hidden; /* Adicione esta linha */
+  overflow: hidden;
   padding: 2px;
   display: flex;
   justify-content: center;
   box-sizing: border-box;
-  border-radius: 20px; /* Certifique-se de que a borda do container também tenha o border-radius */
+  border-radius: 20px; /* arredonda borda do container */
 }
 
 .table-custom {
-  margin-bottom: 200px;
   width: 100%;
-  max-width: 800px;
+  max-width: 900px;
   background-color: rgba(192, 224, 240, 0.384);
-  border-collapse: separate; /* Altere para 'separate' para não colapsar as bordas */
+  border-collapse: separate; /* importante para bordas arredondadas */
+  border-spacing: 0;
   table-layout: auto;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  border-radius: 12px; /* O border-radius da tabela */
-  margin: 0 auto;
-  border: none; /* Remova qualquer borda para não interferir no arredondamento */
+  border-radius: 12px;
+  margin: 0 auto 0px auto;
+  border: none;
 }
 
+/* Cabeçalho da tabela */
 .table-custom thead {
   background-color: #0c6bf8;
   color: white;
 }
 
-.table-custom th, .table-custom td {
+.table-custom th,
+.table-custom td {
   padding: 12px 15px;
   text-align: left;
-  padding-left: 15px;
   font-weight: 500;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-left: 15px;
 }
 
+/* Hover na linha da tabela */
 .table-custom tbody tr:hover {
   background-color: rgba(0, 0, 0, 0.05);
+  cursor: pointer;
 }
 
+/* Bordas arredondadas nos cantos da tabela */
 .table-custom tr:first-child th:first-child {
   border-top-left-radius: 12px;
 }
@@ -184,30 +133,45 @@ div.table-section {
   border-bottom-right-radius: 12px;
 }
 
+/* Responsividade */
+@media (max-width: 768px) {
+  .table-custom {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .table-custom th,
+  .table-custom td {
+    padding: 10px 8px;
+  }
+}
+
+
 /* ------------------ ESTADO DAS SOLICITAÇÕES ------------------ */
-.card-solicitacao span {
-  display: inline-flex;
-  justify-content: flex-start;
-  padding: 2px 8px;
+
+.table-custom span {
+  display: inline-block;
+  padding: 4px 10px;
   border-radius: 20px;
-  font-weight: 500;
-  font-size: 0.75rem;
-  white-space: nowrap;
-  line-height: 1.2;
+  font-weight: 600;
+  font-size: 0.8rem;
   color: white;
-  text-align: left;
-  width: auto;
-  margin-right: auto;
+  white-space: nowrap;
+  user-select: none;
+  text-align: center;
+  min-width: 60px;
 }
 
 .estado-ABERTA        { background-color: #585d68; }
 .estado-ORÇADA        { background-color: #8a6e63; }
 .estado-REJEITADA     { background-color: #dc3545; }
-.estado-APROVADA      { background-color: #ffc107; }
+.estado-APROVADA      { background-color: #ffc107; color: #212529; /* texto escuro no amarelo */ }
 .estado-REDIRECIONADA { background-color: #6f42c1; }
 .estado-ARRUMADA      { background-color: #007bff; }
 .estado-PAGA          { background-color: #fd7e14; }
 .estado-FINALIZADA    { background-color: #28a745; }
+
 
 /* ------------------ BOTÕES ------------------ */
 .btn-container {
@@ -247,10 +211,17 @@ div.table-section {
 .btn-close {
   filter: invert(1) grayscale(100%) brightness(200%);
 }
+
 .btn-outline-primary {
-  color: #007bff;
+  color:  #007bff;
   border: 2px solid #007bff;
 }
+
+.btn-primary {
+  color: #ffffff;
+  border: 2px solid #007bff;
+}
+
 
 .btn-outline-primary:hover {
   background-color: #007bff;
@@ -323,16 +294,6 @@ div.table-section {
   font-size: 0.9rem;
 }
 
-/* ------------------ TEXTO COLORIDO POR ESTADO ------------------ */
-.text-secondary { color: #6c757d !important; font-weight: bold; }
-.text-brown     { color: #8d6e63 !important; font-weight: bold; }
-.text-danger    { color: #dc3546a1 !important; font-weight: bold; }
-.text-warning   { color: #ffc107 !important; font-weight: bold; }
-.text-purple    { color: #6f42c1 !important; font-weight: bold; }
-.text-primary   { color: #007bff !important; font-weight: bold; }
-.text-orange    { color: #fd7e14 !important; font-weight: bold; }
-.text-success   { color: #28a745 !important; font-weight: bold; }
-
 /* ------------------ MODAL ------------------ */
 .modal-header, .modal-footer {
   background-color: #030e6d !important;
@@ -394,8 +355,6 @@ input[readonly] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 30px;
-  margin-bottom: 30px; /* ← Adiciona espaço entre botões e tabela */
 }
 
 
@@ -408,12 +367,19 @@ input[readonly] {
   gap: 20px; /* Espaço entre o botão principal e os quick access */
 }
 
-/* Botão Nova Solicitação */
-.btn-success {
+.nova-solicitacao {
+  background-color: #0aa832 !important;  /* fundo vermelho */
+  color: white !important;               /* texto branco */
   border-radius: 20px !important;
   padding: 10px 20px;
   font-weight: bold;
-  color: #0d6efd;
+  border: none !important;
+}
+
+/* efeito hover */
+.nova-solicitacao:hover {
+  background-color: #078827  !important; /* vermelho mais escuro no hover */
+  color: white !important;
 }
 
 .btn-group {

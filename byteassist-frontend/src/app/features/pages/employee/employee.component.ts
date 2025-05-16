@@ -19,6 +19,11 @@ declare var bootstrap: any; // Importa os modais do Bootstrap
 export class EmployeeComponent implements OnInit {
   solicitacoes: Employee[] = [];
   selecionado: Employee = {} as Employee;
+  solicitacoesPorGrupo: Employee[][] = [];
+  paginaAtual: number = 1;
+  itensPorPagina: number = 4; // Por exemplo, 6 cards por página
+  totalPaginas: number = 0;
+
 
   categorias: string[] = ['Desktop', 'Notebook', 'Smartphone', 'Tablet'];
   marcas: string[] = ['Acer', 'Dell', 'Le Novo', 'LG', 'Samsung', 'Vaio', 'Outro'];
@@ -66,6 +71,11 @@ export class EmployeeComponent implements OnInit {
       if (valA > valB) return this.ordemCrescente ? 1 : -1;
       return 0;
     });
+
+    this.totalPaginas = Math.ceil(this.solicitacoes.length / this.itensPorPagina);
+    this.paginaAtual = 1;
+    this.atualizarPagina();
+
   }
 
   selecionar(s: Employee) {
@@ -196,5 +206,18 @@ export class EmployeeComponent implements OnInit {
       });
     });
   }
+  
+atualizarPagina(): void {
+  const inicio = (this.paginaAtual - 1) * this.itensPorPagina;
+  const fim = inicio + this.itensPorPagina;
+  this.solicitacoesPorGrupo = [ this.solicitacoes.slice(inicio, fim) ];  // deixa só uma "página" no array
+}
+
+mudarPagina(novaPagina: number): void {
+  if (novaPagina >= 1 && novaPagina <= this.totalPaginas) {
+    this.paginaAtual = novaPagina;
+    this.atualizarPagina();
+  }
+}
 
 }
