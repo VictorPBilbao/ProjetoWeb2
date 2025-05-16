@@ -1,5 +1,6 @@
 package com.ufpr.byteassist_backend.service;
 
+import com.ufpr.byteassist_backend.dto.DetailedUserDTO;
 import com.ufpr.byteassist_backend.dto.RegistrationRequestDTO;
 import com.ufpr.byteassist_backend.dto.UserDTO;
 import com.ufpr.byteassist_backend.exception.EnhancedStatusException;
@@ -52,7 +53,7 @@ public class AuthService {
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
-    public ResponseEntity<UserDTO> register(RegistrationRequestDTO user, String username) {
+    public ResponseEntity<UserDTO> register(DetailedUserDTO user, String username) {
 
         if (!userRepo.isUsernameAvailable(username)) {
             throw new EnhancedStatusException(
@@ -62,7 +63,7 @@ public class AuthService {
             );
         }
 
-        if (!userRepo.isEmailAvailable(user.getUser().getEmail())) {
+        if (!userRepo.isEmailAvailable(user.getEmail())) {
             throw new EnhancedStatusException(
                 HttpStatus.CONFLICT,
                 "Email already exists",
@@ -74,20 +75,22 @@ public class AuthService {
         personRepo.createPerson(user.getPerson(), username);
         
         // Hash password using BCrypt
-        String hashedPassword = passwordEncoder.encode(user.getUser().getPassword());
-        user.getUser().setPassword(hashedPassword);
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(hashedPassword);
         
         // Create User object
-        Optional<User> newUser = userRepo.createUser(user.getUser(), username);
-        
+        User newUser = new User();
+        newUser.setEmail(user.getEmail());
+        newUser.setPassword(hashedPassword);
+        Optional<User> createdUser = userRepo.createUser(newUser, username);
         
         // Generate JWT token
-        if (newUser.isPresent()) {
-            String token = jwtService.generateToken(newUser.get().getId().toString(), newUser.get().getId().toString());
+        if (createdUser.isPresent()) {
+            String token = jwtService.generateToken(createdUser.get().getId().toString(), createdUser.get().getId().toString());
             UserDTO userDTO = new UserDTO(
-                newUser.get().getId().toString(),
-                newUser.get().isActive(),
-                newUser.get().getTime().getLastLoginAt(),
+                createdUser.get().getId().toString(),
+                createdUser.get().isActive(),
+                createdUser.get().getTime().getLastLoginAt(),
                 token
             );
             return new ResponseEntity<>(userDTO, HttpStatus.CREATED);

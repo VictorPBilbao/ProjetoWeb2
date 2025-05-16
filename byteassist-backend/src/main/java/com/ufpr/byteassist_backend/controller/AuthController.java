@@ -1,5 +1,6 @@
 package com.ufpr.byteassist_backend.controller;
 
+import com.ufpr.byteassist_backend.dto.DetailedUserDTO;
 import com.ufpr.byteassist_backend.dto.RegistrationRequestDTO;
 import com.ufpr.byteassist_backend.dto.UserDTO;
 import com.ufpr.byteassist_backend.service.AuthService;
@@ -31,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "/register/{username:[a-z0-9._]{3,30}}")
-    public ResponseEntity<UserDTO> registerForm(@Validated(ValidationGroups.Create.class) @RequestBody RegistrationRequestDTO registrationRequest, @PathVariable String username) {
+    public ResponseEntity<UserDTO> registerForm(@Validated(ValidationGroups.Create.class) @RequestBody DetailedUserDTO registrationRequest, @PathVariable String username) {
         return authService.register(registrationRequest, username);
     }
 
