@@ -1,0 +1,11 @@
+# Esse arquivo é utilizado para armazenar variáveis de ambiente do projeto no backend
+
+## Database
+DATABASE_URL=wss://byteassist-database.fly.dev/
+DATABASE_NAMESPACE=dev
+DATABASE_NAME=public
+DATABASE_USER=byteassist-api
+DATABASE_PASSWORD=9g35IwQ*
+
+## JWT
+JWT_SECRET=Ihatejava
