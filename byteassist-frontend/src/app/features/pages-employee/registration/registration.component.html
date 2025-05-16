@@ -9,59 +9,60 @@
   
   <hr>
   <div>
+    <div class="container">
     <h2>{{ modoEdicao ? 'Editar Categoria' : 'Adicionar Nova Categoria' }}</h2>
 
-    <form #formCategoria="ngForm" (ngSubmit)="salvarCategoria()">
-      <div>
-        <label for="nomeCategoria">Nome:</label>
-        <input
-          type="text"
-          id="nomeCategoria"
-          name="nomeCategoria"
-          placeholder="Ex: Notebook, Monitor"
-          [(ngModel)]="categoriaAtual.nome"
-          required
-          #nomeInput="ngModel"
-          style="margin-left: 5px;"
-        >
-        <button type="submit" [disabled]="formCategoria.invalid || !categoriaAtual.nome?.trim()" style="margin-left: 10px;">
-          {{ modoEdicao ? 'Atualizar Categoria' : 'Adicionar Categoria' }}
-        </button>
-        <button type="button" *ngIf="modoEdicao" (click)="cancelarEdicao()" style="margin-left: 10px;">
-          Cancelar Edição
-        </button>
-        <br>
-        <div *ngIf="nomeInput.invalid && (nomeInput.dirty || nomeInput.touched)" style="color: red; margin-left: 45px;">
-          <small *ngIf="nomeInput.errors?.['required']">O nome da categoria é obrigatório.</small>
-        </div>
-      </div>
-    </form>
+<form #formCategoria="ngForm" (ngSubmit)="salvarCategoria()" class="form-categoria">
+  <label for="nomeCategoria"><strong>Nome:</strong></label>
+  <input
+    type="text"
+    id="nomeCategoria"
+    name="nomeCategoria"
+    placeholder="Ex: Notebook, Monitor"
+    [(ngModel)]="categoriaAtual.nome"
+    required
+    #nomeInput="ngModel"
+  >
+  
+  <button type="submit" 
+          [disabled]="formCategoria.invalid || !categoriaAtual.nome?.trim()" 
+          class="btn-editar">
+    {{ modoEdicao ? 'Atualizar Categoria' : 'Adicionar Categoria' }}
+  </button>
+  
+  <button type="button" 
+          *ngIf="modoEdicao" 
+          (click)="cancelarEdicao()" 
+          class="btn-cancelar">
+    Cancelar Edição
+  </button>
+
+  <div *ngIf="nomeInput.invalid && (nomeInput.dirty || nomeInput.touched)" class="erro-form">
+    <small *ngIf="nomeInput.errors?.['required']">O nome da categoria é obrigatório.</small>
+  </div>
+</form>
+
   </div>
 
   <hr style="margin-top: 20px;">
 
-  <div>
-    <h2>Categorias Cadastradas</h2>
-    <table border="1" style="width: 50%; border-collapse: collapse;">
-      <thead>
-        <tr>
-          <th style="text-align: center; padding: 5px;">Nome da Categoria</th>
-          <th style="text-align: center; padding: 5px;">Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let cat of listaCategorias">
-          <td style="padding: 5px;">{{ cat.nome }}</td>
-          <td style="text-align: center; padding: 5px;">
-            <button type="button" (click)="editarCategoria(cat)">Editar</button>
-            <button type="button" (click)="excluirCategoria(cat.id)" style="margin-left: 5px; color: rgb(255, 255, 255);">Excluir</button>
-          </td>
-        </tr>
-        <tr *ngIf="!listaCategorias || listaCategorias.length === 0">
-          <td colspan="2" style="text-align: center; padding: 10px; font-style: italic;">Nenhuma categoria cadastrada ainda.</td>
-        </tr>
-      </tbody>
-    </table>
+
+    <div class="budgets-list-container">
+  <h2>Categorias Cadastradas</h2>
+
+  <div *ngFor="let cat of listaCategorias" class="categoria-card">
+    <div class="categoria-nome">{{ cat.nome }}</div>
+    <div class="acoes">
+      <button type="button" class="btn-editar" (click)="editarCategoria(cat)">Editar</button>
+      <button type="button" class="btn-excluir" (click)="excluirCategoria(cat.id)">Excluir</button>
+    </div>
   </div>
+
+  <div *ngIf="!listaCategorias || listaCategorias.length === 0" style="text-align: center; font-style: italic; margin-top: 10px;">
+    Nenhuma categoria cadastrada ainda.
+  </div>
+</div>
+</div>
+
 
 </section>
