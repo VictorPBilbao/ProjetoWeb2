@@ -1,12 +1,13 @@
 package com.ufpr.byteassist_backend.service;
 
-import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.ufpr.byteassist_backend.dto.DetailedUserDTO;
 import com.ufpr.byteassist_backend.exception.EnhancedStatusException;
 import com.ufpr.byteassist_backend.model.User;
 import com.ufpr.byteassist_backend.repository.UserRepoInterface;
@@ -67,8 +68,8 @@ public class UserService {
         return ResponseEntity.noContent().build();
     }
     
-    public ResponseEntity<Iterator<User>> getAllUsers() {
-        Optional<Iterator<User>> users = userRepo.getAllUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        Optional<List<User>> users = userRepo.getAllUsers();
         if (users.isEmpty()) {
             throw new EnhancedStatusException(
                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -77,5 +78,17 @@ public class UserService {
             );
         }
         return ResponseEntity.ok(users.get());
+    }
+    
+    public ResponseEntity<DetailedUserDTO> getDetailedUser(String username) {
+        Optional<DetailedUserDTO> user = userRepo.getDetailedUser(username);
+        if (user.isEmpty()) {
+            throw new EnhancedStatusException(
+                HttpStatus.NOT_FOUND,
+                "User with username " + username + " not found",
+                "The user with the specified username does not exist"
+            );
+        }
+        return ResponseEntity.ok(user.get());
     }
 }

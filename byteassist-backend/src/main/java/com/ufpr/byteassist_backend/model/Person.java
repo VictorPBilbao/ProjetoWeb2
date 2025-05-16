@@ -3,10 +3,7 @@ package com.ufpr.byteassist_backend.model;
 import java.time.ZonedDateTime;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.surrealdb.RecordId;
-import com.ufpr.byteassist_backend.serializer.RecordIdDeserializer;
-import com.ufpr.byteassist_backend.serializer.RecordIdSerializer;
 import com.ufpr.byteassist_backend.serializer.SimpleDateDeserializer;
 import com.ufpr.byteassist_backend.validation.ValidationGroups;
 

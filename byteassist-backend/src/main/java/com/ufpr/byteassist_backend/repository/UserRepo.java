@@ -1,6 +1,9 @@
 package com.ufpr.byteassist_backend.repository;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -9,6 +12,7 @@ import com.surrealdb.RecordId;
 import com.surrealdb.Response;
 import com.surrealdb.Surreal;
 import com.surrealdb.UpType;
+import com.ufpr.byteassist_backend.dto.DetailedUserDTO;
 import com.ufpr.byteassist_backend.model.User;
 import com.ufpr.byteassist_backend.model.UserTime;
 
@@ -66,37 +70,42 @@ public class UserRepo implements UserRepoInterface {
     }
     
     @Override
-    public Optional<Iterator<User>> getAllUsers() {
+    public Optional<List<User>> getAllUsers() {
         try {
             Iterator<User> users = db.select(User.class, "User");
-            return Optional.ofNullable(users);
+            List<User> userList = new ArrayList<>();
+            users.forEachRemaining(userList::add);
+            return Optional.ofNullable(userList);
         } catch (Exception e) {
             return Optional.empty();
         }
     }
 
-    /**
-     * Verifica se um nome de usuário está disponível.
-     * 
-     * @param username Nome de usuário a ser verificado.
-     * @return true se o nome de usuário estiver disponível, false caso contrário.
-     */
     public boolean isUsernameAvailable(String username) {
         Optional<User> user = getUser(username);
         return user.isEmpty();
     }
 
-    /**
-     * Verifica se um e-mail está disponível.
-     * 
-     * @param email E-mail a ser verificado.
-     * @return true se o e-mail estiver disponível, false caso contrário.
-     */
     public boolean isEmailAvailable(String email) {
         String query = String.format("SELECT * FROM User WHERE email = '%s';", email);
         Response response = db.query(query);
 
         // Verifica se a consulta retornou resultados
         return response.take(0).getArray().len() == 0;
+    }
+    
+    public Optional<DetailedUserDTO> getDetailedUser(String username) {
+        try {
+            Response response = db.queryBind(
+                "SELECT * FROM User WHERE id.id() = $user FETCH person", 
+                Map.of("user", username)
+                );
+                // Response response = db.query("SELECT * FROM User WHERE id.id() = '" + username + "' FETCH person");
+                DetailedUserDTO dto = response.take(0).getArray().get(0).get(DetailedUserDTO.class);
+                System.out.println(dto);
+            return Optional.ofNullable(dto);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 }

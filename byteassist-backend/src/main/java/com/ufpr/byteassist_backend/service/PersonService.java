@@ -1,6 +1,6 @@
 package com.ufpr.byteassist_backend.service;
 
-import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -68,8 +68,8 @@ public class PersonService {
         return ResponseEntity.noContent().build();
     }
     
-    public ResponseEntity<Iterator<Person>> getAllPersons() {
-        Optional<Iterator<Person>> persons = personRepo.getAllPersons();
+    public ResponseEntity<List<Person>> getAllPersons() {
+        Optional<List<Person>> persons = personRepo.getAllPersons();
         if (persons.isEmpty()) {
             throw new EnhancedStatusException(
                 HttpStatus.INTERNAL_SERVER_ERROR,

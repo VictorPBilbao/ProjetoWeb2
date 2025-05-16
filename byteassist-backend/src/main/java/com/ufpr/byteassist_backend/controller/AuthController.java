@@ -1,18 +1,15 @@
 package com.ufpr.byteassist_backend.controller;
 
+import com.ufpr.byteassist_backend.dto.DetailedUserDTO;
 import com.ufpr.byteassist_backend.dto.RegistrationRequestDTO;
 import com.ufpr.byteassist_backend.dto.UserDTO;
 import com.ufpr.byteassist_backend.service.AuthService;
 import com.ufpr.byteassist_backend.validation.ValidationGroups;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
@@ -35,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "/register/{username:[a-z0-9._]{3,30}}")
-    public ResponseEntity<UserDTO> registerForm(@Validated(ValidationGroups.Create.class) @RequestBody RegistrationRequestDTO registrationRequest, @PathVariable String username) {
+    public ResponseEntity<UserDTO> registerForm(@Validated(ValidationGroups.Create.class) @RequestBody DetailedUserDTO registrationRequest, @PathVariable String username) {
         return authService.register(registrationRequest, username);
     }
 
