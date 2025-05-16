@@ -51,7 +51,7 @@ export class RegistrationComponent implements OnInit {
       if (index !== -1) {
         this.listaCategorias[index] = { ...this.categoriaAtual };
       }
-      alert('Categoria atualizada com sucesso! (simulado)');
+      alert('Categoria atualizada com sucesso!');
       this.resetarFormulario();
 
     } else {
@@ -61,7 +61,7 @@ export class RegistrationComponent implements OnInit {
         nome: this.categoriaAtual.nome.trim()
       };
       this.listaCategorias.push(novaCategoria);
-      alert('Categoria adicionada com sucesso! (simulado)');
+      alert('Categoria adicionada com sucesso!');
       this.resetarFormulario();
 
     }
@@ -75,14 +75,17 @@ export class RegistrationComponent implements OnInit {
 
   excluirCategoria(id: number | null): void {
     if (id === null) return;
-
-    if (confirm(`Tem certeza que deseja excluir a categoria com ID ${id}? Esta ação não pode ser desfeita.`)) {
+  
+    const categoria = this.listaCategorias.find(cat => cat.id === id);
+    if (!categoria) return;
+  
+    if (confirm(`Tem certeza que deseja excluir a categoria "${categoria.nome}" (ID: ${categoria.id})? Esta ação não pode ser desfeita.`)) {
       console.log('Excluindo categoria ID:', id);
       this.listaCategorias = this.listaCategorias.filter(cat => cat.id !== id);
       if(this.modoEdicao && this.categoriaAtual.id === id){
         this.resetarFormulario();
       }
-      alert('Categoria excluída com sucesso! (simulado)');
+      alert('Categoria excluída com sucesso!');
 
     }
   }
