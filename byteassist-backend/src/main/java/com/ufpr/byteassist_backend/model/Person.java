@@ -22,26 +22,26 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Person {
     @Null(message = "ID should not be provided in the request body, use the URL instead")
-    public RecordId id;
+    private RecordId id;
     
     @NotBlank(message = "CPF is required", groups = {ValidationGroups.Create.class, ValidationGroups.Update.class})
     @Pattern(regexp = "\\d{11}", message = "CPF must contain exactly 11 digits", groups = {ValidationGroups.Create.class, ValidationGroups.Update.class})
-    public String cpf;
+    private String cpf;
     
     @NotNull
     @Past(message = "Date of birth must be in the past")
     @JsonDeserialize(using = SimpleDateDeserializer.class)
-    public ZonedDateTime dob;
+    private ZonedDateTime dob;
     
     @NotBlank
     @Pattern(regexp = "^(Male|Female|Other)$", message = "Gender must be 'Male', 'Female', or 'Other'")
-    public String gender;
+    private String gender;
     
     @NotNull
     @Valid
-    public PersonAddress address;
+    private PersonAddress address;
     
     @NotNull 
     @Valid
-    public PersonName name;
+    private PersonName name;
 }

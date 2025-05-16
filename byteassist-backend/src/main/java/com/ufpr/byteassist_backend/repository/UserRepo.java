@@ -95,6 +95,7 @@ public class UserRepo implements UserRepoInterface {
     }
     
     public Optional<DetailedUserDTO> getDetailedUser(String username) {
+        System.out.println("Fetching detailed user for username: " + username);
         try {
             Response response = db.queryBind(
                 "SELECT * FROM User WHERE id.id() = $user FETCH person", 

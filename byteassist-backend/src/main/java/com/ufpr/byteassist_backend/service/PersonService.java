@@ -41,7 +41,7 @@ public class PersonService {
                 "The person could not be created because the username is already taken or there was a database error"
             );
         }
-        return ResponseEntity.ok(createdPerson.get());
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdPerson.get());
     }
     
     public ResponseEntity<Person> updatePerson(Person person, String username) {

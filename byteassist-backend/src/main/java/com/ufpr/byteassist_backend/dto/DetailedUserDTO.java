@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DetailedUserDTO {
-    @Null(groups = ValidationGroups.Update.class, message = "ID must not be provided in update requests")
+    @Null(message = "Do not provide an ID as it will be generated automatically")
     public RecordId id;
     
     @NotBlank(message = "Email cannot be blank")
@@ -33,11 +33,11 @@ public class DetailedUserDTO {
     @Null(groups = ValidationGroups.Update.class, message = "Password must not be provided in update requests")
     public String password;
     
-    @NotNull(message = "person cannot be blank")
+    @NotNull(message = "Person cannot be null")
     @Valid
     public Person person;
     
-    @Null(message = "Time must be null")
+    @Null(message = "Time must be null as it will be generated automatically")
     public UserTime time;
 
     public String role = "Client";

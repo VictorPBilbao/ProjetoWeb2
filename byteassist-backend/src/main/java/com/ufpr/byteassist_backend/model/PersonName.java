@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 public class PersonName {
     @NotBlank
     @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters")
-    public String first;
+    private String first;
     
     @NotBlank
     @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters")
-    public String last;
+    private String last;
 }

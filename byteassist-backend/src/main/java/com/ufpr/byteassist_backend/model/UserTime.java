@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserTime {
-    public ZonedDateTime createdAt;
-    public ZonedDateTime lastLoginAt;
-    public ZonedDateTime updatedAt;
+    private ZonedDateTime createdAt;
+    private ZonedDateTime lastLoginAt;
+    private ZonedDateTime updatedAt;
 }

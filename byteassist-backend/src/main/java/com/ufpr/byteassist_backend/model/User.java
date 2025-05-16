@@ -16,25 +16,25 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class User {
     @Null(groups = ValidationGroups.Update.class, message = "ID must not be provided in update requests")
-    public RecordId id;
+    private RecordId id;
     
     @NotBlank(message = "Email cannot be blank")
     @Email(message = "Email should be valid")
-    public String email;
+    private String email;
 
-    public boolean isActive = true;
+    private boolean isActive = true;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank(groups = ValidationGroups.Create.class, message = "Password cannot be blank when creating a user")
     @Null(groups = ValidationGroups.Update.class, message = "Password must not be provided in update requests")
-    public String password;
+    private String password;
 
     @Null(message = "Person ID must be null")
-    public RecordId person;
+    private RecordId person;
     
-    public UserTime time;
+    private UserTime time;
 
     @NotBlank(message = "Type cannot be blank")
     @jakarta.validation.constraints.Pattern(regexp = "^(Client|Admin)$", message = "Type must be either 'Client' or 'Admin'")
-    public String role = "Client";
+    private String role = "Client";
 }

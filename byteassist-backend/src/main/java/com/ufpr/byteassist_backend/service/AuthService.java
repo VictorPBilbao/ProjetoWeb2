@@ -93,7 +93,7 @@ public class AuthService {
                 createdUser.get().getTime().getLastLoginAt(),
                 token
             );
-            return new ResponseEntity<>(userDTO, HttpStatus.CREATED);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
         } else {
             throw new EnhancedStatusException(
                 HttpStatus.INTERNAL_SERVER_ERROR,
