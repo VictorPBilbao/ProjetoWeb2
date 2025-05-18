@@ -1,114 +1,113 @@
 <section class="solicitation-section">
-  
-<!-- Link para o Font Awesome -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <!-- Container branco centralizado -->
+  <div class="solicitation-wrapper">
+    
+    <!-- Link para o Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
+    <!-- Título com blob -->
     <div class="container-do-titulo">
+      <div class="blob-wrapper">
+        <img src="/images/blob.png" alt="Decorativo" class="titulo-blob" />
+      </div>
       <div class="titulo-wrapper">
-        <!-- Blob SVG como único elemento decorativo -->
-        <svg class="titulo-blob" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path fill="#030e6d" d="M46.9,-64.5C62.6,-53.2,78.3,-41.9,78.6,-28.4C79,-15,64.1,0.5,54.9,14.4C45.7,28.4,42.1,40.7,33.9,41.7C25.7,42.7,12.9,32.4,2.4,29.1C-8.1,25.8,-16.1,29.6,-30.2,30.4C-44.2,31.3,-64.2,29.4,-71.9,20C-79.5,10.7,-74.8,-6,-67,-19.2C-59.2,-32.3,-48.3,-41.9,-36.6,-54.5C-25,-67.1,-12.5,-82.7,1.6,-84.9C15.6,-87.1,31.3,-75.8,46.9,-64.5Z" transform="translate(100 100)"/>
-        </svg>
         <h1 class="solicitation-title">
           <i class="fas fa-plus-circle me-2"></i> SOLICITAÇÃO
         </h1>
       </div>
     </div>
 
-  <div class="solicitation-container">
-    <div class="solicitation-card">
-      <!-- Tabela de cabeçalho -->
-      <table class="solicitation-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>DATA</th>
-            <th>HORA</th>
-            <th>ESTADO</th>
-            <th>ORÇAMENTO</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ solicitation.id }}</td>
-            <td>{{ solicitation.data }}</td>
-            <td>{{ solicitation.hora }}</td>
-            <td><span class="status status-open">{{ solicitation.estado }}</span></td>
-            <td>
-              <input 
-                type="text"
-                [(ngModel)]="solicitation.orcamento"
-                class="budget-input"
-                placeholder="R$ 0,00"
-                readonly
-                [value]="solicitation.orcamento | currency: 'BRL' : 'symbol' : '1.2-2'"
-                aria-label="Orçamento" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- Container da solicitação -->
+    <div class="solicitation-container">
+      <div class="solicitation-card">
+        <!-- Tabela -->
+        <table class="solicitation-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>DATA</th>
+              <th>HORA</th>
+              <th>ESTADO</th>
+              <th>ORÇAMENTO</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ solicitation.id }}</td>
+              <td>{{ solicitation.data }}</td>
+              <td>{{ solicitation.hora }}</td>
+              <td><span class="status status-open">{{ solicitation.estado }}</span></td>
+              <td>
+                <input 
+                  type="text"
+                  [(ngModel)]="solicitation.orcamento"
+                  class="budget-input"
+                  placeholder="R$ 0,00"
+                  readonly
+                  [value]="solicitation.orcamento | currency: 'BRL' : 'symbol' : '1.2-2'"
+                  aria-label="Orçamento" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-      <!-- LINHA: Categoria, Marca, Equipamento e Cor -->
-      <div class="form-row">
+        <!-- LINHA de campos -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="categoria">CATEGORIA</label>
+            <select id="categoria" [(ngModel)]="solicitation.categoria" class="form-select" required>
+              <option value="">Selec...</option>
+              <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="marca">MARCA</label>
+            <select id="marca" [(ngModel)]="solicitation.marca" class="form-select" required>
+              <option value="">Sele...</option>
+              <option *ngFor="let brand of brands" [value]="brand">{{ brand }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="equipamento">EQUIPAMENTO</label>
+            <input id="equipamento" [(ngModel)]="solicitation.equipamento" class="form-control" placeholder="Digite o modelo..." type="text" required />
+          </div>
+
+          <div class="form-group">
+            <label for="cor">COR</label> 
+            <input id="cor" [(ngModel)]="solicitation.cor" class="form-control" placeholder="Digite a cor" type="text" required />
+          </div>
+        </div>
+
         <div class="form-group">
-          <label for="categoria">CATEGORIA</label>
-          <select id="categoria" [(ngModel)]="solicitation.categoria" class="form-select" required>
-            <option value="">Selec...</option>
-            <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+          <label for="servico">SERVIÇO</label>
+          <select id="servico" [(ngModel)]="solicitation.servico" class="form-select" required>
+            <option value="">Selecione...</option>
+            <option *ngFor="let service of services" [value]="service">{{ service }}</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label for="marca">MARCA</label>
-          <select id="marca" [(ngModel)]="solicitation.marca" class="form-select" required>
-            <option value="">Sele...</option>
-            <option *ngFor="let brand of brands" [value]="brand">{{ brand }}</option>
-          </select>
+          <label for="descricaoServico">DESCRIÇÃO DO SERVIÇO</label>
+          <textarea id="descricaoServico" [(ngModel)]="solicitation.descricaoServico" class="form-textarea" rows="2" placeholder="Descreva o serviço que será realizado..." required ></textarea>
         </div>
 
-        <!-- EQUIPAMENTO -->
         <div class="form-group">
-          <label for="equipamento">EQUIPAMENTO</label>
-          <input  id="equipamento"  [(ngModel)]="solicitation.equipamento" class="form-control" placeholder="Digite o modelo..." type="text" required />
+          <label for="defeitoRelatado">DEFEITO RELATADO</label>
+          <textarea id="defeitoRelatado" [(ngModel)]="solicitation.defeitoRelatado" class="form-textarea" rows="2" placeholder="Informe o defeito que foi identificado..." required ></textarea>
         </div>
 
-        <!-- COR -->
-        <div class="form-group">
-         <label for="cor">COR</label> 
-        <input id="cor" [(ngModel)]="solicitation.cor" class="form-control" placeholder="Digite a cor" type="text" required />
-        </div>
-
+        <!-- Botão -->
+        <button (click)="register()" class="register-button">
+          CADASTRAR
+        </button>
       </div>
-
-      <!-- Serviço -->
-      <div class="form-group">
-        <label for="servico">SERVIÇO</label>
-        <select id="servico" [(ngModel)]="solicitation.servico" class="form-select" required>
-          <option value="">Selecione...</option>
-          <option *ngFor="let service of services" [value]="service">{{ service }}</option>
-        </select>
-      </div>
-
-   <!-- Descrição do Serviço -->
-    <div class="form-group">
-      <label for="descricaoServico">DESCRIÇÃO DO SERVIÇO</label>
-      <textarea id="descricaoServico" [(ngModel)]="solicitation.descricaoServico" class="form-textarea" rows="2" placeholder="Descreva o serviço que será realizado..." required ></textarea>
     </div>
 
-<!-- Defeito Relatado -->
-    <div class="form-group">
-    <label for="defeitoRelatado">DEFEITO RELATADO</label>
-    <textarea id="defeitoRelatado" [(ngModel)]="solicitation.defeitoRelatado" class="form-textarea" rows="2" placeholder="Informe o defeito que foi identificado..." required ></textarea>
-    </div>
-
-      <!-- Botão -->
-      <button (click)="register()" class="register-button">
-        CADASTRAR
-      </button>
-
-    </div>
-  </div>
+  </div> 
 </section>
+
 
 
 
