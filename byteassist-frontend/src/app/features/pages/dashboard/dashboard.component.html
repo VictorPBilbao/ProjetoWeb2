@@ -1,32 +1,37 @@
 <div class="dashboard-wrapper">
-  <div class="dashboard-wave">
-  </div>
-  <div class="dashboard-container">
-    <h1 class="dashboard-title">DASHBOARD</h1>
-    <div class="charts-container">
-
-      <div class="charts-container">
-        <!-- Gráfico de Equipamentos -->
-        <div class="chart-card">
-          <h4>Meus Equipamentos</h4>
-          <canvas baseChart
-            [data]="equipamentosChartData"
-            [type]="pieChartType"
-            [options]="pieChartOptions">
-          </canvas>
-        </div>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <div class="dashboard-container-white">
     
-        <!-- Gráfico de Serviços -->
-        <div class="chart-card">
-          <h4>Meus Serviços</h4>
-          <canvas baseChart
-            [data]="servicosChartData"
-            [type]="pieChartType"
-            [options]="pieChartOptions">
-          </canvas>
-        </div>
+    <!-- Blob posicionado atrás do título -->
+    <div class="blob-wrapper">
+      <img src="/images/blob.png" alt="Decorativo" class="titulo-blob" />
+    </div>
+
+    <!-- Título com ícone -->
+    <h1 class="dashboard-title">
+      <i class="fas fa-chart-pie"></i> DASHBOARD
+    </h1>
+
+    <!-- Gráficos -->
+    <div class="charts-container">
+      <div class="chart-card">
+        <h4>Meus Equipamentos</h4>
+        <canvas baseChart
+          [data]="equipamentosChartData"
+          [type]="pieChartType"
+          [options]="pieChartOptions">
+        </canvas>
       </div>
+
+      <div class="chart-card">
+        <h4>Meus Serviços</h4>
+        <canvas baseChart
+          [data]="servicosChartData"
+          [type]="barChartType"
+          [options]="barChartOptions">
+        </canvas>
+      </div>
+
     </div>
   </div>
 </div>
-  
