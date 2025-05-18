@@ -1,7 +1,6 @@
 package com.ufpr.byteassist_backend.controller;
 
 import com.ufpr.byteassist_backend.dto.DetailedUserDTO;
-import com.ufpr.byteassist_backend.dto.RegistrationRequestDTO;
 import com.ufpr.byteassist_backend.dto.UserDTO;
 import com.ufpr.byteassist_backend.service.AuthService;
 import com.ufpr.byteassist_backend.validation.ValidationGroups;
