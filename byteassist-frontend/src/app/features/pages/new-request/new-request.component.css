@@ -1,3 +1,15 @@
+.solicitation-wrapper {
+  max-width: 900px;
+  margin: 1rem auto;
+  background-color: #ffffffde;
+  padding: 1rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
 .solicitation-section {
   width: 100%;
   padding: 20px 0;
@@ -5,41 +17,45 @@
 }
 
 .container-do-titulo {
-  display: flex;
-  justify-content: center;
-  margin: 0 auto;
   position: relative;
+  width: 100%;
   max-width: 650px;
+  height: 180px; /* ou o valor que acomode bem seu blob + título */
+  margin: 0 auto;
 }
 
-.titulo-wrapper {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
+.blob-wrapper {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 110%; /* ajuste conforme necessário */
+  z-index: 0;
 }
 
 .titulo-blob {
-  position: absolute;
-  top: 70%;
-  transform: translateY(-50%);
-  width:160%;
+  width: 100%;
   height: auto;
-  z-index: -1; /* Garante que fique atrás de tudo */
-  opacity: 1; /* Opcional: deixa o blob mais suave */
-  margin-left: -70px;
+}
+
+.titulo-wrapper {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  top: 10%;
 }
 
 .solicitation-title {
-  position: relative;
-  color: #ffffff; /* Cor do texto igual à do blob */
+  color: white;
   font-size: 2rem;
   font-weight: bold;
-  padding: 0 15px;
-  display: inline-block;
   margin: 0;
-  background: none; /* Remove qualquer fundo */
-  box-shadow: none; /* Remove sombra */
-  margin-top: 25px;
+  padding: 0 15px;
+  white-space: nowrap;
+  display: inline-block;
+  background: none;
+  box-shadow: none;
 }
 
 .solicitation-title i {
@@ -47,33 +63,32 @@
 }
 
 .solicitation-container {
-    max-width: 650px;
-    padding: 20px;
+    max-width: 800px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: white;
     margin: auto;
   }
 
   .solicitation-card {
-    border-radius: 12px;
-    padding: 25px;
+    border-radius: 20px;
+    padding: 15px;
     color: white; 
-    margin-top: 100px; /*distancia entre o texto e a tabela*/
+    margin-top: -20px;
   }
   
   .solicitation-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    border-radius: 8px;
+    border-radius: 20px;
     overflow: hidden;
     margin-bottom: 10px;
     background-color: #9fbcec2a;
-    color: white; 
+    color: rgb(0, 0, 0); 
   }
   
   .solicitation-table th {
-    background-color: #030e6d;
+    background-color: #0c6bf8;
     color: white;
     padding: 12px 15px;
     text-align: left;
@@ -81,12 +96,12 @@
   
   .solicitation-table td {
     padding: 12px 15px;
-    color: white;
+    color: rgb(0, 0, 0);
   }
   
   .status {
     padding: 4px 10px;
-    border-radius: 12px;
+    border-radius: 20px;
     font-weight: 500;
     font-size: 0.85rem;
     font-weight: bold;
@@ -99,19 +114,19 @@
   
   .budget-input {
     padding: 4px 5px;
-    border-radius: 12px;
+    border-radius: 20px;
     font-weight: 200;
     font-size: 0.85rem;
     width: 70px;
     margin-top: 8px;
     margin-left: 30px;
     border: none;
-  background-color: #efeff7c2;
+    background-color: #efeff7c2;
   }
   
   .form-section {
     margin-top: 20px;
-    color: white;
+    color: rgb(0, 0, 0);
   }
   
   .form-row {
@@ -123,8 +138,8 @@
   .form-select, .form-textarea {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ffffff;
-    border-radius: 12px;
+    border: 1px solid #000000;
+    border-radius: 20px;
     background-color: #fff;
     /*color: white;*/
   }
@@ -136,19 +151,20 @@
   
   .register-button {
     background-color: #28a745;
-    color: white;
+    color: rgb(255, 255, 255);
     border: none;
     padding: 12px 20px;
-    border-radius: 12px;
+    border-radius: 20px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     width: 30%;
     /*margin-top: 10px;*/
-    margin: 20px auto; 
+    margin: 20px auto 0 auto;
     display: block; 
     transition: background-color 0.3s;
     align-items: center;
+    font-weight: bold;
   }
   
   .register-button:hover {
@@ -159,14 +175,14 @@
     display: block;
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: #ffffff;
+    color: #000000;
   }
   
   .form-control {
     width: 100%;
     font-size: 1rem;
     border: 1px solid #ccc;
-    border-radius: 12px;
+    border-radius: 20px;
     transition: border-color 0.3s, box-shadow 0.3s;
     outline: none;
     padding-top: 12px;
