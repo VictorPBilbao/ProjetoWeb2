@@ -15,10 +15,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Task {
-    @Null(message = "ID should not be provided in the request body, use the URL instead")
+    @Null(message = "ID should not be provided in the request body")
     private RecordId id;
     
-    @NotNull(message = "Asignee ID cannot be null")
     private RecordId asignee;
     
     @NotNull(message = "Creator ID cannot be null")
@@ -33,7 +32,7 @@ public class Task {
     private String status;
     
     @NotBlank(message = "Description cannot be blank")
-    private String description;
+    private String summary;
     
     @NotBlank(message = "Title cannot be blank")
     private String title;

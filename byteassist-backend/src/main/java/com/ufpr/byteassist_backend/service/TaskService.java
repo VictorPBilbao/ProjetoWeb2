@@ -30,4 +30,28 @@ public class TaskService {
         }
         return ResponseEntity.ok(tasks.get());
     }
+    
+    public ResponseEntity<Task> getTaskById(String id) {
+        Optional<Task> task = taskRepo.getTaskById(id);
+        if (task.isEmpty()) {
+            throw new EnhancedStatusException(
+                HttpStatus.NOT_FOUND,
+                "Task not found",
+                "No task found with the provided ID"
+            );
+        }
+        return ResponseEntity.ok(task.get());
+    }
+    
+    public ResponseEntity<Task> createTask(Task task) {
+        Optional<Task> createdTask = taskRepo.createTask(task);
+        if (createdTask.isEmpty()) {
+            throw new EnhancedStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Error creating task",
+                "There was a problem accessing the database to create the task"
+            );
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdTask.get());
+    }
 }

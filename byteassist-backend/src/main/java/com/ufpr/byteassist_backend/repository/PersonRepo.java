@@ -19,22 +19,12 @@ import com.ufpr.byteassist_backend.service.DatabaseService;
  */
 @Repository
 public class PersonRepo implements PersonRepoInterface {
-    // Instância do banco de dados SurrealDB utilizada para as operações
     private final Surreal db;
 
-    /**
-     * Construtor que recebe o serviço de banco de dados e inicializa a instância do SurrealDB.
-     * @param databaseService Serviço que fornece a instância do banco de dados.
-     */
     public PersonRepo(DatabaseService databaseService) {
         this.db = databaseService.getDatabase();
     }
     
-    /**
-     * Busca uma pessoa pelo username.
-     * @param username Nome de usuário da pessoa.
-     * @return Optional contendo a pessoa encontrada, ou vazio se não encontrada.
-     */
     @Override
     public Optional<Person> getPerson(String username) {
         try {
@@ -46,12 +36,6 @@ public class PersonRepo implements PersonRepoInterface {
         }
     }
     
-    /**
-     * Cria um novo registro de pessoa no banco de dados.
-     * @param person Objeto Person a ser criado.
-     * @param username Nome de usuário associado à pessoa.
-     * @return Optional contendo a pessoa criada, ou vazio em caso de erro.
-     */
     @Override
     public Optional<Person> createPerson(Person person, String username) {
         try {
@@ -65,12 +49,6 @@ public class PersonRepo implements PersonRepoInterface {
         }
     }
 
-    /**
-     * Atualiza os dados de uma pessoa existente no banco de dados.
-     * @param person Objeto Person com os dados atualizados.
-     * @param username Nome de usuário da pessoa a ser atualizada.
-     * @return Optional contendo a pessoa atualizada, ou vazio em caso de erro.
-     */
     @Override
     public Optional<Person> updatePerson(Person person, String username) {
         try {
@@ -82,11 +60,6 @@ public class PersonRepo implements PersonRepoInterface {
         }
     }
     
-    /**
-     * Remove uma pessoa do banco de dados pelo username.
-     * @param username Nome de usuário da pessoa a ser removida.
-     * @return true se a exclusão foi bem-sucedida, false caso contrário.
-     */
     @Override
     public Boolean deletePerson(String username) {
         try {
@@ -99,10 +72,6 @@ public class PersonRepo implements PersonRepoInterface {
         }
     }
     
-    /**
-     * Recupera todas as pessoas cadastradas no banco de dados.
-     * @return Optional contendo a lista de pessoas, ou vazio em caso de erro.
-     */
     @Override
     public Optional<List<Person>> getAllPersons() {
         try {

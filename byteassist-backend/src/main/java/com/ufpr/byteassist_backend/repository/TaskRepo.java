@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
+import com.surrealdb.RecordId;
 import com.surrealdb.Response;
 import com.surrealdb.Surreal;
 import com.ufpr.byteassist_backend.model.Task;
@@ -14,15 +16,6 @@ import com.ufpr.byteassist_backend.service.DatabaseService;
 
 @Repository
 public class TaskRepo implements TaskRepoInterface {
-
-    // Implement methods from TaskRepoInterface here
-    // For example:
-    // @Override
-    // public Optional<Task> getTaskById(RecordId id) {
-    //     // Implementation logic
-    // }
-
-    // Add any additional methods or logic needed for the Task repository
     private final Surreal db;
     
     public TaskRepo(DatabaseService databaseService) {
@@ -43,8 +36,6 @@ public class TaskRepo implements TaskRepoInterface {
                 Task task = taskRecord.get(Task.class);
                 tasks.add(task);
             }
-            System.out.println("Retrieved tasks for user: " + username + " as " + type);
-            System.out.println("Tasks: " + tasks);
             return Optional.of(tasks);
         } catch (Exception e) {
             // Handle exceptions and return an empty Optional in case of errors
@@ -52,4 +43,23 @@ public class TaskRepo implements TaskRepoInterface {
         }
     }
     
+    @Override
+    public Optional<Task> getTaskById(String id) {
+        try {
+            return db.select(Task.class, new RecordId("Task", id));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    
+    @Override
+    public Optional<Task> createTask(Task task) {
+        try {
+            System.out.println(task);
+            System.out.println(UUID.randomUUID().toString().replace("-", "").substring(0, 10).toUpperCase());
+            return Optional.ofNullable(db.create(Task.class, new RecordId("Task", UUID.randomUUID().toString().replace("-", "").substring(0, 7).toUpperCase()), task));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
 }
