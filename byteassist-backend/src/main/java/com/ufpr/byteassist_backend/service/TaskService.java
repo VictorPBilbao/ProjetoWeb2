@@ -1,0 +1,33 @@
+package com.ufpr.byteassist_backend.service;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.ufpr.byteassist_backend.exception.EnhancedStatusException;
+import com.ufpr.byteassist_backend.model.Task;
+import com.ufpr.byteassist_backend.repository.TaskRepoInterface;
+
+@Service
+public class TaskService {
+    private final TaskRepoInterface taskRepo;
+
+    public TaskService(TaskRepoInterface taskRepo) {
+        this.taskRepo = taskRepo;
+    }
+    
+    public ResponseEntity<List<Task>> getTasksByUsername(String username, String type) {
+        Optional<List<Task>> tasks = taskRepo.getTasksByUsername(username, type);
+        if (tasks.isEmpty()) {
+            throw new EnhancedStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Error retrieving all tasks from database",
+                "There was a problem accessing the database to retrieve the list of tasks"
+            );
+        }
+        return ResponseEntity.ok(tasks.get());
+    }
+}
