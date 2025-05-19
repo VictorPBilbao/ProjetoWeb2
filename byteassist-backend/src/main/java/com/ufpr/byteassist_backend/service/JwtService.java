@@ -13,10 +13,11 @@ public class JwtService {
     private static final String SECRET_KEY = dotenv.get("JWT_SECRET");
     private static final long EXPIRATION_TIME = 86400000; // 1 day in milliseconds
 
-    public String generateToken(String userId, String username) {
+    public String generateToken(String userId, String username, String role) {
         return JWT.create()
                 .withSubject(userId)
                 .withClaim("username", username)
+                .withClaim("role", role)
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(Algorithm.HMAC256(SECRET_KEY));
