@@ -13,10 +13,6 @@ import com.surrealdb.UpType;
 import com.ufpr.byteassist_backend.model.Person;
 import com.ufpr.byteassist_backend.service.DatabaseService;
 
-/**
- * Repositório responsável por operações de persistência relacionadas à entidade Person.
- * Implementa a interface PersonRepoInterface.
- */
 @Repository
 public class PersonRepo implements PersonRepoInterface {
     private final Surreal db;
