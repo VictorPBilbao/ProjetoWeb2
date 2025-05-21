@@ -3,6 +3,7 @@ package com.ufpr.byteassist_backend.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ public class UserController {
     }
     
     @GetMapping("/{username:[a-z0-9._]{3,30}}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> getUser(@PathVariable String username) {
         return userService.getUser(username);
     }
@@ -53,6 +55,7 @@ public class UserController {
     }
     
     @GetMapping("detailed/{username:[a-z0-9._]{3,30}}")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
     public ResponseEntity<DetailedUserDTO> getDetailedUser(@PathVariable String username) {
         return userService.getDetailedUser(username);
     }
