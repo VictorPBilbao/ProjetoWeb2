@@ -1,6 +1,5 @@
 package com.ufpr.byteassist_backend.model;
 
-import java.util.Optional;
 
 import com.surrealdb.RecordId;
 

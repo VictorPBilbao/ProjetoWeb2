@@ -1,11 +1,5 @@
 package com.ufpr.byteassist_backend.controller;
 
-import org.springframework.web.bind.annotation.RestController;
-
-import com.surrealdb.Surreal;
-import com.ufpr.byteassist_backend.model.User;
-import com.ufpr.byteassist_backend.service.DatabaseService;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -14,6 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.surrealdb.Surreal;
+import com.ufpr.byteassist_backend.model.User;
+import com.ufpr.byteassist_backend.service.DatabaseService;
 
 @RestController
 public class GreetUserController {

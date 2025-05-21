@@ -1,11 +1,13 @@
 package com.ufpr.byteassist_backend.service;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import io.github.cdimascio.dotenv.Dotenv;
+import java.util.Date;
+
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+
+import io.github.cdimascio.dotenv.Dotenv;
 
 @Service
 public class JwtService {

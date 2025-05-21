@@ -1,5 +1,12 @@
 package com.ufpr.byteassist_backend.service;
 
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.ufpr.byteassist_backend.dto.DetailedUserDTO;
 import com.ufpr.byteassist_backend.dto.UserDTO;
 import com.ufpr.byteassist_backend.exception.EnhancedStatusException;
@@ -7,13 +14,6 @@ import com.ufpr.byteassist_backend.model.User;
 import com.ufpr.byteassist_backend.repository.PersonRepo;
 import com.ufpr.byteassist_backend.repository.UpdateTimeRepo;
 import com.ufpr.byteassist_backend.repository.UserRepo;
-
-import java.util.Optional;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {

@@ -1,5 +1,6 @@
 package com.ufpr.byteassist_backend.repository;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,9 +16,6 @@ import com.surrealdb.UpType;
 import com.ufpr.byteassist_backend.dto.DetailedUserDTO;
 import com.ufpr.byteassist_backend.model.User;
 import com.ufpr.byteassist_backend.model.UserTime;
-
-import java.time.ZonedDateTime;
-
 import com.ufpr.byteassist_backend.service.DatabaseService;
 
 /**

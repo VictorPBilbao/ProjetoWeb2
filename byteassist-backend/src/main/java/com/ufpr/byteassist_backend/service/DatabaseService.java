@@ -1,12 +1,14 @@
 package com.ufpr.byteassist_backend.service;
 
-import com.surrealdb.Surreal;
-import com.surrealdb.signin.Database;
-import io.github.cdimascio.dotenv.Dotenv;
-import org.springframework.stereotype.Service;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+
+import org.springframework.stereotype.Service;
+
+import com.surrealdb.Surreal;
+import com.surrealdb.signin.Database;
+
+import io.github.cdimascio.dotenv.Dotenv;
 
 @Service
 public class DatabaseService {

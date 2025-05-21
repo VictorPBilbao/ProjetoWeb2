@@ -1,10 +1,11 @@
 package com.ufpr.byteassist_backend.serializer;
 
+import java.io.IOException;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.surrealdb.RecordId;
-import java.io.IOException;
 
 public class RecordIdDeserializer extends JsonDeserializer<RecordId> {
     @Override
