@@ -3,6 +3,7 @@ package com.ufpr.byteassist_backend.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,27 +29,33 @@ public class PersonController {
     }
     
     @GetMapping("/{username:[a-z0-9._]{3,30}}")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
     public ResponseEntity<Person> getPerson(@PathVariable String username) {
         return personService.getPerson(username);
     }
     
+    @GetMapping()
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Person>> getAllPersons() {
+        return personService.getAllPersons();
+    }
+    
     @PostMapping("/{username:[a-z0-9._]{3,30}}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Person> createPerson(@PathVariable String username, @Validated(ValidationGroups.Create.class) @RequestBody Person person) {
         return personService.createPerson(person, username);
     }
     
     @PutMapping("/{username:[a-z0-9._]{3,30}}")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
     public ResponseEntity<Person> updatePerson(@PathVariable String username, @Validated(ValidationGroups.Update.class) @RequestBody Person person) {
         return personService.updatePerson(person, username);
     }
     
     @DeleteMapping("/{username:[a-z0-9._]{3,30}}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletePerson(@PathVariable String username) {
         return personService.deletePerson(username);
     }
     
-    @GetMapping()
-    public ResponseEntity<List<Person>> getAllPersons() {
-        return personService.getAllPersons();
-    }
 }

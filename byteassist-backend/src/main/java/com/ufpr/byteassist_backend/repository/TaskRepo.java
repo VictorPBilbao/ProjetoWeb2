@@ -1,5 +1,6 @@
 package com.ufpr.byteassist_backend.repository;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,10 @@ import org.springframework.stereotype.Repository;
 import com.surrealdb.RecordId;
 import com.surrealdb.Response;
 import com.surrealdb.Surreal;
+import com.surrealdb.UpType;
 import com.ufpr.byteassist_backend.model.Task;
+import com.ufpr.byteassist_backend.model.User;
+import com.ufpr.byteassist_backend.model.UserTime;
 import com.ufpr.byteassist_backend.service.DatabaseService;
 
 @Repository
@@ -55,10 +59,31 @@ public class TaskRepo implements TaskRepoInterface {
     @Override
     public Optional<Task> createTask(Task task) {
         try {
-            System.out.println(task);
-            System.out.println(UUID.randomUUID().toString().replace("-", "").substring(0, 10).toUpperCase());
-            return Optional.ofNullable(db.create(Task.class, new RecordId("Task", UUID.randomUUID().toString().replace("-", "").substring(0, 7).toUpperCase()), task));
+            return Optional.ofNullable(db.create(Task.class, new RecordId("Task", "BYTE-" + UUID.randomUUID().toString().replace("-", "").substring(0, 5).toUpperCase()), task));
         } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    
+    @Override
+    public Boolean deleteTask(String id) {
+        try {
+            // Remove o registro da tarefa do banco de dados
+            db.delete(new RecordId("Task", id));
+            return true;
+        } catch (Exception e) {
+            // Em caso de erro, retorna false
+            return false;
+        }
+    }
+
+    @Override
+    public Optional<Task> updateTask(Task task, String id) {
+        try {
+            // Atualiza apenas os campos fornecidos (MERGE) no registro da tarefa
+            return Optional.ofNullable(db.update(Task.class, new RecordId("Task", id), UpType.MERGE, task));
+        } catch (Exception e) {
+            // Em caso de erro, retorna Optional vazio
             return Optional.empty();
         }
     }

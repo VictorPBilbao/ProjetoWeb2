@@ -29,29 +29,9 @@ public class UserController {
     }
     
     @GetMapping("/{username:[a-z0-9._]{3,30}}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
     public ResponseEntity<User> getUser(@PathVariable String username) {
         return userService.getUser(username);
-    }
-    
-    @PostMapping("/{username:[a-z0-9._]{3,30}}")
-    public ResponseEntity<User> createUser(@Validated(ValidationGroups.Create.class) @RequestBody User user, @PathVariable String username) {
-        return userService.createUser(user, username);
-    }
-    
-    @PutMapping("/{username:[a-z0-9._]{3,30}}")
-    public ResponseEntity<User> updateUser(@Validated(ValidationGroups.Update.class) @RequestBody User user, @PathVariable String username) {
-        return userService.updateUser(user, username);
-    }
-    
-    @DeleteMapping("/{username:[a-z0-9._]{3,30}}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String username) {
-        return userService.deleteUser(username);
-    }
-    
-    @GetMapping()
-    public ResponseEntity<List<User>> getAllUsers() {
-        return userService.getAllUsers();
     }
     
     @GetMapping("detailed/{username:[a-z0-9._]{3,30}}")
@@ -59,4 +39,29 @@ public class UserController {
     public ResponseEntity<DetailedUserDTO> getDetailedUser(@PathVariable String username) {
         return userService.getDetailedUser(username);
     }
+    
+    @GetMapping()
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<User>> getAllUsers() {
+        return userService.getAllUsers();
+    }
+    
+    @PostMapping("/{username:[a-z0-9._]{3,30}}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<User> createUser(@Validated(ValidationGroups.Create.class) @RequestBody User user, @PathVariable String username) {
+        return userService.createUser(user, username);
+    }
+    
+    @PutMapping("/{username:[a-z0-9._]{3,30}}")
+    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
+    public ResponseEntity<User> updateUser(@Validated(ValidationGroups.Update.class) @RequestBody User user, @PathVariable String username) {
+        return userService.updateUser(user, username);
+    }
+    
+    @DeleteMapping("/{username:[a-z0-9._]{3,30}}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteUser(@PathVariable String username) {
+        return userService.deleteUser(username);
+    }
+    
 }

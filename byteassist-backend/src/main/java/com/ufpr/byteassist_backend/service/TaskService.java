@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.surrealdb.RecordId;
 import com.ufpr.byteassist_backend.exception.EnhancedStatusException;
 import com.ufpr.byteassist_backend.model.Task;
 import com.ufpr.byteassist_backend.repository.TaskRepoInterface;
@@ -14,11 +15,13 @@ import com.ufpr.byteassist_backend.repository.TaskRepoInterface;
 @Service
 public class TaskService {
     private final TaskRepoInterface taskRepo;
+    private final UserService userService;
 
-    public TaskService(TaskRepoInterface taskRepo) {
+    public TaskService(TaskRepoInterface taskRepo, UserService userService) {
         this.taskRepo = taskRepo;
+        this.userService = userService;
     }
-    
+
     public ResponseEntity<List<Task>> getTasksByUsername(String username, String type) {
         Optional<List<Task>> tasks = taskRepo.getTasksByUsername(username, type);
         if (tasks.isEmpty()) {
@@ -53,5 +56,34 @@ public class TaskService {
             );
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTask.get());
+    }
+
+    public ResponseEntity<Task> updateTask(String id, Task task) {
+        Task updatedTask = taskRepo.updateTask(task, id).orElseThrow(
+            () -> new EnhancedStatusException(
+                HttpStatus.NOT_FOUND,
+                "Task not found",
+                "No task found with the provided ID"
+            ));
+        return ResponseEntity.ok(updatedTask);
+    }
+    
+    public boolean isTaskCreator(String taskId, String username) {
+        Task task = taskRepo.getTaskById(taskId).orElseThrow(
+            () -> new EnhancedStatusException(
+                HttpStatus.NOT_FOUND,
+                "Task not found",
+                "No task found with the provided ID"
+            )
+        );
+        if (task.getCreator().getId().equals(new RecordId("Task", username).getId())) {
+            return true;
+        } else {
+            throw new EnhancedStatusException(
+            HttpStatus.FORBIDDEN,
+            "Forbidden",
+            "You are not the creator of this task"
+            );
+        }
     }
 }

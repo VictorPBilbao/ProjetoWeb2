@@ -18,28 +18,14 @@ import com.ufpr.byteassist_backend.model.User;
 import com.ufpr.byteassist_backend.model.UserTime;
 import com.ufpr.byteassist_backend.service.DatabaseService;
 
-/**
- * Repositório responsável por operações de persistência relacionadas à entidade User.
- * Implementa a interface UserRepoInterface.
- */
 @Repository
 public class UserRepo implements UserRepoInterface {
-    // Instância do banco de dados SurrealDB utilizada para as operações
     private final Surreal db;
 
-    /**
-     * Construtor que recebe o serviço de banco de dados e inicializa a instância do SurrealDB.
-     * @param databaseService Serviço que fornece a instância do banco de dados.
-     */
     public UserRepo(DatabaseService databaseService) {
         this.db = databaseService.getDatabase();
     }
     
-    /**
-     * Busca um usuário pelo username.
-     * @param username Nome de usuário do usuário.
-     * @return Optional contendo o usuário encontrado, ou vazio se não encontrado.
-     */
     @Override
     public Optional<User> getUser(String username) {
         try {
@@ -51,12 +37,6 @@ public class UserRepo implements UserRepoInterface {
         }
     }
     
-    /**
-     * Cria um novo registro de usuário no banco de dados.
-     * @param user Objeto User a ser criado.
-     * @param username Nome de usuário associado ao usuário.
-     * @return Optional contendo o usuário criado, ou vazio em caso de erro.
-     */
     @Override
     public Optional<User> createUser(User user, String username) {
         // Define a referência à entidade Person relacionada ao usuário
@@ -70,12 +50,6 @@ public class UserRepo implements UserRepoInterface {
         }
     }
     
-    /**
-     * Atualiza os dados de um usuário existente no banco de dados.
-     * @param user Objeto User com os dados atualizados.
-     * @param username Nome de usuário do usuário a ser atualizado.
-     * @return Optional contendo o usuário atualizado, ou vazio em caso de erro.
-     */
     @Override
     public Optional<User> updateUser(User user, String username) {
         // Atualiza o campo de tempo do usuário para o momento atual
@@ -90,11 +64,6 @@ public class UserRepo implements UserRepoInterface {
         }
     }
     
-    /**
-     * Remove um usuário do banco de dados pelo username.
-     * @param username Nome de usuário do usuário a ser removido.
-     * @return true se a exclusão foi bem-sucedida, false caso contrário.
-     */
     @Override
     public Boolean deleteUser(String username) {
         try {
@@ -107,10 +76,6 @@ public class UserRepo implements UserRepoInterface {
         }
     }
     
-    /**
-     * Recupera todos os usuários cadastrados no banco de dados.
-     * @return Optional contendo a lista de usuários, ou vazio em caso de erro.
-     */
     @Override
     public Optional<List<User>> getAllUsers() {
         try {
@@ -126,22 +91,12 @@ public class UserRepo implements UserRepoInterface {
         }
     }
 
-    /**
-     * Verifica se um nome de usuário está disponível.
-     * @param username Nome de usuário a ser verificado.
-     * @return true se o nome de usuário estiver disponível, false caso contrário.
-     */
     public boolean isUsernameAvailable(String username) {
         Optional<User> user = getUser(username);
         // Retorna true se não existir usuário com o username informado
         return user.isEmpty();
     }
 
-    /**
-     * Verifica se um e-mail está disponível.
-     * @param email E-mail a ser verificado.
-     * @return true se o e-mail estiver disponível, false caso contrário.
-     */
     public boolean isEmailAvailable(String email) {
         // Monta a query para buscar usuários com o e-mail informado
         String query = String.format("SELECT * FROM User WHERE email = '%s';", email);
@@ -151,11 +106,6 @@ public class UserRepo implements UserRepoInterface {
         return response.take(0).getArray().len() == 0;
     }
     
-    /**
-     * Busca um usuário detalhado (incluindo informações da pessoa associada) pelo username.
-     * @param username Nome de usuário do usuário.
-     * @return Optional contendo o DTO detalhado do usuário, ou vazio em caso de erro.
-     */
     public Optional<DetailedUserDTO> getDetailedUser(String username) {
         System.out.println("Fetching detailed user for username: " + username);
         try {

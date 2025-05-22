@@ -9,4 +9,6 @@ public interface TaskRepoInterface {
     public Optional<List<Task>> getTasksByUsername(String username, String type);
     public Optional<Task> getTaskById(String id);
     public Optional<Task> createTask(Task task);
+    public Boolean deleteTask(String id);
+    public Optional<Task> updateTask(Task task, String id);
 }
