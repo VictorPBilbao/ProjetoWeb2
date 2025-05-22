@@ -15,11 +15,9 @@ import com.ufpr.byteassist_backend.repository.TaskRepoInterface;
 @Service
 public class TaskService {
     private final TaskRepoInterface taskRepo;
-    private final UserService userService;
 
-    public TaskService(TaskRepoInterface taskRepo, UserService userService) {
+    public TaskService(TaskRepoInterface taskRepo) {
         this.taskRepo = taskRepo;
-        this.userService = userService;
     }
 
     public ResponseEntity<List<Task>> getTasksByUsername(String username, String type) {
