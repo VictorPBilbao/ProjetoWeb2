@@ -122,6 +122,15 @@ export class UserService {
     );
   }
 
+  getUser(): User {
+    this.getInfoUserV2().subscribe((user: User) => {
+      console.log('user', user);
+      return user;
+    });
+
+    return new User();
+  }
+
   updateUser(user: User): Observable<any> {
     const body = new HttpParams()
       .set('user', JSON.stringify(user));

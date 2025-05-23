@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth/auth.service';
 import { UserService } from '../../services/user/user.service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { User } from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-menu-sidebar',
@@ -15,7 +16,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './menu-sidebar.component.css'
 })
 export class MenuSidebarComponent {
-  userName: string = 'Victor Bilbao';
+  user: User | null = null;
   searchTerm : string = '';
   sidebarVisible: boolean = true;
   clientLinksVisible: boolean = false;
@@ -29,6 +30,9 @@ export class MenuSidebarComponent {
 
   ngOnInit(): void {
     this.checkScreenSize(); // Verifica o tamanho da tela ao carregar o componente
+
+    this.user = this.userService.getUser(); // Busca o usuário
+
     this.clientLinksVisible =
       this.userService.getUserRule() === 'RULE_CLIENT';
 
@@ -56,8 +60,8 @@ export class MenuSidebarComponent {
   }
 
   getUserInitals(): string {
-    if (!this.userName) return '';
-    return this.userName
+    if (!this.user?.fullName) return '';
+    return this.user.fullName
       .split(' ')
       .map(name => name[0])
       .join('')
