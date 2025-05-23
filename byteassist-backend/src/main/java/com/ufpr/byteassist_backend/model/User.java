@@ -1,5 +1,12 @@
 package com.ufpr.byteassist_backend.model;
 
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.surrealdb.RecordId;
 import com.ufpr.byteassist_backend.validation.ValidationGroups;
@@ -14,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User implements UserDetails {
     @Null(groups = ValidationGroups.Update.class, message = "ID must not be provided in update requests")
     private RecordId id;
     
@@ -35,6 +42,34 @@ public class User {
     private UserTime time;
 
     @NotBlank(message = "Type cannot be blank")
-    @jakarta.validation.constraints.Pattern(regexp = "^(Client|Admin)$", message = "Type must be either 'Client' or 'Admin'")
+    @jakarta.validation.constraints.Pattern(regexp = "^(Client|Admin|Manager|Employee)$", message = "Type must be either 'Client' or 'Admin'")
     private String role = "Client";
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return switch (role) {
+            case "Admin" -> List.of(
+                new SimpleGrantedAuthority("ROLE_ADMIN"),
+                new SimpleGrantedAuthority("ROLE_MANAGER"),
+                new SimpleGrantedAuthority("ROLE_EMPLOYEE"),
+                new SimpleGrantedAuthority("ROLE_CLIENT")
+            );
+            case "Manager" -> List.of(
+                new SimpleGrantedAuthority("ROLE_MANAGER"),
+                new SimpleGrantedAuthority("ROLE_EMPLOYEE"),
+                new SimpleGrantedAuthority("ROLE_CLIENT")
+            );
+            case "Employee" -> List.of(
+                new SimpleGrantedAuthority("ROLE_EMPLOYEE"),
+                new SimpleGrantedAuthority("ROLE_CLIENT")
+            );
+            case "Client" -> List.of(new SimpleGrantedAuthority("ROLE_CLIENT"));
+            default -> throw new IllegalStateException("Unexpected value: " + role);
+        };
+    }
+
+    @Override
+    public String getUsername() {
+        return id.getId().toString();
+    }
 }

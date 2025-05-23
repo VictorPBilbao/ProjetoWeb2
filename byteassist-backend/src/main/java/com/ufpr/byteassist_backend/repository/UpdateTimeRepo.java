@@ -20,11 +20,6 @@ public class UpdateTimeRepo {
         this.db = databaseService.getDatabase();
     }
 
-    /**
-     * Atualiza o campo de última data de login (time.last_login_at) para o horário atual.
-     * 
-     * @param id Identificador do registro a ser atualizado.
-     */
     public void updateTimeLastLogin(String id) {
         try {
             // Executa a consulta para atualizar o campo de última data de login

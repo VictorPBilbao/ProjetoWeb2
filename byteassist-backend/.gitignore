@@ -34,3 +34,4 @@ build/
 
 ### Environments ###
 .env
+env
