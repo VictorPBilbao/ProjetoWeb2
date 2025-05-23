@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,12 +29,18 @@ public class UserController {
         this.userService = userService;
     }
     
+    @GetMapping("/me")
+    public ResponseEntity<User> getCurrentUser() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(user);
+    }
+    
     @GetMapping("/{username:[a-z0-9._]{3,30}}")
     @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
     public ResponseEntity<User> getUser(@PathVariable String username) {
         return userService.getUser(username);
     }
-    
+
     @GetMapping("detailed/{username:[a-z0-9._]{3,30}}")
     @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
     public ResponseEntity<DetailedUserDTO> getDetailedUser(@PathVariable String username) {
