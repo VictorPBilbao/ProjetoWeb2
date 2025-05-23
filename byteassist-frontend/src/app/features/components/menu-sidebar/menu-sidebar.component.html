@@ -3,11 +3,11 @@
     <div class="menu-user-container d-flex flex-column menu-padding">
       <div class="d-flex align-items-center">
         <div class="menu-name-initials-container d-flex align-items-center justify-content-center">
-          VB
+          {{ getUserInitals() }}
         </div>
 
         <div class="menu-user-name">
-          {{ userName }}
+          {{ user?.fullName }}
         </div>
       </div>
 
