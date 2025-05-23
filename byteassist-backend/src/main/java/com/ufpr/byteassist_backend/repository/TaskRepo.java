@@ -1,6 +1,7 @@
 package com.ufpr.byteassist_backend.repository;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -31,6 +32,27 @@ public class TaskRepo implements TaskRepoInterface {
             String query = "SELECT * FROM Task WHERE " + fieldToQuery + " = $user";
             
             Response response = db.queryBind(query, Map.of("user", username));
+            
+            List<Task> tasks = new ArrayList<>();
+            for (var taskRecord : response.take(0).getArray()) {
+                Task task = taskRecord.get(Task.class);
+                tasks.add(task);
+            }
+            return Optional.of(tasks);
+        } catch (Exception e) {
+            // Handle exceptions and return an empty Optional in case of errors
+            return Optional.empty();
+        }
+    }
+    
+    @Override
+    public Optional<List<Task>> getTasksByUsernameAndStatus(String username, String type, String status) {
+        try {
+            // Build query dynamically based on type parameter
+            String fieldToQuery = type.equals("creator") ? "creator.id.id()" : "asignee.id.id()";
+            String query = "SELECT * FROM Task WHERE " + fieldToQuery + " = $user AND status = $status";
+            
+            Response response = db.queryBind(query, Map.of("user", username, "status", status));
             
             List<Task> tasks = new ArrayList<>();
             for (var taskRecord : response.take(0).getArray()) {
@@ -79,6 +101,19 @@ public class TaskRepo implements TaskRepoInterface {
         try {
             // Atualiza apenas os campos fornecidos (MERGE) no registro da tarefa
             return Optional.ofNullable(db.update(Task.class, new RecordId("Task", id), UpType.MERGE, task));
+        } catch (Exception e) {
+            // Em caso de erro, retorna Optional vazio
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<List<Task>> getAllTasks() {
+        try {
+            Iterator<Task> tasks = db.select(Task.class, "Task");
+            List<Task> taskList = new ArrayList<>();
+            tasks.forEachRemaining(taskList::add);
+            return Optional.ofNullable(taskList);
         } catch (Exception e) {
             // Em caso de erro, retorna Optional vazio
             return Optional.empty();

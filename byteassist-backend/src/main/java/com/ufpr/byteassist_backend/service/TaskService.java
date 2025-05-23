@@ -32,6 +32,18 @@ public class TaskService {
         return ResponseEntity.ok(tasks.get());
     }
     
+    public ResponseEntity<List<Task>> getTasksByUsernameAndStatus(String username, String type, String status) {
+        Optional<List<Task>> tasks = taskRepo.getTasksByUsernameAndStatus(username, type, status);
+        if (tasks.isEmpty()) {
+            throw new EnhancedStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Error retrieving all tasks from database",
+                "There was a problem accessing the database to retrieve the list of tasks"
+            );
+        }
+        return ResponseEntity.ok(tasks.get());
+    }
+    
     public ResponseEntity<Task> getTaskById(String id) {
         Optional<Task> task = taskRepo.getTaskById(id);
         if (task.isEmpty()) {
@@ -66,6 +78,30 @@ public class TaskService {
         return ResponseEntity.ok(updatedTask);
     }
     
+    public ResponseEntity<Void> deleteTask(String id) {
+        boolean deleted = taskRepo.deleteTask(id);
+        if (!deleted) {
+            throw new EnhancedStatusException(
+                HttpStatus.NOT_FOUND,
+                "Task not found",
+                "No task found with the provided ID"
+            );
+        }
+        return ResponseEntity.noContent().build();
+    }
+    
+    public ResponseEntity<List<Task>> getAllTasks() {
+        Optional<List<Task>> tasks = taskRepo.getAllTasks();
+        if (tasks.isEmpty()) {
+            throw new EnhancedStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Error retrieving all tasks from database",
+                "There was a problem accessing the database to retrieve the list of tasks"
+            );
+        }
+        return ResponseEntity.ok(tasks.get());
+    }
+    
     public boolean isTaskCreator(String taskId, String username) {
         Task task = taskRepo.getTaskById(taskId).orElseThrow(
             () -> new EnhancedStatusException(
@@ -84,4 +120,6 @@ public class TaskService {
             );
         }
     }
+
+
 }
