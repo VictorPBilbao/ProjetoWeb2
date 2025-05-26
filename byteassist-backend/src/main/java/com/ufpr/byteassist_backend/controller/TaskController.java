@@ -63,6 +63,31 @@ public class TaskController {
 
         return taskService.getTasksByUsername(username, type);
     }
+    
+    @GetMapping("/me")
+    public ResponseEntity<List<Task>> getCurrentUserTasks(
+            @RequestParam(name = "type", defaultValue = "creator") String type, 
+            @RequestParam(name = "status", required = false) String status) {
+
+        // Validate that type is either "creator" or "assignee"
+        if (!type.equals("creator") && !type.equals("assignee")) {
+            throw new IllegalArgumentException("Type parameter must be either 'creator' or 'assignee'");
+        }
+
+        // valid status: 'Aguardando Orçamento' | 'Aguardando Aprovação' | 'Aguardando Peças' | 'Em Andamento' | 'Concluído' | 'Rejeitado'
+        if (status != null && !java.util.regex.Pattern.compile("Aguardando Orçamento|Aguardando Aprovação|Aguardando Peças|Em Andamento|Concluído|Rejeitado", java.util.regex.Pattern.CANON_EQ).matcher(status).matches()) {
+            throw new IllegalArgumentException("Status parameter must be one of: 'Aguardando Orçamento', 'Aguardando Aprovação', 'Aguardando Peças', 'Em Andamento', 'Concluído', 'Rejeitado'");
+        }
+
+        // Get the current user from the security context
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (status != null) {
+            return taskService.getTasksByUsernameAndStatus(user.getUsername(), type, status);
+        }
+
+        return taskService.getTasksByUsername(user.getUsername(), type);
+    }
 
     @PostMapping()
     public ResponseEntity<Task> createTask(@Validated @RequestBody Task task) {

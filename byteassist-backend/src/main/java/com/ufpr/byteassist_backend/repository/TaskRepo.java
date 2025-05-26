@@ -49,8 +49,10 @@ public class TaskRepo implements TaskRepoInterface {
     public Optional<List<Task>> getTasksByUsernameAndStatus(String username, String type, String status) {
         try {
             // Build query dynamically based on type parameter
-            String fieldToQuery = type.equals("creator") ? "creator.id.id()" : "asignee.id.id()";
+            String fieldToQuery = type.equals("creator") ? "creator.id.id()" : "assignee.id.id()";
             String query = "SELECT * FROM Task WHERE " + fieldToQuery + " = $user AND status = $status";
+            
+            System.out.println("Executing query: " + query + " with user: " + username + " and status: " + status);
             
             Response response = db.queryBind(query, Map.of("user", username, "status", status));
             

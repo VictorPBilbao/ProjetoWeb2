@@ -24,24 +24,24 @@ public class Person {
     @Null(message = "ID should not be provided in the request body, use the URL instead")
     private RecordId id;
     
-    @NotBlank(message = "CPF is required", groups = {ValidationGroups.Create.class, ValidationGroups.Update.class})
+    @NotBlank(message = "CPF is required", groups = {ValidationGroups.Create.class})
     @Pattern(regexp = "\\d{11}", message = "CPF must contain exactly 11 digits", groups = {ValidationGroups.Create.class, ValidationGroups.Update.class})
     private String cpf;
     
-    @NotNull
+    @NotNull(groups = {ValidationGroups.Create.class})
     @Past(message = "Date of birth must be in the past")
     @JsonDeserialize(using = SimpleDateDeserializer.class)
     private ZonedDateTime dob;
     
-    @NotBlank
-    @Pattern(regexp = "^(Male|Female|Other)$", message = "Gender must be 'Male', 'Female', or 'Other'")
+    @NotBlank(groups = {ValidationGroups.Create.class})
+    @Pattern(regexp = "^(Male|Female|Other)$", message = "Gender must be 'Male', 'Female', or 'Other'", groups = {ValidationGroups.Create.class, ValidationGroups.Update.class})
     private String gender;
     
-    @NotNull
+    @NotNull(groups = {ValidationGroups.Create.class})
     @Valid
     private PersonAddress address;
     
-    @NotNull 
+    @NotNull(groups = {ValidationGroups.Create.class}) 
     @Valid
     private PersonName name;
 }
