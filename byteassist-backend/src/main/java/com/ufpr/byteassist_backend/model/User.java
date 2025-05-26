@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.surrealdb.RecordId;
 import com.ufpr.byteassist_backend.validation.ValidationGroups;
 
@@ -31,8 +31,8 @@ public class User implements UserDetails {
     private String email;
 
     private boolean isActive = true;
-
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    
+    @JsonIgnore
     @NotBlank(groups = ValidationGroups.Create.class, message = "Password cannot be blank when creating a user")
     @Null(groups = ValidationGroups.Update.class, message = "Password must not be provided in update requests")
     private String password;
@@ -45,8 +45,14 @@ public class User implements UserDetails {
     @NotBlank(groups = ValidationGroups.Create.class, message = "Type cannot be blank")
     @Pattern(regexp = "^(Client|Admin|Manager|Employee)$", message = "Type must be either 'Client' or 'Admin'")
     private String role = "Client";
+    
+    @Override
+    public String getUsername() {
+        return id.getId().toString();
+    }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return switch (role) {
             case "Admin" -> List.of(
@@ -68,9 +74,20 @@ public class User implements UserDetails {
             default -> throw new IllegalStateException("Unexpected value: " + role);
         };
     }
-
+    
     @Override
-    public String getUsername() {
-        return id.getId().toString();
-    }
+    @JsonIgnore
+    public boolean isAccountNonExpired() {return true;}
+    
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonLocked() {return true;}
+    
+    @Override
+    @JsonIgnore
+    public boolean isCredentialsNonExpired() {return true;}
+    
+    @Override
+    @JsonIgnore
+    public boolean isEnabled() {return true;}
 }
