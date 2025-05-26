@@ -14,6 +14,7 @@ import com.ufpr.byteassist_backend.validation.ValidationGroups;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Null;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,10 +23,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {
-    @Null(groups = ValidationGroups.Update.class, message = "ID must not be provided in update requests")
+    @Null(message = "ID must not be provided in update requests")
     private RecordId id;
     
-    @NotBlank(message = "Email cannot be blank")
+    @NotBlank(groups = ValidationGroups.Create.class, message = "Email cannot be blank")
     @Email(message = "Email should be valid")
     private String email;
 
@@ -41,8 +42,8 @@ public class User implements UserDetails {
     
     private UserTime time;
 
-    @NotBlank(message = "Type cannot be blank")
-    @jakarta.validation.constraints.Pattern(regexp = "^(Client|Admin|Manager|Employee)$", message = "Type must be either 'Client' or 'Admin'")
+    @NotBlank(groups = ValidationGroups.Create.class, message = "Type cannot be blank")
+    @Pattern(regexp = "^(Client|Admin|Manager|Employee)$", message = "Type must be either 'Client' or 'Admin'")
     private String role = "Client";
 
     @Override
