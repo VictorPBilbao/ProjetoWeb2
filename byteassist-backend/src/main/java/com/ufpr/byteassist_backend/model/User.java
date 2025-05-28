@@ -8,6 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.surrealdb.RecordId;
 import com.ufpr.byteassist_backend.validation.ValidationGroups;
 
@@ -32,7 +33,7 @@ public class User implements UserDetails {
 
     private boolean isActive = true;
     
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank(groups = ValidationGroups.Create.class, message = "Password cannot be blank when creating a user")
     @Null(groups = ValidationGroups.Update.class, message = "Password must not be provided in update requests")
     private String password;

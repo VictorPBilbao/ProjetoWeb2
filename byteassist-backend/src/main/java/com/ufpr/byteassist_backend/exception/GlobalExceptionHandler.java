@@ -107,12 +107,23 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
-        // Cria a resposta de erro para formato inválido
+        String errorMessage = "The request body could not be read. Ensure it's in the correct format.";
+        
+        // Check if it's an unrecognized property exception
+        Throwable cause = ex.getCause();
+        if (cause instanceof com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException) {
+            com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException propEx = 
+                (com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException) cause;
+            
+            errorMessage = "Unknown field: '" + propEx.getPropertyName() + 
+                "'. Available fields for Equipment are: id, brand, model, type";
+        }
+        
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .message("Invalid request format")
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .errorCode(HttpStatus.BAD_REQUEST)
-                .errorDescription("The request body could not be read. Ensure it's in the correct format.")
+                .errorDescription(errorMessage)
                 .build();
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);

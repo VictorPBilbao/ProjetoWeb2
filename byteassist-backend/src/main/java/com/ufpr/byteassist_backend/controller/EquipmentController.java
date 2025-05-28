@@ -51,7 +51,7 @@ public class EquipmentController {
 
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('EMPLOYEE')")
-    public ResponseEntity<Equipment> updateEquipment(@PathVariable String id, @Validated @RequestBody Equipment equipment) {
+    public ResponseEntity<Equipment> updateEquipment(@PathVariable String id, @Validated(ValidationGroups.Update.class) @RequestBody Equipment equipment) {
         return equipmentService.updateEquipment(id, equipment);
     }
 

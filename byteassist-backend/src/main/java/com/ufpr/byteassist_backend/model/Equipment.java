@@ -24,4 +24,6 @@ public class Equipment {
     
     @NotBlank(groups = ValidationGroups.Create.class, message = "Type cannot be blank when creating an equipment")
     private String type;
+    
+    private String color;
 }
