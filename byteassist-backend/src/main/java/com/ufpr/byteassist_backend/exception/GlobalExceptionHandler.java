@@ -107,34 +107,26 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
-        // Cria a resposta de erro para formato inválido
+        String errorMessage = "The request body could not be read. Ensure it's in the correct format.";
+        
+        // Check if it's an unrecognized property exception
+        Throwable cause = ex.getCause();
+        if (cause instanceof com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException) {
+            com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException propEx = 
+                (com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException) cause;
+            
+            errorMessage = "Unknown field: '" + propEx.getPropertyName() + 
+                "'. Available fields for Equipment are: id, brand, model, type";
+        }
+        
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .message("Invalid request format")
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .errorCode(HttpStatus.BAD_REQUEST)
-                .errorDescription("The request body could not be read. Ensure it's in the correct format.")
+                .errorDescription(errorMessage)
                 .build();
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    /**
-     * Trata todas as exceções genéricas não capturadas por outros métodos.
-     * 
-     * @param ex Exceção capturada.
-     * @return ResponseEntity contendo detalhes do erro e status HTTP 500 (INTERNAL_SERVER_ERROR).
-     */
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleAllExceptions(Exception ex) {
-        // Cria a resposta de erro para exceções genéricas
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .message("Internal server error")
-                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
-                .errorDescription("An unexpected error occurred: " + ex.getMessage())
-                .build();
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -179,5 +171,24 @@ public class GlobalExceptionHandler {
                 .errorDescription("You don't have sufficient permissions to access this resource.")
                 .build();
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+    
+    /**
+     * Trata todas as exceções genéricas não capturadas por outros métodos.
+     * 
+     * @param ex Exceção capturada.
+     * @return ResponseEntity contendo detalhes do erro e status HTTP 500 (INTERNAL_SERVER_ERROR).
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleAllExceptions(Exception ex) {
+        // Cria a resposta de erro para exceções genéricas
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message("Internal server error")
+                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
+                .errorDescription("An unexpected error occurred: " + ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -1,32 +1,66 @@
 package com.ufpr.byteassist_backend.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import com.ufpr.byteassist_backend.dto.BudgetDTO;
+import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ufpr.byteassist_backend.model.Budget;
+import com.ufpr.byteassist_backend.service.BudgetService;
+import com.ufpr.byteassist_backend.validation.ValidationGroups;
 
 @RestController
-@RequestMapping("/budget")
+@RequestMapping("/api/budget")
 public class BudgetController {
-    public BudgetController() {
-        // Constructor
+    private final BudgetService budgetService;
+
+    public BudgetController(BudgetService budgetService) {
+        this.budgetService = budgetService;
     }
 
-    @GetMapping("/getById/{id}")
-    public ResponseEntity<String> getBudgetById(@PathVariable Long id) {
-        // Placeholder for actual implementation
-        return ResponseEntity.ok("Budget with ID: " + id);
+    @GetMapping()
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    public ResponseEntity<List<Budget>> getAllBudgets() {
+        return budgetService.getAllBudgets();
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<String> createBudget(@RequestBody BudgetDTO budgetDTO) {
-        // Aqui você pode chamar um serviço para salvar o orçamento
-        // budgetService.create(budgetDTO);
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    public ResponseEntity<Budget> getBudgetById(@PathVariable String id) {
+        return budgetService.getBudgetById(id);
+    }
+    
+    @GetMapping("/byEquipment")
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    public ResponseEntity<List<Budget>> getBudgetsByEquipment(@RequestParam String equipmentId) {
+        return budgetService.getBudgetsByEquipment(equipmentId);
+    }
 
-        System.out.println("Recebido orçamento de: " + budgetDTO.clientName);
+    @PostMapping()
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    public ResponseEntity<Budget> createBudget(@Validated(ValidationGroups.Create.class) @RequestBody Budget budget) {
+        return budgetService.createBudget(budget);
+    }
 
-        return ResponseEntity.ok("Orçamento criado com sucesso!");
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    public ResponseEntity<Budget> updateBudget(@PathVariable String id, @Validated(ValidationGroups.Update.class) @RequestBody Budget budget) {
+        return budgetService.updateBudget(id, budget);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<Void> deleteBudget(@PathVariable String id) {
+        return budgetService.deleteBudget(id);
     }
 }

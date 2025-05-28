@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ufpr.byteassist_backend.model.Task;
 import com.ufpr.byteassist_backend.model.User;
 import com.ufpr.byteassist_backend.service.TaskService;
+import com.ufpr.byteassist_backend.validation.ValidationGroups;
 
 @RestController
 @RequestMapping("/api/task")
@@ -90,7 +91,7 @@ public class TaskController {
     }
 
     @PostMapping()
-    public ResponseEntity<Task> createTask(@Validated @RequestBody Task task) {
+    public ResponseEntity<Task> createTask(@Validated(ValidationGroups.Create.class) @RequestBody Task task) {
         // get the current user from the security context
         // and set it as the creator of the task
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -101,7 +102,7 @@ public class TaskController {
 
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('EMPLOYEE')")
-    public ResponseEntity<Task> updateTask(@PathVariable String id, @Validated @RequestBody Task task) {
+    public ResponseEntity<Task> updateTask(@PathVariable String id, @Validated(ValidationGroups.Update.class) @RequestBody Task task) {
         // get the current user from the security context
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
