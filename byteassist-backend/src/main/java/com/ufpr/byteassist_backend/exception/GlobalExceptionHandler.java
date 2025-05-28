@@ -129,25 +129,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    /**
-     * Trata todas as exceções genéricas não capturadas por outros métodos.
-     * 
-     * @param ex Exceção capturada.
-     * @return ResponseEntity contendo detalhes do erro e status HTTP 500 (INTERNAL_SERVER_ERROR).
-     */
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleAllExceptions(Exception ex) {
-        // Cria a resposta de erro para exceções genéricas
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .message("Internal server error")
-                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
-                .errorDescription("An unexpected error occurred: " + ex.getMessage())
-                .build();
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex) {
         Map<String, Object> body = new HashMap<>();
@@ -190,5 +171,24 @@ public class GlobalExceptionHandler {
                 .errorDescription("You don't have sufficient permissions to access this resource.")
                 .build();
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+    
+    /**
+     * Trata todas as exceções genéricas não capturadas por outros métodos.
+     * 
+     * @param ex Exceção capturada.
+     * @return ResponseEntity contendo detalhes do erro e status HTTP 500 (INTERNAL_SERVER_ERROR).
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleAllExceptions(Exception ex) {
+        // Cria a resposta de erro para exceções genéricas
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message("Internal server error")
+                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .errorCode(HttpStatus.INTERNAL_SERVER_ERROR)
+                .errorDescription("An unexpected error occurred: " + ex.getMessage())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
