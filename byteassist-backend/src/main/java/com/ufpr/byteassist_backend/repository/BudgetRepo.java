@@ -41,7 +41,7 @@ public class BudgetRepo implements BudgetRepoInterface {
         try {
             return db.select(Budget.class, new RecordId("Budget", id));
         } catch (Exception e) {
-            return Optional.empty();
+            throw new RuntimeException("Error retrieving budget with ID: " + id + e, e);
         }
     }
     
