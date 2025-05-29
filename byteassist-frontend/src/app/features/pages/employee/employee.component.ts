@@ -6,6 +6,7 @@ import { Employee } from '../../shared/models/employee.model';
 import { Router } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
 import Swal from 'sweetalert2';
+//import { AccountComponent } from "../account/account.component";
 
 declare var bootstrap: any; // Importa os modais do Bootstrap
 
@@ -21,13 +22,11 @@ export class EmployeeComponent implements OnInit {
   selecionado: Employee = {} as Employee;
   solicitacoesPorGrupo: Employee[][] = [];
   paginaAtual: number = 1;
-  itensPorPagina: number = 4; // Por exemplo, 6 cards por página
+  itensPorPagina: number = 4; 
   totalPaginas: number = 0;
 
-
-  categorias: string[] = ['Desktop', 'Notebook', 'Smartphone', 'Tablet'];
-  marcas: string[] = ['Acer', 'Dell', 'Le Novo', 'LG', 'Samsung', 'Vaio', 'Outro'];
-  servicos: string[] = ['Atualização', 'Formatação', 'Configuração', 'Limpeza', 'Manutenção', 'Troca de peças']
+  categorias: string[] = [];
+  marcas: string[] = [];
 
   campoOrdenado: string = '';
   ordemCrescente: boolean = true;
@@ -40,7 +39,12 @@ export class EmployeeComponent implements OnInit {
       this.solicitacoes = s;
       this.ordenarPor('data');
     });
-  }
+
+    this.service.getEquipamentos().subscribe(equipamentos => {
+    this.categorias = [...new Set(equipamentos.map(e => e.type))];
+    this.marcas = [...new Set(equipamentos.map(e => e.brand))];
+  });
+}
 
   ordenarPor(campo: keyof Employee): void {  // Garante que 'campo' seja uma chave válida de Employee
     if (this.campoOrdenado === campo) {
@@ -100,34 +104,17 @@ export class EmployeeComponent implements OnInit {
     modal.show();
   }
 
+  //salvarEdicao() {
+    //this.service.editar(this.selecionado);
+    //this.ngOnInit(); // Atualiza a lista exibida
+    //bootstrap.Modal.getInstance(document.getElementById('editarModal'))?.hide(); // Fecha o modal
+ // }
   salvarEdicao() {
-    this.service.editar(this.selecionado);
+    this.service.editar(this.selecionado).subscribe(() => {
     this.ngOnInit(); // Atualiza a lista exibida
     bootstrap.Modal.getInstance(document.getElementById('editarModal'))?.hide(); // Fecha o modal
-  }
-
-  remover(id: number) {
-    const item = this.solicitacoes.find(s => s.id === id);
-    if (item) {
-      this.selecionado = { ...item };
-      const modal = new bootstrap.Modal(document.getElementById('removerModal'));
-      modal.show();
-    }
-  }
-
-  confirmarRemocao() {
-    this.service.remover(this.selecionado.id);
-
-    // Fecha o modal manualmente (com Bootstrap JS)
-    const modalElement = document.getElementById('removerModal');
-    const modal = bootstrap.Modal.getInstance(modalElement);
-    modal?.hide();
-
-    // Recarrega a lista de solicitações com delay para garantir sincronia
-    setTimeout(() => {
-      this.ngOnInit();
-    }, 300);
-  }
+  });
+}
 
   // Função para realizar a ação conforme o estado
   realizarAcao(acao: string): void {

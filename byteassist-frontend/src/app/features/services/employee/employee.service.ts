@@ -1,253 +1,93 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { Employee } from '../../shared/models/employee.model';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EmployeeService {
+  //private readonly apiUrl = 'https://byteassist-backend.fly.dev/api/task';
+  private readonly apiUrl = 'https://byteassist-backend.fly.dev/api/task/detailed';
 
-  // Chave do localStorage para armazenar as solicitações
-  private solicitacoesKey = 'solicitacoes';
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
-   private solicitacoesIniciais: Employee[] = [
-    {
-      id: 1,
-      data: '2025-02-27',
-      hora: '14:00',
-      equipamento: 'Book4',
-      estado: 'ABERTA',
-      servico: 'Manutenção',
-      orcamento: '',
-      funcionario: 'Guilherme Arthur',
-      historico: 'Solicitação criada',
-      acao: 'Efetuar Orçamento',
-      cor: 'Cinza',
-      categoria: 'Notebook',
-      marca: 'Dell',
-      descricaoServico: 'Verificar funcionamento geral do notebook.',
-      defeitoRelatado: 'Desligamento inesperado.'
-    },
-    {
-      id: 2,
-      data: '2025-03-19',
-      hora: '10:30',
-      equipamento: 'Galaxy S23',
-      estado: 'ORÇADA',
-      servico: 'Atualização',
-      orcamento: 'R$ 200,00',
-      funcionario: 'Guilherme Arthur',
-      historico: 'Aguardando aprovação',
-      acao: 'Efetuar Orçamento',
-      cor: 'marrom',
-      categoria: 'Smartphone',
-      marca: 'Samsung',
-      descricaoServico: 'Atualização de hardware e sistema.',
-      defeitoRelatado: 'Lento ao inicializar.'
-    },
-    {
-      id: 3,
-      data: '2025-03-25',
-      hora: '16:15',
-      equipamento: 'Galaxy Tab 8',
-      estado: 'REJEITADA',
-      servico: 'Limpeza',
-      orcamento: 'R$ 50,00',
-      funcionario: 'Guilherme Arthur',
-      historico: 'Rejeitada pelo cliente',
-      acao: 'Resgatar serviço.',
-      cor: 'Vermelho',
-      categoria: 'Tablet',
-      marca: 'Samsung',
-      descricaoServico: 'Limpeza interna e externa.',
-      defeitoRelatado: 'Tela engordurada e lenta.'
-    },
-    {
-      id: 4,
-      data: '2025-03-30',
-      hora: '09:00',
-      equipamento: 'Iphone 16',
-      estado: 'APROVADA',
-      servico: 'Formatação',
-      orcamento: 'R$ 300,00',
-      funcionario: 'Iman de Lacerda',
-      historico: 'Orçamento aprovado',
-      acao: 'Efetuar Manutenção',
-      cor: 'Amarelo',
-      categoria: 'Smartphone',
-      marca: 'Apple',
-      descricaoServico: 'Formatação completa com backup.',
-      defeitoRelatado: 'Sistema travando.'
-    },
-    {
-      id: 5,
-      data: '2025-04-05',
-      hora: '11:45',
-      equipamento: 'Acer Aspire 3',
-      estado: 'REDIRECIONADA',
-      servico: 'Configuração',
-      orcamento: 'R$ 150,00',
-      funcionario: 'Iman de Lacerda',
-      historico: 'Solicitação redirecionada',
-      destinoFuncionario: '',
-      acao: 'Efetuar Manutenção',
-      cor: 'Roxo',
-      categoria: 'Notebook',
-      marca: 'Acer',
-      descricaoServico: 'Configuração inicial de sistema e rede.',
-      defeitoRelatado: 'Sem conexão com Wi-Fi.'
-    },
-    {
-      id: 6,
-      data: '2025-04-11',
-      hora: '13:30',
-      equipamento: 'Tab Le Novo',
-      estado: 'ARRUMADA',
-      servico: 'Limpeza',
-      orcamento: 'R$100,00',
-      funcionario: 'Iman de Lacerda',
-      historico: 'Manutenção concluída',
-      acao: '',
-      cor: 'Azul',
-      categoria: 'Tablet',
-      marca: 'Le Novo',
-      descricaoServico: 'Limpeza técnica.',
-      defeitoRelatado: 'Som abafado.'
-    },
-    {
-      id: 7,
-      data: '2025-04-12',
-      hora: '15:20',
-      equipamento: 'Computador',
-      estado: 'PAGA',
-      servico: 'Troca de peças',
-      orcamento: 'R$ 800,00',
-      funcionario: '',
-      historico: 'Pagamento efetuado',
-      acao: 'Finalizar Solicitação',
-      cor: 'Alaranjado',
-      categoria: 'Desktop',
-      marca: 'Dell',
-      descricaoServico: 'Substituição de fonte e memória.',
-      defeitoRelatado: 'Não liga.'
-    },
-    {
-      id: 8,
-      data: '2025-04-15',
-      hora: '12:00',
-      equipamento: 'Dell Inspiron I15',
-      estado: 'FINALIZADA',
-      servico: 'Configuração',
-      orcamento: 'R$ 250,00',
-      funcionario: 'Iman de Lacerda',
-      historico: 'Solicitação finalizada',
-      acao: '',
-      cor: 'verde',
-      categoria: 'Notebook',
-      marca: 'Dell',
-      descricaoServico: 'Configuração de contas e apps.',
-      defeitoRelatado: 'Dificuldade para configurar e-mail.'
-    }
-  ];
+private getHttpOptions() {
+  const token = this.authService.getToken();
 
-  // Variável para controlar o último ID utilizado
-  private lastId: number;
-
-  private solicitacoesSubject = new BehaviorSubject<Employee[]>(this.obterSolicitacoesDoStorage());
-
-  solicitacoes$ = this.solicitacoesSubject.asObservable();
-
-  constructor() {
-    const solicitacoes = this.obterSolicitacoesDoStorage();
-    const maioresId = solicitacoes.length > 0
-      ? Math.max(...solicitacoes.map(s => s.id))
-      : 0;
-
-    this.lastId = maioresId;
-
-
-    // Se o localStorage estiver vazio, mescla as solicitações iniciais
-    if (solicitacoes.length === 0) {
-      this.salvarSolicitacoesNoStorage(this.solicitacoesIniciais);
-      this.solicitacoesSubject.next(this.solicitacoesIniciais);
-    }
+  return {
+    headers: new HttpHeaders({
+      //'Content-Type': 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': `Bearer ${token}`
+    })
+  };
+}
+listar(type: string = 'creator', status?: string): Observable<Employee[]> {
+  const params: any = { type };
+  if (status) {
+    params.status = status;
   }
 
-  private obterSolicitacoesDoStorage(): Employee[] {
-    const solicitacoes = localStorage.getItem(this.solicitacoesKey);
-    const parsedSolicitacoes = solicitacoes ? JSON.parse(solicitacoes) : [];
+  return this.http.get<any[]>(`${this.apiUrl}/me`, {
+    ...this.getHttpOptions(),
+    params
+  }).pipe(
+    map((tasks: any[]) => tasks.map(task => this.mapTaskToEmployee(task))),
+    catchError(this.handleError)
+  );
+}
 
-    // Ordena as solicitações por data (do mais recente para o mais antigo)
-    return parsedSolicitacoes.sort((a: Employee, b: Employee) => new Date(b.data).getTime() - new Date(a.data).getTime());
+private mapTaskToEmployee(task: any): Employee {
+  const dt = task.time?.createdAt ? new Date(task.time.createdAt) : new Date();
+  const data = dt.toLocaleDateString('pt-BR'); // "29/05/2025"
+  const hora = dt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }); // "14:30"
+
+  return {
+    id: task.id?.match(/⟨(.+?)⟩/)?.[1] ?? task.id,
+    categoria: task.type,
+    cor: task.equipment?.color ?? '',
+    data,
+    hora,
+    defeitoRelatado: task.summary,
+    descricaoServico: task.title,
+    equipamento: `${task.equipment?.brand ?? ''} ${task.equipment?.model ?? ''}`.trim(),
+    estado: task.status,
+    autor: task.creator?.username ?? '',
+    funcionario: task.assignee?.username ?? '',
+    historico: task.summary, // Se houver campo mais específico, substitua aqui
+    marca: task.equipment?.brand ?? '',
+    orcamento: task.budget?.amount?.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }) ?? ''
+  };
+}
+
+  buscarPorId(id: number): Observable<Employee> {
+    return this.http.get<Employee>(`${this.apiUrl}/${id}`, this.getHttpOptions())
+      .pipe(catchError(this.handleError));
   }
 
-  private salvarSolicitacoesNoStorage(solicitacoes: Employee[]): void {
-    localStorage.setItem(this.solicitacoesKey, JSON.stringify(solicitacoes));
+  editar(solicitacao: Employee): Observable<Employee> {
+    return this.http.put<Employee>(`${this.apiUrl}/${solicitacao.id}`, solicitacao, this.getHttpOptions())
+      .pipe(catchError(this.handleError));
   }
 
-  listar() {
-    return this.solicitacoes$;
+  adicionar(solicitacao: Employee): Observable<Employee> {
+    return this.http.post<Employee>(`${this.apiUrl}`, solicitacao, this.getHttpOptions())
+      .pipe(catchError(this.handleError));
   }
 
+  getEquipamentos(): Observable<any[]> {
+  return this.http.get<any[]>('https://byteassist-backend.fly.dev/api/equipment', this.getHttpOptions())
+    .pipe(catchError(this.handleError));
+}
 
-  adicionar(solicitacao: Employee) {
-    // Incrementa o último ID para garantir sequência
-    this.lastId++;
-
-    // Atribui o ID da solicitação com o último ID
-    solicitacao.id = this.lastId;
-
-    // A data precisa ser capturada no formato desejado
-    if (!solicitacao.data) {
-      solicitacao.data = new Date().toISOString().split('T')[0];  // Formata para 'yyyy-mm-dd'
-    }
-
-    // Obtém as solicitações atuais
-    const solicitacoes = this.obterSolicitacoesDoStorage();
-
-    // Adiciona a nova solicitação ao array
-    solicitacoes.push(solicitacao);
-
-    //ordena por data e hora
-    const sortedSolicitacoes = solicitacoes.sort((a: Employee, b: Employee) => {
-      const dataHoraA = new Date(`${a.data}T${a.hora}:00`).getTime(); // sufixo :00 para completar segundos
-      const dataHoraB = new Date(`${b.data}T${b.hora}:00`).getTime();
-      return dataHoraB - dataHoraA;
-    });
-
-    // Salva novamente no localStorage
-    this.salvarSolicitacoesNoStorage(sortedSolicitacoes);
-
-    // Atualiza o BehaviorSubject com o novo array
-    this.solicitacoesSubject.next(sortedSolicitacoes);
-  }
-
-  // Método para editar uma solicitação existente
-  editar(solicitacao: Employee) {
-    const solicitacoes = this.obterSolicitacoesDoStorage();
-    const index = solicitacoes.findIndex(s => s.id === solicitacao.id);
-    if (index !== -1) {
-      solicitacoes[index] = solicitacao;
-      this.salvarSolicitacoesNoStorage(solicitacoes); // Atualiza o localStorage
-      this.solicitacoesSubject.next(solicitacoes); // Atualiza o BehaviorSubject
-    }
-  }
-
-  // Método para remover uma solicitação
-  remover(id: number) {
-    let solicitacoes = this.obterSolicitacoesDoStorage();
-    solicitacoes = solicitacoes.filter(s => s.id !== id);
-    this.salvarSolicitacoesNoStorage(solicitacoes); // Atualiza o localStorage
-    this.solicitacoesSubject.next(solicitacoes); // Atualiza o BehaviorSubject
-  }
-
-  // Método para buscar solicitação por ID
-  buscarPorId(id: number): Employee | undefined {
-    return this.obterSolicitacoesDoStorage().find(s => s.id === id);
-  }
-
-  // Método para obter todas as solicitações
-  obterSolicitacoes(): Employee[] {
-    return this.obterSolicitacoesDoStorage();
+  private handleError(error: HttpErrorResponse) {
+    console.error('Erro da API:', error);
+    return throwError(() => new Error(error.message || 'Erro ao se comunicar com o servidor.'));
   }
 }

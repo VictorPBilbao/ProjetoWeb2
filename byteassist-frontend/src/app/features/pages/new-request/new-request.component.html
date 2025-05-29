@@ -81,14 +81,6 @@
         </div>
 
         <div class="form-group">
-          <label for="servico">SERVIÇO</label>
-          <select id="servico" [(ngModel)]="solicitation.servico" class="form-select" required>
-            <option value="">Selecione...</option>
-            <option *ngFor="let service of services" [value]="service">{{ service }}</option>
-          </select>
-        </div>
-
-        <div class="form-group">
           <label for="descricaoServico">DESCRIÇÃO DO SERVIÇO</label>
           <textarea id="descricaoServico" [(ngModel)]="solicitation.descricaoServico" class="form-textarea" rows="2" placeholder="Descreva o serviço que será realizado..." required ></textarea>
         </div>
