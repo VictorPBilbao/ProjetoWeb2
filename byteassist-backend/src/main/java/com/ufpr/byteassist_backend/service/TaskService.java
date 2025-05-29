@@ -12,6 +12,9 @@ import com.ufpr.byteassist_backend.exception.EnhancedStatusException;
 import com.ufpr.byteassist_backend.model.Task;
 import com.ufpr.byteassist_backend.repository.TaskRepoInterface;
 
+import com.ufpr.byteassist_backend.dto.DetailedTaskDTO;
+
+
 @Service
 public class TaskService {
     private final TaskRepoInterface taskRepo;
@@ -120,6 +123,16 @@ public class TaskService {
             );
         }
     }
-
-
+    
+    public ResponseEntity<List<DetailedTaskDTO>> getCurrentUserDetailedTasks(String userId, String type) {
+        Optional<List<DetailedTaskDTO>> tasks = taskRepo.getDetailedTasksByUsername(userId, type);
+        if (tasks.isEmpty()) {
+            throw new EnhancedStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Error retrieving detailed tasks from database",
+                "There was a problem accessing the database to retrieve the list of detailed tasks"
+            );
+        }
+        return ResponseEntity.ok(tasks.get());
+    }
 }

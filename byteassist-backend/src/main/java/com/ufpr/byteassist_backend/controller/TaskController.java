@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ufpr.byteassist_backend.dto.DetailedTaskDTO;
 import com.ufpr.byteassist_backend.model.Task;
 import com.ufpr.byteassist_backend.model.User;
 import com.ufpr.byteassist_backend.service.TaskService;
@@ -88,6 +89,21 @@ public class TaskController {
         }
 
         return taskService.getTasksByUsername(user.getUsername(), type);
+    }
+    
+    @GetMapping("detailed/me")
+    public ResponseEntity<List<DetailedTaskDTO>> getCurrentUserDetailedTasks(
+        @RequestParam(name = "type", defaultValue = "creator") String type) {
+
+        // Validate that type is either "creator" or "assignee"
+        if (!type.equals("creator") && !type.equals("assignee")) {
+            throw new IllegalArgumentException("Type parameter must be either 'creator' or 'assignee'");
+        }
+
+        // Get the current user from the security context
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return taskService.getCurrentUserDetailedTasks(user.getId().getId().toString(), type);
     }
 
     @PostMapping()

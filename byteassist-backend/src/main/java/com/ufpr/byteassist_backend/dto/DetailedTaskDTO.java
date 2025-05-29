@@ -1,7 +1,10 @@
-package com.ufpr.byteassist_backend.model;
-
+package com.ufpr.byteassist_backend.dto;
 
 import com.surrealdb.RecordId;
+import com.ufpr.byteassist_backend.model.Budget;
+import com.ufpr.byteassist_backend.model.Equipment;
+import com.ufpr.byteassist_backend.model.TaskTime;
+import com.ufpr.byteassist_backend.model.User;
 import com.ufpr.byteassist_backend.validation.ValidationGroups;
 
 import jakarta.validation.Valid;
@@ -15,29 +18,28 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Task {
+public class DetailedTaskDTO {
     @Null(message = "ID should not be provided in the request body")
     private RecordId id;
     
-    private RecordId assignee;
+    @Valid
+    private User assignee;
     
-    private RecordId creator;
+    @Valid
+    private User creator;
     
-    private RecordId budget;
+    @Valid
+    private Budget budget;
     
-    @NotNull(groups = ValidationGroups.Create.class, message = "Equipment ID cannot be null")
-    private RecordId equipment;
+    @Valid
+    private Equipment equipment;
     
-    @NotBlank(groups = ValidationGroups.Create.class, message = "Name cannot be blank")
     private String status;
     
-    @NotBlank(groups = ValidationGroups.Create.class, message = "Description cannot be blank")
     private String summary;
     
-    @NotBlank(groups = ValidationGroups.Create.class, message = "Title cannot be blank")
     private String title;
     
-    @NotBlank(groups = ValidationGroups.Create.class, message = "Type cannot be blank")
     private String type;
     
     private TaskTime time;
