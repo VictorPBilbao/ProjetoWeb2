@@ -1,17 +1,18 @@
 export interface Employee {
-  id: number;
-  data: string;                // ex: '2025-04-20'
-  hora: string;                // ex: '14:30'
-  equipamento: string;         // ex: 'Impressora HP 1234'
-  estado: string;              // ex: 'ABERTA', 'APROVADA', etc.          // pode ser opcional
-  funcionario?: string;        // nome do responsável pela solicitação
-  historico?: string;          // breve histórico
+  id: string;
+  data: string;
+  hora: string;
+  equipamento: string;
+  estado: string;
+  funcionario?: string;
+  historico?: string;
   destinoFuncionario?: string;
-  acao?: string; // Propriedade opcional 
-  cor?: string; 
+  acao?: string;
+  cor?: string;
   categoria?: string;
   marca?: string;
-  servico?: string;
+  autor?: string;
+  //servico?: string; //nao existe no back
   descricaoServico?: string;
   defeitoRelatado?: string;
   orcamento: string;
@@ -21,5 +22,5 @@ export interface Employee {
   orientacoesCliente?: string;
   dataHoraManutencao?: Date;
   funcionarioDestino?: string;
-
 }
+

@@ -170,7 +170,6 @@
 
             <p><strong>Orçamento:</strong> {{ selecionado.orcamento }}</p>
 
-            <p><strong>Serviço:</strong> {{ selecionado.servico }}</p>
           </div>
 
           <!-- Coluna da direita: campos de manutenção -->
@@ -264,12 +263,6 @@
               <input type="text" class="form-control" [(ngModel)]="selecionado.orcamento" name="orcamento" readonly required>
             </div>
           </div>
-
-          <div class="mb-3">
-            <label class="form-label"><i class="bi bi-pencil-square"></i> Serviço</label>
-            <input type="text" class="form-control" [(ngModel)]="selecionado.servico" name="servico" required>
-          </div>
-
           <hr>
 
           <!-- Status e Histórico -->

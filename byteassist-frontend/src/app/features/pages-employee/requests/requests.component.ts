@@ -40,10 +40,11 @@ export class RequestsComponent implements OnInit {
   }
 
   carregarSolicitacoes(): void {
-    // Usando o método correto do serviço
-    this.solicitacoes = this.employeeService.obterSolicitacoes();
+  this.employeeService.listar().subscribe(solicitacoes => {
+    this.solicitacoes = solicitacoes;
     this.filtrarSolicitacoes();
-  }
+  });
+}
 
   filtroData(): void {
     // Chama o método de filtragem sempre que os filtros de data mudarem

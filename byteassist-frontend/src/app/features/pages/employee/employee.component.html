@@ -52,9 +52,6 @@
           <button class="btn btn-sm btn-warning me-1" (click)="editar(s)">
             <i class="fas fa-pencil-alt"></i>
           </button>
-          <button class="btn btn-sm btn-danger" (click)="remover(s.id)">
-            <i class="fas fa-eye-slash"></i>
-          </button>
         </td>
       </tr>
     </tbody>
@@ -94,6 +91,7 @@
             <p><strong>Defeito Relatado:</strong> {{ selecionado.defeitoRelatado }}</p>
             <p><strong>Descrição do Serviço:</strong> {{ selecionado.descricaoServico }}</p>
             <p><strong>Equipamento:</strong> {{ selecionado.equipamento }}</p>
+            
             <p><strong>Estado:</strong>
               <span [ngClass]="{
                 'text-secondary': selecionado.estado === 'ABERTA',
@@ -111,7 +109,6 @@
             <p><strong>ID da Solicitação:</strong> {{ selecionado.id }}</p>
             <p><strong>Marca:</strong> {{ selecionado.marca }}</p>
             <p><strong>Orçamento:</strong> {{ selecionado.orcamento }}</p>
-            <p><strong>Serviço:</strong> {{ selecionado.servico }}</p>
           </div>
           <div class="modal-footer d-flex justify-content-between">
             <div>
@@ -188,37 +185,12 @@
                 <label class="form-label">Orçamento</label>
                 <input type="text" class="form-control" [(ngModel)]="selecionado.orcamento" name="orcamento" readonly>
               </div>
-              <div class="mb-3">
-                <label class="form-label">Serviço</label>
-                <select class="form-select" [(ngModel)]="selecionado.servico" name="servico" [disabled]="selecionado.estado === 'FINALIZADA'">
-                  <option *ngFor="let s of servicos" [value]="s">{{ s }}</option>
-                </select>
-              </div>
             </div>
             <div class="modal-footer">
               <button class="btn btn-primary" type="submit" *ngIf="selecionado.estado !== 'FINALIZADA'">Salvar</button>
               <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
           </form>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal: Remover -->
-    <div class="modal fade" id="removerModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Remover da Visualização</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body">
-            Tem certeza que deseja ocultar esta solicitação?
-          </div>
-          <div class="modal-footer">
-            <button class="btn btn-danger" (click)="confirmarRemocao()">Ocultar</button>
-            <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          </div>
         </div>
       </div>
     </div>

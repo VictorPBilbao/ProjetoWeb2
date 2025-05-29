@@ -22,7 +22,7 @@ export class NewRequestComponent {
 
   // Modelo do formulário
   solicitation: Employee = {
-    id: 0,  // O ID será gerado automaticamente pelo serviço
+    id: '',  // O ID será gerado automaticamente pelo serviço
     data: this.getCurrentDate(), // A data será gerada aqui, diretamente no componente
     hora: this.getCurrentTime(),
     equipamento: '',
@@ -30,7 +30,6 @@ export class NewRequestComponent {
     orcamento: '',
     categoria: '',
     marca: '',
-    servico: '',
     descricaoServico: '',
     defeitoRelatado: ''
   };
@@ -76,15 +75,17 @@ export class NewRequestComponent {
     this.resetForm();
   }
 
-  private carregarSolicitacoes() {
-    this.solicitacoes = this.employeeService.obterSolicitacoes();
-    this.ordenarPor(this.campoOrdenado);  // Ordena logo após carregar as solicitações
-  }
+ private carregarSolicitacoes() {
+  this.employeeService.listar().subscribe(solicitacoes => {
+    this.solicitacoes = solicitacoes;
+    this.ordenarPor(this.campoOrdenado);  // Ordena após carregar
+  });
+}
 
   // Limpar formulário
   private resetForm() {
     this.solicitation = {
-      id: 0,  // O ID será gerado automaticamente pelo serviço
+      id: '',  // O ID será gerado automaticamente pelo serviço
       data: this.getCurrentDate(), // A data será gerada aqui, diretamente no componente
       hora: this.getCurrentTime(),
       estado: 'ABERTA',
@@ -92,7 +93,6 @@ export class NewRequestComponent {
       categoria: '',
       marca: '',
       equipamento: '',
-      servico: '',
       descricaoServico: '',
       defeitoRelatado: ''
     };
