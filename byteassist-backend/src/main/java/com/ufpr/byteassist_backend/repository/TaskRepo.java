@@ -13,6 +13,7 @@ import com.surrealdb.RecordId;
 import com.surrealdb.Response;
 import com.surrealdb.Surreal;
 import com.surrealdb.UpType;
+import com.ufpr.byteassist_backend.dto.DetailedTaskDTO;
 import com.ufpr.byteassist_backend.model.Task;
 import com.ufpr.byteassist_backend.service.DatabaseService;
 
@@ -119,6 +120,27 @@ public class TaskRepo implements TaskRepoInterface {
         } catch (Exception e) {
             // Em caso de erro, retorna Optional vazio
             return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<List<DetailedTaskDTO>> getDetailedTasksByUsername(String username, String type) {
+        try {
+            // Build query dynamically based on type parameter
+            String fieldToQuery = type.equals("creator") ? "creator.id.id()" : "assignee.id.id()";
+            String query = "SELECT * FROM Task WHERE " + fieldToQuery + " = $user FETCH equipment, budget, assignee, creator";
+
+            Response response = db.queryBind(query, Map.of("user", username));
+
+            List<DetailedTaskDTO> tasks = new ArrayList<>();
+            for (var taskRecord : response.take(0).getArray()) {
+                DetailedTaskDTO task = taskRecord.get(DetailedTaskDTO.class);
+                tasks.add(task);
+            }
+            return Optional.of(tasks);
+        } catch (Exception e) {
+            // Handle exceptions and return an empty Optional in case of errors
+            throw new RuntimeException(e);
         }
     }
 }
