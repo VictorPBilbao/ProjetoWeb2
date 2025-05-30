@@ -1,7 +1,7 @@
 <app-notification [message]="message" [visible]="showNotification"></app-notification>
 <section>
   <div class="container">
-    <h1>Editar e Verificar Dados do Usuário</h1>
+    <h1>Meus Dados</h1>
     <form
       class="user-form flex flex-column gap-24"
       #userForm="ngForm"
@@ -53,8 +53,8 @@
               id="phone"
               name="phone"
               placeholder="(XX) XXXXX‑XXXX"
+              mask="(00) 00000-0000"
               [(ngModel)]="user.phone"
-              (input)="applyPhoneMask($event)"
               maxlength="15"
             >
           </div>
@@ -75,7 +75,7 @@
               name="cpf"
               placeholder="000.000.000-00"
               [(ngModel)]="user.cpf"
-              (input)="applyCpfMask($event)"
+              mask="000.000.000-00"
               maxlength="14"
             >
           </div>
@@ -98,9 +98,9 @@
               [(ngModel)]="user.gender"
             >
               <option value="">Selecione...</option>
-              <option value="M">Masculino</option>
-              <option value="F">Feminino</option>
-              <option value="O">Outro</option>
+              <option value="Male">Masculino</option>
+              <option value="Female">Feminino</option>
+              <option value="Other">Outro</option>
             </select>
           </div>
 
@@ -118,9 +118,9 @@
               type="text"
               id="zip"
               name="zip"
-              placeholder="00000‑000"
+              placeholder="00000-000"
+              mask="00000-000"
               [(ngModel)]="user.zip"
-              (input)="applyCepMask($event)"
               maxlength="9"
             >
           </div>
