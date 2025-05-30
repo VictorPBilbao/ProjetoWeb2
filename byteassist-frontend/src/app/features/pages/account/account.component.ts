@@ -4,14 +4,17 @@ import { CommonModule } from '@angular/common';
 import { User } from '../../shared/models/user.model';
 import { UserService } from '../../services/user/user.service';
 import { NotificationComponent } from '../../components/notification/notification.component';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-account',
   imports: [
     CommonModule,
     FormsModule,
-    NotificationComponent
+    NotificationComponent,
+    NgxMaskDirective
   ],
+  providers: [provideNgxMask()],
   templateUrl: './account.component.html',
   styleUrl: './account.component.css'
 })
@@ -26,7 +29,7 @@ export class AccountComponent {
   ) {}
 
   ngOnInit() {
-    this.userService.getInfoUser().subscribe((user: User) => {
+    this.userService.getUser().subscribe((user: User) => {
       this.user = user;
     });
   }

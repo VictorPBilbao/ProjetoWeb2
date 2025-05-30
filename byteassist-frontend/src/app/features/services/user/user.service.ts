@@ -92,7 +92,7 @@ export class UserService {
       'Authorization': `Bearer ${this.authService.getToken()}` // Adiciona o token no header
     })
 
-    return this.http.get<T>(`${this.apiUrl}/person`, { headers }).pipe(
+    return this.http.get<T>(`${this.apiUrl}/person/me`, { headers }).pipe(
       catchError(handleErrors.handleError)
     );
   }
@@ -105,7 +105,7 @@ export class UserService {
         '',
         `${data.name.first} ${data.name.last}`,
         data.cpf,
-        new Date(data.dob),
+        data.dob.split('T')[0],
         data.gender,
         '',
         '',
@@ -122,18 +122,14 @@ export class UserService {
     );
   }
 
-  getUser(): User {
-    this.getInfoUserV2().subscribe((user: User) => {
-      console.log('user', user);
-      return user;
-    });
-
-    return new User();
+  getUser(): Observable<User> {
+    return this.getInfoUserV2();
   }
 
   updateUser(user: User): Observable<any> {
+    const userApiFormat = this.mapUserToApiFormat(user);
     const body = new HttpParams()
-      .set('user', JSON.stringify(user));
+      .set('user', JSON.stringify(userApiFormat));
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -146,5 +142,27 @@ export class UserService {
       finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
       catchError(handleErrors.handleError)
     );
+  }
+
+  private mapUserToApiFormat(user: User): any {
+    return {
+      id: user.id,
+      cpf: user.cpf,
+      dob: user.dateOfBirth.toISOString().split('T')[0], // Formato 'YYYY-MM-DD'
+      gender: user.gender,
+      address: {
+        zip: user.zip,
+        number: user.number,
+        street: user.street,
+        neighborhood: user.neighborhood,
+        city: user.city,
+        state: user.state,
+        country: user.country
+      },
+      name: {
+        first: user.fullName.split(' ')[0],
+        last: user.fullName.split(' ').slice(1).join(' ')
+      }
+    };
   }
 }
