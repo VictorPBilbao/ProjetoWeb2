@@ -42,8 +42,14 @@ listar(type: string = 'creator', status?: string): Observable<Employee[]> {
 
 private mapTaskToEmployee(task: any): Employee {
   const dt = task.time?.createdAt ? new Date(task.time.createdAt) : new Date();
-  const data = dt.toLocaleDateString('pt-BR'); // "29/05/2025"
-  const hora = dt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }); // "14:30"
+
+  // Corrigido: formato ISO aceito por input type="date"
+  const data = dt.toISOString().slice(0, 10); // "2025-05-29"
+
+  const hora = dt.toLocaleTimeString('pt-BR', {
+    hour: '2-digit',
+    minute: '2-digit'
+  }); 
 
   return {
     id: task.id?.match(/⟨(.+?)⟩/)?.[1] ?? task.id,
@@ -71,12 +77,12 @@ private mapTaskToEmployee(task: any): Employee {
       .pipe(catchError(this.handleError));
   }
 
-  editar(solicitacao: Employee): Observable<Employee> {
+  editar(solicitacao: Employee): Observable<Employee> { //add url da api pra editar
     return this.http.put<Employee>(`${this.apiUrl}/${solicitacao.id}`, solicitacao, this.getHttpOptions())
       .pipe(catchError(this.handleError));
   }
 
-  adicionar(solicitacao: Employee): Observable<Employee> {
+  adicionar(solicitacao: Employee): Observable<Employee> { // add url da api para criar nova usando o post
     return this.http.post<Employee>(`${this.apiUrl}`, solicitacao, this.getHttpOptions())
       .pipe(catchError(this.handleError));
   }
