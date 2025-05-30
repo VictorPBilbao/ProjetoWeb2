@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ufpr.byteassist_backend.dto.DetailedUserDTO;
 import com.ufpr.byteassist_backend.model.User;
 import com.ufpr.byteassist_backend.service.UserService;
 import com.ufpr.byteassist_backend.validation.ValidationGroups;
@@ -24,51 +24,56 @@ import com.ufpr.byteassist_backend.validation.ValidationGroups;
 @RequestMapping("/api/user")
 public class UserController {
     private final UserService userService;
-    
+
     public UserController(UserService userService) {
         this.userService = userService;
     }
-    
+
     @GetMapping("/me")
-    public ResponseEntity<User> getCurrentUser() {
+    public ResponseEntity<User> getCurrentUser(
+        @RequestParam(required = false) List<String> expand
+    ) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return ResponseEntity.ok(user);
-    }
-    
-    @GetMapping("/{username:[a-z0-9._]{3,30}}")
-    @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
-    public ResponseEntity<User> getUser(@PathVariable String username) {
-        return userService.getUser(username);
+        return userService.getUser(user.getUsername(), expand);
     }
 
-    @GetMapping("detailed/{username:[a-z0-9._]{3,30}}")
+    @GetMapping("{username:[a-z0-9._]{3,30}}")
     @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
-    public ResponseEntity<DetailedUserDTO> getDetailedUser(@PathVariable String username) {
-        return userService.getDetailedUser(username);
+    public ResponseEntity<User> getUser(
+            @PathVariable String username,
+            @RequestParam(required = false) List<String> expand) {
+        return userService.getUser(username, expand);
     }
-    
+
     @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<User>> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<User>> getAllUsers(
+            @RequestParam(required = false) List<String> expand) {
+        return userService.getAllUsers(expand);
     }
-    
+
     @PostMapping("/{username:[a-z0-9._]{3,30}}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<User> createUser(@Validated(ValidationGroups.Create.class) @RequestBody User user, @PathVariable String username) {
-        return userService.createUser(user, username);
+    public ResponseEntity<User> createUser(
+        @Validated(ValidationGroups.Create.class) @RequestBody User user,
+        @PathVariable String username,
+        @RequestParam(required = false) List<String> expand) {
+        return userService.createUser(user, username, expand);
     }
-    
+
     @PutMapping("/{username:[a-z0-9._]{3,30}}")
     @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
-    public ResponseEntity<User> updateUser(@Validated(ValidationGroups.Update.class) @RequestBody User user, @PathVariable String username) {
-        return userService.updateUser(user, username);
+    public ResponseEntity<User> updateUser(
+            @Validated(ValidationGroups.Update.class) @RequestBody User user,
+            @PathVariable String username,
+            @RequestParam(required = false) List<String> expand) {
+        return userService.updateUser(user, username, expand);
     }
-    
+
     @DeleteMapping("/{username:[a-z0-9._]{3,30}}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteUser(@PathVariable String username) {
         return userService.deleteUser(username);
     }
-    
+
 }

@@ -7,20 +7,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.ufpr.byteassist_backend.dto.DetailedUserDTO;
+import com.surrealdb.RecordId;
 import com.ufpr.byteassist_backend.exception.EnhancedStatusException;
 import com.ufpr.byteassist_backend.model.User;
 import com.ufpr.byteassist_backend.repository.UserRepoInterface;
+import com.ufpr.byteassist_backend.util.EntityExpander;
 
 @Service
 public class UserService {
     private final UserRepoInterface userRepo;
+    private final EntityExpander entityExpander;
     
-    public UserService(UserRepoInterface userRepo) {
+    public UserService(UserRepoInterface userRepo, EntityExpander entityExpander) {
         this.userRepo = userRepo;
+        this.entityExpander = entityExpander;
     }
     
-    public ResponseEntity<User> getUser(String username) {
+    public ResponseEntity<User> getUser(String username, List<String> expand) {
         Optional<User> user = userRepo.getUser(username);
         if (user.isEmpty()) {
             throw new EnhancedStatusException(
@@ -29,10 +32,13 @@ public class UserService {
                 "The user with the specified username does not exist"
             );
         }
-        return ResponseEntity.ok(user.get());
+        
+        // Use our utility to expand the user if needed
+        User expandedUser = entityExpander.expandUser(user.get(), expand);
+        return ResponseEntity.ok(expandedUser);
     }
-    
-    public ResponseEntity<User> createUser(User user, String username) {
+
+    public ResponseEntity<User> createUser(User user, String username, List<String> expand) {
         Optional<User> createdUser = userRepo.createUser(user, username);
         if (createdUser.isEmpty()) {
             throw new EnhancedStatusException(
@@ -41,11 +47,13 @@ public class UserService {
                 "The user could not be created because the username is already taken or there was a database error"
             );
         }
-        // return a 201 created response with the created user
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser.get());
+        
+        // Use our utility to expand the user if needed
+        User expandedUser = entityExpander.expandUser(createdUser.get(), expand);
+        return ResponseEntity.status(HttpStatus.CREATED).body(expandedUser);
     }
     
-    public ResponseEntity<User> updateUser(User user, String username) {
+    public ResponseEntity<User> updateUser(User user, String username, List<String> expand) {
         Optional<User> updatedUser = userRepo.updateUser(user, username);
         if (updatedUser.isEmpty()) {
             throw new EnhancedStatusException(
@@ -54,7 +62,10 @@ public class UserService {
                 "The user with the specified username does not exist and cannot be updated"
             );
         }
-        return ResponseEntity.ok(updatedUser.get());
+        
+        // Use our utility to expand the user if needed
+        User expandedUser = entityExpander.expandUser(updatedUser.get(), expand);
+        return ResponseEntity.ok(expandedUser);
     }
     
     public ResponseEntity<Void> deleteUser(String username) {
@@ -69,7 +80,7 @@ public class UserService {
         return ResponseEntity.noContent().build();
     }
     
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<User>> getAllUsers(List<String> expand) {
         Optional<List<User>> users = userRepo.getAllUsers();
         if (users.isEmpty()) {
             throw new EnhancedStatusException(
@@ -78,18 +89,9 @@ public class UserService {
                 "There was a problem accessing the database to retrieve the list of users"
             );
         }
-        return ResponseEntity.ok(users.get());
-    }
-    
-    public ResponseEntity<DetailedUserDTO> getDetailedUser(String username) {
-        Optional<DetailedUserDTO> user = userRepo.getDetailedUser(username);
-        if (user.isEmpty()) {
-            throw new EnhancedStatusException(
-                HttpStatus.NOT_FOUND,
-                "User with username " + username + " not found",
-                "The user with the specified username does not exist"
-            );
-        }
-        return ResponseEntity.ok(user.get());
+        
+        // Use our utility to expand all users efficiently
+        List<User> expandedUsers = entityExpander.expandUsers(users.get(), expand);
+        return ResponseEntity.ok(expandedUsers);
     }
 }

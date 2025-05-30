@@ -40,5 +40,6 @@ public class Task {
     @NotBlank(groups = ValidationGroups.Create.class, message = "Type cannot be blank")
     private String type;
     
+    @Null(message = "Time should not be provided in the request body as it is automatically generated")
     private TaskTime time;
 }
