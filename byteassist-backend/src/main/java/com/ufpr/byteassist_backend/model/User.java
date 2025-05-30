@@ -41,11 +41,24 @@ public class User implements UserDetails {
     @Null(message = "Person ID must be null")
     private RecordId person;
     
+    @JsonIgnore 
+    private Person personDetail;
+    
     private UserTime time;
 
     @NotBlank(groups = ValidationGroups.Create.class, message = "Type cannot be blank")
     @Pattern(regexp = "^(Client|Admin|Manager|Employee)$", message = "Type must be either 'Client' or 'Admin'")
     private String role = "Client";
+    
+    @JsonProperty("person")
+    public Object getPersonProperty() {
+        return personDetail != null ? personDetail : person;
+    }
+    
+    // Method to set the expanded person object
+    public void setPersonDetail(Person personDetail) {
+        this.personDetail = personDetail;
+    }
     
     @Override
     public String getUsername() {
