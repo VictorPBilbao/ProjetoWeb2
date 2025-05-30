@@ -62,7 +62,7 @@ public class User implements UserDetails {
     
     @Override
     public String getUsername() {
-        return id.getId().toString();
+        return id.getId().toString().replaceAll("[⟨⟩]", "");
     }
 
     @Override

@@ -25,8 +25,8 @@ public class EntityExpander {
     }
     
     public User expandUser(User user, List<String> expand) {
-        if (user != null && expand != null && expand.contains("person") && user.getPerson() != null) {
-            Person person = personService.getPerson(user.getPerson().getId().toString()).getBody();
+        if (expand != null && expand.contains("person") && user.getPerson() != null) {
+            Person person = personService.getPerson(user.getPerson().getId().toString().replaceAll("[⟨⟩]", "")).getBody();
             user.setPersonDetail(person);
         }
         return user;
@@ -41,7 +41,7 @@ public class EntityExpander {
         List<String> personIds = users.stream()
             .filter(user -> user.getPerson() != null)
             .map(user -> user.getPerson().getId().toString())
-            .collect(Collectors.toList());
+            .toList();
             
         if (personIds.isEmpty()) {
             return users;
@@ -55,14 +55,14 @@ public class EntityExpander {
         
         Map<String, Person> personMap = persons.stream()
             .collect(Collectors.toMap(
-                person -> person.getId().getId().toString(),
+                person -> person.getId().getId().toString().replaceAll("[⟨⟩]", ""),
                 Function.identity()
             ));
             
         // Associate each user with its person
         for (User user : users) {
             if (user.getPerson() != null) {
-                String personId = user.getPerson().getId().toString();
+                String personId = user.getPerson().getId().toString().replaceAll("[⟨⟩]", "");
                 Person person = personMap.get(personId);
                 if (person != null) {
                     user.setPersonDetail(person);
