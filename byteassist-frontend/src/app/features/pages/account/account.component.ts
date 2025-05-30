@@ -55,30 +55,4 @@ export class AccountComponent {
       this.showNotification = true;
     }
   }
-
-  applyCpfMask(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value
-      .replace(/\D/g, '') // Remove tudo que não é número
-      .replace(/(\d{3})(\d)/, '$1.$2') // Adiciona o primeiro ponto
-      .replace(/(\d{3})(\d)/, '$1.$2') // Adiciona o segundo ponto
-      .replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Adiciona o traço
-  }
-
-  // Máscara para Telefone
-  applyPhoneMask(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value
-      .replace(/\D/g, '') // Remove tudo que não é número
-      .replace(/(\d{2})(\d)/, '($1) $2') // Adiciona os parênteses
-      .replace(/(\d{5})(\d)/, '$1-$2'); // Adiciona o traço
-  }
-
-  // Máscara para CEP
-  applyCepMask(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value
-      .replace(/\D/g, '') // Remove tudo que não é número
-      .replace(/(\d{5})(\d)/, '$1-$2'); // Adiciona o traço
-  }
 }
