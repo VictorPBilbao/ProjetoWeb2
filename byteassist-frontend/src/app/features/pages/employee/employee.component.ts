@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EmployeeService } from '../../services/employee/employee.service';
 import { Employee } from '../../shared/models/employee.model';
 import { Router } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
-import Swal from 'sweetalert2';
-//import { AccountComponent } from "../account/account.component";
+import { ModalEmployeeVisualizarComponent } from '../../components/modal-employee-visualizar/modal-employee-visualizar.component';
+import { ModalEmployeeEditarComponent } from "../../components/modal-employee-editar/modal-employee-editar.component";
 
-declare var bootstrap: any; // Importa os modais do Bootstrap
+declare var bootstrap: any; 
 
 @Component({
   selector: 'app-employee',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ModalEmployeeVisualizarComponent, ModalEmployeeEditarComponent],
   templateUrl: './employee.component.html',
   styleUrls: ['./employee.component.css'],
 })
@@ -32,6 +32,21 @@ export class EmployeeComponent implements OnInit {
   ordemCrescente: boolean = true;
 
   constructor(private service: EmployeeService, private router: Router, private cdr: ChangeDetectorRef) { }
+
+  @ViewChild(ModalEmployeeVisualizarComponent) modalVisualizar!: ModalEmployeeVisualizarComponent;
+  @ViewChild(ModalEmployeeEditarComponent) modalEmployeeEditar!: ModalEmployeeEditarComponent;
+
+
+  ver(s: Employee) {
+  this.modalVisualizar.selecionado = { ...s };
+  this.modalVisualizar.abrirModal();
+  }
+
+  editar(s: Employee) {
+  this.modalEmployeeEditar.editar(s); // define o selecionado no modal
+  //this.modalEmployeeEditar.abrirModal(); // abre o modal
+  }
+
 
   ngOnInit(): void {
     this.service.listar().subscribe(s => {
@@ -90,110 +105,7 @@ export class EmployeeComponent implements OnInit {
     this.router.navigate(['/nova-solicitacao']);
   }
 
-  ver(s: Employee) {
-    this.selecionado = { ...s };
-    this.cdr.detectChanges(); // Força o Angular a atualizar a view
 
-    const modal = new bootstrap.Modal(document.getElementById('visualizarModal'));
-    modal.show();
-  }
-
-  editar(s: Employee) {
-    this.selecionado = { ...s };
-    const modal = new bootstrap.Modal(document.getElementById('editarModal'));
-    modal.show();
-  }
-
-  //salvarEdicao() {
-    //this.service.editar(this.selecionado);
-    //this.ngOnInit(); // Atualiza a lista exibida
-    //bootstrap.Modal.getInstance(document.getElementById('editarModal'))?.hide(); // Fecha o modal
- // }
-  salvarEdicao() {
-    this.service.editar(this.selecionado).subscribe(() => {
-    this.ngOnInit(); // Atualiza a lista exibida
-    bootstrap.Modal.getInstance(document.getElementById('editarModal'))?.hide(); // Fecha o modal
-  });
-}
-
-  // Função para realizar a ação conforme o estado
-  realizarAcao(acao: string): void {
-    switch (acao) {
-      case 'ok':
-        this.processarOk();
-        break;
-      case 'aprovar':
-        this.aprovarOrcamento();
-        break;
-      case 'rejeitar':
-        this.rejeitarOrcamento();
-        break;
-      case 'resgatar':
-        this.resgatarServico();
-        break;
-      case 'pagar':
-        this.pagarServico();
-        break;
-      default:
-        console.log('Ação desconhecida');
-    }
-  }
-
-  processarOk(): void {
-    console.log('Ação OK realizada');
-    // Lógica para processar ação "OK"
-  }
-
-  aprovarOrcamento(): void {
-    console.log('Orçamento aprovado');
-    this.router.navigate(['/orcamentos']).then(() => {
-      window.location.reload(); // força o reload após a navegação
-    });
-  }
-
-  rejeitarOrcamento(): void {
-    console.log('Orçamento rejeitado');
-    this.router.navigate(['/orcamentos']).then(() => {
-      window.location.reload(); // força o reload após a navegação
-    });
-  }
-
-  resgatarServico(): void {
-    // Atualiza o estado da solicitação
-    this.selecionado.estado = 'APROVADA';
-
-    // Atualiza o array principal, se necessário
-    const index = this.solicitacoes.findIndex(s => s.id === this.selecionado.id);
-    if (index !== -1) {
-      this.solicitacoes[index].estado = 'APROVADA';
-    }
-
-    // Exibe o popup de sucesso
-    Swal.fire({
-      title: 'Serviço Resgatado!',
-      text: 'O serviço foi resgatado, solicitação APROVADA.',
-      icon: 'success',
-      confirmButtonText: 'OK',
-      confirmButtonColor: '#198754'
-    });
-  }
-
-  pagarServico(): void {
-    // Exibe o popup de confirmação
-    Swal.fire({
-      title: 'Confirme o pagamento!\nValor: R$100,00',
-      text: 'Redirecionando para a tela de pagamento...',
-      icon: 'success',
-      confirmButtonText: 'OK',
-      confirmButtonColor: '#0d6efd'
-    }).then(() => {
-      // Redireciona para /payment e força refresh
-      this.router.navigateByUrl('/pagamentos').then(() => {
-        window.location.reload();  // Força recarregamento da tela
-      });
-    });
-  }
-  
 atualizarPagina(): void {
   const inicio = (this.paginaAtual - 1) * this.itensPorPagina;
   const fim = inicio + this.itensPorPagina;
