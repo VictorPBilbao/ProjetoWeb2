@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.surrealdb.RecordId;
 import com.ufpr.byteassist_backend.exception.EnhancedStatusException;
 import com.ufpr.byteassist_backend.model.User;
 import com.ufpr.byteassist_backend.repository.UserRepoInterface;
