@@ -12,14 +12,14 @@ import com.ufpr.byteassist_backend.model.User;
 import com.ufpr.byteassist_backend.service.PersonService;
 
 /**
- * Utility class for handling entity expansion in API responses.
+ * Utility class for handling user expansion in API responses.
  * Centralizes the logic for expanding relationships like User->Person.
  */
 @Component
-public class EntityExpander {
+public class UserExpander {
     private final PersonService personService;
     
-    public EntityExpander(PersonService personService) {
+    public UserExpander(PersonService personService) {
         this.personService = personService;
     }
     
