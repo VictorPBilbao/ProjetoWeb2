@@ -11,19 +11,20 @@ import com.surrealdb.RecordId;
 import com.ufpr.byteassist_backend.exception.EnhancedStatusException;
 import com.ufpr.byteassist_backend.model.Task;
 import com.ufpr.byteassist_backend.repository.TaskRepoInterface;
-
-import com.ufpr.byteassist_backend.dto.DetailedTaskDTO;
+import com.ufpr.byteassist_backend.util.TaskExpander;
 
 
 @Service
 public class TaskService {
     private final TaskRepoInterface taskRepo;
+    private final TaskExpander taskExpander;
 
-    public TaskService(TaskRepoInterface taskRepo) {
+    public TaskService(TaskRepoInterface taskRepo, TaskExpander taskExpander) {
         this.taskRepo = taskRepo;
+        this.taskExpander = taskExpander;
     }
 
-    public ResponseEntity<List<Task>> getTasksByUsername(String username, String type) {
+    public ResponseEntity<List<Task>> getTasksByUsername(String username, String type, List<String> expand) {
         Optional<List<Task>> tasks = taskRepo.getTasksByUsername(username, type);
         if (tasks.isEmpty()) {
             throw new EnhancedStatusException(
@@ -32,10 +33,13 @@ public class TaskService {
                 "There was a problem accessing the database to retrieve the list of tasks"
             );
         }
-        return ResponseEntity.ok(tasks.get());
+        
+        // Expand tasks if requested
+        List<Task> expandedTasks = taskExpander.expandTasks(tasks.get(), expand);
+        return ResponseEntity.ok(expandedTasks);
     }
     
-    public ResponseEntity<List<Task>> getTasksByUsernameAndStatus(String username, String type, String status) {
+    public ResponseEntity<List<Task>> getTasksByUsernameAndStatus(String username, String type, String status, List<String> expand) {
         Optional<List<Task>> tasks = taskRepo.getTasksByUsernameAndStatus(username, type, status);
         if (tasks.isEmpty()) {
             throw new EnhancedStatusException(
@@ -44,10 +48,13 @@ public class TaskService {
                 "There was a problem accessing the database to retrieve the list of tasks"
             );
         }
-        return ResponseEntity.ok(tasks.get());
+        
+        // Expand tasks if requested
+        List<Task> expandedTasks = taskExpander.expandTasks(tasks.get(), expand);
+        return ResponseEntity.ok(expandedTasks);
     }
     
-    public ResponseEntity<Task> getTaskById(String id) {
+    public ResponseEntity<Task> getTaskById(String id, List<String> expand) {
         Optional<Task> task = taskRepo.getTaskById(id);
         if (task.isEmpty()) {
             throw new EnhancedStatusException(
@@ -56,10 +63,13 @@ public class TaskService {
                 "No task found with the provided ID"
             );
         }
-        return ResponseEntity.ok(task.get());
+        
+        // Expand task if requested
+        Task expandedTask = taskExpander.expandTask(task.get(), expand);
+        return ResponseEntity.ok(expandedTask);
     }
     
-    public ResponseEntity<Task> createTask(Task task) {
+    public ResponseEntity<Task> createTask(Task task, List<String> expand) {
         Optional<Task> createdTask = taskRepo.createTask(task);
         if (createdTask.isEmpty()) {
             throw new EnhancedStatusException(
@@ -68,17 +78,23 @@ public class TaskService {
                 "There was a problem accessing the database to create the task"
             );
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdTask.get());
+        
+        // Expand task if requested
+        Task expandedTask = taskExpander.expandTask(createdTask.get(), expand);
+        return ResponseEntity.status(HttpStatus.CREATED).body(expandedTask);
     }
 
-    public ResponseEntity<Task> updateTask(String id, Task task) {
+    public ResponseEntity<Task> updateTask(String id, Task task, List<String> expand) {
         Task updatedTask = taskRepo.updateTask(task, id).orElseThrow(
             () -> new EnhancedStatusException(
                 HttpStatus.NOT_FOUND,
                 "Task not found",
                 "No task found with the provided ID"
             ));
-        return ResponseEntity.ok(updatedTask);
+            
+        // Expand task if requested
+        Task expandedTask = taskExpander.expandTask(updatedTask, expand);
+        return ResponseEntity.ok(expandedTask);
     }
     
     public ResponseEntity<Void> deleteTask(String id) {
@@ -93,7 +109,7 @@ public class TaskService {
         return ResponseEntity.noContent().build();
     }
     
-    public ResponseEntity<List<Task>> getAllTasks() {
+    public ResponseEntity<List<Task>> getAllTasks(List<String> expand) {
         Optional<List<Task>> tasks = taskRepo.getAllTasks();
         if (tasks.isEmpty()) {
             throw new EnhancedStatusException(
@@ -102,7 +118,10 @@ public class TaskService {
                 "There was a problem accessing the database to retrieve the list of tasks"
             );
         }
-        return ResponseEntity.ok(tasks.get());
+        
+        // Expand tasks if requested
+        List<Task> expandedTasks = taskExpander.expandTasks(tasks.get(), expand);
+        return ResponseEntity.ok(expandedTasks);
     }
     
     public boolean isTaskCreator(String taskId, String username) {
@@ -122,17 +141,5 @@ public class TaskService {
             "You are not the creator of this task"
             );
         }
-    }
-    
-    public ResponseEntity<List<DetailedTaskDTO>> getCurrentUserDetailedTasks(String userId, String type) {
-        Optional<List<DetailedTaskDTO>> tasks = taskRepo.getDetailedTasksByUsername(userId, type);
-        if (tasks.isEmpty()) {
-            throw new EnhancedStatusException(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                "Error retrieving detailed tasks from database",
-                "There was a problem accessing the database to retrieve the list of detailed tasks"
-            );
-        }
-        return ResponseEntity.ok(tasks.get());
     }
 }

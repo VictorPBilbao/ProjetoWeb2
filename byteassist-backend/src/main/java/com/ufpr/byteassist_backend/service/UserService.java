@@ -7,20 +7,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.surrealdb.RecordId;
 import com.ufpr.byteassist_backend.exception.EnhancedStatusException;
 import com.ufpr.byteassist_backend.model.User;
 import com.ufpr.byteassist_backend.repository.UserRepoInterface;
-import com.ufpr.byteassist_backend.util.EntityExpander;
+import com.ufpr.byteassist_backend.util.UserExpander;
 
 @Service
 public class UserService {
     private final UserRepoInterface userRepo;
-    private final EntityExpander entityExpander;
+    private final UserExpander userExpander;
     
-    public UserService(UserRepoInterface userRepo, EntityExpander entityExpander) {
+    public UserService(UserRepoInterface userRepo, UserExpander userExpander) {
         this.userRepo = userRepo;
-        this.entityExpander = entityExpander;
+        this.userExpander = userExpander;
     }
     
     public ResponseEntity<User> getUser(String username, List<String> expand) {
@@ -34,7 +33,7 @@ public class UserService {
         }
         
         // Use our utility to expand the user if needed
-        User expandedUser = entityExpander.expandUser(user.get(), expand);
+        User expandedUser = userExpander.expandUser(user.get(), expand);
         return ResponseEntity.ok(expandedUser);
     }
 
@@ -49,7 +48,7 @@ public class UserService {
         }
         
         // Use our utility to expand the user if needed
-        User expandedUser = entityExpander.expandUser(createdUser.get(), expand);
+        User expandedUser = userExpander.expandUser(createdUser.get(), expand);
         return ResponseEntity.status(HttpStatus.CREATED).body(expandedUser);
     }
     
@@ -64,7 +63,7 @@ public class UserService {
         }
         
         // Use our utility to expand the user if needed
-        User expandedUser = entityExpander.expandUser(updatedUser.get(), expand);
+        User expandedUser = userExpander.expandUser(updatedUser.get(), expand);
         return ResponseEntity.ok(expandedUser);
     }
     
@@ -91,7 +90,7 @@ public class UserService {
         }
         
         // Use our utility to expand all users efficiently
-        List<User> expandedUsers = entityExpander.expandUsers(users.get(), expand);
+        List<User> expandedUsers = userExpander.expandUsers(users.get(), expand);
         return ResponseEntity.ok(expandedUsers);
     }
 }

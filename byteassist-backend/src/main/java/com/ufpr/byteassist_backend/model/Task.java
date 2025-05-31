@@ -1,10 +1,11 @@
 package com.ufpr.byteassist_backend.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.surrealdb.RecordId;
 import com.ufpr.byteassist_backend.validation.ValidationGroups;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
@@ -42,4 +43,37 @@ public class Task {
     
     @Null(message = "Time should not be provided in the request body as it is automatically generated")
     private TaskTime time;
+    
+    // Add fields for expanded entities
+    @JsonIgnore
+    private User creatorDetail;
+    
+    @JsonIgnore
+    private User assigneeDetail;
+    
+    @JsonIgnore
+    private Equipment equipmentDetail;
+    
+    @JsonIgnore
+    private Budget budgetDetail;
+    
+    @JsonProperty("creator")
+    public Object getCreatorProperty() {
+        return creatorDetail != null ? creatorDetail : creator;
+    }
+    
+    @JsonProperty("assignee")
+    public Object getAssigneeProperty() {
+        return assigneeDetail != null ? assigneeDetail : assignee;
+    }
+    
+    @JsonProperty("equipment")
+    public Object getEquipmentProperty() {
+        return equipmentDetail != null ? equipmentDetail : equipment;
+    }
+    
+    @JsonProperty("budget")
+    public Object getBudgetProperty() {
+        return budgetDetail != null ? budgetDetail : budget;
+    }
 }

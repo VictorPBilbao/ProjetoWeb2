@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ufpr.byteassist_backend.dto.DetailedTaskDTO;
 import com.ufpr.byteassist_backend.model.Task;
 import com.ufpr.byteassist_backend.model.User;
 import com.ufpr.byteassist_backend.service.TaskService;
@@ -33,13 +32,16 @@ public class TaskController {
 
     @GetMapping()
     @PreAuthorize("hasRole('MANAGER')")
-    public ResponseEntity<List<Task>> getAllTasks() {
-        return taskService.getAllTasks();
+    public ResponseEntity<List<Task>> getAllTasks(
+            @RequestParam(required = false) List<String> expand) {
+        return taskService.getAllTasks(expand);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable String id) {
-        return taskService.getTaskById(id);
+    public ResponseEntity<Task> getTaskById(
+            @PathVariable String id,
+            @RequestParam(required = false) List<String> expand) {
+        return taskService.getTaskById(id, expand);
     }
 
     @GetMapping("/byUsername/{username:[a-z0-9._]{3,30}}")
@@ -47,7 +49,8 @@ public class TaskController {
     public ResponseEntity<List<Task>> getTasksByUsername(
             @PathVariable String username,
             @RequestParam(name = "type", defaultValue = "creator") String type,
-            @RequestParam(name = "status", required = false) String status) {
+            @RequestParam(name = "status", required = false) String status,
+            @RequestParam(required = false) List<String> expand) {
 
         // Validate that type is either "creator" or "assignee"
         if (!type.equals("creator") && !type.equals("assignee")) {
@@ -60,16 +63,17 @@ public class TaskController {
         }
         
         if (status != null) {
-            return taskService.getTasksByUsernameAndStatus(username, type, status);
+            return taskService.getTasksByUsernameAndStatus(username, type, status, expand);
         }
 
-        return taskService.getTasksByUsername(username, type);
+        return taskService.getTasksByUsername(username, type, expand);
     }
     
     @GetMapping("/me")
     public ResponseEntity<List<Task>> getCurrentUserTasks(
             @RequestParam(name = "type", defaultValue = "creator") String type, 
-            @RequestParam(name = "status", required = false) String status) {
+            @RequestParam(name = "status", required = false) String status,
+            @RequestParam(required = false) List<String> expand) {
 
         // Validate that type is either "creator" or "assignee"
         if (!type.equals("creator") && !type.equals("assignee")) {
@@ -85,40 +89,30 @@ public class TaskController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (status != null) {
-            return taskService.getTasksByUsernameAndStatus(user.getUsername(), type, status);
+            return taskService.getTasksByUsernameAndStatus(user.getUsername(), type, status, expand);
         }
 
-        return taskService.getTasksByUsername(user.getUsername(), type);
-    }
-    
-    @GetMapping("detailed/me")
-    public ResponseEntity<List<DetailedTaskDTO>> getCurrentUserDetailedTasks(
-        @RequestParam(name = "type", defaultValue = "creator") String type) {
-
-        // Validate that type is either "creator" or "assignee"
-        if (!type.equals("creator") && !type.equals("assignee")) {
-            throw new IllegalArgumentException("Type parameter must be either 'creator' or 'assignee'");
-        }
-
-        // Get the current user from the security context
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        return taskService.getCurrentUserDetailedTasks(user.getId().getId().toString(), type);
+        return taskService.getTasksByUsername(user.getUsername(), type, expand);
     }
 
     @PostMapping()
-    public ResponseEntity<Task> createTask(@Validated(ValidationGroups.Create.class) @RequestBody Task task) {
+    public ResponseEntity<Task> createTask(
+            @Validated(ValidationGroups.Create.class) @RequestBody Task task,
+            @RequestParam(required = false) List<String> expand) {
         // get the current user from the security context
         // and set it as the creator of the task
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         task.setCreator(user.getId());
 
-        return taskService.createTask(task);
+        return taskService.createTask(task, expand);
     }
 
     @PatchMapping("/{id}")
     @PreAuthorize("hasRole('EMPLOYEE')")
-    public ResponseEntity<Task> updateTask(@PathVariable String id, @Validated(ValidationGroups.Update.class) @RequestBody Task task) {
+    public ResponseEntity<Task> updateTask(
+            @PathVariable String id, 
+            @Validated(ValidationGroups.Update.class) @RequestBody Task task,
+            @RequestParam(required = false) List<String> expand) {
         // get the current user from the security context
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -127,7 +121,7 @@ public class TaskController {
             task.setCreator(user.getId());
         }
 
-        return taskService.updateTask(id, task);
+        return taskService.updateTask(id, task, expand);
     }
 
     @DeleteMapping("/{id}")
