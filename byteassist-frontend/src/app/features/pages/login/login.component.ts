@@ -41,16 +41,9 @@ export class LoginComponent implements OnInit {
     return !!this.loginForm.get(field)?.invalid && !!this.loginForm.get(field)?.touched;
   }
 
+  // Método para obter a mensagem de erro do campo
   getErrorMessage(field: string): string {
-    if (field === 'username') {
-      if (this.loginForm.get(field)?.hasError('required')) return 'Usuário é obrigatório';
-    }
-
-    if (field === 'password') {
-      if (this.loginForm.get(field)?.hasError('required')) return 'Senha é obrigatória';
-    }
-
-    return '';
+      return `${field.charAt(0).toUpperCase() + field.slice(1)} é obrigatório`;
   }
 
   onSubmit() {
@@ -70,14 +63,12 @@ export class LoginComponent implements OnInit {
             } catch (error) {
               throw error;
             }
-          } else {
-            this.message = 'Erro ao fazer login. Verifique sua conexão ou tente novamente mais tarde.';
           }
-          this.showNotification = true;
+          this.showNotification = false;
         },
         error: (err) => {
           if (err.status === 401) {
-            this.message = err.error?.message || 'Erro ao fazer login. Verifique sua conexão ou tente novamente mais tarde.';
+            this.message = 'Usuário ou senha inválidos. Tente novamente.';
           } else {
             this.message = 'Erro ao fazer login. Verifique sua conexão ou tente novamente mais tarde.';
           }
