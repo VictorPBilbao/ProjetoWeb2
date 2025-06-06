@@ -6,6 +6,7 @@ export interface Person {
   cpf: string;
   dob: Date;
   gender: string;
+  phone: string;
   address: PersonAddress;
   name: PersonName;
 }

@@ -36,7 +36,7 @@ export class AuthService {
   // Salva o token em um cookie
   saveToken(token: string): void {
     const expires = new Date();
-    expires.setTime(expires.getTime() + 7 * 24 * 60 * 60 * 1000); // Expira em 7 dias
+    expires.setTime(expires.getTime() + 24 * 60 * 60 * 1000); // Expira em 24 horas
     document.cookie = `token=${token}; path=/; secure; samesite=strict; expires=${expires.toUTCString()}`;
   }
 

@@ -31,7 +31,7 @@
               id="fullName"
               name="fullName"
               required
-              [(ngModel)]="user.fullName"
+              [(ngModel)]="user.person.name.first"
             >
           </div>
 
@@ -54,7 +54,7 @@
               name="phone"
               placeholder="(XX) XXXXX‑XXXX"
               mask="(00) 00000-0000"
-              [(ngModel)]="user.phone"
+              [(ngModel)]="user.person.phone"
               maxlength="15"
             >
           </div>
@@ -74,7 +74,7 @@
               id="cpf"
               name="cpf"
               placeholder="000.000.000-00"
-              [(ngModel)]="user.cpf"
+              [(ngModel)]="user.person.cpf"
               mask="000.000.000-00"
               maxlength="14"
             >
@@ -86,7 +86,7 @@
               type="date"
               id="dateOfBirth"
               name="dateOfBirth"
-              [(ngModel)]="user.dateOfBirth"
+              [(ngModel)]="user.person.dob"
             >
           </div>
 
@@ -95,7 +95,7 @@
             <select
               id="gender"
               name="gender"
-              [(ngModel)]="user.gender"
+              [(ngModel)]="user.person.gender"
             >
               <option value="">Selecione...</option>
               <option value="Male">Masculino</option>
@@ -120,7 +120,7 @@
               name="zip"
               placeholder="00000-000"
               mask="00000-000"
-              [(ngModel)]="user.zip"
+              [(ngModel)]="user.person.address.zip"
               maxlength="9"
             >
           </div>
@@ -131,7 +131,7 @@
               type="text"
               id="street"
               name="street"
-              [(ngModel)]="user.street"
+              [(ngModel)]="user.person.address.street"
             >
           </div>
 
@@ -141,7 +141,7 @@
               type="text"
               id="number"
               name="number"
-              [(ngModel)]="user.number"
+              [(ngModel)]="user.person.address.number"
             >
           </div>
 
@@ -151,7 +151,7 @@
               type="text"
               id="complement"
               name="complement"
-              [(ngModel)]="user.complement"
+              [(ngModel)]="user.person.address.complement"
             >
           </div>
 
@@ -161,7 +161,7 @@
               type="text"
               id="neighborhood"
               name="neighborhood"
-              [(ngModel)]="user.neighborhood"
+              [(ngModel)]="user.person.address.neighborhood"
             >
           </div>
 
@@ -171,7 +171,7 @@
               type="text"
               id="city"
               name="city"
-              [(ngModel)]="user.city"
+              [(ngModel)]="user.person.address.city"
             >
           </div>
 
@@ -180,7 +180,7 @@
             <select
               id="state"
               name="state"
-              [(ngModel)]="user.state"
+              [(ngModel)]="user.person.address.state"
             >
               <option value="">Selecione...</option>
               <option value="AC">AC</option>
@@ -218,7 +218,7 @@
             <select
               id="country"
               name="country"
-              [(ngModel)]="user.country"
+              [(ngModel)]="user.person.address.country"
             >
               <option value="BR">Brasil</option>
               <!-- demais países -->

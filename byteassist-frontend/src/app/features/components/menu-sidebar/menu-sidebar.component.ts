@@ -62,8 +62,8 @@ export class MenuSidebarComponent {
   }
 
   getUserInitals(): string {
-    if (!this.user?.fullName) return '';
-    return this.user.fullName
+    if (!this.user?.person?.name?.first) return '';
+    return this.user.person.name.first + ' ' + this.user.person.name.last
       .split(' ')
       .map(name => name[0])
       .join('')

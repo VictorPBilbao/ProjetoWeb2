@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Budget } from '../../shared/models/budget.model';
-import { EquipmenteParts } from '../../shared/models/equipmenteParts.model';
+import { EquipmenteParts } from '../../shared/models/equipmentParts.model';
 import { LoadingService } from '../utils/loading.service';
 
 @Injectable({

@@ -20,7 +20,7 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 })
 export class AccountComponent {
   @ViewChild('userForm') userForm!: NgForm | undefined;
-  user: User = new User();
+  user: User = {} as User;
   message: string = '';
   showNotification: boolean = false;
 

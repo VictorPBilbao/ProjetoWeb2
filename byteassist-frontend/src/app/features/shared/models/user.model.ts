@@ -7,7 +7,7 @@ export interface User {
     username: string;
     isActive: boolean;
     password?: string;
-    person: string | Person;
+    person: Person;
     role: string;
     time: UserTime;
 }
