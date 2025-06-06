@@ -1,21 +1,13 @@
-export class User {
-  constructor(
-    public id: string = '',
-    public username: string = '',
-    public password: string = '',
-    public fullName: string = '',
-    public cpf: string = '',
-    public dateOfBirth: Date = new Date(),
-    public gender: string = '',
-    public email: string = '',
-    public phone: string = '',
-    public zip: string = '',
-    public state: string = '',
-    public city: string = '',
-    public neighborhood: string = '',
-    public street: string = '',
-    public number: string = '',
-    public complement: string = '',
-    public country: string = 'BR',
-  ) { }
+import { Person } from "./person.model";
+import { UserTime } from "./user-time.model";
+
+export interface User {
+    id: string;
+    email: string;
+    username: string;
+    isActive: boolean;
+    password?: string;
+    person: string | Person;
+    role: string;
+    time: UserTime;
 }

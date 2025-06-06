@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { User } from '../../shared/models/user.model';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
 import { handleErrors } from '../../helpers/errors/handleErrors';
 import { LoadingService } from '../utils/loading.service';
 import { AuthService } from '../auth/auth.service';
+import { User } from '../../shared/models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +14,9 @@ export class UserService {
   private readonly apiUrl = 'https://byteassist-backend.fly.dev/api';
 
   constructor(
-    private http: HttpClient,
-    private loadingService: LoadingService,
-    private authService: AuthService
+    private readonly http: HttpClient,
+    private readonly loadingService: LoadingService,
+    private readonly authService: AuthService
   ) { }
 
   // Método para criar um novo usuário
@@ -60,30 +60,30 @@ export class UserService {
     return null; // Retorna null se o token não for encontrado
   }
 
-  getInfoUser(): Observable<User> {
-    // Usuário completamente preenchido (mock)
-    const mockUser = new User(
-      '123e4567-e89b-12d3-a456-426614174000',
-      'johndoe',
-      '',
-      'John Doe',
-      '123.456.789-00',
-      new Date(1990, 4, 15),
-      'M',
-      'john.doe@example.com',
-      '(11) 91234-5678',
-      '01001-000',
-      'SP',
-      'São Paulo',
-      'Centro',
-      'Praça da Sé',
-      '100',
-      'Apto 101',
-      'BR'
-    );
+  // getInfoUser(): Observable<User> {
+  //   // Usuário completamente preenchido (mock)
+  //   const mockUser = User(
+  //     '123e4567-e89b-12d3-a456-426614174000',
+  //     'johndoe',
+  //     '',
+  //     'John Doe',
+  //     '123.456.789-00',
+  //     new Date(1990, 4, 15),
+  //     'M',
+  //     'john.doe@example.com',
+  //     '(11) 91234-5678',
+  //     '01001-000',
+  //     'SP',
+  //     'São Paulo',
+  //     'Centro',
+  //     'Praça da Sé',
+  //     '100',
+  //     'Apto 101',
+  //     'BR'
+  //   );
 
-    return of(mockUser);
-  }
+  //   return of(mockUser);
+  // }
 
   // Vai substuir o método getInfoUser
   getPersonByToken<T>(): Observable<T> {
