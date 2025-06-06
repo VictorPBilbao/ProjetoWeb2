@@ -2,6 +2,18 @@ section {
   padding: 40px 20px;
 }
 
+.payment-wrapper {
+  max-width: 900px;
+  margin: auto;
+  background-color: #ffffffde;
+  padding: 1rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
 .center-container {
   display: flex;
   justify-content: center;
@@ -12,9 +24,8 @@ section {
   margin-bottom: 30px;
 }
 
-/* Container do título - removido o gradiente e borda */
 .title-container {
-  padding: 20px 0; /* Ajuste o padding conforme necessário */
+  padding: 20px 0; 
   position: relative;
   margin-bottom: 40px;
 }
@@ -29,13 +40,13 @@ section {
 /* Estilo do blob */
 .titulo-blob {
   position: absolute;
-  top: -20px;
-  transform: translateY(-50%);
-  width: 150%;
+  top: -120px;
+  width: 250%;
   height: auto;
-  z-index: -1;
+  z-index: 1;
   opacity: 1;
-  margin-left: -13%;
+  margin-left: -70%;
+  pointer-events: none;
 }
 
 /* Estilo do título */
@@ -48,6 +59,7 @@ h1 {
   margin: 0;
   padding-left: 40px; /* Espaço para o blob */
   margin-top: -40px;
+  z-index: 1;
 }
 
 /* Ícone de pagamentos */
@@ -60,7 +72,7 @@ h1 i {
 /* Container central do formulário */
 .container {
   padding: 30px;
-  border-radius: 12px;
+  border-radius: 20px;
   max-width: 620px;
   margin: auto;
 }
@@ -88,11 +100,11 @@ label {
   font-weight: 600;
   margin-bottom: 6px;
   display: block;
-  color: #ffffff;
+  color: #000000;
 }
 
 input[readonly] {
-  background-color: #e9ecef; /* cor de fundo esmaecida */
+  background-color: #a0a3a72a; /* cor de fundo esmaecida */
   opacity: 0.7;              /* deixa o campo mais "apagado" */
   cursor: not-allowed;       /* indica que não é editável */
 }
@@ -104,7 +116,7 @@ select.form-control {
   padding: 10px 12px;
   font-size: 1rem;
   border: 1px solid #ced4da;
-  border-radius: 12px;
+  border-radius: 20px;
   transition: border-color 0.3s;
 }
 
@@ -119,7 +131,7 @@ button[type="submit"] {
   padding: 12px 20px;
   font-size: 1.1rem;
   font-weight: bold;
-  border-radius: 12px;
+  border-radius: 20px;
   margin-top: 15px;
   transition: background-color 0.3s ease;
   width: 200px;
@@ -138,18 +150,18 @@ button[type="submit"]:hover {
   color: #0c5460;
   padding: 15px;
   border: 1px solid #bee5eb;
-  border-radius: 12px;
+  border-radius: 20px;
 }
 
 .form-group p strong {
-  color: #ffffff; /* ou outra cor desejada */
+  color: #000000; /* ou outra cor desejada */
 }
 .form-group p {
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 .pix-text {
-  color: white;
+  color: rgb(0, 0, 0);
   margin-bottom: 10px;
 }
 

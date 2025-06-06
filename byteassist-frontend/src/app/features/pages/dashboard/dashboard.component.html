@@ -15,20 +15,20 @@
     <!-- Gráficos -->
     <div class="charts-container">
       <div class="chart-card">
-        <h4>Meus Equipamentos</h4>
+        <h4>Meus Serviços</h4>
         <canvas baseChart
-          [data]="equipamentosChartData"
+          [data]="servicosChartData"
           [type]="pieChartType"
           [options]="pieChartOptions">
         </canvas>
       </div>
 
       <div class="chart-card">
-        <h4>Meus Serviços</h4>
+        <h4>Minhas Solicitações</h4>
         <canvas baseChart
-          [data]="servicosChartData"
-          [type]="barChartType"
-          [options]="barChartOptions">
+          [data]="solicitacoesChartData"
+          [type]="lineChartType"
+          [options]="lineChartOptions">
         </canvas>
       </div>
 
