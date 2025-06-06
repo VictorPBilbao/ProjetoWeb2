@@ -45,9 +45,7 @@ export class ListMyTasksComponent implements OnInit {
   ordemCrescente: boolean = true;
 
   constructor(
-    private readonly service: EmployeeService,
     private readonly router: Router,
-    private readonly cdr: ChangeDetectorRef,
     private readonly taskService: TaskService
   ) {}
 
@@ -56,28 +54,12 @@ export class ListMyTasksComponent implements OnInit {
   @ViewChild(ModalEmployeeEditarComponent)
   modalEmployeeEditar!: ModalEmployeeEditarComponent;
 
-  // ver(s: Employee) {
-  //   this.modalVisualizar.selecionado = { ...s };
-  //   this.modalVisualizar.abrirModal();
-  // }
-
   editar(s: Employee) {
     this.modalEmployeeEditar.editar(s); // define o selecionado no modal
     //this.modalEmployeeEditar.abrirModal(); // abre o modal
   }
 
   ngOnInit(): void {
-    this.service.listar().subscribe((s) => {
-      console.log('Solicitações recebidas:', s); // Verifique os dados recebidos
-      this.solicitacoes = s;
-      this.ordenarPor('data');
-    });
-
-    this.service.getEquipamentos().subscribe((equipamentos) => {
-      this.categorias = [...new Set(equipamentos.map((e) => e.type))];
-      this.marcas = [...new Set(equipamentos.map((e) => e.brand))];
-    });
-
     this.taskService.getAllMyTasks('creator', undefined, 'equipment').subscribe({
       next: (tasks) => {
         console.log('Tasks recebidas:', tasks);
@@ -130,10 +112,6 @@ export class ListMyTasksComponent implements OnInit {
     );
     this.paginaAtual = 1;
     this.atualizarPagina();
-  }
-
-  selecionar(s: Employee) {
-    this.selecionado = { ...s };
   }
 
   abrirFormulario() {
