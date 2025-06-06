@@ -43,7 +43,7 @@ export class UserService {
     rule = (rule === 'thalitasanttos77') ? 'RULE_EMPLOYEE' : 'RULE_CLIENT';
 
     const expires = new Date();
-    expires.setTime(expires.getTime() + 7 * 24 * 60 * 60 * 1000); // Expira em 7 dias
+    expires.setTime(expires.getTime() + 24 * 60 * 60 * 1000); // Expira em 24 horas
     document.cookie = `rule=${rule}; path=/; secure; samesite=strict; expires=${expires.toUTCString()}`;
   }
 
@@ -60,76 +60,30 @@ export class UserService {
     return null; // Retorna null se o token não for encontrado
   }
 
-  // getInfoUser(): Observable<User> {
-  //   // Usuário completamente preenchido (mock)
-  //   const mockUser = User(
-  //     '123e4567-e89b-12d3-a456-426614174000',
-  //     'johndoe',
-  //     '',
-  //     'John Doe',
-  //     '123.456.789-00',
-  //     new Date(1990, 4, 15),
-  //     'M',
-  //     'john.doe@example.com',
-  //     '(11) 91234-5678',
-  //     '01001-000',
-  //     'SP',
-  //     'São Paulo',
-  //     'Centro',
-  //     'Praça da Sé',
-  //     '100',
-  //     'Apto 101',
-  //     'BR'
-  //   );
-
-  //   return of(mockUser);
-  // }
-
   // Vai substuir o método getInfoUser
-  getPersonByToken<T>(): Observable<T> {
+  getPersonByToken<T>(expand?: string): Observable<T> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': `Bearer ${this.authService.getToken()}` // Adiciona o token no header
-    })
+      'Authorization': `Bearer ${this.authService.getToken()}`
+    });
 
-    return this.http.get<T>(`${this.apiUrl}/person/me`, { headers }).pipe(
-      catchError(handleErrors.handleError)
-    );
-  }
+    let params = new HttpParams();
+    if (expand) {
+      params = params.set('expand', expand);
+    }
 
-  getInfoUserV2(): Observable<User> {
-    return this.getPersonByToken<any>().pipe(
-      map(data => new User(
-        data.id,
-        '',
-        '',
-        `${data.name.first} ${data.name.last}`,
-        data.cpf,
-        data.dob.split('T')[0],
-        data.gender,
-        '',
-        '',
-        data.address.zip,
-        data.address.state,
-        data.address.city,
-        data.address.neighborhood,
-        data.address.street,
-        data.address.number,
-        '',
-        data.address.country
-      )),
+    return this.http.get<T>(`${this.apiUrl}/person/me`, { headers, params }).pipe(
       catchError(handleErrors.handleError)
     );
   }
 
   getUser(): Observable<User> {
-    return this.getInfoUserV2();
+    return this.getPersonByToken<User>('person');
   }
 
-  updateUser(user: User): Observable<any> {
-    const userApiFormat = this.mapUserToApiFormat(user);
+  updateUser(user: User): Observable<User> {
     const body = new HttpParams()
-      .set('user', JSON.stringify(userApiFormat));
+      .set('user', JSON.stringify(user));
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -138,31 +92,9 @@ export class UserService {
 
     this.loadingService.show(); // Exibe o loading
 
-    return this.http.put(`${this.apiUrl}/user`, body.toString(), { headers }).pipe(
+    return this.http.put<User>(`${this.apiUrl}/user`, body.toString(), { headers }).pipe(
       finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
       catchError(handleErrors.handleError)
     );
-  }
-
-  private mapUserToApiFormat(user: User): any {
-    return {
-      id: user.id,
-      cpf: user.cpf,
-      dob: user.dateOfBirth.toISOString().split('T')[0], // Formato 'YYYY-MM-DD'
-      gender: user.gender,
-      address: {
-        zip: user.zip,
-        number: user.number,
-        street: user.street,
-        neighborhood: user.neighborhood,
-        city: user.city,
-        state: user.state,
-        country: user.country
-      },
-      name: {
-        first: user.fullName.split(' ')[0],
-        last: user.fullName.split(' ').slice(1).join(' ')
-      }
-    };
   }
 }

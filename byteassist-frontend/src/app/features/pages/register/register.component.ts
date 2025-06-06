@@ -5,6 +5,9 @@ import { NotificationComponent } from '../../components/notification/notificatio
 import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user/user.service';
 import { User } from '../../shared/models/user.model';
+import { Person } from '../../shared/models/person.model';
+import { PersonAddress } from '../../shared/models/person-address.model';
+import { UserTime } from '../../shared/models/user-time.model';
 
 @Component({
   selector: 'app-register',
@@ -19,7 +22,7 @@ import { User } from '../../shared/models/user.model';
 })
 export class RegisterComponent {
   @ViewChild('registerForm') registerForm!: NgForm | undefined;
-  user: User = new User();
+  user: User = {} as User;
   message: string = '';
   showNotification: boolean = false;
   currentStep: number = 1; // Variável para controlar o passo atual do formulário
@@ -65,26 +68,53 @@ export class RegisterComponent {
       const formValues = this.registerForm.value; // Obtém os valores do formulário
       const password = formValues.password;
 
-      // Alimenta o objeto User com os dados do formulário
-      this.user.username = formValues.username;
-      this.user.password = password;
-      this.user.fullName = formValues.nome;
-      this.user.cpf = formValues.cpf.replace(/\D/g, ''); // Remove caracteres não numéricos do CPF
-      this.user.dateOfBirth = new Date(formValues.nascimento); // Converte para Date
-      this.user.gender = formValues.sexo;
-      this.user.email = formValues.email;
-      this.user.phone = formValues.telefone.replace(/\D/g, ''); // Remove caracteres não numéricos do telefone
-      this.user.zip = formValues.cep.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
-      this.user.state = formValues.uf;
-      this.user.city = formValues.cidade;
-      this.user.neighborhood = formValues.bairro;
-      this.user.street = formValues.logradouro;
-      this.user.number = formValues.numero;
-      this.user.complement = formValues.complemento;
+      // Monta o objeto PersonAddress
+      const address: PersonAddress = {
+        street: formValues.logradouro,
+        number: formValues.numero,
+        complement: formValues.complemento,
+        neighborhood: formValues.bairro,
+        city: formValues.cidade,
+        state: formValues.uf,
+        zip: formValues.cep.replace(/\D/g, ''),
+        country: 'Brasil'
+      };
 
-      return this.user; // Retorna o objeto User preenchido
+      // Monta o objeto Person
+      const person: Person = {
+        id: '', // Se você estiver criando um novo Person
+        cpf: formValues.cpf.replace(/\D/g, ''),
+        dob: new Date(formValues.nascimento),
+        gender: formValues.sexo,
+        phone: formValues.telefone.replace(/\D/g, ''),
+        address: address,
+        name: {
+          first: formValues.nome.split(' ')[0] || '',
+          last: formValues.nome.split(' ').slice(1).join(' ') || ''
+        }
+      };
+
+      // Monta o objeto UserTime
+      const userTime: UserTime = {
+        createdAt: new Date(),
+        lastLoginAt: new Date(0),
+        updatedAt: new Date()
+      };
+
+      // Monta o objeto User
+      this.user = {
+        id: '',
+        email: formValues.email,
+        username: formValues.username,
+        isActive: true,
+        password: password,
+        person: person,
+        role: 'user',
+        time: userTime
+      };
+
+      return this.user;
     }
-
     return null; // Retorna null caso o formulário não esteja definido
   }
 
