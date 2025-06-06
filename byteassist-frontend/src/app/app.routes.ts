@@ -5,7 +5,7 @@ import { LoginComponent } from './features/pages/login/login.component';
 import { HomeComponent } from './features/pages/home/home.component';
 
 //Páginas do cliente
-import { EmployeeComponent } from './features/pages/employee/employee.component';
+import { ListMyTasksComponent } from './features/pages/list-my-tasks/list-my-tasks.component';
 import { RegisterComponent } from './features/pages/register/register.component';
 import { DashboardComponent } from './features/pages/dashboard/dashboard.component';
 import { NewRequestComponent } from './features/pages/new-request/new-request.component';
@@ -22,7 +22,7 @@ import { RegistrationComponent } from './features/pages-employee/registration/re
 export const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'login',component: LoginComponent},
-  {path: 'solicitacoes', component: EmployeeComponent},
+  {path: 'solicitacoes', component: ListMyTasksComponent},
   {path: 'cadastro', component: RegisterComponent},
   {path: 'dashboard', component: DashboardComponent },
   {path: 'nova-solicitacao', component: NewRequestComponent },

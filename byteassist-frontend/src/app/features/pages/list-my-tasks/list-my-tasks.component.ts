@@ -15,7 +15,7 @@ import { EquipmentFieldPipe } from '../../shared/pipes/equipment-field.pipe';
 declare var bootstrap: any;
 
 @Component({
-  selector: 'app-employee',
+  selector: 'app-list-my-tasks',
   standalone: true,
   imports: [
     CommonModule,
@@ -25,10 +25,10 @@ declare var bootstrap: any;
     RecordIdPipe,
     EquipmentFieldPipe
   ],
-  templateUrl: './employee.component.html',
-  styleUrls: ['./employee.component.css'],
+  templateUrl: './list-my-tasks.component.html',
+  styleUrls: ['./list-my-tasks.component.css'],
 })
-export class EmployeeComponent implements OnInit {
+export class ListMyTasksComponent implements OnInit {
   solicitacoes: Employee[] = [];
   selecionado: Employee = {} as Employee;
   solicitacoesPorGrupo: Employee[][] = [];

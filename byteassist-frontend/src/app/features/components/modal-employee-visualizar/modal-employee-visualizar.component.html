@@ -32,9 +32,9 @@
         <div class="row mb-3">
           <div class="col-12">
             <p><strong>Descrição:</strong> {{ selecionado.summary }}</p>
-            <p><strong>Técnico Responsável:</strong> {{ selecionado.assignee || 'Não atribuído' }}</p>
-            <p><strong>Solicitante:</strong> {{ selecionado.creator }}</p>
-            <p><strong>Orçamento:</strong> {{ selecionado.budget || 'Não orçado' }}</p>
+            <p><strong>Técnico Responsável:</strong> {{ "@" + selecionado.assignee | getRecordId }}</p>
+            <p><strong>Solicitante:</strong> {{ '@' + selecionado.creator | getRecordId }}</p>
+            <p><strong>Orçamento:</strong> {{ selecionado.budget | getRecordId }}</p>
           </div>
         </div>
       </div>
