@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-payment',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  providers: [provideNgxMask()],  // Adicione esta linha para garantir o fornecimento de máscara
+  providers: [provideNgxMask()],  
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.css']
 })
