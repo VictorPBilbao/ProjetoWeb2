@@ -1,12 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { EmployeeService } from '../../services/employee/employee.service';
-import { Employee } from '../../shared/models/employee.model';
+// import { EmployeeService } from '../../services/employee/employee.service';       // EMPLOYEE
+// import { Employee } from '../../shared/models/employee.model';                   // EMPLOYEE
 import { Router } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
-import { ModalEmployeeVisualizarComponent } from '../../components/modal-employee-visualizar/modal-employee-visualizar.component';
-import { ModalEmployeeEditarComponent } from '../../components/modal-employee-editar/modal-employee-editar.component';
+import { ModalListMyTaskVisualizarComponent } from '../../components/modal-listmytask-visualizar/modal-listmytask-visualizar.component';
+//import { ModalEmployeeVisualizarComponent } from '../../components/modal-employee-visualizar/modal-employee-visualizar.component'; // EMPLOYEE
+//import { ModalEmployeeEditarComponent } from '../../components/modal-employee-editar/modal-employee-editar.component';           // EMPLOYEE
+
+
 import { Task } from '../../shared/models/task.model';
 import { TaskService } from '../../services/task/task.service';
 import { RecordIdPipe } from '../../shared/pipes/record-id.pipe';
@@ -18,10 +21,9 @@ declare var bootstrap: any;
   selector: 'app-list-my-tasks',
   standalone: true,
   imports: [
+    ModalListMyTaskVisualizarComponent,
     CommonModule,
     FormsModule,
-    ModalEmployeeVisualizarComponent,
-    ModalEmployeeEditarComponent,
     RecordIdPipe,
     EquipmentFieldPipe
   ],
@@ -29,105 +31,131 @@ declare var bootstrap: any;
   styleUrls: ['./list-my-tasks.component.css'],
 })
 export class ListMyTasksComponent implements OnInit {
-  solicitacoes: Employee[] = [];
-  selecionado: Employee = {} as Employee;
-  solicitacoesPorGrupo: Employee[][] = [];
+  // ===== Paginação =====
   paginaAtual: number = 1;
   itensPorPagina: number = 4;
   totalPaginas: number = 0;
 
+  // ===== Dados de Tasks =====
   tasks: Task[] = [];
+  tasksPorPagina: Task[] = [];
+
+  // ===== (EMPLOYEE: comentado) =====
+  // solicitacoes: Employee[] = [];
+  // solicitacoesPorGrupo: Employee[][] = [];
+  // selecionado: Employee = {} as Employee;
 
   categorias: string[] = [];
   marcas: string[] = [];
 
-  campoOrdenado: string = '';
-  ordemCrescente: boolean = true;
+  // ===== (EMPLOYEE: comentado) =====
+  // campoOrdenado: string = '';
+  // ordemCrescente: boolean = true;
 
   constructor(
-    private readonly router: Router,
-    private readonly taskService: TaskService
-  ) {}
+    // private readonly service: EmployeeService,    // EMPLOYEE
+   // private readonly router: Router,
+    //private readonly taskService: TaskService
+  //) { }
+  //@ViewChild(ModalListMyTaskVisualizarComponent)
+  //modalVisualizar!: ModalListMyTaskVisualizarComponent;
 
-  @ViewChild(ModalEmployeeVisualizarComponent)
-  modalVisualizar!: ModalEmployeeVisualizarComponent;
-  @ViewChild(ModalEmployeeEditarComponent)
-  modalEmployeeEditar!: ModalEmployeeEditarComponent;
+  // ===== (EMPLOYEE: comentado) =====
+  // @ViewChild(ModalEmployeeVisualizarComponent)
+  // modalVisualizar!: ModalEmployeeVisualizarComponent;
+  // @ViewChild(ModalEmployeeEditarComponent)
+  // modalEmployeeEditar!: ModalEmployeeEditarComponent;
 
-  editar(s: Employee) {
-    this.modalEmployeeEditar.editar(s); // define o selecionado no modal
+  ngOnInit(): void {
+    // ===== (EMPLOYEE: listar solicitacoes) =====
+    // this.service.listar().subscribe((s) => {
+    //   console.log('Solicitações recebidas:', s);
+    //   this.solicitacoes = s;
+    //   this.ordenarPor('data');
+    // });
+
+    // ===== (EMPLOYEE: categorias e marcas) =====
+    // this.service.getEquipamentos().subscribe((equipamentos) => {
+    //   this.categorias = [...new Set(equipamentos.map((e) => e.type))];
+    //   this.marcas     = [...new Set(equipamentos.map((e) => e.brand))];
+    // });
+
+    // ===== Carrega e pagina tasks =====
+  //@ViewChild(ModalEmployeeVisualizarComponent)
+  //modalVisualizar!: ModalEmployeeVisualizarComponent;
+  //@ViewChild(ModalEmployeeEditarComponent)
+  //!: ModalEmployeeEditarComponent;
+
+  //editar(s: Employee) {
+    //this.modalEmployeeEditar.editar(s); // define o selecionado no modal
     //this.modalEmployeeEditar.abrirModal(); // abre o modal
-  }
+  //}
 
   ngOnInit(): void {
     this.taskService.getAllMyTasks('creator', undefined, 'equipment').subscribe({
       next: (tasks) => {
         console.log('Tasks recebidas:', tasks);
         this.tasks = tasks;
+        this.totalPaginas = Math.ceil(this.tasks.length / this.itensPorPagina);
+        this.atualizarPagina();
       },
-      error: (error) => {
-        console.error('Erro ao buscar tasks:', error);
-      },
+      error: (err) => console.error('Erro ao buscar tasks:', err)
     });
   }
 
-  verTask(task: Task) {
-    this.modalVisualizar.selecionado = { ...task };
-    this.modalVisualizar.abrirModal();
+  /** Abre modal de visualização da task */
+  //verTask(task: Task) {
+  // EMPLOYEE modal adaptado: aqui abriria modalVisualizar para task
+  // this.modalVisualizar.selecionado = { ...task };
+  // this.modalVisualizar.abrirModal();
+
+/** Abre modal de visualização da task */
+verTask(task: Task) {
+  // 1) passa a task selecionada para o modal
+  this.modalVisualizar.selecionado = task;
+  // 2) chama o método de exibir
+  this.modalVisualizar.abrirModal();
+}
+
+
+/** (EMPLOYEE: ordenação comentada) */
+// ordenarPor(campo: keyof Employee): void { … }
+
+/** (EMPLOYEE: seleção comentada) */
+// selecionar(s: Employee) {
+//   this.selecionado = { ...s };
+// }
+
+/** Navega para criação de nova solicitação/task */
+abrirFormulario() {
+  this.router.navigate(['/nova-solicitacao']);
+}
+  //abrirFormulario() {
+    //this.router.navigate(['/nova-solicitacao']);
+  //}
+
+  /** Atualiza tasksPorPagina para a página atual */
+  private atualizarPagina(): void {
+  const inicio = (this.paginaAtual - 1) * this.itensPorPagina;
+  this.tasksPorPagina = this.tasks.slice(inicio, inicio + this.itensPorPagina);
+}
+
+/** Muda de página */
+mudarPagina(nova: number): void {
+  if(nova < 1 || nova > this.totalPaginas) return;
+this.paginaAtual = nova;
+this.atualizarPagina();
   }
 
-  ordenarPor(campo: keyof Employee): void {
-    // Garante que 'campo' seja uma chave válida de Employee
-    if (this.campoOrdenado === campo) {
-      this.ordemCrescente = !this.ordemCrescente;
-    } else {
-      this.campoOrdenado = campo;
-      this.ordemCrescente = true;
-    }
+/** trackBy para performance no *ngFor */
+trackByTaskId(_idx: number, task: Task): any {
+  return task.id;
+}
 
-    this.solicitacoes.sort((a, b) => {
-      let valA: any;
-      let valB: any;
+  /** (EMPLOYEE: editar comentado) */
+  //editar(s: Employee) {
+  // this.modalEmployeeEditar.editar(s);
+  // this.modalEmployeeEditar.abrirModal();
+  //}
 
-      if (campo === 'data') {
-        valA = new Date(`${a.data}T${a.hora}`);
-        valB = new Date(`${b.data}T${b.hora}`);
-      } else {
-        valA = a[campo]; // Agora 'campo' é garantido como chave válida de 'Employee'
-        valB = b[campo];
-      }
-
-      if (typeof valA === 'string') {
-        valA = valA.toLowerCase();
-        valB = valB.toLowerCase();
-      }
-
-      if (valA < valB) return this.ordemCrescente ? -1 : 1;
-      if (valA > valB) return this.ordemCrescente ? 1 : -1;
-      return 0;
-    });
-
-    this.totalPaginas = Math.ceil(
-      this.solicitacoes.length / this.itensPorPagina
-    );
-    this.paginaAtual = 1;
-    this.atualizarPagina();
-  }
-
-  abrirFormulario() {
-    this.router.navigate(['/nova-solicitacao']);
-  }
-
-  atualizarPagina(): void {
-    const inicio = (this.paginaAtual - 1) * this.itensPorPagina;
-    const fim = inicio + this.itensPorPagina;
-    this.solicitacoesPorGrupo = [this.solicitacoes.slice(inicio, fim)]; // deixa só uma "página" no array
-  }
-
-  mudarPagina(novaPagina: number): void {
-    if (novaPagina >= 1 && novaPagina <= this.totalPaginas) {
-      this.paginaAtual = novaPagina;
-      this.atualizarPagina();
-    }
-  }
 }
