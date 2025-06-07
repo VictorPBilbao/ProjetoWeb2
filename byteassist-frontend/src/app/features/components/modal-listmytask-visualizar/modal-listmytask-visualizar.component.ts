@@ -13,10 +13,10 @@ declare var bootstrap: any;
   selector: 'app-modal-employee-visualizar',
   standalone: true,
   imports: [CommonModule, RecordIdPipe, EquipmentFieldPipe],
-  templateUrl: './modal-employee-visualizar.component.html',
-  styleUrls: ['./modal-employee-visualizar.component.css'],
+  templateUrl: './modal-listmytask-visualizar.component.html',
+  styleUrls: ['./modal-listmytask-visualizar.component.css'],
 })
-export class ModalEmployeeVisualizarComponent {
+export class ModalListMyTaskVisualizarComponent {
   @Input() selecionado: Task = {} as Task;
 
   constructor(private router: Router) {}
