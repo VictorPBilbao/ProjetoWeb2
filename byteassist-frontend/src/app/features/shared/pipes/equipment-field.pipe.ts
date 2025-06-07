@@ -9,7 +9,7 @@ import { Equipment } from '../../shared/models/equipment.model';
 export class EquipmentFieldPipe implements PipeTransform {
   transform(equipment: string | Equipment | null, fieldName: keyof Equipment): string {
     if (typeof equipment === 'object' && equipment !== null) {
-      return equipment[fieldName];
+      return equipment[fieldName] ?? '';
     }
     return equipment ?? '';
   }

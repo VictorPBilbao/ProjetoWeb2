@@ -14,9 +14,17 @@
       <p class="descricao-solicitacoes">
         Aqui você pode visualizar, criar e gerenciar solicitações de serviço
         técnico de forma prática.
+        Aqui você pode visualizar, criar e gerenciar solicitações de serviço
+        técnico de forma prática.
       </p>
     </div>
 
+    <!-- Botões de Acesso Rápido -->
+    <div class="acoes-wrapper mb-3">
+      <button class="btn nova-solicitacao" (click)="abrirFormulario()">
+        Nova Solicitação
+      </button>
+    </div>
     <!-- Botões de Acesso Rápido -->
     <div class="acoes-wrapper mb-3">
       <button class="btn nova-solicitacao" (click)="abrirFormulario()">
@@ -72,9 +80,30 @@
       >
         Anterior
       </button>
+    <!-- Paginação -->
+    <div
+      class="paginacao d-flex justify-content-center align-items-center mt-3 gap-2"
+    >
+      <button
+        class="btn btn-sm btn-outline-primary"
+        [disabled]="paginaAtual === 1"
+        (click)="mudarPagina(paginaAtual - 1)"
+      >
+        Anterior
+      </button>
 
       <span>Página {{ paginaAtual }} de {{ totalPaginas }}</span>
+      <span>Página {{ paginaAtual }} de {{ totalPaginas }}</span>
 
+      <button
+        class="btn btn-sm btn-outline-primary"
+        [disabled]="paginaAtual === totalPaginas"
+        (click)="mudarPagina(paginaAtual + 1)"
+      >
+        Próxima
+      </button>
+    </div>
+  </div>
       <button
         class="btn btn-sm btn-outline-primary"
         [disabled]="paginaAtual === totalPaginas"
