@@ -35,11 +35,17 @@ export class MenuSidebarComponent {
       this.user = user;
     }); // Busca o usuário
 
-    this.clientLinksVisible =
-      this.userService.getUserRule() === 'RULE_CLIENT';
-
-    this.employeeLinksVisible =
-      this.userService.getUserRule() === 'RULE_EMPLOYEE';
+     // Aguarda a regra ser salva
+    this.userService.saveUserRule().subscribe({
+      next: () => {
+        const rule = this.userService.getUserRule();
+        this.clientLinksVisible = rule === 'RULE_CLIENT';
+        this.employeeLinksVisible = rule === 'RULE_EMPLOYEE';
+      },
+      error: (err) => {
+        console.error('Erro ao obter a regra do usuário:', err);
+      }
+    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -63,7 +69,7 @@ export class MenuSidebarComponent {
 
   getUserInitals(): string {
     if (!this.user?.person?.name?.first) return '';
-    return this.user.person.name.first + ' ' + this.user.person.name.last
+    return (this.user.person.name.first + ' ' + this.user.person.name.last)
       .split(' ')
       .map(name => name[0])
       .join('')
@@ -102,6 +108,7 @@ export class MenuSidebarComponent {
 
   logout(): void {
     this.authService.removeToken();
+    this.userService.removeRule();
     this.router.navigate(['/']);
   }
 }

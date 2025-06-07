@@ -91,3 +91,7 @@ h1 {
 .actions {
   margin-top: 16px;
 }
+
+input:disabled {
+  cursor: not-allowed;
+}

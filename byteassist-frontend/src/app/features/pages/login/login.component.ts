@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'; // Importa ReactiveFormsModule para usar formulários reativos
 import { CommonModule } from '@angular/common'; // Importa o CommonModule para usar ngIf e ngFor no template
 import { NotificationComponent } from '../../components/notification/notification.component'; // Importa o componente de notificação
+import { tap, concatMap } from 'rxjs/operators';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user/user.service';
@@ -49,22 +50,21 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     if (this.loginForm.valid) {
       this.showNotification = false;
-
-      this.auth.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
-        next: (response) => {
+      this.auth.login(this.loginForm.value.username, this.loginForm.value.password).pipe(
+        tap(response => {
           if (response && response.id && response.token != "") {
-            try {
-              this.auth.saveToken(response.token);
-              this.userService.saveUserRule(response.username);
-
-              (this.userService.getUserRule() === 'RULE_EMPLOYEE') ?
-                this.router.navigate(['/funcionario/solicitacoes']) :
-                  this.router.navigate(['/dashboard']);
-            } catch (error) {
-              throw error;
-            }
+            this.auth.saveToken(response.token);
+          } else {
+            throw new Error('Resposta de login inválida');
           }
-          this.showNotification = false;
+        }),
+        concatMap(() => this.userService.saveUserRule()),
+      ).subscribe({
+        next: () => {
+          const userRule = this.userService.getUserRule();
+          (userRule === 'RULE_EMPLOYEE') ?
+            this.router.navigate(['/funcionario/solicitacoes']) :
+            this.router.navigate(['/dashboard']);
         },
         error: (err) => {
           if (err.status === 401) {
@@ -75,7 +75,6 @@ export class LoginComponent implements OnInit {
           this.showNotification = true;
         }
       });
-
     } else {
       this.loginForm.markAllAsTouched();
       console.log('Form is invalid', this.loginForm);
