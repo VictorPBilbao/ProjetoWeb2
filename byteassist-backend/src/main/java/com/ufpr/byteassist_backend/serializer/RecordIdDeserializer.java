@@ -21,7 +21,7 @@ public class RecordIdDeserializer extends JsonDeserializer<RecordId> {
         }
         
         // if parts[1] has <>, remove them
-        parts[1] = parts[1].replace("<", "").replace(">", "");
+        parts[1] = parts[1].replace("⟨", "").replace("⟩", "");
         
         return new RecordId(parts[0], parts[1]);
     }
