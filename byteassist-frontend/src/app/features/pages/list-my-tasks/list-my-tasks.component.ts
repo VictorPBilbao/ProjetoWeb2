@@ -54,12 +54,11 @@ export class ListMyTasksComponent implements OnInit {
 
   constructor(
     // private readonly service: EmployeeService,    // EMPLOYEE
-    private readonly router: Router,
-    private readonly cdr: ChangeDetectorRef,
-    private readonly taskService: TaskService
-  ) { }
-  @ViewChild(ModalListMyTaskVisualizarComponent)
-  modalVisualizar!: ModalListMyTaskVisualizarComponent;
+   // private readonly router: Router,
+    //private readonly taskService: TaskService
+  //) { }
+  //@ViewChild(ModalListMyTaskVisualizarComponent)
+  //modalVisualizar!: ModalListMyTaskVisualizarComponent;
 
   // ===== (EMPLOYEE: comentado) =====
   // @ViewChild(ModalEmployeeVisualizarComponent)
@@ -82,6 +81,17 @@ export class ListMyTasksComponent implements OnInit {
     // });
 
     // ===== Carrega e pagina tasks =====
+  //@ViewChild(ModalEmployeeVisualizarComponent)
+  //modalVisualizar!: ModalEmployeeVisualizarComponent;
+  //@ViewChild(ModalEmployeeEditarComponent)
+  //!: ModalEmployeeEditarComponent;
+
+  //editar(s: Employee) {
+    //this.modalEmployeeEditar.editar(s); // define o selecionado no modal
+    //this.modalEmployeeEditar.abrirModal(); // abre o modal
+  //}
+
+  ngOnInit(): void {
     this.taskService.getAllMyTasks('creator', undefined, 'equipment').subscribe({
       next: (tasks) => {
         console.log('Tasks recebidas:', tasks);
@@ -120,6 +130,9 @@ verTask(task: Task) {
 abrirFormulario() {
   this.router.navigate(['/nova-solicitacao']);
 }
+  //abrirFormulario() {
+    //this.router.navigate(['/nova-solicitacao']);
+  //}
 
   /** Atualiza tasksPorPagina para a página atual */
   private atualizarPagina(): void {

@@ -29,7 +29,6 @@ public class Task {
     @NotNull(groups = ValidationGroups.Create.class, message = "Equipment ID cannot be null")
     private RecordId equipment;
     
-    @NotBlank(groups = ValidationGroups.Create.class, message = "Name cannot be blank")
     private String status;
     
     @NotBlank(groups = ValidationGroups.Create.class, message = "Description cannot be blank")
