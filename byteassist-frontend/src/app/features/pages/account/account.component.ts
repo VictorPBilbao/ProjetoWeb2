@@ -37,7 +37,7 @@ export class AccountComponent {
   onSubmit() {
     this.showNotification = false;
     if (this.userForm?.valid) {
-      this.userService.updateUser(this.user).subscribe({
+      this.userService.updatePerson(this.user.person, this.user.username).subscribe({
         next: (response: any) => {
           console.log('User updated successfully', response);
           this.message = 'Informações atualizadas com sucesso!';
@@ -47,6 +47,20 @@ export class AccountComponent {
           console.error('Error updating user', error);
           // Verifica se error.error.message está definido
           this.message = 'Erro ao atualizar informações!' + (error.error?.message || '');
+          this.showNotification = true;
+        }
+      });
+
+      this.userService.updateUser(this.user).subscribe({
+        next: (response: any) => {
+          console.log('User updated successfully', response);
+          this.message = 'Usuário atualizado com sucesso!';
+          this.showNotification = true;
+        },
+        error: (error: any) => {
+          console.error('Error updating user', error);
+          // Verifica se error.error.message está definido
+          this.message = 'Erro ao atualizar usuário!' + (error.error?.message || '');
           this.showNotification = true;
         }
       });

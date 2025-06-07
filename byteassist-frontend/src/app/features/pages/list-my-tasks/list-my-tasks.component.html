@@ -47,11 +47,11 @@
         <tbody>
           <tr *ngFor="let task of tasksPorPagina; trackBy: trackByTaskId">
             <td>{{ task.id | getRecordId }}</td>
-            <td>{{ task.time.createdAt | date : "dd/MM/yyyy" }}</td>
-            <td>{{ task.time.createdAt | date : "HH:mm:ss" }}</td>
-            <td>{{ task.equipment | equipmentField : "model" }}</td>
+            <td>{{ task.time?.createdAt | date : "dd/MM/yyyy" }}</td>
+            <td>{{ task.time?.createdAt | date : "HH:mm:ss" }}</td>
+            <td>{{ task.equipment ? (task.equipment | equipmentField : 'model') : '' }}</td>
             <td>
-              <span [ngClass]="'estado-' + task.status.trim().toUpperCase()">
+              <span [ngClass]="'estado-' + (task.status?.trim()?.toUpperCase() ?? '')">
                 {{ task.status }}
               </span>
             </td>
@@ -112,6 +112,5 @@
         Próxima
       </button>
     </div>
-  </div>
 </section>
 <app-modal-employee-visualizar></app-modal-employee-visualizar>
