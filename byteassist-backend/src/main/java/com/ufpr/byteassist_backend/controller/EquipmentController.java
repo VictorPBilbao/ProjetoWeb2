@@ -44,7 +44,6 @@ public class EquipmentController {
     }
 
     @PostMapping()
-    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<Equipment> createEquipment(@Validated(ValidationGroups.Create.class) @RequestBody Equipment equipment) {
         return equipmentService.createEquipment(equipment);
     }

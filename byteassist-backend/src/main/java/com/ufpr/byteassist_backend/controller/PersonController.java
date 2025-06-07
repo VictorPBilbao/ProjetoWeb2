@@ -55,7 +55,7 @@ public class PersonController {
         return personService.createPerson(person, username);
     }
     
-    @PutMapping("/{username:[a-z0-9._]{3,30}}")
+    @PatchMapping("/{username:[a-z0-9._]{3,30}}")
     @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
     public ResponseEntity<Person> updatePerson(@PathVariable String username, @Validated(ValidationGroups.Update.class) @RequestBody Person person) {
         return personService.updatePerson(person, username);
