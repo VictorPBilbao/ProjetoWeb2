@@ -53,12 +53,12 @@ export class ListMyTasksComponent implements OnInit {
   // ordemCrescente: boolean = true;
 
   constructor(
-    // private readonly service: EmployeeService,    // EMPLOYEE
-   // private readonly router: Router,
-    //private readonly taskService: TaskService
-  //) { }
-  //@ViewChild(ModalListMyTaskVisualizarComponent)
-  //modalVisualizar!: ModalListMyTaskVisualizarComponent;
+    //private readonly service: EmployeeService,    // EMPLOYEE
+    private readonly router: Router,
+    private readonly taskService: TaskService
+  ) { }
+  @ViewChild(ModalListMyTaskVisualizarComponent)
+  modalVisualizar!: ModalListMyTaskVisualizarComponent;
 
   // ===== (EMPLOYEE: comentado) =====
   // @ViewChild(ModalEmployeeVisualizarComponent)
@@ -91,7 +91,7 @@ export class ListMyTasksComponent implements OnInit {
     //this.modalEmployeeEditar.abrirModal(); // abre o modal
   //}
 
-  ngOnInit(): void {
+  //ngOnInit(): void {
     this.taskService.getAllMyTasks('creator', undefined, 'equipment').subscribe({
       next: (tasks) => {
         console.log('Tasks recebidas:', tasks);
