@@ -1,7 +1,6 @@
 <section>
   <!-- Container principal com fundo branco -->
   <div class="table-section bg-white p-4 rounded shadow-sm mt-4">
-
     <!-- Cabeçalho: blob + título + descrição -->
     <div class="cabecalho-solicitacoes text-center mb-4">
       <div class="container-do-titulo">
@@ -13,73 +12,87 @@
         </div>
       </div>
       <p class="descricao-solicitacoes">
-        Aqui você pode visualizar, criar e gerenciar solicitações de serviço técnico de forma prática.
+        Aqui você pode visualizar, criar e gerenciar solicitações de serviço
+        técnico de forma prática.
       </p>
     </div>
 
-<!-- Botões de Acesso Rápido -->
-<div class="acoes-wrapper mb-3">
-  <button class="btn nova-solicitacao" (click)="abrirFormulario()">
-    Nova Solicitação
-  </button>
-</div>
+    <!-- Botões de Acesso Rápido -->
+    <div class="acoes-wrapper mb-3">
+      <button class="btn nova-solicitacao" (click)="abrirFormulario()">
+        Nova Solicitação
+      </button>
+    </div>
 
-<div class="table-responsive">
-  <table class="table-custom">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Data</th>
-        <th>Hora</th>
-        <th>Equipamento</th>
-        <th>Estado</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (task of tasks; track task.id) {
-      <tr>
-        <td>{{ task.id | getRecordId }}</td>
-        <td>{{ task.time.createdAt | date:'dd/MM/yyyy' }}</td>
-        <td>{{ task.time.createdAt | date:'HH:mm:ss' }}</td>
-        <td>{{ task.equipment | equipmentField:'model' }}</td>
-        <td>
-          <span [ngClass]="'estado-' + (task.status.trim().toUpperCase())">{{ task.status }}</span>
-        </td>
-        <td>
-          <button class="btn btn-sm btn-info me-1" (click)="verTask(task)" aria-label="Ver detalhes">
-            <i class="fas fa-eye"></i>
-          </button>
-          <!-- <button class="btn btn-sm btn-warning me-1" (click)="editar(s)" aria-label="Editar solicitação">
+    <div class="table-responsive">
+      <table class="table-custom">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Data</th>
+            <th>Hora</th>
+            <th>Equipamento</th>
+            <th>Estado</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (task of tasks; track task.id) {
+          <tr>
+            <td>{{ task.id | getRecordId }}</td>
+            <td>{{ task.time?.createdAt | date : "dd/MM/yyyy" }}</td>
+            <td>{{ task.time?.createdAt | date : "HH:mm:ss" }}</td>
+            <td>{{ task.equipment ?? null | equipmentField : "model" }}</td>
+            <td>
+              <span
+                [ngClass]="
+                  'estado-' +
+                  (task?.status?.trim()?.toUpperCase() ?? 'INDEFINIDO')
+                "
+                >{{ task.status ?? "Indefinido" }}</span
+              >
+            </td>
+            <td>
+              <button
+                class="btn btn-sm btn-info me-1"
+                (click)="verTask(task)"
+                aria-label="Ver detalhes"
+              >
+                <i class="fas fa-eye"></i>
+              </button>
+              <!-- <button class="btn btn-sm btn-warning me-1" (click)="editar(s)" aria-label="Editar solicitação">
             <i class="fas fa-pencil-alt"></i>
           </button> -->
-        </td>
-      </tr>
-      }
-    </tbody>
-  </table>
-</div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
 
-<!-- Paginação -->
-<div class="paginacao d-flex justify-content-center align-items-center mt-3 gap-2">
-  <button
-    class="btn btn-sm btn-outline-primary"
-    [disabled]="paginaAtual === 1"
-    (click)="mudarPagina(paginaAtual - 1)">
-    Anterior
-  </button>
+    <!-- Paginação -->
+    <div
+      class="paginacao d-flex justify-content-center align-items-center mt-3 gap-2"
+    >
+      <button
+        class="btn btn-sm btn-outline-primary"
+        [disabled]="paginaAtual === 1"
+        (click)="mudarPagina(paginaAtual - 1)"
+      >
+        Anterior
+      </button>
 
-  <span>Página {{ paginaAtual }} de {{ totalPaginas }}</span>
+      <span>Página {{ paginaAtual }} de {{ totalPaginas }}</span>
 
-  <button
-    class="btn btn-sm btn-outline-primary"
-    [disabled]="paginaAtual === totalPaginas"
-    (click)="mudarPagina(paginaAtual + 1)">
-    Próxima
-  </button>
-</div>
-</div>
-
+      <button
+        class="btn btn-sm btn-outline-primary"
+        [disabled]="paginaAtual === totalPaginas"
+        (click)="mudarPagina(paginaAtual + 1)"
+      >
+        Próxima
+      </button>
+    </div>
+  </div>
 </section>
 <app-modal-employee-visualizar></app-modal-employee-visualizar>
 <app-modal-employee-editar></app-modal-employee-editar>

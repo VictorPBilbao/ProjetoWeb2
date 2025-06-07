@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { Task } from '../../shared/models/task.model';
-import { map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -47,11 +47,29 @@ export class TaskService {
           tasks.map((task) => ({
             ...task,
             time: {
-              createdAt: new Date(task.time.createdAt),
-              updatedAt: new Date(task.time.updatedAt),
+              createdAt: new Date(task?.time?.createdAt ?? ''),
+              updatedAt: new Date(task?.time?.updatedAt ?? ''),
             },
           }))
         )
       );
   }
+
+  public createTask(task: Task, expand?: string | string[]): Observable<Task> {
+    const params: any = {};
+
+    if (expand) {
+      // Handle both string format "value1,value2" or array format ["value1", "value2"]
+      params.expand = Array.isArray(expand) ? expand.join(',') : expand;
+    }
+
+    return this.http.post<Task>(this.apiUrl, task, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.token}`,
+      },
+      params,
+    });
+  }
+
 }
