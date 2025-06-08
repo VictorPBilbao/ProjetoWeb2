@@ -1,0 +1,68 @@
+<section *ngIf="error && !loading" class="task-error-section d-flex flex-column align-items-center justify-content-center p-5 mt-5">
+  <img src="/assets/images/erro.png" alt="Erro" style="max-width: 120px; opacity: 0.7; margin-bottom: 24px;" />
+  <h2 class="text-danger mb-3">Oops!</h2>
+  <p class="text-center fs-5 mb-2">Parece que você não tem acesso a esta solicitação ou ela não foi encontrada.</p>
+  <p class="text-muted mb-4">Verifique se o link está correto ou retorne para a lista de solicitações.</p>
+  <button class="btn btn-primary" routerLink="/solicitacoes">Voltar para minhas solicitações</button>
+</section>
+
+<section *ngIf="!loading && task && !error" class="task-view-section bg-white p-4 rounded shadow-sm mt-4">
+  <div class="task-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
+    <div class="task-info">
+      <h2 class="task-title mb-1">{{ task.title }}</h2>
+      <div class="task-meta mb-2">
+        <span class="badge bg-primary me-2">{{ task.status }}</span>
+        <span class="text-muted me-2">Criada em: {{ task.time?.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+        <span class="text-muted">Atualizada em: {{ task.time?.updatedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+      </div>
+      <div class="task-summary mb-2">
+        <strong>Resumo:</strong> {{ task.summary }}
+      </div>
+      <div class="task-people mb-2">
+        <span><i class="bi bi-person"></i> <strong>Criador:</strong> {{ task.creator }}</span>
+        <span class="ms-3"><i class="bi bi-person-badge"></i> <strong>Responsável:</strong> {{ task.assignee }}</span>
+      </div>
+    </div>
+    <div class="equipment-info card p-3 ms-md-4 mt-3 mt-md-0">
+      <h5 class="mb-2"><i class="bi bi-cpu me-1"></i> Equipamento</h5>
+      <div *ngIf="equipment; else noEquipment">
+        <div><strong>Modelo:</strong> {{ equipment.model }}</div>
+        <div><strong>Marca:</strong> {{ equipment.brand }}</div>
+        <div><strong>Cor:</strong> {{ equipment.color }}</div>
+        <div><strong>Tipo:</strong> {{ equipment.type }}</div>
+      </div>
+      <ng-template #noEquipment>
+        <span class="text-muted">Sem informações de equipamento.</span>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="task-description mb-4">
+    <h4>Descrição</h4>
+    <p>{{ task.summary || 'Sem descrição detalhada.' }}</p>
+  </div>
+
+  <div class="task-comments">
+    <h4>Comentários</h4>
+    <div class="comments-list mb-3">
+      <div *ngFor="let comment of comments" class="comment mb-2 p-2 rounded bg-light">
+        <div class="comment-header d-flex align-items-center mb-1">
+          <i class="bi bi-person-circle me-2"></i>
+          <span class="fw-bold">{{ comment.author }}</span>
+          <span class="text-muted ms-2 small">{{ comment.date | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+        <div class="comment-body">{{ comment.text }}</div>
+      </div>
+    </div>
+    <form class="add-comment-form d-flex gap-2">
+      <input type="text" class="form-control" placeholder="Adicionar comentário... (mock)" disabled>
+      <button class="btn btn-primary" type="button" disabled>Comentar</button>
+    </form>
+  </div>
+</section>
+<section *ngIf="loading" class="spinner-center">
+  <output class="spinner-border text-primary">
+    <span class="visually-hidden">Carregando...</span>
+  </output>
+</section>
+<section *ngIf="!loading && !task" class="alert alert-danger mt-4">Tarefa não encontrada.</section>

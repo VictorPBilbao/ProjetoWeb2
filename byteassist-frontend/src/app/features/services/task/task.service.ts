@@ -1,6 +1,7 @@
+import { AuthService } from './../auth/auth.service';
+import { RecordidService } from './../utils/recordid.service';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { AuthService } from '../auth/auth.service';
+import { inject, Injectable } from '@angular/core';
 import { Task } from '../../shared/models/task.model';
 import { map, Observable } from 'rxjs';
 
@@ -9,14 +10,10 @@ import { map, Observable } from 'rxjs';
 })
 export class TaskService {
   private readonly apiUrl = 'https://byteassist-backend.fly.dev/api/task';
-  private readonly token;
-
-  constructor(
-    private readonly http: HttpClient,
-    private readonly authService: AuthService
-  ) {
-    this.token = this.authService.getToken();
-  }
+  private readonly http = inject(HttpClient);
+  private readonly recordIdService = inject(RecordidService);
+  private readonly authService = inject(AuthService);
+  private readonly token = this.authService.getToken();
 
   public getAllMyTasks(
     type: string = 'creator',
@@ -72,4 +69,23 @@ export class TaskService {
     });
   }
 
+  public getTaskById(
+    taskId: string,
+    expand?: string | string[]
+  ): Observable<Task> {
+    const params: any = {};
+
+    if (expand) {
+      // Handle both string format "value1,value2" or array format ["value1", "value2"]
+      params.expand = Array.isArray(expand) ? expand.join(',') : expand;
+    }
+
+    return this.http.get<Task>(`${this.apiUrl}/${taskId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.token}`,
+      },
+      params,
+    });
+  }
 }
