@@ -1,15 +1,16 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
-import { TaskService } from '../services/task/task.service';
-import { Task } from '../shared/models/task.model';
-import { Equipment } from '../shared/models/equipment.model';
+import { TaskService } from '../../services/task/task.service';
+import { Task } from '../../shared/models/task.model';
+import { Equipment } from '../../shared/models/equipment.model';
 
 @Component({
   selector: 'app-task-view',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './task-view.component.html',
   styleUrls: ['./task-view.component.css']
 })
