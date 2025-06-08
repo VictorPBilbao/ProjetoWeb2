@@ -27,6 +27,7 @@ export class RegisterComponent {
   showNotification: boolean = false;
   currentStep: number = 1; // Variável para controlar o passo atual do formulário
   showPassword: boolean = false; // Variável para controlar a visibilidade da senha
+  isCepValid: boolean = true;
 
   constructor(
     private router: Router,
@@ -35,6 +36,12 @@ export class RegisterComponent {
   onSubmit() {
     this.showNotification = false; // Reseta a notificação ao submeter o formulário
     this.message = ''; // Reseta a mensagem ao submeter o formulário
+
+    if (this.isCepValid === false) {
+      this.message = 'CEP inválido. Por favor, verifique o CEP informado.';
+      this.showNotification = true;
+      return;
+    }
 
     if (this.registerForm?.valid) {
       this.user = this.verifyFieldsAndCreateUser() as User;
@@ -169,5 +176,45 @@ export class RegisterComponent {
   // Alterna a visibilidade da senha
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
+  }
+
+  // Verifica se o cep é válido
+  onVerifyCep(): void {
+    this.showNotification = false; // Reseta a notificação ao verificar o CEP
+    const cep = this.registerForm?.controls['cep']?.value || '';
+
+    // Verifica se o CEP tem 8 dígitos
+    const cepPattern = /^\d{5}-?\d{3}$/;
+    if (!cepPattern.test(cep)) {
+      this.isCepValid = false;
+      return;
+    }
+
+    // Busca as informações do CEP
+    this.userService.validateCep(cep.replace('-', '')).subscribe({
+      next: (address) => {
+        if (address) {
+          // Se o CEP for válido, preenche os campos de endereço
+          if (this.registerForm && this.registerForm.controls) {
+            this.registerForm.controls['logradouro']?.setValue(address.street);
+            this.registerForm.controls['bairro']?.setValue(address.neighborhood);
+            this.registerForm.controls['cidade']?.setValue(address.city);
+            this.registerForm.controls['uf']?.setValue(address.state);
+            this.registerForm.controls['complemento']?.setValue(address.complement || '');
+          }
+          this.isCepValid = true; // CEP válido
+          console.log('CEP válido:', address);
+        } else {
+          this.message = 'CEP não encontrado.';
+          this.showNotification = true;
+          this.isCepValid = false; // CEP inválido
+        }
+      },
+      error: (err) => {
+        this.message = err.message || 'Erro ao buscar CEP. Verifique sua conexão ou tente novamente mais tarde.';
+        this.showNotification = true;
+        this.isCepValid = false; // Erro na busca do CEP
+      }
+    });
   }
 }

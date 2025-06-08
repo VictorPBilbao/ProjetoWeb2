@@ -7,6 +7,7 @@ import { LoadingService } from '../utils/loading.service';
 import { AuthService } from '../auth/auth.service';
 import { User } from '../../shared/models/user.model';
 import { Person } from '../../shared/models/person.model';
+import { PersonAddress } from '../../shared/models/person-address.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,17 +23,38 @@ export class UserService {
 
   // Método para criar um novo usuário
   createUser(user: User): Observable<any> {
-    const body = new HttpParams()
-      .set('user', JSON.stringify(user));
-
     const headers = new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/json'
     });
+
+    const newUserPayload = {
+      password: user.password,
+      email: user.email,
+      person: {
+        cpf: user.person.cpf,
+        dob: user.person.dob,
+        gender: user.person.gender,
+        phone: user.person.phone,
+        address: {
+          zip: user.person.address.zip,
+          number: user.person.address.number,
+          street: user.person.address.street,
+          neighborhood: user.person.address.neighborhood,
+          complement: user.person.address.complement || '',
+          city: user.person.address.city,
+          state: user.person.address.state,
+          country: user.person.address.country,
+        },
+        name: {
+          first: user.person.name.first,
+          last: user.person.name.last
+        }
+      }
+    }
 
     this.loadingService.show(); // Exibe o loading
 
-    console.log('body', body.toString());
-    return this.http.post(`${this.apiUrl}/auth/register`, body.toString(), { headers }).pipe(
+    return this.http.post(`${this.apiUrl}/auth/register/${user.username}`, newUserPayload, { headers }).pipe(
       finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
       catchError(handleErrors.handleError)
     );
@@ -146,5 +168,41 @@ export class UserService {
     const expires = new Date();
     expires.setTime(expires.getTime() - 1); // Define a data de expiração para o passado
     document.cookie = `rule=; path=/; secure; samesite=strict; expires=${expires.toUTCString()}`; // Remove o cookie
+  }
+
+  // valid o cep do usuário
+  validateCep(cep: string): Observable<PersonAddress> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    this.loadingService.show(); // Exibe o loading
+
+    return this.http.get<any>(`https://viacep.com.br/ws/${cep}/json/`, { headers }).pipe(
+      map(data => {
+        if (data.erro) {
+          throw new Error('CEP inválido');
+        }
+        return this.mapToPersonAddress(data);
+      }),
+      finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
+      catchError(err => {
+        return throwError(() => new Error('Erro ao validar CEP: ' + err.message));
+      })
+    );
+  }
+
+  mapToPersonAddress(data: any): PersonAddress {
+    console.log('Dados do CEP:', data);
+    return {
+      zip: data.cep,
+      number: '',
+      street: data.logradouro,
+      neighborhood: data.bairro,
+      complement: data.complemento || '',
+      city: data.localidade,
+      state: data.uf,
+      country: 'Brasil'
+    }
   }
 }

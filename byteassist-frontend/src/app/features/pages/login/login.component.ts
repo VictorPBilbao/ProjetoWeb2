@@ -62,7 +62,7 @@ export class LoginComponent implements OnInit {
       ).subscribe({
         next: () => {
           const userRule = this.userService.getUserRule();
-          (userRule === 'RULE_EMPLOYEE') ?
+          (userRule === 'RULE_EMPLOYEE' || userRule === 'RULE_ADMIN') ?
             this.router.navigate(['/funcionario/solicitacoes']) :
             this.router.navigate(['/dashboard']);
         },
