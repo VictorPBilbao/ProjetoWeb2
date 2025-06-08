@@ -18,10 +18,14 @@
           name="username"
           ngModel
           #username="ngModel"
-          placeholder="Login"
+          placeholder="Usuário"
+          minlength="3"
+          maxlength="30"
           required>
         <div *ngIf="username.invalid && username.touched" class="error-message">
           <small *ngIf="username.errors?.['required']">O campo Username é obrigatório.</small>
+          <small *ngIf="username.errors?.['minlength']">O Username deve ter pelo menos 3 caracteres.</small>
+          <small *ngIf="username.errors?.['maxlength']">O Username não pode ter mais de 30 caracteres.</small>
         </div>
 
         <!-- Campo Password -->
@@ -66,7 +70,7 @@
           <button type="button"
                   class="btn btn-primary"
                   (click)="goToNextStep()"
-                  [disabled] = "(confirmedPassword.value !== password.value)"
+                  [disabled] = "confirmedPassword.value !== password.value || !password.value"
           >
             Próximo</button>
         </div>
@@ -149,6 +153,7 @@
               required
               maxlength="9"
               (input)="applyCepMask($event)"
+              (blur)="onVerifyCep()"
             >
             <div *ngIf="registerForm.controls['cep']?.invalid && registerForm.controls['cep']?.touched" class="error-message">
               <small>O campo CEP é obrigatório.</small>
@@ -169,7 +174,7 @@
           </div>
 
           <div class="regiter-btn flex flex-column items-center">
-            <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid">CADASTRAR</button>
+            <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid || !isCepValid">CADASTRAR</button>
             <button type="button" class="btn btn-secondary" (click)="goToPreviousStep()" style="margin-top: 10px;">Voltar</button>
             <div class="login-link-container">
               <p>Já tem uma conta?</p>
@@ -178,8 +183,6 @@
           </div>
         </div>
       </div>
-
-
     </form>
   </div>
 
