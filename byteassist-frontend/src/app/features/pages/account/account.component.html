@@ -21,17 +21,29 @@
               name="username"
               required
               [(ngModel)]="user.username"
+              disabled
             >
           </div>
 
           <div class="field">
-            <label for="fullName">Nome Completo</label>
+            <label for="fullName">Nome</label>
             <input
               type="text"
-              id="fullName"
-              name="fullName"
+              id="fisrtName"
+              name="fisrtName"
               required
               [(ngModel)]="user.person.name.first"
+            >
+          </div>
+
+          <div class="field">
+            <label for="fullName">Sobrenome</label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              required
+              [(ngModel)]="user.person.name.last"
             >
           </div>
 
@@ -43,6 +55,7 @@
               name="email"
               required
               [(ngModel)]="user.email"
+              disabled
             >
           </div>
 
@@ -81,12 +94,13 @@
           </div>
 
           <div class="field">
-            <label for="dateOfBirth">Data de Nascimento</label>
+            <label for="dob">Data de Nascimento</label>
             <input
               type="date"
-              id="dateOfBirth"
-              name="dateOfBirth"
-              [(ngModel)]="user.person.dob"
+              id="dob"
+              name="dob"
+              [ngModel]="user.person.dob | date:'yyyy-MM-dd'"
+              (ngModelChange)="user.person.dob = $event"
             >
           </div>
 

@@ -41,10 +41,10 @@
             <td>{{ task.id | getRecordId }}</td>
             <td>{{ task.time?.createdAt | date : "dd/MM/yyyy" }}</td>
             <td>{{ task.time?.createdAt | date : "HH:mm:ss" }}</td>
-            <td>{{ task.equipment ?? null | equipmentField : "model" }}</td>
+            <td>{{ task.equipment ? (task.equipment | equipmentField : 'model') : '' }}</td>
             <td>
-              <span [ngClass]="'estado-' + task?.status?.trim()?.toUpperCase()">
-                {{ task?.status }}
+              <span [ngClass]="'estado-' + (task.status?.trim()?.toUpperCase() ?? '')">
+                {{ task.status }}
               </span>
             </td>
             <td>
@@ -84,5 +84,13 @@
       </button>
     </div>
   </div>
+      <button
+        class="btn btn-sm btn-outline-primary"
+        [disabled]="paginaAtual === totalPaginas"
+        (click)="mudarPagina(paginaAtual + 1)"
+      >
+        Próxima
+      </button>
+    </div>
 </section>
 <app-modal-listmytask-visualizar></app-modal-listmytask-visualizar>
