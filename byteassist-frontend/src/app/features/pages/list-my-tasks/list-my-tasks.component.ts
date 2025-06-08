@@ -1,32 +1,25 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-// import { EmployeeService } from '../../services/employee/employee.service';       // EMPLOYEE
-// import { Employee } from '../../shared/models/employee.model';                   // EMPLOYEE
 import { Router } from '@angular/router';
-import { ChangeDetectorRef } from '@angular/core';
-import { ModalListMyTaskVisualizarComponent } from '../../components/modal-listmytask-visualizar/modal-listmytask-visualizar.component';
-//import { ModalEmployeeVisualizarComponent } from '../../components/modal-employee-visualizar/modal-employee-visualizar.component'; // EMPLOYEE
-//import { ModalEmployeeEditarComponent } from '../../components/modal-employee-editar/modal-employee-editar.component';           // EMPLOYEE
 
 
 import { Task } from '../../shared/models/task.model';
 import { TaskService } from '../../services/task/task.service';
 import { RecordIdPipe } from '../../shared/pipes/record-id.pipe';
 import { EquipmentFieldPipe } from '../../shared/pipes/equipment-field.pipe';
-
-declare var bootstrap: any;
+import { ModalListMyTaskVisualizarComponent } from '../../components/modal-listmytask-visualizar/modal-listmytask-visualizar.component';
 
 @Component({
   selector: 'app-list-my-tasks',
   standalone: true,
   imports: [
-    ModalListMyTaskVisualizarComponent,
     CommonModule,
     FormsModule,
     RecordIdPipe,
-    EquipmentFieldPipe
-  ],
+    EquipmentFieldPipe,
+    ModalListMyTaskVisualizarComponent
+],
   templateUrl: './list-my-tasks.component.html',
   styleUrls: ['./list-my-tasks.component.css'],
 })

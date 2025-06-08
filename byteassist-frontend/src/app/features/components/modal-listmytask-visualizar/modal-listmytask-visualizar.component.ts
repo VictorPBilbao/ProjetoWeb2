@@ -10,7 +10,7 @@ import { EquipmentFieldPipe } from '../../shared/pipes/equipment-field.pipe';
 declare var bootstrap: any;
 
 @Component({
-  selector: 'app-modal-employee-visualizar',
+  selector: 'app-modal-listmytask-visualizar',
   standalone: true,
   imports: [CommonModule, RecordIdPipe, EquipmentFieldPipe],
   templateUrl: './modal-listmytask-visualizar.component.html',
