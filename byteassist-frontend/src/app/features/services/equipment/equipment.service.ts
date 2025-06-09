@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { Equipment } from '../../shared/models/equipment.model';
 import { Observable } from 'rxjs';
@@ -9,14 +9,9 @@ import { Observable } from 'rxjs';
 })
 export class EquipmentService {
   private readonly apiUrl = 'https://byteassist-backend.fly.dev/api';
-  private readonly token;
-
-  constructor(
-    private readonly http: HttpClient,
-    private readonly authService: AuthService
-  ) {
-    this.token = this.authService.getToken();
-  }
+  private readonly http = inject(HttpClient);
+  private readonly authService: AuthService = inject(AuthService);
+  private readonly token = this.authService.getToken();
 
   public createEquipment(
     equipment: Equipment,

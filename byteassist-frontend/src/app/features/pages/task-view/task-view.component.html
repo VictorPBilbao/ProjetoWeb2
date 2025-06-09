@@ -64,22 +64,12 @@
             [(ngModel)]="task.status"
             aria-label="Status da Tarefa"
           >
-            <option
-              *ngFor="
-                let s of [
-                  'ABERTA',
-                  'EM ANDAMENTO',
-                  'PENDENTE',
-                  'AGUARDANDO_APROVACAO',
-                  'FINALIZADA',
-                  'CANCELADA'
-                ]
-              "
-              [value]="s"
-              class="text-dark"
-            >
+            @for (s of [ 'ABERTA', 'EM ANDAMENTO', 'PENDENTE',
+            'AGUARDANDO_APROVACAO', 'FINALIZADA', 'CANCELADA' ]; track s) {
+            <option [value]="s" class="text-dark">
               {{ s }}
             </option>
+            }
           </select>
         </span>
       </div>
@@ -106,15 +96,14 @@
     </div>
     <div class="equipment-info card p-3 ms-md-4 mt-3 mt-md-0">
       <h5 class="mb-2"><i class="bi bi-cpu me-1"></i> Equipamento</h5>
-      <div *ngIf="equipment; else noEquipment">
-        <div><strong>Modelo:</strong> {{ equipment.model }}</div>
-        <div><strong>Marca:</strong> {{ equipment.brand }}</div>
-        <div><strong>Cor:</strong> {{ equipment.color }}</div>
-        <div><strong>Tipo:</strong> {{ equipment.type }}</div>
-      </div>
-      <ng-template #noEquipment>
-        <span class="text-muted">Sem informações de equipamento.</span>
-      </ng-template>
+      @if (equipment) {
+      <div><strong>Modelo:</strong> {{ equipment.model }}</div>
+      <div><strong>Marca:</strong> {{ equipment.brand }}</div>
+      <div><strong>Cor:</strong> {{ equipment.color }}</div>
+      <div><strong>Tipo:</strong> {{ equipment.type }}</div>
+      } @else {
+      <span class="text-muted">Sem informações de equipamento.</span>
+      }
     </div>
   </div>
 
@@ -126,10 +115,8 @@
   <div class="task-comments">
     <h4>Comentários</h4>
     <div class="comments-list mb-3">
-      <div
-        *ngFor="let comment of comments"
-        class="comment mb-2 p-2 rounded bg-light"
-      >
+      @for (comment of comments; track comment.author) {
+      <div class="comment mb-2 p-2 rounded bg-light">
         <div class="comment-header d-flex align-items-center mb-1">
           <i class="bi bi-person-circle me-2"></i>
           <span class="fw-bold">{{ comment.author }}</span>
@@ -137,17 +124,40 @@
             comment.date | date : "dd/MM/yyyy HH:mm"
           }}</span>
         </div>
-        <div class="comment-body">{{ comment.text }}</div>
+        <div class="comment-body">
+          <markdown [data]="comment.text"></markdown>
+        </div>
       </div>
+      }
     </div>
-    <form class="add-comment-form d-flex gap-2">
-      <input
-        type="text"
+    <form
+      class="add-comment-form d-flex flex-column gap-2"
+      (ngSubmit)="addComment()"
+    >
+      <textarea
         class="form-control"
-        placeholder="Adicionar comentário... (mock)"
-        disabled
-      />
-      <button class="btn btn-primary" type="button" disabled>Comentar</button>
+        rows="3"
+        placeholder="Adicionar comentário... (Markdown básico suportado)"
+        [(ngModel)]="newCommentText"
+        name="newCommentText"
+        required
+      ></textarea>
+
+      <!-- Live Preview Section -->
+      @if (newCommentText.trim()) {
+      <div class="markdown-preview border p-2 rounded mt-2">
+        <h6 class="text-muted small">Pré-visualização:</h6>
+        <markdown [data]="newCommentText"></markdown>
+      </div>
+      }
+
+      <button
+        class="btn btn-primary align-self-end"
+        type="submit"
+        [disabled]="!newCommentText.trim()"
+      >
+        Comentar
+      </button>
     </form>
   </div>
 </section>

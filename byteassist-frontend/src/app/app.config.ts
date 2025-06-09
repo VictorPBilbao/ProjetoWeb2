@@ -2,6 +2,8 @@ import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } fr
 import { provideRouter } from '@angular/router';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { provideEnvironmentNgxMask } from 'ngx-mask';
+import { MarkdownModule } from 'ngx-markdown';
+
 
 import { routes } from './app.routes';
 import { HttpClientModule } from '@angular/common/http';
@@ -13,6 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     importProvidersFrom(HttpClientModule),
-    provideEnvironmentNgxMask()
+    provideEnvironmentNgxMask(),
+    importProvidersFrom(MarkdownModule.forRoot())
   ]
 };
