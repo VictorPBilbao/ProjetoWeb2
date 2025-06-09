@@ -37,6 +37,10 @@ public class Person {
     @Pattern(regexp = "^(Male|Female|Other)$", message = "Gender must be 'Male', 'Female', or 'Other'", groups = {ValidationGroups.Create.class, ValidationGroups.Update.class})
     private String gender;
     
+    @NotBlank(groups = {ValidationGroups.Create.class})
+    @Pattern(regexp = "^\\+?[0-9]{10,15}$", message = "Phone number must be between 10 and 15 digits, optionally starting with '+'")
+    private String phone; // mandatory when creating a person
+    
     @NotNull(groups = {ValidationGroups.Create.class})
     @Valid
     private PersonAddress address;
