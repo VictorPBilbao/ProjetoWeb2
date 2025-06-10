@@ -75,14 +75,6 @@
 
       <span>Página {{ paginaAtual }} de {{ totalPaginas }}</span>
 
-      <button
-        class="btn btn-sm btn-outline-primary"
-        [disabled]="paginaAtual === totalPaginas"
-        (click)="mudarPagina(paginaAtual + 1)"
-      >
-        Próxima
-      </button>
-    </div>
   </div>
       <button
         class="btn btn-sm btn-outline-primary"
@@ -92,4 +84,3 @@
         Próxima
       </button>
 </section>
-<app-modal-listmytask-visualizar></app-modal-listmytask-visualizar>

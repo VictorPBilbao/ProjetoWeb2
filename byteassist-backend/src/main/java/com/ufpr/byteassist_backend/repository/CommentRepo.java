@@ -26,9 +26,9 @@ public class CommentRepo implements CommentRepoInterface {
     public Optional<List<Comment>> getAllCommentsByTaskId(String taskId) {
         try {
             String query = "SELECT * FROM Comments_on WHERE out = $taskid ORDER BY comment_date DESC";
-            System.out.println(new RecordId("Task", taskId).toString());
-            Response response = db.queryBind(query, Map.of("taskid", new RecordId("Task", taskId).toString()));
-
+            Response response = db.queryBind(query, Map.of("taskid", new RecordId("Task", taskId)));
+            
+            
             List<Comment> comments = new ArrayList<>();
             for (var commentRecord : response.take(0).getArray()) {
                 Comment comment = commentRecord.get(Comment.class);

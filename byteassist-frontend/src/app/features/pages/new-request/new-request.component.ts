@@ -7,12 +7,11 @@ import { Router } from '@angular/router'; // Para redirecionar após o cadastro
 import { TaskService } from '../../services/task/task.service';
 import { Task } from '../../shared/models/task.model';
 import { RecordidService } from '../../services/utils/recordid.service';
-import { NotificationComponent } from '../../components/notification/notification.component';
 
 @Component({
   selector: 'app-new-request',
   standalone: true,
-  imports: [CommonModule, FormsModule, NotificationComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './new-request.component.html',
   styleUrls: ['./new-request.component.css'],
 })
@@ -56,9 +55,6 @@ export class NewRequestComponent {
   constructor(private readonly router: Router) {}
 
   // Placeholder for register logic
-  message: string = '';
-  showNotification: boolean = false;
-
   createSolicitacao() {
     // You can access form data via this.solicitation
     // and this.registerForm?.value
@@ -91,23 +87,16 @@ export class NewRequestComponent {
           next: (createdTask) => {
             console.log('Created Task:', createdTask);
             this.task = createdTask;
-            this.message =
-              'Solicitação criada com sucesso! Você será redirecionado em instantes.';
-            this.showNotification = true;
-            setTimeout(() => {
-              this.showNotification = false;
-              this.router.navigate(['/solicitacoes']);
-            }, 2500);
+            // Redirect if needed
+            // this.router.navigate(['/task', this.recordIdService.getId(createdTask.id)]);
           },
           error: (error) => {
-            this.message = 'Erro ao criar solicitação.';
-            this.showNotification = true;
+            console.error('Error creating task:', error);
           },
         });
       },
       error: (error) => {
-        this.message = 'Erro ao criar equipamento.';
-        this.showNotification = true;
+        console.error('Error creating equipment:', error);
       },
     });
   }

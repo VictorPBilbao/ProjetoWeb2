@@ -1,0 +1,170 @@
+@if (error && !loading) {
+<section
+  class="task-error-section d-flex flex-column align-items-center justify-content-center p-5 mt-5"
+>
+  <img src="/images/erro.png" alt="Erro" />
+  <h2 class="text-danger mb-3">Oopss!</h2>
+  <p class="text-center fs-5 mb-2">
+    Parece que você não tem acesso a esta solicitação ou ela não foi encontrada.
+  </p>
+  <p class="text-muted mb-4">
+    Verifique se o link está correto ou retorne para a lista de solicitações.
+  </p>
+  <button class="btn btn-primary" routerLink="/solicitacoes">
+    Voltar para minhas solicitações
+  </button>
+</section>
+} @if (!loading && task && !error) {
+<section class="task-view-section bg-white p-4 rounded shadow-sm mt-4">
+  <div
+    class="task-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4"
+  >
+    <div class="task-info">
+      <div class="d-flex align-items-center justify-content-start mb-2">
+        <h2 class="task-title mb-0 me-3">{{ task.title }}</h2>
+        <span
+          class="d-inline-block rounded-pill px-2 py-1"
+          [ngClass]="{
+            'bg-primary': task.status === 'ABERTA',
+            'bg-info': task.status === 'EM ANDAMENTO',
+            'bg-warning': task.status === 'PENDENTE',
+            'bg-secondary': task.status === 'AGUARDANDO_APROVACAO',
+            'bg-success': task.status === 'FINALIZADA',
+            'bg-danger': task.status === 'CANCELADA',
+            'bg-light': ![
+              'ABERTA',
+              'EM ANDAMENTO',
+              'PENDENTE',
+              'AGUARDANDO_APROVACAO',
+              'FINALIZADA',
+              'CANCELADA'
+            ].includes(task.status ?? '')
+          }"
+        >
+          <select
+            class="form-select form-select-sm w-auto border-0 bg-transparent"
+            [ngClass]="{
+              'text-white':
+                task.status === 'ABERTA' ||
+                task.status === 'AGUARDANDO_APROVACAO' ||
+                task.status === 'FINALIZADA' ||
+                task.status === 'CANCELADA',
+              'text-dark':
+                task.status === 'EM ANDAMENTO' ||
+                task.status === 'PENDENTE' ||
+                ![
+                  'ABERTA',
+                  'EM ANDAMENTO',
+                  'PENDENTE',
+                  'AGUARDANDO_APROVACAO',
+                  'FINALIZADA',
+                  'CANCELADA'
+                ].includes(task.status ?? '')
+            }"
+            [(ngModel)]="task.status"
+            aria-label="Status da Tarefa"
+          >
+            @for (s of [ 'ABERTA', 'EM ANDAMENTO', 'PENDENTE',
+            'AGUARDANDO_APROVACAO', 'FINALIZADA', 'CANCELADA' ]; track s) {
+            <option [value]="s" class="text-dark">
+              {{ s }}
+            </option>
+            }
+          </select>
+        </span>
+      </div>
+      <div class="task-meta mb-2">
+        <span class="text-muted me-2"
+          >Criada em:
+          {{ task.time?.createdAt | date : "dd/MM/yyyy HH:mm" }}</span
+        >
+        <span class="text-muted"
+          >Atualizada em:
+          {{ task.time?.updatedAt | date : "dd/MM/yyyy HH:mm" }}</span
+        >
+      </div>
+      <div class="task-people mb-2">
+        <span
+          ><i class="bi bi-person"></i> <strong>Criador:</strong>
+          {{ task.creator }}</span
+        >
+        <span class="ms-3"
+          ><i class="bi bi-person-badge"></i> <strong>Responsável:</strong>
+          {{ task.assignee }}</span
+        >
+      </div>
+    </div>
+    <div class="equipment-info card p-3 ms-md-4 mt-3 mt-md-0">
+      <h5 class="mb-2"><i class="bi bi-cpu me-1"></i> Equipamento</h5>
+      @if (equipment) {
+      <div><strong>Modelo:</strong> {{ equipment.model }}</div>
+      <div><strong>Marca:</strong> {{ equipment.brand }}</div>
+      <div><strong>Cor:</strong> {{ equipment.color }}</div>
+      <div><strong>Tipo:</strong> {{ equipment.type }}</div>
+      } @else {
+      <span class="text-muted">Sem informações de equipamento.</span>
+      }
+    </div>
+  </div>
+
+  <div class="task-description mb-4">
+    <h4>Descrição</h4>
+    <p>{{ task.summary || "Sem descrição detalhada." }}</p>
+  </div>
+
+  <div class="task-comments">
+    <h4>Comentários</h4>
+    <div class="comments-list mb-3">
+      @for (comment of comments; track comment.author) {
+      <div class="comment mb-2 p-2 rounded bg-light">
+        <div class="comment-header d-flex align-items-center mb-1">
+          <i class="bi bi-person-circle me-2"></i>
+          <span class="fw-bold">{{ comment.author }}</span>
+          <span class="text-muted ms-2 small">{{
+            comment.date | date : "dd/MM/yyyy HH:mm"
+          }}</span>
+        </div>
+        <div class="comment-body">
+          <markdown [data]="comment.text"></markdown>
+        </div>
+      </div>
+      }
+    </div>
+    <form
+      class="add-comment-form d-flex flex-column gap-2"
+      (ngSubmit)="addComment()"
+    >
+      <textarea
+        class="form-control"
+        rows="3"
+        placeholder="Adicionar comentário... (Markdown básico suportado)"
+        [(ngModel)]="newCommentText"
+        name="newCommentText"
+        required
+      ></textarea>
+
+      <!-- Live Preview Section -->
+      @if (newCommentText.trim()) {
+      <div class="markdown-preview border p-2 rounded mt-2">
+        <h6 class="text-muted small">Pré-visualização:</h6>
+        <markdown [data]="newCommentText"></markdown>
+      </div>
+      }
+
+      <button
+        class="btn btn-primary align-self-end"
+        type="submit"
+        [disabled]="!newCommentText.trim()"
+      >
+        Comentar
+      </button>
+    </form>
+  </div>
+</section>
+} @if (loading) {
+<section class="spinner-center">
+  <output class="spinner-border text-primary">
+    <span class="visually-hidden">Carregando...</span>
+  </output>
+</section>
+}

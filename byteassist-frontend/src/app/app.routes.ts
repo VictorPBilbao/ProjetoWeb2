@@ -33,6 +33,7 @@ export const routes: Routes = [
   {path: 'funcionario/orcamentos', component: BudgetingComponent },
   {path: 'funcionario/solicitacoes', component: RequestsComponent },
   {path: 'funcionario/cadastros', component: RegistrationComponent },
+  { path: 'solicitacao/:taskId', loadComponent: () => import('./features/pages/task-view/task-view.component').then(m => m.TaskViewComponent) },
   {path: '**', redirectTo: '' } // Redireciona para home se rota não existir
 
 ];

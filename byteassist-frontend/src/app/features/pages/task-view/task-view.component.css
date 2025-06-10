@@ -1,0 +1,87 @@
+.task-view-section {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 2rem 2.5rem;
+}
+.task-header {
+  border-bottom: 1px solid #e3e3e3;
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+}
+.task-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #062685;
+}
+.task-meta .badge {
+  font-size: 1rem;
+  padding: 0.5em 1em;
+  border-radius: 8px;
+}
+.task-meta .text-muted {
+  font-size: 0.95rem;
+}
+.task-summary {
+  font-size: 1.1rem;
+  color: #333;
+}
+.task-people span {
+  font-size: 1rem;
+  color: #444;
+}
+.equipment-info {
+  min-width: 220px;
+  background: #f6f8fa;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.task-description {
+  margin-bottom: 2rem;
+}
+.task-comments {
+  margin-top: 2rem;
+}
+.comments-list .comment {
+  background: #f8f9fa;
+  border: 1px solid #e3e3e3;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+.add-comment-form input {
+  flex: 1;
+}
+.add-comment-form button {
+  min-width: 120px;
+}
+.spinner-center {
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.task-error-section img {
+  max-width: 120px;
+  opacity: 0.7;
+  margin-bottom: 24px;
+}
+
+.task-error-section {
+  min-height: 350px;
+}
+@media (max-width: 768px) {
+  .task-view-section {
+    padding: 1rem 0.5rem;
+  }
+  .task-header {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+  .equipment-info {
+    margin-left: 0 !important;
+    margin-top: 1rem !important;
+    width: 100%;
+  }
+}
