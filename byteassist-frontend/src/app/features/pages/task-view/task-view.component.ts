@@ -29,16 +29,6 @@ export class TaskViewComponent implements OnInit {
   budget: Budget | null = null;
   loading = true;
   error = false;
-  // comments = [
-  //   {
-  //     author: 'Victor Bilbao',
-  //   },
-  //   {
-  //     author: 'Maria Silva',
-  //     date: new Date(),
-  //     text: 'Outro comentário mock com *itálico*.',
-  //   },
-  // ];
   comments: Comment[] = [];
   newCommentText: string = '';
 
@@ -81,7 +71,7 @@ export class TaskViewComponent implements OnInit {
     if (this.newCommentText.trim() && this.task) {
       const newComment: Comment = {
         in: 'Usuário Atual (mock)',
-        comment_date: new Date(),
+        out: "teste",
         comment: this.newCommentText.trim(),
       };
       this.comments.push(newComment);
