@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ufpr.byteassist_backend.exception.EnhancedStatusException;
+import com.ufpr.byteassist_backend.model.Comment;
 import com.ufpr.byteassist_backend.model.Task;
 import com.ufpr.byteassist_backend.model.User;
+import com.ufpr.byteassist_backend.service.CommentService;
 import com.ufpr.byteassist_backend.service.TaskService;
 import com.ufpr.byteassist_backend.validation.ValidationGroups;
 
@@ -28,9 +30,11 @@ import com.ufpr.byteassist_backend.validation.ValidationGroups;
 @RequestMapping("/api/task")
 public class TaskController {
     private final TaskService taskService;
+    private final CommentService commentService;
 
-    public TaskController(TaskService taskService) {
+    public TaskController(TaskService taskService, CommentService commentService) {
         this.taskService = taskService;
+        this.commentService = commentService;
     }
 
     @GetMapping()
@@ -143,13 +147,6 @@ public class TaskController {
             @PathVariable String id,
             @Validated(ValidationGroups.Update.class) @RequestBody Task task,
             @RequestParam(required = false) List<String> expand) {
-        // get the current user from the security context
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        // Set the current user ID as the task creator if already not set
-        if (task.getCreator() == null) {
-            task.setCreator(user.getId());
-        }
 
         return taskService.updateTask(id, task, expand);
     }
