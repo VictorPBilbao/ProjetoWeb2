@@ -44,11 +44,10 @@ public class CommentRepo implements CommentRepoInterface {
     public Optional<Comment> createComment(Comment comment) {
         try {
             return Optional.ofNullable(
-                    db.create(
+                    db.insertRelation(
                             Comment.class,
                             "Comments_on",
-                            comment)
-                            .get(0));
+                            comment));
         } catch (Exception e) {
             return Optional.empty();
         }

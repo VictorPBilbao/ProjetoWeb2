@@ -12,10 +12,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import com.surrealdb.InsertRelation;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Comment {
+public class Comment extends InsertRelation {
     @Null(message = "ID should not be provided in the request body")
     private RecordId id;
     

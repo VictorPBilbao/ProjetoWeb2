@@ -3,6 +3,7 @@ package com.ufpr.byteassist_backend.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ufpr.byteassist_backend.model.Comment;
 import com.ufpr.byteassist_backend.service.CommentService;
+import com.ufpr.byteassist_backend.validation.ValidationGroups;
 
 @RestController
 @RequestMapping("/api/comment")
@@ -30,7 +32,7 @@ public class CommentController {
     }
 
     @PostMapping
-    public ResponseEntity<Comment> createComment(@RequestBody Comment comment) {
+    public ResponseEntity<Comment> createComment(@Validated(ValidationGroups.Create.class) @RequestBody Comment comment) {
         return commentService.createComment(comment);
     }
 
@@ -40,7 +42,7 @@ public class CommentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Comment> updateComment(@PathVariable String id, @RequestBody Comment comment) {
+    public ResponseEntity<Comment> updateComment(@PathVariable String id, @Validated(ValidationGroups.Update.class) @RequestBody Comment comment) {
         return commentService.updateComment(comment, id);
     }
 
