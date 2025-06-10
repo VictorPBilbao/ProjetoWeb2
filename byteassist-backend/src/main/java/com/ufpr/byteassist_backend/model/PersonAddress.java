@@ -29,6 +29,9 @@ public class PersonAddress {
     @Size(min = 2, max = 50, message = "Neighborhood must be between 2 and 50 characters")
     private String neighborhood;
     
+    @Size(max = 100, message = "Complement must be up to 100 characters")
+    private String complement; // optional field, can be null or empty in the database
+    
     @NotBlank(groups = {ValidationGroups.Create.class})
     @Size(min = 2, max = 50, message = "City must be between 2 and 50 characters")
     private String city;
@@ -40,7 +43,4 @@ public class PersonAddress {
     @NotBlank(groups = {ValidationGroups.Create.class})
     @Pattern(regexp = "^[A-Z]{2}$", message = "Country must be exactly 2 uppercase letters (ISO 3166-1 alpha-2 code)")
     private String country;
-    
-    @Size(max = 100, message = "Complement must be up to 100 characters")
-    private String complement; // optional field, can be null or empty in the database
 }
