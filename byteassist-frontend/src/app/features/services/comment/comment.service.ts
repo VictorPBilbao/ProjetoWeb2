@@ -13,9 +13,9 @@ export class CommentService {
   private readonly token = this.authService.getToken();
   private readonly apiUrl = 'https://byteassist-backend.fly.dev/api';
 
-  public createComment(taskId: string, commentText: string): Observable<Comment> {
-    const body = { text: commentText };
-    return this.http.post<Comment>(`${this.apiUrl}/comment/byTaskId/${taskId}`, body, {
+  public createComment(comment: Comment): Observable<Comment> {
+    const body = comment;
+    return this.http.post<Comment>(`${this.apiUrl}/comment`, body, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${this.token}`,

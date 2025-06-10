@@ -70,12 +70,19 @@ export class TaskViewComponent implements OnInit {
   addComment(): void {
     if (this.newCommentText.trim() && this.task) {
       const newComment: Comment = {
-        in: 'Usuário Atual (mock)',
-        out: "teste",
+        out: 'Task:' + this.route.snapshot.paramMap.get('taskId'),
         comment: this.newCommentText.trim(),
       };
+      if (newComment.out === undefined) {
+        console.error('Task ID is undefined, cannot add comment');
+        return;
+      }
       this.comments.push(newComment);
-      this.newCommentText = '';
+      this.commentService.createComment(newComment).subscribe({
+        next: () => {
+          this.newCommentText = '';
+        },
+      });
     }
   }
 }
