@@ -21,7 +21,7 @@ public class Comment extends InsertRelation {
     @Null(message = "ID should not be provided in the request body")
     private RecordId id;
     
-    @NotNull(groups = ValidationGroups.Create.class, message = "In ID cannot be null")
+    @Null(groups = ValidationGroups.Create.class, message = "In ID should not be provided in the request body as it will be taken from the authenticated user")
     private RecordId in;
     
     @NotNull(groups = ValidationGroups.Create.class, message = "Out ID cannot be null")

@@ -3,6 +3,7 @@ package com.ufpr.byteassist_backend.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ufpr.byteassist_backend.model.Comment;
+import com.ufpr.byteassist_backend.model.User;
 import com.ufpr.byteassist_backend.service.CommentService;
 import com.ufpr.byteassist_backend.validation.ValidationGroups;
 
@@ -33,6 +35,8 @@ public class CommentController {
 
     @PostMapping
     public ResponseEntity<Comment> createComment(@Validated(ValidationGroups.Create.class) @RequestBody Comment comment) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        comment.setIn(user.getId());
         return commentService.createComment(comment);
     }
 
