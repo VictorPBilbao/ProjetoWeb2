@@ -11,12 +11,15 @@ import { Equipment } from '../../shared/models/equipment.model';
 import { Budget } from '../../shared/models/budget.model';
 import { CommentService } from '../../services/comment/comment.service';
 import { BudgetService } from '../../services/budget/budget.service'; // Added import
+import { Comment } from '../../shared/models/comment.model';
+import { RecordIdPipe } from './../../shared/pipes/record-id.pipe';
+
 
 @Component({
   selector: 'app-task-view',
   standalone: true,
   // Use MarkdownModule.forRoot() here
-  imports: [CommonModule, RouterModule, FormsModule, MarkdownModule],
+  imports: [CommonModule, RouterModule, FormsModule, MarkdownModule, RecordIdPipe],
   templateUrl: './task-view.component.html',
   styleUrls: ['./task-view.component.css'],
 })
@@ -26,16 +29,17 @@ export class TaskViewComponent implements OnInit {
   budget: Budget | null = null;
   loading = true;
   error = false;
-  comments = [
-    {
-      author: 'Victor Bilbao',
-    },
-    {
-      author: 'Maria Silva',
-      date: new Date(),
-      text: 'Outro comentário mock com *itálico*.',
-    },
-  ];
+  // comments = [
+  //   {
+  //     author: 'Victor Bilbao',
+  //   },
+  //   {
+  //     author: 'Maria Silva',
+  //     date: new Date(),
+  //     text: 'Outro comentário mock com *itálico*.',
+  //   },
+  // ];
+  comments: Comment[] = [];
   newCommentText: string = '';
 
   private readonly route = inject(ActivatedRoute);
@@ -61,14 +65,24 @@ export class TaskViewComponent implements OnInit {
       this.loading = false;
       this.error = true;
     }
+
+    //* fetch comments from the comment service
+    this.commentService.getComments(taskId ?? '').subscribe({
+      next: (comments) => {
+        this.comments = comments;
+      },
+      error: () => {
+        console.error('Error fetching comments');
+      },
+    });
   }
 
   addComment(): void {
     if (this.newCommentText.trim() && this.task) {
-      const newComment = {
-        author: 'Usuário Atual (mock)',
-        date: new Date(),
-        text: this.newCommentText.trim(),
+      const newComment: Comment = {
+        in: 'Usuário Atual (mock)',
+        comment_date: new Date(),
+        comment: this.newCommentText.trim(),
       };
       this.comments.push(newComment);
       this.newCommentText = '';
