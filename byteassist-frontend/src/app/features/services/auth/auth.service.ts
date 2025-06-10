@@ -61,4 +61,14 @@ export class AuthService {
     const token = this.getToken();
     return !!token;
   }
+
+  // from the jwt get the username
+  getUsername(): string | null {
+    const token = this.getToken();
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.username ?? null;
+    }
+    return null;
+  }
 }

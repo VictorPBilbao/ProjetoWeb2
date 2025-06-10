@@ -13,6 +13,7 @@ import { CommentService } from '../../services/comment/comment.service';
 import { BudgetService } from '../../services/budget/budget.service'; // Added import
 import { Comment } from '../../shared/models/comment.model';
 import { RecordIdPipe } from './../../shared/pipes/record-id.pipe';
+import { AuthService } from '../../services/auth/auth.service';
 
 
 @Component({
@@ -35,6 +36,9 @@ export class TaskViewComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly taskService = inject(TaskService);
   private readonly commentService = inject(CommentService);
+  private readonly authService = inject(AuthService);
+
+  username: string = this.authService.getUsername() ?? '';
 
   ngOnInit(): void {
     const taskId = this.route.snapshot.paramMap.get('taskId');
@@ -77,9 +81,15 @@ export class TaskViewComponent implements OnInit {
         console.error('Task ID is undefined, cannot add comment');
         return;
       }
-      this.comments.push(newComment);
+      // in should be the current user's ID or username, get it from the auth service or similar
+
       this.commentService.createComment(newComment).subscribe({
         next: () => {
+          newComment.in = this.username;
+            const now = new Date();
+            now.setHours(now.getHours() + 3);
+            newComment.comment_date = now;
+          this.comments.push(newComment);
           this.newCommentText = '';
         },
       });
