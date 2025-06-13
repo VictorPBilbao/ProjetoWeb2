@@ -41,9 +41,19 @@
             <td>{{ task.id | getRecordId }}</td>
             <td>{{ task.time?.createdAt | date : "dd/MM/yyyy" }}</td>
             <td>{{ task.time?.createdAt | date : "HH:mm:ss" }}</td>
-            <td>{{ task.equipment ? (task.equipment | equipmentField : 'model') : '' }}</td>
             <td>
-              <span [ngClass]="'estado-' + (task.status?.trim()?.toUpperCase() ?? '')">
+              {{
+                task.equipment
+                  ? (task.equipment | equipmentField : "model")
+                  : ""
+              }}
+            </td>
+            <td>
+              <span
+                [ngClass]="
+                  'estado-' + (task.status?.trim()?.toUpperCase() ?? '')
+                "
+              >
                 {{ task.status }}
               </span>
             </td>
@@ -60,7 +70,6 @@
         </tbody>
       </table>
     </div>
-
     <!-- Paginação -->
     <div
       class="paginacao d-flex justify-content-center align-items-center mt-3 gap-2"
@@ -75,7 +84,6 @@
 
       <span>Página {{ paginaAtual }} de {{ totalPaginas }}</span>
 
-  </div>
       <button
         class="btn btn-sm btn-outline-primary"
         [disabled]="paginaAtual === totalPaginas"
@@ -83,5 +91,6 @@
       >
         Próxima
       </button>
+    </div>
   </div>
 </section>
