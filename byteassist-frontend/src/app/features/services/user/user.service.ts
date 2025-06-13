@@ -205,4 +205,17 @@ export class UserService {
       country: 'Brasil'
     }
   }
+
+  // Método para validar o nome de usuário
+  validateUsername(username: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    this.loadingService.show(); // Exibe o loading
+
+    return this.http.get<any>(`https://byteassist-backend.fly.dev/auth/validate/username/${username}`, { headers }).pipe(
+      finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
+    );
+  }
 }
