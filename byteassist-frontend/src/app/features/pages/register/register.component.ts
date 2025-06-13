@@ -28,6 +28,7 @@ export class RegisterComponent {
   currentStep: number = 1; // Variável para controlar o passo atual do formulário
   showPassword: boolean = false; // Variável para controlar a visibilidade da senha
   isCepValid: boolean = true;
+  isUsernameAvailable: boolean = true;
 
   constructor(
     private router: Router,
@@ -214,6 +215,35 @@ export class RegisterComponent {
         this.message = err.message || 'Erro ao buscar CEP. Verifique sua conexão ou tente novamente mais tarde.';
         this.showNotification = true;
         this.isCepValid = false; // Erro na busca do CEP
+      }
+    });
+  }
+
+  onValidateUsername(): void {
+    this.showNotification = false; // Reseta a notificação ao validar o nome de usuário
+    const username = this.registerForm?.controls['username']?.value || '';
+
+    if (username.length < 3) {
+      this.message = 'O nome de usuário deve ter pelo menos 3 caracteres.';
+      this.showNotification = true;
+      return;
+    }
+
+    this.userService.validateUsername(username).subscribe({
+      next: () => {
+        this.isUsernameAvailable = true; // Nome de usuário disponível
+      },
+      error: (err) => {
+        if (err.status === 409) {
+          // HTTP 409 → nome em uso
+          this.message = 'Nome de usuário já está em uso. Por favor, escolha outro.';
+        } else {
+          // Outros erros
+          console.log(err.status)
+          this.message = 'Erro ao validar nome de usuário: ' + (err.error?.message || 'Erro desconhecido.');
+        }
+        this.showNotification = true;
+        this.isUsernameAvailable = false; // Nome de usuário indisponível
       }
     });
   }
