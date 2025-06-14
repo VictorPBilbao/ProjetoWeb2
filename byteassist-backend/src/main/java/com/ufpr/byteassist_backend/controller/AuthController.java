@@ -17,7 +17,7 @@ import com.ufpr.byteassist_backend.service.AuthService;
 import com.ufpr.byteassist_backend.validation.ValidationGroups;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
     private final AuthService authService;
 
