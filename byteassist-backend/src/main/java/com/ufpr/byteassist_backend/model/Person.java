@@ -34,7 +34,6 @@ public class Person {
     private ZonedDateTime dob;
     
     @NotBlank(groups = {ValidationGroups.Create.class})
-    @Pattern(regexp = "^(Male|Female|Other)$", message = "Gender must be 'Male', 'Female', or 'Other'", groups = {ValidationGroups.Create.class, ValidationGroups.Update.class})
     private String gender;
     
     @NotBlank(groups = {ValidationGroups.Create.class})

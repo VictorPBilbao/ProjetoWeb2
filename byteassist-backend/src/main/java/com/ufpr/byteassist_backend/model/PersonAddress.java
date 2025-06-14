@@ -41,6 +41,5 @@ public class PersonAddress {
     private String state;
     
     @NotBlank(groups = {ValidationGroups.Create.class})
-    @Pattern(regexp = "^[A-Z]{2}$", message = "Country must be exactly 2 uppercase letters (ISO 3166-1 alpha-2 code)")
     private String country;
 }
