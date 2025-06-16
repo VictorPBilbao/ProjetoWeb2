@@ -106,28 +106,51 @@
               required
               maxlength="10"
               (input)="applyDateMask($event)"
+              validDate
+              #nascimento="ngModel"
             >
-            <div *ngIf="registerForm.controls['nascimento']?.invalid && registerForm.controls['nascimento']?.touched" class="error-message">
-              <small>O campo Nascimento é obrigatório.</small>
+            <div class="error-message">
+              <small *ngIf="nascimento.errors?.['required'] && nascimento.touched">
+                O campo Nascimento é obrigatório.
+              </small>
+              <small *ngIf="nascimento.errors?.['invalidDate'] && nascimento.touched">
+                Data inválida. Por favor, insira uma data válida.
+              </small>
             </div>
+            <!-- Erro de data inválida (ex: 32/01/2024) -->
 
-            <input type="text" name="nome" ngModel placeholder="Nome completo" required>
-            <div *ngIf="registerForm.controls['nome']?.invalid && registerForm.controls['nome']?.touched" class="error-message">
-              <small>O campo Nome completo é obrigatório.</small>
+            <div>
+              <input type="text" name="nome" ngModel placeholder="Nome" required>
+              <div *ngIf="registerForm.controls['nome']?.invalid && registerForm.controls['nome']?.touched" class="error-message">
+                <small>O campo Nome completo é obrigatório.</small>
+              </div>
+
+              <input type="text" name="sobrenome" ngModel placeholder="Sobrenome" required>
+              <div *ngIf="registerForm.controls['sobrenome']?.invalid && registerForm.controls['sobrenome']?.touched" class="error-message">
+                <small>O campo Sobrenome é obrigatório.</small>
+              </div>
             </div>
 
             <label>Sexo:</label>
             <div class="radio-group flex items-center">
-              <label><input type="radio" name="sexo" ngModel value="feminino" required> Feminino</label>
-              <label><input type="radio" name="sexo" ngModel value="masculino" required> Masculino</label>
-              <label><input type="radio" name="sexo" ngModel value="outro" required> Outro</label>
+              <label><input type="radio" name="sexo" ngModel value="Female" required> Feminino</label>
+              <label><input type="radio" name="sexo" ngModel value="Male" required> Masculino</label>
+              <label><input type="radio" name="sexo" ngModel value="Other" required> Outro</label>
             </div>
             <div *ngIf="registerForm.controls['sexo']?.invalid && registerForm.controls['sexo']?.touched" class="error-message">
               <small>O campo Sexo é obrigatório.</small>
             </div>
 
-            <input type="email" name="email" ngModel placeholder="E-mail" required>
-            <div *ngIf="registerForm.controls['email']?.invalid && registerForm.controls['email']?.touched" class="error-message">
+            <input
+              type="email"
+              name="email"
+              ngModel
+              placeholder="E-mail"
+              required
+              (blur)="onValidateEmail()">
+            <div
+              *ngIf="registerForm.controls['email']?.invalid && registerForm.controls['email']?.touched && !isEmailAvailable"
+              class="error-message">
               <small>O campo E-mail é obrigatório.</small>
             </div>
 
@@ -175,7 +198,13 @@
           </div>
 
           <div class="regiter-btn flex flex-column items-center">
-            <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid || !isCepValid  || !isUsernameAvailable">CADASTRAR</button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="registerForm.invalid || !isCepValid  || !isUsernameAvailable || !isEmailAvailable"
+            >
+              CADASTRAR
+            </button>
             <button type="button" class="btn btn-secondary" (click)="goToPreviousStep()" style="margin-top: 10px;">Voltar</button>
             <div class="login-link-container">
               <p>Já tem uma conta?</p>
