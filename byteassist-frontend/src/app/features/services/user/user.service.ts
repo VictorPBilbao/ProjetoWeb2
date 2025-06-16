@@ -13,7 +13,7 @@ import { PersonAddress } from '../../shared/models/person-address.model';
   providedIn: 'root'
 })
 export class UserService {
-  private readonly apiUrl = 'https://byteassist-backend.fly.dev/api';
+  private readonly apiUrl = 'https://byteassist-backend.fly.dev';
 
   constructor(
     private readonly http: HttpClient,
@@ -53,8 +53,8 @@ export class UserService {
     }
 
     this.loadingService.show(); // Exibe o loading
-
-    return this.http.post(`${this.apiUrl}/auth/register/${user.username}`, newUserPayload, { headers }).pipe(
+    console.log('Payload do novo usuário:', newUserPayload);
+    return this.http.post(`${this.apiUrl}/api/auth/register/${user.username}`, newUserPayload, { headers }).pipe(
       finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
       catchError(handleErrors.handleError)
     );
@@ -115,7 +115,7 @@ export class UserService {
       params = params.set('expand', expand);
     }
 
-    return this.http.get<T>(`${this.apiUrl}/user/me`, { headers, params }).pipe(
+    return this.http.get<T>(`${this.apiUrl}/api/user/me`, { headers, params }).pipe(
       catchError(handleErrors.handleError)
     );
   }
@@ -136,7 +136,7 @@ export class UserService {
 
     this.loadingService.show(); // Exibe o loading
 
-    return this.http.put<User>(`${this.apiUrl}/user/${user.username}`, userPayload, { headers }).pipe(
+    return this.http.put<User>(`${this.apiUrl}/api/user/${user.username}`, userPayload, { headers }).pipe(
       finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
       catchError(handleErrors.handleError)
     );
@@ -158,7 +158,7 @@ export class UserService {
 
     this.loadingService.show(); // Exibe o loading
 
-    return this.http.put<Person>(`${this.apiUrl}/person/${username}`, personPayload, { headers }).pipe(
+    return this.http.put<Person>(`${this.apiUrl}/api/person/${username}`, personPayload, { headers }).pipe(
       finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
       catchError(handleErrors.handleError)
     );
@@ -214,7 +214,20 @@ export class UserService {
 
     this.loadingService.show(); // Exibe o loading
 
-    return this.http.get<any>(`https://byteassist-backend.fly.dev/auth/validate/username/${username}`, { headers }).pipe(
+    return this.http.get<any>(`${this.apiUrl}/api/auth/validate/username/${username}`, { headers }).pipe(
+      finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
+    );
+  }
+
+  // Valida o email do usuário
+  validateEmail(email: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    this.loadingService.show(); // Exibe o loading
+
+    return this.http.get<any>(`${this.apiUrl}/api/auth/validate/email/${email}`, { headers }).pipe(
       finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
     );
   }

@@ -8,6 +8,7 @@ import { User } from '../../shared/models/user.model';
 import { Person } from '../../shared/models/person.model';
 import { PersonAddress } from '../../shared/models/person-address.model';
 import { UserTime } from '../../shared/models/user-time.model';
+import { DateValidatorDirective } from '../../shared/directives/date-validator.directive';
 
 @Component({
   selector: 'app-register',
@@ -15,7 +16,8 @@ import { UserTime } from '../../shared/models/user-time.model';
     CommonModule,
     FormsModule,
     NotificationComponent,
-    RouterLink
+    RouterLink,
+    DateValidatorDirective
   ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
@@ -29,6 +31,7 @@ export class RegisterComponent {
   showPassword: boolean = false; // Variável para controlar a visibilidade da senha
   isCepValid: boolean = true;
   isUsernameAvailable: boolean = true;
+  isEmailAvailable: boolean = true;
 
   constructor(
     private router: Router,
@@ -54,6 +57,7 @@ export class RegisterComponent {
         next: (response) => {
           if (response) {
             this.message = 'Cadastro realizado com sucesso!';
+            this.showNotification = true;
             this.router.navigate(['/login']);
           } else {
             this.message = 'Erro ao fazer cadastro. Verifique sua conexão ou tente novamente mais tarde.';
@@ -85,20 +89,21 @@ export class RegisterComponent {
         city: formValues.cidade,
         state: formValues.uf,
         zip: formValues.cep.replace(/\D/g, ''),
-        country: 'Brasil'
+        country: 'BR'
       };
 
       // Monta o objeto Person
+      const [day, month, year] = formValues.nascimento.split('/');
       const person: Person = {
         id: '', // Se você estiver criando um novo Person
         cpf: formValues.cpf.replace(/\D/g, ''),
-        dob: new Date(formValues.nascimento),
+        dob: new Date(`${year}-${month}-${day}`),
         gender: formValues.sexo,
         phone: formValues.telefone.replace(/\D/g, ''),
         address: address,
         name: {
-          first: formValues.nome.split(' ')[0] || '',
-          last: formValues.nome.split(' ').slice(1).join(' ') || ''
+          first: formValues.nome,
+          last: formValues.sobrenome
         }
       };
 
@@ -113,7 +118,7 @@ export class RegisterComponent {
       this.user = {
         id: '',
         email: formValues.email,
-        username: formValues.username,
+        username: formValues.username.toLowerCase(),
         isActive: true,
         password: password,
         person: person,
@@ -209,19 +214,22 @@ export class RegisterComponent {
           this.message = 'CEP não encontrado.';
           this.showNotification = true;
           this.isCepValid = false; // CEP inválido
+          this.registerForm?.controls['cep']?.setValue(''); // Reseta o campo de CEP
         }
       },
       error: (err) => {
         this.message = err.message || 'Erro ao buscar CEP. Verifique sua conexão ou tente novamente mais tarde.';
         this.showNotification = true;
         this.isCepValid = false; // Erro na busca do CEP
+        this.registerForm?.controls['cep']?.setValue(''); // Reseta o campo de CEP
       }
     });
   }
 
   onValidateUsername(): void {
     this.showNotification = false; // Reseta a notificação ao validar o nome de usuário
-    const username = this.registerForm?.controls['username']?.value || '';
+    var username = this.registerForm?.controls['username']?.value || '';
+    username = username.replace(/\s+/g, '').toLowerCase();
 
     if (username.length < 3) {
       this.message = 'O nome de usuário deve ter pelo menos 3 caracteres.';
@@ -244,6 +252,36 @@ export class RegisterComponent {
         }
         this.showNotification = true;
         this.isUsernameAvailable = false; // Nome de usuário indisponível
+        this.registerForm?.controls['username']?.setValue('');
+      }
+    });
+  }
+
+  onValidateEmail(): void {
+    this.showNotification = false; // Reseta a notificação ao validar o email
+    const email = this.registerForm?.controls['email']?.value || '';
+
+    if (!email || !email.includes('@')) {
+      this.message = 'Por favor, insira um email válido.';
+      this.showNotification = true;
+      return;
+    }
+
+    this.userService.validateEmail(email).subscribe({
+      next: () => {
+        this.isEmailAvailable = true; // Email disponível
+      },
+      error: (err) => {
+        if (err.status === 409) {
+          // HTTP 409 → email em uso
+          this.message = 'Email já está em uso. Por favor, escolha outro.';
+        } else {
+          // Outros erros
+          this.message = 'Erro ao validar email: ' + (err.error?.message || 'Erro desconhecido.');
+        }
+        this.showNotification = true;
+        this.isEmailAvailable = false; // Email indisponível
+        this.registerForm?.controls['email']?.setValue('');
       }
     });
   }

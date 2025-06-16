@@ -27,7 +27,7 @@ export class AuthService {
     });
 
     this.loadingService.show(); // Exibe o loading
-    return this.http.post(`${this.apiUrl}/auth/login`, body.toString(), { headers }).pipe(
+    return this.http.post(`${this.apiUrl}/api/auth/login`, body.toString(), { headers }).pipe(
       finalize(() => this.loadingService.hide()) // Esconde o loading após a requisição
       // catchError(handleErrors.handleError)
     );
