@@ -13,7 +13,8 @@ import { CommentService } from '../../services/comment/comment.service';
 import { BudgetService } from '../../services/budget/budget.service'; // Added import
 import { Comment } from '../../shared/models/comment.model';
 import { RecordIdPipe } from './../../shared/pipes/record-id.pipe';
-
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-task-view',
@@ -35,6 +36,7 @@ export class TaskViewComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly taskService = inject(TaskService);
   private readonly commentService = inject(CommentService);
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
     const taskId = this.route.snapshot.paramMap.get('taskId');
@@ -77,5 +79,83 @@ export class TaskViewComponent implements OnInit {
       this.comments.push(newComment);
       this.newCommentText = '';
     }
+  }
+
+  // badgeClass(): controla as cores do badge
+  badgeClass(status: string | null | undefined): string {
+    switch (status) {
+      case 'ABERTA': return 'bg-secondary text-white';   // Cinza
+      case 'ORÇADA': return 'bg-brown text-white';       // Marrom
+      case 'REJEITADA': return 'bg-danger text-white';      // Vermelho
+      case 'APROVADA': return 'bg-warning text-white';     // Amarelo
+      case 'REDIRECIONADA': return 'bg-purple text-white';      // Roxo
+      case 'ARRUMADA': return 'bg-primary text-white';     // Azul
+      case 'PAGA': return 'bg-orange text-white';      // Alaranjado
+      case 'FINALIZADA': return 'bg-success text-white';     // Verde
+      default: return 'bg-light text-white';       // fallback claro
+    }
+  }
+
+  // RF005: redireciona para tela de orçamentos
+  onMostrarOrcamento(task: Task): void {
+    this.router.navigate(['/orcamentos', task.id]); //não tem id(adriano vai alterar)
+  }
+
+  onResgatarServico(task: Task): void {
+    if (!task.id) {
+      console.error('Task sem ID, impossível resgatar.');
+      return;
+    }
+
+    const now = new Date();
+    const textoHist = `Serviço resgatado: REJEITADA → APROVADA em ${now.toLocaleString()}`;
+
+    // Atualiza status no backend
+    task.status = 'APROVADA'; // Atualiza o status para APROVADA
+    this.taskService.updateTask(task)
+      .subscribe({
+        next: (updatedTask) => {
+          // Reflete no front
+          this.task = updatedTask;
+
+          // 2Cria comentário “histórico”
+          this.commentService.createComment(task.id!, textoHist)
+            .subscribe({
+              next: (newComment: Comment) => {
+                // Insere no topo da lista
+                this.comments.unshift(newComment);
+
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Serviço resgatado',
+                  text: textoHist,
+                  timer: 2000
+                });
+              },
+              error: (err) => {
+                console.error('Erro ao adicionar comentário de histórico', err);
+                Swal.fire('Aviso', 'Status alterado, mas não foi possível registrar histórico', 'warning');
+              }
+            });
+        },
+        error: (err) => {
+          console.error('Falha ao resgatar serviço', err);
+          Swal.fire('Erro', 'Não foi possível atualizar o status', 'error');
+        }
+      });
+  }
+
+  // RF010: paga serviço e redireciona
+  onPagarServico(task: Task): void {
+    Swal.fire({
+      title: `Realize o pagamento!`,
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonText: 'Ir para Pagamentos'
+    }).then(result => {
+      if (result.isConfirmed) {
+        this.router.navigate(['/pagamentos']);
+      }
+    });
   }
 }
