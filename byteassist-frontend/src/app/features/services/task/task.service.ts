@@ -121,7 +121,7 @@ export class TaskService {
       'Authorization': `Bearer ${this.authService.getToken()}` // Adiciona o token no header
     });
     this.loadingService.show(); // Exibe o loading
-    return this.http.patch<Task>(`${this.apiUrl}/${task.id}?expand=equipment`, taskPayload, { headers }).pipe(
+    return this.http.patch<Task>(`${this.apiUrl}/${task.id}`, taskPayload, { headers }).pipe(
       finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
     );
   }

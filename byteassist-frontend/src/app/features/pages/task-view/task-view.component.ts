@@ -134,12 +134,14 @@ export class TaskViewComponent implements OnInit {
               },
               error: (err) => {
                 console.error('Erro ao adicionar comentário de histórico', err);
+                task.status = 'REJEITADA'; // Reverte o status se falhar
                 Swal.fire('Aviso', 'Status alterado, mas não foi possível registrar histórico', 'warning');
               }
             });
         },
         error: (err) => {
           console.error('Falha ao resgatar serviço', err);
+          task.status = 'REJEITADA'; // Reverte o status se falhar
           Swal.fire('Erro', 'Não foi possível atualizar o status', 'error');
         }
       });
