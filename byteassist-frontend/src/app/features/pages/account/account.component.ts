@@ -48,6 +48,7 @@ export class AccountComponent {
           // Verifica se error.error.message está definido
           this.message = 'Erro ao atualizar informações!' + (error.error?.message || '');
           this.showNotification = true;
+          return;
         }
       });
 

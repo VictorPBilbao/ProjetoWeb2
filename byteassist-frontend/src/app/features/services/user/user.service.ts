@@ -136,9 +136,8 @@ export class UserService {
 
     this.loadingService.show(); // Exibe o loading
 
-    return this.http.put<User>(`${this.apiUrl}/api/user/${user.username}`, userPayload, { headers }).pipe(
+    return this.http.patch<User>(`${this.apiUrl}/api/user/${user.username}`, userPayload, { headers }).pipe(
       finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
-      catchError(handleErrors.handleError)
     );
   }
 
@@ -158,9 +157,8 @@ export class UserService {
 
     this.loadingService.show(); // Exibe o loading
 
-    return this.http.put<Person>(`${this.apiUrl}/api/person/${username}`, personPayload, { headers }).pipe(
+    return this.http.patch<Person>(`${this.apiUrl}/api/person/${username}`, personPayload, { headers }).pipe(
       finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
-      catchError(handleErrors.handleError)
     );
   }
 
