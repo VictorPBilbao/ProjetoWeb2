@@ -24,6 +24,26 @@
       </button>
     </div>
 
+    <!--Ordenação das solicitações-->
+    <div class="d-flex justify-content-between mb-2">
+      <!-- controle de ordenação -->
+      <div>
+        <button
+          class="btn btn-sm btn-outline-primary me-1"
+          (click)="ordenarPorData('asc')"
+        >
+          ↑ Data Crescente
+        </button>
+        <button
+          class="btn btn-sm btn-outline-primary"
+          (click)="ordenarPorData('desc')"
+        >
+          ↓ Data Decrescente
+        </button>
+      </div>
+    </div>
+
+    <!--tabela-->
     <div class="table-responsive">
       <table class="table-custom">
         <thead>
@@ -70,6 +90,7 @@
         </tbody>
       </table>
     </div>
+
     <!-- Paginação -->
     <div
       class="paginacao d-flex justify-content-center align-items-center mt-3 gap-2"

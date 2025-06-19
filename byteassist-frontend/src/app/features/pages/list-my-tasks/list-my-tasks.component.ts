@@ -33,7 +33,7 @@ export class ListMyTasksComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly taskService: TaskService
-  ) {}
+  ) { }
   @ViewChild(ModalListMyTaskVisualizarComponent)
   modalVisualizar!: ModalListMyTaskVisualizarComponent;
 
@@ -82,4 +82,19 @@ export class ListMyTasksComponent implements OnInit {
   trackByTaskId(_idx: number, task: Task): any {
     return task.id;
   }
+
+  /** <<<MÉTODO DE ORDENAÇÃO >>> */
+  ordenarPorData(direcao: 'asc' | 'desc'): void {
+    // ordena o array completo antes de paginar
+    this.tasks.sort((a, b) => {
+      const t1 = new Date(a.time?.createdAt || '').getTime();
+      const t2 = new Date(b.time?.createdAt || '').getTime();
+      return direcao === 'asc' ? t1 - t2 : t2 - t1;
+    });
+    // depois de ordenar, volte à página 1 e atualize o slice
+    this.paginaAtual = 1;
+    this.atualizarPagina();
+  }
 }
+
+
