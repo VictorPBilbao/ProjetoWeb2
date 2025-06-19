@@ -21,7 +21,7 @@ export class NewRequestComponent {
   equipmentService = inject(EquipmentService);
   recordIdService = inject(RecordidService);
   equipment: Equipment = {};
-  task: Task = {};
+  task: Task = {} as Task;
 
   // Solicitation model for form binding
   solicitation: any = {
@@ -52,7 +52,7 @@ export class NewRequestComponent {
   ];
 
   // Injeção de dependências
-  constructor(private readonly router: Router) {}
+  constructor(private readonly router: Router) { }
 
   // Placeholder for register logic
   createSolicitacao() {

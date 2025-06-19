@@ -6,7 +6,7 @@ export interface Task {
   assignee?: string;
   creator?: string;
   budget?: string;
-  equipment: string | Equipment;
+  equipment?: string | Equipment;
   status?: string;
   summary?: string;
   title?: string;
