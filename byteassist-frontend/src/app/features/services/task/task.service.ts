@@ -1,14 +1,20 @@
 import { AuthService } from './../auth/auth.service';
 import { RecordidService } from './../utils/recordid.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Task } from '../../shared/models/task.model';
 import { map, Observable } from 'rxjs';
+import { LoadingService } from '../utils/loading.service';
+import { finalize } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TaskService {
+  constructor(
+    private readonly loadingService: LoadingService
+  ) { };
+
   private readonly apiUrl = 'https://byteassist-backend.fly.dev/api/task';
   private readonly http = inject(HttpClient);
   private readonly recordIdService = inject(RecordidService);
@@ -88,4 +94,36 @@ export class TaskService {
       params,
     });
   }
+
+  //atualizar status da task no back
+  updateTask(task: Task): Observable<Task> {
+    if (!task.id) {
+      throw new Error('Task.id é obrigatório para updateTask');
+    }
+
+    const equipmentId: string | undefined =
+      typeof task.equipment === 'string'
+        ? task.equipment
+        : task.equipment?.id;
+
+    const taskPayload = {
+      assignee: task.assignee,
+      creator: task.creator,
+      // equipment: task.equipment.id,
+      equipment: equipmentId,
+      status: task.status,
+      title: task.title,
+      type: task.type
+    }
+    console.log('Payload enviado:', taskPayload);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.authService.getToken()}` // Adiciona o token no header
+    });
+    this.loadingService.show(); // Exibe o loading
+    return this.http.patch<Task>(`${this.apiUrl}/${task.id}?expand=equipment`, taskPayload, { headers }).pipe(
+      finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
+    );
+  }
+
 }
