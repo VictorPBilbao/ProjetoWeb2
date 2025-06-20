@@ -1,621 +1,90 @@
-<div class="pagina-container">
-  <div class="container-do-titulo">
-    <img src="/images/blob.png" alt="Decorativo" class="titulo-blob" />
-    <!-- Título com ícone de cliente -->
-    <div class="titulo-wrapper">
-      <h1 class="titulo-solicitacoes">
-        <i class="fas fa-user-tie me-2"></i> SOLICITAÇÕES
-      </h1>
-    </div>
-  </div>
-
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  />
-
-  <div class="table-responsive-container">
-    <!-- Filtro por Data de Abertura
-<div class="flex items-center" style="gap: 10px;">
-
-  Período: Início
-  <div class="">
-    <label class="form-label">Data Início</label>
-    <input type="date" class="form-control" [(ngModel)]="filtroDataInicio" (ngModelChange)="filtroData()">
-  </div>
-
-  Período: Fim
-  <div class="">
-    <label class="form-label">Data Fim</label>
-    <input type="date" class="form-control" [(ngModel)]="filtroDataFim" (ngModelChange)="filtroData()">
-  </div>
-
-  Limpar Filtro
-  <div class="self-end" style="height: 100%;">
-    <button class="btn-sm btn-clear ms-2" (click)="limparFiltro()">Limpar</button>
-
-  </div> 
-
-</div>
-
-  Filtro por Estado
-  <div class="mb-3">
-    <label for="filtroEstado" class="form-label"></label>
-    <select id="filtroEstado" class="form-select" [(ngModel)]="filtroEstado" (change)="filtrarSolicitacoes()">
-      <option value="">Todos</option>
-      <option value="ABERTA">Aberta</option>
-      <option value="ORÇADA">Orçada</option>
-      <option value="APROVADA">Aprovada</option>
-      <option value="REJEITADA">Rejeitada</option>
-      <option value="REDIRECIONADA">Redirecionada</option>
-      <option value="ARRUMADA">Arrumada</option>
-      <option value="PAGA">Paga</option>
-      <option value="FINALIZADA">Finalizada</option>
-    </select>
-  </div> -->
-
-    <table class="table-custom">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Data</th>
-          <th>Hora</th>
-          <th>Equipamento</th>
-          <th>Funcionário</th>
-          <th>Estado</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let s of solicitacoesPorPagina">
-          <td>{{ s.id }}</td>
-          <td>{{ s.time?.createdAt | date : "dd/MM/yyyy" }}</td>
-          <td>{{ s.time?.createdAt | date : "HH:mm" }}</td>
-          <td>{{ getModeloEquipamento(s.equipment) }}</td>
-          <td>{{ s.assignee }}</td>
-          <td>
-            <span
-              class="badge"
-              [ngClass]="{
-                'bg-secondary': s.status === 'ABERTA',
-                'bg-brown': s.status === 'ORÇADA',
-                'bg-danger': s.status === 'REJEITADA',
-                'bg-warning': s.status === 'APROVADA',
-                'bg-purple': s.status === 'REDIRECIONADA',
-                'bg-primary': s.status === 'ARRUMADA',
-                'bg-orange': s.status === 'PAGA',
-                'bg-success': s.status === 'FINALIZADA'
-              }"
-            >
-              {{ s.status }}
-            </span>
-          </td>
-          <td class="text-nowrap">
-            <!-- Visualizar 
-            <button
-              class="btn btn-sm btn-info me-1"
-              data-bs-toggle="modal"
-              data-bs-target="#visualizarModal"
-              (click)="selecionar(s)"
-              title="Visualizar"
-            >
-              <i class="fas fa-eye"></i>
-            </button> -->
-
-            <!-- Editar/Manutenção 
-            <button
-              class="btn btn-sm btn-warning me-1"
-              data-bs-toggle="modal"
-              data-bs-target="#manutencaoModal"
-              (click)="selecionar(s)"
-              title="Editar"
-            >
-              <i class="fas fa-tools"></i>
-            </button> -->
-
-            <!-- Orçar 
-            <button
-              class="btn btn-sm btn-secondary me-1"
-              (click)="irParaOrcamento(s)"
-              [disabled]="s.status === 'FINALIZADA'"
-              title="Orçar"
-            >
-              <i class="fas fa-dollar-sign"></i>
-            </button> -->
-
-            <!-- Finalizar --
-            <button
-              class="btn btn-sm btn-success"
-              data-bs-toggle="modal"
-              data-bs-target="#finalizarModal"
-              (click)="selecionar(s)"
-              [disabled]="s.status !== 'PAGA'"
-              title="Finalizar"
-            >
-              <i class="fas fa-check-circle"></i>
-            </button> -->
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <!-- 
-  <div
-    class="modal fade"
-    id="visualizarModal"
-    tabindex="-1"
-    aria-labelledby="visualizarModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header bg-light">
-          <h5 class="modal-title" id="visualizarModalLabel">
-            Detalhes da Solicitação #{{ selecionado?.id }}
-          </h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="OK"
-          ></button>
-        </div>
-
-        <div class="modal-body" *ngIf="selecionado">
-          <div class="row">
-            <!-- Coluna da esquerda: campos originais 
-            <div class="col-md-6">
-              <p><strong>Categoria:</strong> {{ selecionado.categoria }}</p>
-              <p><strong>Cor:</strong> {{ selecionado.cor }}</p>
-
-              <!-- Data e Hora lado a lado 
-              <div class="d-flex mb-2">
-                <p class="me-3">
-                  <strong>Data:</strong>
-                  {{ selecionado.data | date : "dd/MM/yyyy" }}
-                </p>
-                <p><strong>Hora:</strong> {{ selecionado.hora }}</p>
-              </div>
-
-              <p><strong>Defeito Relatado:</strong></p>
-              <p class="p-2 bg-light rounded">
-                {{ selecionado.defeitoRelatado }}
-              </p>
-
-              <p><strong>Descrição do Serviço:</strong></p>
-              <p class="p-2 bg-light rounded">
-                {{ selecionado.descricaoServico }}
-              </p>
-
-              <p><strong>Equipamento:</strong> {{ selecionado.equipamento }}</p>
-
-              <p>
-                <strong>Estado:</strong>
-                <span
-                  class="badge"
-                  [ngClass]="{
-                    'bg-secondary': selecionado.estado === 'ABERTA',
-                    'bg-brown': selecionado.estado === 'ORÇADA',
-                    'bg-danger': selecionado.estado === 'REJEITADA',
-                    'bg-warning': selecionado.estado === 'APROVADA',
-                    'bg-purple': selecionado.estado === 'REDIRECIONADA',
-                    'bg-primary': selecionado.estado === 'ARRUMADA',
-                    'bg-orange': selecionado.estado === 'PAGA',
-                    'bg-success': selecionado.estado === 'FINALIZADA'
-                  }"
-                >
-                  {{ selecionado.estado }}
-                </span>
-              </p>
-
-              <p><strong>Funcionário:</strong> {{ selecionado.funcionario }}</p>
-
-              <p><strong>Histórico:</strong></p>
-              <p class="p-2 bg-light rounded" *ngIf="selecionado.historico">
-                {{ selecionado.historico }}
-              </p>
-
-              <p><strong>Marca:</strong> {{ selecionado.marca }}</p>
-
-              <p><strong>Orçamento:</strong> {{ selecionado.orcamento }}</p>
-            </div>
-
-            <!-- Coluna da direita: campos de manutenção 
-            <div class="col-md-6">
-              <p><strong>Descrição da Manutenção:</strong></p>
-              <p class="p-2 bg-light rounded">
-                {{ selecionado.descricaoManutencao }}
-              </p>
-
-              <p>
-                <strong>Funcionário Destino:</strong>
-                {{ selecionado.funcionarioDestino }}
-              </p>
-
-              <p><strong>Orientações para o Cliente:</strong></p>
-              <p class="p-2 bg-light rounded">
-                {{ selecionado.orientacoesCliente }}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            OK
-          </button>
+<section>
+  <!-- Container principal com fundo branco -->
+  <div class="table-section bg-white p-4 rounded shadow-sm mt-4">
+    <!-- Cabeçalho: blob + título + descrição -->
+    <div class="cabecalho-solicitacoes text-center mb-4">
+      <div class="container-do-titulo">
+        <div class="titulo-wrapper">
+          <!-- <img src="/images/blob.png" alt="Decorativo" class="titulo-blob" /> -->
+          <h1 class="titulo-solicitacoes">
+            <i class="fas fa-clipboard-list me-2"></i> SOLICITAÇÕES
+          </h1>
         </div>
       </div>
+      <p class="descricao-solicitacoes">Solicitações de clientes.</p>
+    </div>
+
+    <!--tabela-->
+    <div class="table-responsive">
+      <table class="table-custom">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Data</th>
+            <th>Hora</th>
+            <th>Equipamento</th>
+            <th>Estado</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let task of solicitacoesPorPagina; trackBy: trackByTaskId"
+          >
+            <td>{{ task.id | getRecordId }}</td>
+            <td>{{ task.time?.createdAt | date : "dd/MM/yyyy" }}</td>
+            <td>{{ task.time?.createdAt | date : "HH:mm:ss" }}</td>
+            <td>
+              {{
+                task.equipment
+                  ? (task.equipment | equipmentField : "model")
+                  : ""
+              }}
+            </td>
+            <td>
+              <span
+                [ngClass]="
+                  'estado-' + (task.status?.trim()?.toUpperCase() ?? '')
+                "
+              >
+                {{ task.status }}
+              </span>
+            </td>
+            <td>
+              <button
+                class="btn btn-sm btn-info me-1"
+                (click)="verTask(task)"
+                aria-label="Ver detalhes"
+              >
+                <i class="fas fa-eye"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginação -->
+    <div
+      class="paginacao d-flex justify-content-center align-items-center mt-3 gap-2"
+    >
+      <button
+        class="btn btn-sm btn-outline-primary"
+        [disabled]="paginaAtual === 1"
+        (click)="mudarPagina(paginaAtual - 1)"
+      >
+        Anterior
+      </button>
+
+      <span>Página {{ paginaAtual }} de {{ totalPaginas }}</span>
+
+      <button
+        class="btn btn-sm btn-outline-primary"
+        [disabled]="paginaAtual === totalPaginas"
+        (click)="mudarPagina(paginaAtual + 1)"
+      >
+        Próxima
+      </button>
     </div>
   </div>
-
-  <!-- Modal: Editar Solicitação 
-  <div class="modal fade" id="manutencaoModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content" *ngIf="selecionado">
-        <form (ngSubmit)="salvarEdicao()">
-          <!-- Cabeçalho 
-          <div class="modal-header bg-warning text-white">
-            <h5 class="modal-title">
-              Editar Solicitação #{{ selecionado.id }}
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-            ></button>
-          </div>
-
-          <!-- Corpo do Modal 
-          <div class="modal-body">
-            <!-- Informações Iniciais 
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label"
-                  ><i class="bi bi-pencil-square"></i> Categoria</label
-                >
-                <select
-                  class="form-select"
-                  [(ngModel)]="selecionado.categoria"
-                  name="categoria"
-                  required
-                >
-                  <option value="" disabled>Selecione uma categoria</option>
-                  <option *ngFor="let c of categorias" [value]="c">
-                    {{ c }}
-                  </option>
-                </select>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label"
-                  ><i class="bi bi-pencil-square"></i> Cor</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  [(ngModel)]="selecionado.cor"
-                  name="cor"
-                  required
-                />
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label"
-                  ><i class="bi bi-pencil-square"></i> Data</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  [value]="selecionado.data | date : 'dd/MM/yyyy'"
-                  readonly
-                />
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label"
-                  ><i class="bi bi-pencil-square"></i> Hora</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  [value]="selecionado.hora"
-                  readonly
-                />
-              </div>
-            </div>
-
-            <hr />
-
-            <!-- Descrição do Problema 
-            <div class="mb-3">
-              <label class="form-label"
-                ><i class="bi bi-pencil-square"></i> Defeito Relatado</label
-              >
-              <textarea
-                class="form-control"
-                rows="3"
-                [value]="selecionado.defeitoRelatado"
-                readonly
-              ></textarea>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label"
-                ><i class="bi bi-pencil-square"></i> Descrição do Serviço</label
-              >
-              <textarea
-                class="form-control"
-                rows="4"
-                [value]="selecionado.descricaoServico"
-                readonly
-              ></textarea>
-            </div>
-
-            <hr />
-
-            <!-- Informações Técnicas 
-            <div class="row">
-              <div class="col-md-4 mb-3">
-                <label class="form-label"
-                  ><i class="bi bi-pencil-square"></i> Equipamento</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  [(ngModel)]="selecionado.equipamento"
-                  name="equipamento"
-                  required
-                />
-              </div>
-              <div class="col-md-4 mb-3">
-                <label class="form-label"
-                  ><i class="bi bi-pencil-square"></i> Marca</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  [(ngModel)]="selecionado.marca"
-                  name="marca"
-                  required
-                />
-              </div>
-              <div class="col-md-4 mb-3">
-                <label class="form-label"
-                  ><i class="bi bi-pencil-square"></i> Orçamento</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  [(ngModel)]="selecionado.orcamento"
-                  name="orcamento"
-                  readonly
-                  required
-                />
-              </div>
-            </div>
-            <hr />
-
-            <!-- Status e Histórico 
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label"
-                  ><i class="bi bi-pencil-square"></i> Estado</label
-                >
-                <select
-                  class="form-select"
-                  [(ngModel)]="selecionado.estado"
-                  name="estado"
-                  required
-                >
-                  <option value="" disabled>Selecione um estado</option>
-                  <option
-                    *ngFor="
-                      let estado of [
-                        'ABERTA',
-                        'ORÇADA',
-                        'REJEITADA',
-                        'APROVADA',
-                        'REDIRECIONADA',
-                        'ARRUMADA',
-                        'PAGA',
-                        'FINALIZADA'
-                      ]
-                    "
-                    [value]="estado"
-                  >
-                    {{ estado }}
-                  </option>
-                </select>
-              </div>
-
-              <div class="col-md-6 mb-3">
-                <label class="form-label"
-                  ><i class="bi bi-pencil-square"></i> Funcionário</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  [(ngModel)]="funcionarioDestino"
-                  name="funcionario"
-                  required
-                />
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label"
-                ><i class="bi bi-pencil-square"></i> Histórico</label
-              >
-              <textarea
-                class="form-control"
-                rows="3"
-                [(ngModel)]="selecionado.historico"
-                name="historico"
-                required
-              ></textarea>
-            </div>
-
-            <hr />
-
-            <!-- Realizar Manutenção 
-            <h5 class="mt-3">Realizar Manutenção</h5>
-
-            <div class="mb-3">
-              <label class="form-label"
-                ><i class="bi bi-tools"></i> Descrição da Manutenção</label
-              >
-              <textarea
-                class="form-control"
-                rows="3"
-                [(ngModel)]="selecionado.descricaoManutencao"
-                name="descricaoManutencao"
-                required
-              ></textarea>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label"
-                ><i class="bi bi-tools"></i> Orientações para o Cliente</label
-              >
-              <textarea
-                class="form-control"
-                rows="3"
-                [(ngModel)]="selecionado.orientacoesCliente"
-                name="orientacoesCliente"
-                required
-              ></textarea>
-            </div>
-
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label"
-                  ><i class="bi bi-tools"></i> Data/Hora da Manutenção</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  [value]="dataHoraAtual | date : 'dd/MM/yyyy HH:mm'"
-                  readonly
-                />
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label"
-                  ><i class="bi bi-tools"></i> Funcionário Responsável</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  [value]="selecionado.funcionario"
-                  readonly
-                />
-              </div>
-            </div>
-
-            <hr />
-
-            <!-- Redirecionar Manutenção 
-            <div class="mb-3" *ngIf="selecionado.estado !== 'FINALIZADA'">
-              <h5 class="mt-3">Redirecionar Manutenção</h5>
-              <label class="form-label"
-                ><i class="bi bi-arrow-right"></i> Redirecionar Para</label
-              >
-              <select
-                class="form-select"
-                [(ngModel)]="selecionado.funcionarioDestino"
-                name="funcionarioDestino"
-                required
-              >
-                <option value="">Selecione um funcionário</option>
-                <option
-                  *ngFor="let f of funcionarios"
-                  [value]="f"
-                  [disabled]="f === selecionado.funcionario"
-                >
-                  {{ f }}
-                </option>
-              </select>
-            </div>
-
-            <div class="mb-3" *ngIf="selecionado.funcionarioDestino">
-              <label class="form-label"
-                ><i class="bi bi-person-check"></i> Funcionário Destino</label
-              >
-              <input
-                type="text"
-                class="form-control"
-                [value]="selecionado.funcionarioDestino"
-                readonly
-              />
-            </div>
-          </div>
-
-          <!-- Rodapé 
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">
-              Salvar Alterações
-            </button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Cancelar
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: Finalizar Solicitação 
-  <div
-    class="modal fade"
-    id="finalizarModal"
-    tabindex="-1"
-    aria-labelledby="finalizarModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content" *ngIf="selecionado">
-        <div class="modal-header bg-success text-white">
-          <h5 class="modal-title" id="finalizarModalLabel">
-            Finalizar Solicitação #{{ selecionado.id }}
-          </h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Fechar"
-          ></button>
-        </div>
-
-        <div class="modal-body">
-          <p>Tem certeza que deseja finalizar esta solicitação?</p>
-          <div class="alert alert-info mt-3">
-            <strong>Equipamento:</strong> {{ selecionado.equipamento }}<br />
-            <strong>Estado atual:</strong> {{ selecionado.estado }}
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-success"
-            (click)="finalizarSolicitacao()"
-            data-bs-dismiss="modal"
-          >
-            Confirmar Finalização
-          </button>
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Cancelar
-          </button> -->
-</div>
+</section>

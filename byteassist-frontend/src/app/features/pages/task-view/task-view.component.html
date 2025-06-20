@@ -111,6 +111,35 @@
         >
       </div>
 
+      <!-- Combobox para atribuir responsável - USAR O NG IF -->
+      <div class="mt-2">
+        <label for="assigneeSelect" class="form-label">
+          <i class="bi bi-person-plus"></i> Atribuir responsável:
+        </label>
+        <select
+          id="assigneeSelect"
+          class="form-select form-select-sm small-select"
+          [(ngModel)]="selectedAssignee"
+          name="selectedAssignee"
+          (ngModelChange)="onAssigneeChange()"
+        >
+          <option value="" disabled selected>Selecione...</option>
+          <option *ngFor="let func of funcionarios" [value]="func">
+            {{ func }}
+          </option>
+        </select>
+      </div>
+
+      <!-- task aberta o funcionario pode orçar -->
+      <button
+        *ngIf="task.status === 'ABERTA'"
+        class="btn btn-outline-secondary"
+        title="Orçar Solicitação"
+        (click)="onOrcarSolicitacao(task)"
+      >
+        <i class="bi bi-receipt me-1"></i> Orçar
+      </button>
+
       <!-- a) ORÇADA: Ver orçamento -->
       <button
         *ngIf="task.status === 'ORÇADA'"

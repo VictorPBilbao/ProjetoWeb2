@@ -92,3 +92,7 @@
     width: 100%;
   }
 }
+.small-select {
+  width: 180px;       /* define largura fixa */
+  display: inline-block; /* evita 100% width */
+}

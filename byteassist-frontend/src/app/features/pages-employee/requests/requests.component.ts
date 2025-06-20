@@ -7,17 +7,20 @@ import { Task } from '../../shared/models/task.model';
 import { TaskService } from '../../services/task/task.service';
 import { RecordidService } from '../../services/utils/recordid.service';
 import { Equipment } from '../../shared/models/equipment.model';
+import { RecordIdPipe } from '../../shared/pipes/record-id.pipe';
+import { EquipmentFieldPipe } from '../../shared/pipes/equipment-field.pipe';
 
 
 @Component({
   selector: 'app-requests',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RecordIdPipe, EquipmentFieldPipe],
   templateUrl: './requests.component.html',
   styleUrls: ['./requests.component.css']
 })
 export class RequestsComponent implements OnInit {
   public readonly recordIdService = inject(RecordidService);
+
 
   // Paginação
   paginaAtual: number = 1;
@@ -35,15 +38,15 @@ export class RequestsComponent implements OnInit {
   filtroDataFim: string = '';
 
   constructor(
-    private taskService: TaskService, //pega as tasks de quem ta logado, o certo é usar all tasks para o funcionário
+    private taskService: TaskService, //pega as tasks de quem ta logado
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.taskService.getAllMyTasks('creator', undefined, ['equipment', 'time'])
+    this.taskService.getAllMyTasks('assignee', undefined, ['equipment'])
       .subscribe({
         next: (tasks) => {
-          console.log('📦 Dados recebidos da API:', tasks); // 👈 VERIFIQUE AQUI
+          console.log('📦 Dados recebidos da API:', tasks);
           this.solicitacoes = tasks;
           this.filtrarSolicitacoes();
         },
@@ -62,6 +65,13 @@ export class RequestsComponent implements OnInit {
 
     this.totalPaginas = Math.ceil(this.solicitacoesFiltradas.length / this.itensPorPagina);
     this.atualizarPagina();
+  }
+
+  public get pages(): number[] {
+    return Array.from(
+      { length: Math.ceil(this.solicitacoes.length / this.itensPorPagina) },
+      (_, i) => i + 1
+    );
   }
 
   atualizarPagina(): void {
@@ -86,8 +96,11 @@ export class RequestsComponent implements OnInit {
     this.router.navigate(['/nova-solicitacao']);
   }
 
-  verSolicitacao(task: Task): void {
-    const id = this.recordIdService.getId(task.id ?? '');
+  verTask(task: Task) {
+    this.router.navigate([
+      '/solicitacao',
+      this.recordIdService.getId(task.id ?? ''),
+    ]);
   }
 
   getModeloEquipamento(equipment: string | Equipment | undefined): string {
@@ -96,4 +109,5 @@ export class RequestsComponent implements OnInit {
     }
     return (equipment as string) ?? 'Desconhecido';
   }
+
 }
