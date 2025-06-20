@@ -46,10 +46,11 @@ public class BudgetController {
         return budgetService.getBudgetsByEquipment(equipmentId);
     }
 
-    @PostMapping()
+    @PostMapping("/{taskID}")
     @PreAuthorize("hasRole('EMPLOYEE')")
-    public ResponseEntity<Budget> createBudget(@Validated(ValidationGroups.Create.class) @RequestBody Budget budget) {
-        return budgetService.createBudget(budget);
+    public ResponseEntity<Budget> createBudget(@Validated(ValidationGroups.Create.class) @RequestBody Budget budget, @PathVariable String taskID) {
+        System.out.println("Creating budget for task ID: " + taskID);
+        return budgetService.createBudget(budget, taskID);
     }
 
     @PatchMapping("/{id}")

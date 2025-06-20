@@ -25,6 +25,6 @@ public class Budget {
     @NotBlank(groups = ValidationGroups.Create.class, message = "Description cannot be blank")
     private String description;
     
-    @NotNull(groups = ValidationGroups.Create.class, message = "Equipment ID cannot be null")
-    private RecordId equipment;
+    @NotNull(groups = ValidationGroups.Create.class, message = "Creator can not be blank")
+    private RecordId creator;
 }
