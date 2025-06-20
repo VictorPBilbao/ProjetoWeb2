@@ -7,16 +7,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.surrealdb.RecordId;
 import com.ufpr.byteassist_backend.exception.EnhancedStatusException;
 import com.ufpr.byteassist_backend.model.Budget;
+import com.ufpr.byteassist_backend.model.Task;
 import com.ufpr.byteassist_backend.repository.BudgetRepoInterface;
+import com.ufpr.byteassist_backend.repository.TaskRepoInterface;
 
 @Service
 public class BudgetService {
     private final BudgetRepoInterface budgetRepo;
-    
-    public BudgetService(BudgetRepoInterface budgetRepo) {
+    private final TaskRepoInterface taskRepo;
+
+    public BudgetService(BudgetRepoInterface budgetRepo, TaskRepoInterface taskRepo) {
         this.budgetRepo = budgetRepo;
+        this.taskRepo = taskRepo;
     }
     
     public ResponseEntity<List<Budget>> getAllBudgets() {
@@ -43,7 +48,7 @@ public class BudgetService {
         return ResponseEntity.ok(budget.get());
     }
     
-    public ResponseEntity<Budget> createBudget(Budget budget) {
+    public ResponseEntity<Budget> createBudget(Budget budget, String taskID) {
         Optional<Budget> createdBudget = budgetRepo.createBudget(budget);
         if (createdBudget.isEmpty()) {
             throw new EnhancedStatusException(
@@ -51,7 +56,32 @@ public class BudgetService {
                 "Error creating budget",
                 "There was a problem accessing the database to create the budget"
             );
+        }       
+        
+        RecordId newBudgetId = createdBudget.get().getId();
+
+        Optional<Task> task = taskRepo.getTaskById(taskID);
+        if (task.isEmpty()) {
+            throw new EnhancedStatusException(
+                HttpStatus.NOT_FOUND,
+                "Task not found",
+                "No task found with the provided ID"
+            );
         }
+
+        // agora atualizar a task e settar o budget com o novo ID
+        Task updatedTask = task.get();
+        updatedTask.setBudget(newBudgetId);
+        
+        Optional<Task> updatedTaskOpt = taskRepo.updateTask(updatedTask, taskID);
+        if (updatedTaskOpt.isEmpty()) {
+            throw new EnhancedStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Error updating task with budget",
+                "There was a problem accessing the database to update the task with the new budget"
+            );
+        }
+
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBudget.get());
     }
     
