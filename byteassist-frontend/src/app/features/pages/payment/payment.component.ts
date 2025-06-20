@@ -1,18 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { CommonModule } from '@angular/common';
 import { TaskService } from '../../services/task/task.service';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
+import { RecordidService } from '../../services/utils/recordid.service';
+import { AuthService } from '../../services/auth/auth.service';
+import { Budget } from '../../shared/models/budget.model';
+
 
 @Component({
   selector: 'app-payment',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  providers: [provideNgxMask()],
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.css']
 })
 export class PaymentComponent implements OnInit {
+  private readonly taskService = inject(TaskService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly recordIdService = inject(RecordidService);
+  private readonly authService = inject(AuthService);
+
+  private readonly taskId = this.route.snapshot.paramMap.get('taskId') ?? '';
 
   isModalVisible: boolean = false;
   isLoading = false;
@@ -31,13 +41,34 @@ export class PaymentComponent implements OnInit {
     task: '',
     empresa: 'Byte Assist',
     cnpj: '46.485.166/0001-46',
-    valor: '',
+    valor: 0,
     tipoPagamento: '',
     numeroCartao: '',
     vencimentoCartao: '',
     nomeTitular: '',
     parcelas: 1
   };
+
+  // Método de inicialização que será chamado quando o componente for carregado
+  ngOnInit(): void {
+    // Garante que o código de barras e a chave Pix sejam gerados na inicialização
+    this.codigoBarras = this.gerarCodigoBarras();
+    this.chavePix = this.gerarChavePix();
+
+    //  se a taskId estiver disponível, busca os dados da task caso contrário página n encontrada
+    if (this.taskId) {
+      this.taskService.getTaskById(this.taskId, 'budget').subscribe({
+        next: (task) => {
+          this.pagamento.task = task.id ?? '';
+          this.pagamento.valor = (task.budget as Budget)?.amount ?? 0;
+        },
+        error: () => {
+          console.error('Erro ao buscar dados da tarefa');
+        },
+      });
+    }
+
+  }
 
   // Método que será chamado ao submeter o formulário
   submitForm() {
@@ -92,12 +123,5 @@ export class PaymentComponent implements OnInit {
   // Método para gerar chave Pix
   private gerarChavePix(): string {
     return `${Math.random().toString(36).substring(2, 15)}@byte-assist.com.br`;
-  }
-
-  // Método de inicialização que será chamado quando o componente for carregado
-  ngOnInit(): void {
-    // Garante que o código de barras e a chave Pix sejam gerados na inicialização
-    this.codigoBarras = this.gerarCodigoBarras();
-    this.chavePix = this.gerarChavePix();
   }
 }

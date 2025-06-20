@@ -29,14 +29,13 @@ export class BudgetComponent {
   selectedBudget: Budget | null = null;
   message: string = '';
   showNotification: boolean = false;
-
+  rejectDescription: string = '';
   constructor(
-    private budgetService: BudgetService,
-    private route: ActivatedRoute
+    private readonly budgetService: BudgetService,
+    private readonly route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    const taskId = this.route.snapshot.paramMap.get('taskId');
     this.budgets = this.budgetService.getBudgets();
   }
 
@@ -52,34 +51,28 @@ export class BudgetComponent {
       return;
     }
 
-    this.selectedBudget.status = "Aprovado";
+    this.selectedBudget.accepted = true;
     console.log('Chamando approveBudget...');
     await this.budgetService.approveBudget(id);
     console.log('approveBudget finalizado, abrindo modal');
     this.openModal();
   }
 
-  async rejectBudget(id: string): Promise<void> {
-    if (!this.selectedBudget) {
+  async rejectBudget(id?: string): Promise<void> {
+    if (!this.selectedBudget || !id) {
       this.message = 'Erro ao encontrar o orçamento selecionado.';
       this.showNotification = true;
       return;
     }
 
     await this.budgetService.rejectBudget(id);
-    this.selectedBudget.status = 'Rejeitado';
-    this.openModal();
+    this.selectedBudget.accepted = false;
+    this.closeModal();
   }
 
   openRejectBudgetModal(id: string): void {
     this.selectedBudget = this.budgets.find(budget => budget.id === id) || null;
-    if (!this.selectedBudget) {
-      this.message = 'Erro ao encontrar o orçamento selecionado.';
-      this.showNotification = true;
-      return;
-    }
-
-    this.selectedBudget.status = "Orçada";
+    this.rejectDescription = '';
     this.openModal();
   }
 

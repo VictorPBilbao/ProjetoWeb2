@@ -7,22 +7,20 @@
   <div class="budgets-list-container">
     <div class="table-header table-header1 flex items-center justify-between">
       <div class="header-item">ID</div>
-      <div class="header-item">Data</div>
-      <div class="header-item">Hora</div>
-      <div class="header-item">Equipamento</div>
+      <div class="header-item">Criador</div>
       <div class="header-item">Status</div>
       <div class="header-item">Valor</div>
+      <div class="header-item">Descrição</div>
     </div>
 
     <div class="table-card" *ngFor="let budget of budgets; let i = index">
       <div class="table-header">
         <div class="info flex items-center justify-between" (click)="openBudget(i)">
           <div class="header-item">{{ budget.id }}</div>
-          <div class="header-item">{{ budget.date | date:'dd/MM/yyyy' }}</div>
-          <div class="header-item">{{ budget.time }}</div>
-          <div class="header-item">{{ budget.equipment }}</div>
-          <div class="header-item">{{ budget.status }}</div>
-          <div class="header-item">{{ budget.budgetValue | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</div>
+          <div class="header-item">{{ budget.creator }}</div>
+          <div class="header-item">{{ budget.accepted ? 'Aprovado' : 'Pendente' }}</div>
+          <div class="header-item">{{ budget.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</div>
+          <div class="header-item">{{ budget.description }}</div>
         </div>
         <span class="table-caret">
           <i
@@ -37,59 +35,44 @@
         <div class="budget-details flex justify-between">
           <div class="descricao">
             <div class="secao">
-              <h3>Peças</h3>
-              <p>{{ budget.partsDescription }}</p>
+              <h3>Descrição</h3>
+              <p>{{ budget.description }}</p>
             </div>
             <div class="secao">
-              <h3>Mão de Obra</h3>
-              <p>{{ budget.laborDescription }}</p>
+              <h3>Status</h3>
+              <p>{{ budget.accepted ? 'Aprovado' : 'Pendente' }}</p>
             </div>
-            <div class="servico">Serviço: <span>{{ budget.serviceName }}</span></div>
           </div>
 
           <div class="painel-lateral">
-            <p><strong>{{ budget.date | date:'dd/MM/yyyy' }}</strong><br>{{ budget.time }}</p>
             <div class="detalhes">
-              <p>Peças: {{ budget.budgetPartsValue | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
-              <p>Pessoal: verificar</p>
-              <p>Mão de Obra: {{ budget.budgetLaborValue | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
-              <p><strong>Orçamento: </strong>{{ budget.budgetValue | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
-              <p>Contador: {{ budget.accountantName }}<br>Tesoureiro: {{ budget.treasurerName }}</p>
+              <p><strong>Valor: </strong>{{ budget.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+              <p><strong>Criador: </strong>{{ budget.creator }}</p>
             </div>
           </div>
         </div>
 
         <div class="botoes">
-          <button class="aprovar" (click)="approvalBudget(budget.id)"><i class="bi bi-check-circle"></i> Aprovar</button>
-          <button class="rejeitar" (click)="openRejectBudgetModal(budget.id)"><i class="bi bi-x-circle"></i> Rejeitar</button>
+          <button class="aprovar" (click)="approvalBudget(budget.id!)" [disabled]="budget.accepted"><i class="bi bi-check-circle"></i> Aprovar</button>
+          <button class="rejeitar" (click)="openRejectBudgetModal(budget.id!)" [disabled]="budget.accepted"><i class="bi bi-x-circle"></i> Rejeitar</button>
         </div>
       </div>
     </div>
   </div>
 
   <div class="budget-modal flex items-center justify-center" *ngIf="modalVisible">
-    <div class="modal-content" *ngIf="selectedBudget && selectedBudget.status === 'Aprovado'">
+    <div class="modal-content" *ngIf="selectedBudget && selectedBudget.accepted">
       <span class="close" (click)="closeModal()"><i class="bi bi-x"></i></span>
       <h2>Orçamento Aprovado</h2>
-      <p>Valor: {{ selectedBudget.budgetValue | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+      <p>Valor: {{ selectedBudget.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
       <button class="btn-ok" (click)="closeModal()">Ok</button>
     </div>
 
-    <div class="modal-content" *ngIf="selectedBudget && selectedBudget.status === 'Orçada'">
+    <div class="modal-content" *ngIf="selectedBudget && !selectedBudget.accepted">
       <span class="close" (click)="closeModal()"><i class="bi bi-x"></i></span>
       <h2>Motivo de rejeição:</h2>
-      <textarea [(ngModel)]="selectedBudget.rejectDescription" placeholder="Digite o motivo da rejeição"></textarea>
+      <textarea [(ngModel)]="rejectDescription" placeholder="Digite o motivo da rejeição"></textarea>
       <button class="btn-reject" (click)="rejectBudget(selectedBudget.id)">Rejeitar</button>
-    </div>
-
-    <div class="modal-content" *ngIf="selectedBudget && selectedBudget.status === 'Rejeitado'">
-      <h2>Orçamento rejeitado</h2>
-      <button
-        class="btn-ok"
-        style="background-color: black; width: 120px; margin: auto;"
-        (click)="closeModal()">
-          Ok
-      </button>
     </div>
   </div>
 </section>

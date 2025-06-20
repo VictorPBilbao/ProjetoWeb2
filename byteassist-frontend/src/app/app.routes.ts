@@ -18,6 +18,7 @@ import { PaymentComponent } from './features/pages/payment/payment.component';
 import { BudgetingComponent } from './features/pages-employee/budgeting/budgeting.component';
 import { RequestsComponent } from './features/pages-employee/requests/requests.component';
 import { RegistrationComponent } from './features/pages-employee/registration/registration.component';
+import { TaskViewComponent } from './features/pages/task-view/task-view.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -31,11 +32,11 @@ export const routes: Routes = [
   { path: 'orcamentos/:idTask?', component: BudgetComponent },
   { path: 'ajuda', component: HelpComponent },
   // { path: 'pagamentos', component: PaymentComponent },
-  { path: 'pagamentos/:idTask', component: PaymentComponent },
+  { path: 'pagamentos/:taskId', component: PaymentComponent },
   { path: 'funcionario/orcamentos/', component: BudgetingComponent },
   { path: 'funcionario/orcamentos/:idTask?', component: BudgetingComponent },
   { path: 'funcionario/solicitacoes', component: RequestsComponent },
   { path: 'funcionario/cadastros', component: RegistrationComponent },
-  { path: 'solicitacao/:taskId', loadComponent: () => import('./features/pages/task-view/task-view.component').then(m => m.TaskViewComponent) },
+  { path: 'solicitacao/:taskId', component: TaskViewComponent },
   { path: '**', redirectTo: '' } // Redireciona para home se rota não existir
 ];

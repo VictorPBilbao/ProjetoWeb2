@@ -29,12 +29,11 @@ export class BudgetingComponent {
   showNotification: boolean = false;
 
   constructor(
-    private budgetService: BudgetService,
-    private route: ActivatedRoute
+    private readonly budgetService: BudgetService,
+    private readonly route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    const taskId = this.route.snapshot.paramMap.get('taskId');
     this.budgets = this.budgetService.getBudgets();
   }
 
@@ -42,17 +41,16 @@ export class BudgetingComponent {
     this.activeAccordion = this.activeAccordion === index ? null : index;
   }
 
-  async budgetingRequest(id: string): Promise<void> {
+  async budgetingRequest(id?: string): Promise<void> {
     this.selectedBudget = this.budgets.find(budget => budget.id === id) || null;
-    if (!this.selectedBudget) {
+    if (!this.selectedBudget || !id) {
       this.message = 'Erro ao encontrar o orçamento selecionado.';
       this.showNotification = true;
       return;
     }
 
-    this.selectedBudget.status = "Orçada";
-    console.log('Chamando approveBudget...');
-    await this.budgetService.approveBudget(id);
+    console.log('Chamando budgetingRequest...');
+    await this.budgetService.budgetingRequest(id);
     this.openModal();
   }
 

@@ -1,3 +1,4 @@
+import { RecordidService } from './../../services/utils/recordid.service';
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -43,6 +44,7 @@ export class TaskViewComponent implements OnInit {
   private readonly commentService = inject(CommentService);
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
+  private readonly recordidService = inject(RecordidService);
 
   username: string = this.authService.getUsername() ?? '';
 
@@ -156,7 +158,7 @@ export class TaskViewComponent implements OnInit {
       confirmButtonText: 'Ir para Pagamentos',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.router.navigate(['/pagamentos', task.id]);
+        this.router.navigate(['/pagamentos', this.recordidService.getId(task.id ?? '')]);
       }
     });
   }
