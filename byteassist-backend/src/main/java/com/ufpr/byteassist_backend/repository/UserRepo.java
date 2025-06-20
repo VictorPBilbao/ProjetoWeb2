@@ -25,7 +25,7 @@ public class UserRepo implements UserRepoInterface {
     public UserRepo(DatabaseService databaseService) {
         this.db = databaseService.getDatabase();
     }
-    
+
     @Override
     public Optional<User> getUser(String username) {
         try {
@@ -36,7 +36,7 @@ public class UserRepo implements UserRepoInterface {
             return Optional.empty();
         }
     }
-    
+
     @Override
     public Optional<User> createUser(User user, String username) {
         // Define a referência à entidade Person relacionada ao usuário
@@ -49,7 +49,7 @@ public class UserRepo implements UserRepoInterface {
             return Optional.empty();
         }
     }
-    
+
     @Override
     public Optional<User> updateUser(User user, String username) {
         // Atualiza o campo de tempo do usuário para o momento atual
@@ -63,7 +63,7 @@ public class UserRepo implements UserRepoInterface {
             return Optional.empty();
         }
     }
-    
+
     @Override
     public Boolean deleteUser(String username) {
         try {
@@ -75,7 +75,7 @@ public class UserRepo implements UserRepoInterface {
             return false;
         }
     }
-    
+
     @Override
     public Optional<List<User>> getAllUsers() {
         try {
@@ -102,22 +102,40 @@ public class UserRepo implements UserRepoInterface {
         String query = "SELECT * FROM User WHERE email = '%s';".formatted(email);
         Response response = db.query(query);
 
-        // Verifica se a consulta retornou resultados (se não retornou, o e-mail está disponível)
+        // Verifica se a consulta retornou resultados (se não retornou, o e-mail está
+        // disponível)
         return response.take(0).getArray().len() == 0;
     }
-    
+
     public Optional<DetailedUserDTO> getDetailedUser(String username) {
         System.out.println("Fetching detailed user for username: " + username);
         try {
-            // Executa uma query que busca o usuário e faz o fetch da entidade person associada
+            // Executa uma query que busca o usuário e faz o fetch da entidade person
+            // associada
             Response response = db.queryBind(
-                "SELECT * FROM User WHERE id.id() = $user FETCH person", 
-                Map.of("user", username)
-            );
+                    "SELECT * FROM User WHERE id.id() = $user FETCH person",
+                    Map.of("user", username));
             // Extrai o DTO detalhado do resultado da consulta
             DetailedUserDTO dto = response.take(0).getArray().get(0).get(DetailedUserDTO.class);
             System.out.println(dto); // Loga o DTO para depuração
             return Optional.ofNullable(dto);
+        } catch (Exception e) {
+            // Em caso de erro, retorna Optional vazio
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<List<String>> getAllEmployees() {
+        try {
+            // Busca todos os funcionários no banco de dados
+            Response response = db.query("select value id from User where role = 'Employee'");
+            List<String> employees = new ArrayList<>();
+            for (com.surrealdb.Value value : response.take(0).getArray()) {
+                // value is already a string, how to convert it to String without adding double quotes again?
+                employees.add(value.toString().replace("\'", ""));
+            }
+            return Optional.ofNullable(employees);
         } catch (Exception e) {
             // Em caso de erro, retorna Optional vazio
             return Optional.empty();

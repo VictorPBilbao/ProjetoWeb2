@@ -75,5 +75,12 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable String username) {
         return userService.deleteUser(username);
     }
+    
+    @GetMapping("/getAllEmployees")
+    @PreAuthorize("hasRole('EMPLOYEE')")
+    public List<String> getAllEmployees() {
+        return userService.getAllEmployees();
+    }
+    
 
 }

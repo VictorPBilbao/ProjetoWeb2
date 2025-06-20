@@ -93,4 +93,17 @@ public class UserService {
         List<User> expandedUsers = userExpander.expandUsers(users.get(), expand);
         return ResponseEntity.ok(expandedUsers);
     }
+
+    public List<String> getAllEmployees() {
+        Optional<List<String>> employees = userRepo.getAllEmployees();
+        if (employees.isEmpty()) {
+            throw new EnhancedStatusException(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Error retrieving employees from database",
+                "There was a problem accessing the database to retrieve the list of employees"
+            );
+        }
+
+        return employees.get();
+    }
 }

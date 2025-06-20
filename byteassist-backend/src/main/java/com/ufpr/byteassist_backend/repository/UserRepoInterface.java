@@ -13,4 +13,5 @@ public interface UserRepoInterface {
     Boolean deleteUser(String username);
     Optional<List<User>> getAllUsers();
     Optional<DetailedUserDTO> getDetailedUser(String username);
+    Optional<List<String>> getAllEmployees();
 }
