@@ -96,15 +96,26 @@ public class TaskService {
 
     public ResponseEntity<Task> updateTask(String id, Task task, List<String> expand) {
 
+        // * pegar a task atual para ver com oestá */
+        Task existingTask = taskRepo.getTaskById(id).orElseThrow(
+                () -> new EnhancedStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Task not found",
+                        "No task found with the provided ID"));
+
         Task updatedTask = taskRepo.updateTask(task, id).orElseThrow(
                 () -> new EnhancedStatusException(
                         HttpStatus.NOT_FOUND,
                         "Task not found",
                         "No task found with the provided ID"));
-        
+
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        // For each non-null field in the incoming task, create a comment about the update
+        // se antes a task.status estava 'REJEITADA' e agora esta em 'APROVADA', criar
+        // um comentário
+
+        // For each non-null field in the incoming task, create a comment about the
+        // update
         if (task.getTitle() != null) {
             createUpdateComment(updatedTask.getId(),
                     "Título alterado para _" + task.getTitle() + "_ por _" + user.getUsername() + "_");
@@ -114,8 +125,16 @@ public class TaskService {
                     "Descrição alterada para _" + task.getSummary() + "_ por _" + user.getUsername() + "_");
         }
         if (task.getStatus() != null) {
-            createUpdateComment(updatedTask.getId(),
-                    "Status alterado para _" + task.getStatus() + "_. por _" + user.getUsername() + "_");
+            if (existingTask.getStatus().equals("REJEITADA") && task.getStatus().equals("APROVADA")) {
+                createUpdateComment(updatedTask.getId(),
+                        "Serviço resgatado por _" + user.getUsername() + "_");
+            } else if (existingTask.getStatus().equals("ARRUMADA") && task.getStatus().equals("FINALIZADA")) {
+                createUpdateComment(updatedTask.getId(),
+                        "Serviço pago pelo usuário _" + user.getUsername() + "_");
+            } else {
+                createUpdateComment(updatedTask.getId(),
+                        "Status alterado para _" + task.getStatus() + "_. por _" + user.getUsername() + "_");
+            }
         }
         if (task.getAssignee() != null) {
             createUpdateComment(updatedTask.getId(),
@@ -123,7 +142,8 @@ public class TaskService {
         }
         if (task.getEquipment() != null) {
             createUpdateComment(updatedTask.getId(),
-                    "Equipamento alterado para _" + task.getEquipment().getId() + "_. por _" + user.getUsername() + "_");
+                    "Equipamento alterado para _" + task.getEquipment().getId() + "_. por _" + user.getUsername()
+                            + "_");
         }
         if (task.getBudget() != null) {
             createUpdateComment(updatedTask.getId(),
