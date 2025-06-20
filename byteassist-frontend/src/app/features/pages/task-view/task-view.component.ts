@@ -121,7 +121,10 @@ export class TaskViewComponent implements OnInit {
           this.task = updatedTask;
 
           // 2Cria comentário “histórico”
-          this.commentService.createComment(task.id!, textoHist)
+          this.commentService.createComment({
+            out: 'Task:' + task.id,
+            comment: textoHist
+          })
             .subscribe({
               next: (newComment: Comment) => {
                 // Insere no topo da lista
