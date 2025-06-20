@@ -10,17 +10,17 @@
       <div class="header-item">Criador</div>
       <div class="header-item">Status</div>
       <div class="header-item">Valor</div>
-      <div class="header-item">Descrição</div>
     </div>
 
-    <div class="table-card" *ngFor="let budget of budgets; let i = index">
+    <div class="table-card" *ngFor="let task of tasks; let i = index">
       <div class="table-header">
         <div class="info flex items-center justify-between" (click)="openBudget(i)">
-          <div class="header-item">{{ budget.id }}</div>
-          <div class="header-item">{{ budget.creator }}</div>
-          <div class="header-item">{{ budget.accepted ? 'Aprovado' : 'Pendente' }}</div>
-          <div class="header-item">{{ budget.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</div>
-          <div class="header-item">{{ budget.description }}</div>
+          <div class="header-item">{{ task.id }}</div>
+          <div class="header-item">
+            <!--{{ task.creator?.person.name.first }}-->
+          </div>
+          <div class="header-item">{{ task.budget?.accepted ? 'Aprovado' : 'Pendente' }}</div>
+          <div class="header-item">{{ task.budget?.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</div>
         </div>
         <span class="table-caret">
           <i
@@ -36,43 +36,43 @@
           <div class="descricao">
             <div class="secao">
               <h3>Descrição</h3>
-              <p>{{ budget.description }}</p>
+              <p>{{ task.budget?.description }}</p>
             </div>
             <div class="secao">
               <h3>Status</h3>
-              <p>{{ budget.accepted ? 'Aprovado' : 'Pendente' }}</p>
+              <p>{{ task.budget?.accepted ? 'Aprovado' : 'Pendente' }}</p>
             </div>
           </div>
 
           <div class="painel-lateral">
             <div class="detalhes">
-              <p><strong>Valor: </strong>{{ budget.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
-              <p><strong>Criador: </strong>{{ budget.creator }}</p>
+              <p><strong>Valor: </strong>{{ task.budget?.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+              <p><strong>Criador: </strong>{{ task.budget?.creator }}</p>
             </div>
           </div>
         </div>
 
         <div class="botoes">
-          <button class="aprovar" (click)="approvalBudget(budget.id!)" [disabled]="budget.accepted"><i class="bi bi-check-circle"></i> Aprovar</button>
-          <button class="rejeitar" (click)="openRejectBudgetModal(budget.id!)" [disabled]="budget.accepted"><i class="bi bi-x-circle"></i> Rejeitar</button>
+          <button class="aprovar" (click)="approvalBudget(task.budget?.id!)" [disabled]="task.budget?.accepted"><i class="bi bi-check-circle"></i> Aprovar</button>
+          <button class="rejeitar" (click)="openRejectBudgetModal(task.budget?.id!)" [disabled]="task.budget?.accepted"><i class="bi bi-x-circle"></i> Rejeitar</button>
         </div>
       </div>
     </div>
   </div>
 
   <div class="budget-modal flex items-center justify-center" *ngIf="modalVisible">
-    <div class="modal-content" *ngIf="selectedBudget && selectedBudget.accepted">
+    <div class="modal-content" *ngIf="selectedTask && selectedTask.budget?.accepted">
       <span class="close" (click)="closeModal()"><i class="bi bi-x"></i></span>
       <h2>Orçamento Aprovado</h2>
-      <p>Valor: {{ selectedBudget.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
+      <p>Valor: {{ selectedTask.budget?.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
       <button class="btn-ok" (click)="closeModal()">Ok</button>
     </div>
 
-    <div class="modal-content" *ngIf="selectedBudget && !selectedBudget.accepted">
+    <div class="modal-content" *ngIf="selectedTask && !selectedTask.budget?.accepted">
       <span class="close" (click)="closeModal()"><i class="bi bi-x"></i></span>
       <h2>Motivo de rejeição:</h2>
       <textarea [(ngModel)]="rejectDescription" placeholder="Digite o motivo da rejeição"></textarea>
-      <button class="btn-reject" (click)="rejectBudget(selectedBudget.id)">Rejeitar</button>
+      <button class="btn-reject" (click)="rejectBudget(selectedTask.budget?.id)">Rejeitar</button>
     </div>
   </div>
 </section>
