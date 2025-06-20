@@ -123,7 +123,7 @@ export class TaskViewComponent implements OnInit {
 
   // RF005: redireciona para tela de orçamentos
   onMostrarOrcamento(task: Task): void {
-    this.router.navigate(['/orcamentos', task.id]); //não tem id(adriano vai alterar)
+    this.router.navigate(['/orcamentos', task.id]);
   }
 
   onResgatarServico(task: Task): void {
@@ -132,6 +132,7 @@ export class TaskViewComponent implements OnInit {
       return;
     }
 
+    const now = new Date();
     // Atualiza status no backend
     task.status = 'APROVADA'; // Atualiza o status para APROVADA
     this.taskService.updateTask(task).subscribe({
