@@ -1,5 +1,5 @@
 import { Component, LOCALE_ID } from '@angular/core';
-import { Budget } from '../../shared/models/budget.model';
+import { Task } from '../../shared/models/task.model';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { BudgetService } from '../../services/budget/budget.service';
 import { NotificationComponent } from '../../components/notification/notification.component';
@@ -21,10 +21,10 @@ registerLocaleData(ptBr);
   styleUrl: './budgeting.component.css'
 })
 export class BudgetingComponent {
-  budgets: Budget[] = [];
+  tasks: Task[] = [];
   activeAccordion: number | null = null;
   modalVisible = false;
-  selectedBudget: Budget | null = null;
+  selectedTask: Task | null = null;
   message: string = '';
   showNotification: boolean = false;
 
@@ -34,7 +34,18 @@ export class BudgetingComponent {
   ) { }
 
   ngOnInit(): void {
-    this.budgets = this.budgetService.getBudgets();
+    const taskId = this.route.snapshot.paramMap.get('taskId');
+
+    this.budgetService.getTasksWithBudget().subscribe({
+      next: (tasks: Task[]) => {
+        this.tasks = tasks;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar as tarefas:', error);
+        this.message = 'Erro ao carregar as tarefas.';
+        this.showNotification = true;
+      }
+    });
   }
 
   openBudget(index: number): void {
@@ -42,15 +53,7 @@ export class BudgetingComponent {
   }
 
   async budgetingRequest(id?: string): Promise<void> {
-    this.selectedBudget = this.budgets.find(budget => budget.id === id) || null;
-    if (!this.selectedBudget || !id) {
-      this.message = 'Erro ao encontrar o orçamento selecionado.';
-      this.showNotification = true;
-      return;
-    }
 
-    console.log('Chamando budgetingRequest...');
-    await this.budgetService.budgetingRequest(id);
     this.openModal();
   }
 

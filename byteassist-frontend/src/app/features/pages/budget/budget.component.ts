@@ -1,10 +1,11 @@
 import { Component, LOCALE_ID } from '@angular/core';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Budget } from '../../shared/models/budget.model';
+import { Task } from '../../shared/models/task.model';
 import { BudgetService } from '../../services/budget/budget.service';
 import { NotificationComponent } from '../../components/notification/notification.component';
 import { ActivatedRoute } from '@angular/router';
+import { User } from '../../shared/models/user.model';
 import ptBr from '@angular/common/locales/pt';
 
 registerLocaleData(ptBr);
@@ -23,10 +24,10 @@ registerLocaleData(ptBr);
   styleUrl: './budget.component.css'
 })
 export class BudgetComponent {
-  budgets: Budget[] = [];
+  tasks: Task[] = [];
   activeAccordion: number | null = null;
   modalVisible = false;
-  selectedBudget: Budget | null = null;
+  selectedTask: Task | null = null;
   message: string = '';
   showNotification: boolean = false;
   rejectDescription: string = '';
@@ -36,7 +37,45 @@ export class BudgetComponent {
   ) { }
 
   ngOnInit(): void {
-    this.budgets = this.budgetService.getBudgets();
+    const taskId = this.route.snapshot.paramMap.get('taskId');
+
+    if (taskId) {
+      this.budgetService.getTaskWithBudget(taskId).subscribe({
+        next: (task: Task) => {
+          this.tasks = [task];
+        },
+        error: (error) => {
+          console.error('Erro ao carregar a tarefa:', error);
+          this.message = 'Erro ao carregar a tarefa.';
+          this.showNotification = true;
+        }
+      });
+    } else {
+      this.budgetService.getTasksWithBudgetFromClient().subscribe({
+        next: (tasks: Task[]) => {
+          this.tasks = tasks;
+        },
+        error: (error) => {
+          console.error('Erro ao carregar as tarefas:', error);
+          this.message = 'Erro ao carregar as tarefas.';
+          this.showNotification = true;
+        }
+      });
+    }
+  }
+
+  getCreatorName(creator: User | string): string {
+    if (
+      creator &&
+      typeof creator === 'object' &&
+      'name' in creator &&
+      creator.name &&
+      typeof creator.name === 'object' &&
+      'first' in creator.name
+    ) {
+      return (creator.name as { first: string }).first;
+    }
+    return creator as string;
   }
 
   openBudget(index: number): void {
@@ -44,35 +83,17 @@ export class BudgetComponent {
   }
 
   async approvalBudget(id: string): Promise<void> {
-    this.selectedBudget = this.budgets.find(budget => budget.id === id) || null;
-    if (!this.selectedBudget) {
-      this.message = 'Erro ao encontrar o orçamento selecionado.';
-      this.showNotification = true;
-      return;
-    }
 
-    this.selectedBudget.accepted = true;
-    console.log('Chamando approveBudget...');
-    await this.budgetService.approveBudget(id);
-    console.log('approveBudget finalizado, abrindo modal');
     this.openModal();
   }
 
   async rejectBudget(id?: string): Promise<void> {
-    if (!this.selectedBudget || !id) {
-      this.message = 'Erro ao encontrar o orçamento selecionado.';
-      this.showNotification = true;
-      return;
-    }
 
-    await this.budgetService.rejectBudget(id);
-    this.selectedBudget.accepted = false;
     this.closeModal();
   }
 
   openRejectBudgetModal(id: string): void {
-    this.selectedBudget = this.budgets.find(budget => budget.id === id) || null;
-    this.rejectDescription = '';
+
     this.openModal();
   }
 

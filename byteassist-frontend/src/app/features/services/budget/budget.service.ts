@@ -1,37 +1,50 @@
 import { Injectable } from '@angular/core';
 import { Budget } from '../../shared/models/budget.model';
+import { Task } from '../../shared/models/task.model';
 import { LoadingService } from '../utils/loading.service';
+import { Observable } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BudgetService {
 
-  constructor(private readonly loadingService: LoadingService) { }
-  getBudgets(): Budget[] {
-    return [
-      {
-        id: 't-01',
-        accepted: false,
-        amount: 3000,
-        creator: 'user-001',
-        description: 'Orçamento para conserto completo do notebook, incluindo peças e mão de obra.'
-      },
-      {
-        id: 't-02',
-        accepted: false,
-        amount: 1250,
-        creator: 'user-002',
-        description: 'Orçamento para manutenção e calibração da impressora.'
-      },
-      {
-        id: 't-03',
-        accepted: false,
-        amount: 7850,
-        creator: 'user-003',
-        description: 'Orçamento para upgrade de componentes críticos do servidor.'
-      }
-    ];
+  private readonly apiUrlTask = 'https://byteassist-backend.fly.dev/api/task';
+  private readonly apiUrlBudget = 'https://byteassist-backend.fly.dev/api/budget';
+
+  constructor(
+    private readonly loadingService: LoadingService,
+    private readonly authService: AuthService,
+    private readonly http: HttpClient
+  ) { }
+
+  getTasksWithBudget(): Observable<Task[]> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.authService.getToken()}`
+    });
+
+    return this.http.get<Task[]>(`${this.apiUrlTask}?expand=budget, equipment`, { headers });
+  }
+
+  getTasksWithBudgetFromClient(): Observable<Task[]> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.authService.getToken()}`
+    });
+
+    return this.http.get<Task[]>(`${this.apiUrlTask}/me?expand=budget, equipment, creator`, { headers });
+  }
+
+  getTaskWithBudget(taskId: string): Observable<Task> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.authService.getToken()}`
+    });
+
+    return this.http.get<Task>(`${this.apiUrlTask}/${taskId}?expand=budget, equipment`, { headers });
   }
 
   approveBudget(budgetId: string): Promise<void> {

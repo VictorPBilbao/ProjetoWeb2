@@ -4,6 +4,6 @@ export interface Budget {
   id?: string;
   accepted?: boolean;
   amount?: number;
-  creator?: string | User;
+  creator?: User;
   description?: string;
 }
