@@ -7,6 +7,7 @@ import { Router } from '@angular/router'; // Para redirecionar após o cadastro
 import { TaskService } from '../../services/task/task.service';
 import { Task } from '../../shared/models/task.model';
 import { RecordidService } from '../../services/utils/recordid.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-new-request',
@@ -87,16 +88,25 @@ export class NewRequestComponent {
           next: (createdTask) => {
             console.log('Created Task:', createdTask);
             this.task = createdTask;
-            // Redirect if needed
-            // this.router.navigate(['/task', this.recordIdService.getId(createdTask.id)]);
+
+            Swal.fire({
+              title: 'Sucesso!',
+              text: 'Task criada com sucesso.',
+              icon: 'success',
+              confirmButtonText: 'OK'
+            }).then(() => {
+              this.router.navigate(['/solicitacoes']);
+            });
           },
           error: (error) => {
             console.error('Error creating task:', error);
+            Swal.fire('Erro', 'Não foi possível criar a task.', 'error');
           },
         });
       },
       error: (error) => {
         console.error('Error creating equipment:', error);
+        Swal.fire('Erro', 'Não foi possível criar o equipamento.', 'error');
       },
     });
   }
