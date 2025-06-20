@@ -7,7 +7,6 @@ import { RecordidService } from '../../services/utils/recordid.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { Budget } from '../../shared/models/budget.model';
 
-
 @Component({
   selector: 'app-payment',
   standalone: true,
