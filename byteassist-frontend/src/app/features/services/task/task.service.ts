@@ -107,13 +107,13 @@ export class TaskService {
         : task.equipment?.id;
 
     const taskPayload = {
-      assignee: task.assignee,
-      creator: task.creator,
+      // assignee: task.assignee,
+      // creator: task.creator,
       // equipment: task.equipment.id,
-      equipment: equipmentId,
+      // equipment: equipmentId,
       status: task.status,
-      title: task.title,
-      type: task.type
+      // title: task.title,
+      // type: task.type
     }
     console.log('Payload enviado:', taskPayload);
     const headers = new HttpHeaders({
@@ -121,7 +121,8 @@ export class TaskService {
       'Authorization': `Bearer ${this.authService.getToken()}` // Adiciona o token no header
     });
     this.loadingService.show(); // Exibe o loading
-    return this.http.patch<Task>(`${this.apiUrl}/${task.id}`, taskPayload, { headers }).pipe(
+    return this.http.patch<Task>(`${this.apiUrl}/${this.recordIdService.getId(task.id)} 
+      `, taskPayload, { headers }).pipe(
       finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
     );
   }
