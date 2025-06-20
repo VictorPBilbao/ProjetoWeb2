@@ -105,14 +105,13 @@ public class TaskController {
             throw new IllegalArgumentException("Type parameter must be either 'creator' or 'assignee'");
         }
 
-        // valid status: 'Aguardando Orçamento' | 'Aguardando Aprovação' | 'Aguardando
-        // Peças' | 'Em Andamento' | 'Concluído' | 'Rejeitado'
+        // valid status: 'ABERTA' | 'FINALIZADA' | 'ORÇADA' | 'PAGA' | 'REDIRECIONADA' | 'REJEITADA' | 'ARRUMADA' | 'APROVADA'
         if (status != null && !java.util.regex.Pattern
-                .compile("Aguardando Orçamento|Aguardando Aprovação|Aguardando Peças|Em Andamento|Concluído|Rejeitado",
+                .compile("ABERTA|FINALIZADA|ORÇADA|PAGA|REDIRECIONADA|REJEITADA|ARRUMADA|APROVADA",
                         java.util.regex.Pattern.CANON_EQ)
                 .matcher(status).matches()) {
             throw new IllegalArgumentException(
-                    "Status parameter must be one of: 'Aguardando Orçamento', 'Aguardando Aprovação', 'Aguardando Peças', 'Em Andamento', 'Concluído', 'Rejeitado'");
+                    "Status parameter must be one of: 'ABERTA', 'FINALIZADA', 'ORÇADA', 'PAGA', 'REDIRECIONADA', 'REJEITADA', 'ARRUMADA', 'APROVADA'");
         }
 
         // Get the current user from the security context

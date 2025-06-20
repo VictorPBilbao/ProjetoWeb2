@@ -28,7 +28,7 @@ public class TaskRepo implements TaskRepoInterface {
     public Optional<List<Task>> getTasksByUsername(String username, String type) {
         try {
             // Build query dynamically based on type parameter
-            String fieldToQuery = type.equals("creator") ? "creator.id.id()" : "asignee.id.id()";
+            String fieldToQuery = type.equals("creator") ? "creator.id.id()" : "assignee IS NOT NONE AND assignee.id.id()";
             String query = "SELECT * FROM Task WHERE " + fieldToQuery + " = $user";
             
             Response response = db.queryBind(query, Map.of("user", username));
@@ -49,7 +49,7 @@ public class TaskRepo implements TaskRepoInterface {
     public Optional<List<Task>> getTasksByUsernameAndStatus(String username, String type, String status) {
         try {
             // Build query dynamically based on type parameter
-            String fieldToQuery = type.equals("creator") ? "creator.id.id()" : "assignee.id.id()";
+            String fieldToQuery = type.equals("creator") ? "creator.id()" : "assignee IS NOT NONE AND assignee.id()";
             String query = "SELECT * FROM Task WHERE " + fieldToQuery + " = $user AND status = $status";
             
             System.out.println("Executing query: " + query + " with user: " + username + " and status: " + status);
@@ -64,7 +64,7 @@ public class TaskRepo implements TaskRepoInterface {
             return Optional.of(tasks);
         } catch (Exception e) {
             // Handle exceptions and return an empty Optional in case of errors
-            return Optional.empty();
+            throw e;
         }
     }
     
