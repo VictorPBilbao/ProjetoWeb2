@@ -101,11 +101,6 @@ export class TaskService {
       throw new Error('Task.id é obrigatório para updateTask');
     }
 
-    const equipmentId: string | undefined =
-      typeof task.equipment === 'string'
-        ? task.equipment
-        : task.equipment?.id;
-
     const taskPayload = {
       // assignee: task.assignee,
       // creator: task.creator,
@@ -115,13 +110,12 @@ export class TaskService {
       // title: task.title,
       // type: task.type
     }
-    console.log('Payload enviado:', taskPayload);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${this.authService.getToken()}` // Adiciona o token no header
     });
     this.loadingService.show(); // Exibe o loading
-    return this.http.patch<Task>(`${this.apiUrl}/${this.recordIdService.getId(task.id)} 
+    return this.http.patch<Task>(`${this.apiUrl}/${this.recordIdService.getId(task.id)}
       `, taskPayload, { headers }).pipe(
       finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
     );
