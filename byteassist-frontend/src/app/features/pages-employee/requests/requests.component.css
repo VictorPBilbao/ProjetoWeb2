@@ -12,7 +12,7 @@
 .pagina-container {
   max-width: 1000px;
   margin: 40px auto; /* centraliza na horizontal e dá espaçamento vertical */
-  background-color: #ffffff;
+  background-color: #000000;
   border-radius: 20px;
   padding: 10px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -27,7 +27,7 @@
   align-items: center;
 }
 
-/* Wrapper do blob */
+
 .titulo-blob {
   position: absolute;
   top: -92px; /* ↔ mova livremente */
@@ -52,7 +52,7 @@
 
 /* Título com ícone */
 h1.titulo-solicitacoes {
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 2rem;
   font-weight: bold;
   margin: 0;

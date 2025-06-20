@@ -38,6 +38,9 @@ export class TaskViewComponent implements OnInit {
   comments: Comment[] = [];
   newCommentText: string = '';
 
+  public funcionarios: string[] = [];
+  public selectedAssignee: string = '';
+
   private readonly route = inject(ActivatedRoute);
   private readonly taskService = inject(TaskService);
   private readonly commentService = inject(CommentService);
@@ -160,4 +163,26 @@ export class TaskViewComponent implements OnInit {
       }
     });
   }
+
+  //método que vai alterar de funcionário no front
+  public onAssigneeChange(): void {
+    if (!this.task || !this.selectedAssignee) return;
+
+    const updatedTask = { ...this.task, assignee: this.selectedAssignee };
+    this.taskService.updateTask(updatedTask).subscribe({
+      next: (t) => {
+        this.task = t;            // Atualiza no front
+        Swal.fire('Sucesso', 'Responsável atribuído.', 'success');
+      },
+      error: () => {
+        Swal.fire('Erro', 'Não foi possível atribuir responsável.', 'error');
+      }
+    });
+  }
+
+  //método que vai redirecionar para a tela de orçamento
+  public onOrcarSolicitacao(task: Task): void {
+    this.router.navigate(['funcionario/orcamentos/', task.id]);
+  }
+
 }
