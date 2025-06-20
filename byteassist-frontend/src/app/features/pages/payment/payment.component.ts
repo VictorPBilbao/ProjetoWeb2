@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { CommonModule } from '@angular/common';
+import { TaskService } from '../../services/task/task.service';
 
 @Component({
   selector: 'app-payment',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  providers: [provideNgxMask()],  
+  providers: [provideNgxMask()],
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.css']
 })
@@ -27,7 +28,7 @@ export class PaymentComponent implements OnInit {
   pagamento = {
     tipoServico: '',
     dataServico: '',
-    task:'',
+    task: '',
     empresa: 'Byte Assist',
     cnpj: '46.485.166/0001-46',
     valor: '',

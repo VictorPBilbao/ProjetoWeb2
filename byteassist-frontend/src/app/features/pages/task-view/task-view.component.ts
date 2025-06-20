@@ -110,7 +110,7 @@ export class TaskViewComponent implements OnInit {
     }
 
     const now = new Date();
-    const textoHist = `Serviço resgatado: REJEITADA → APROVADA em ${now.toLocaleString()}`;
+    // const textoHist = `Serviço resgatado: REJEITADA → APROVADA em ${now.toLocaleString()}`;
 
     // Atualiza status no backend
     task.status = 'APROVADA'; // Atualiza o status para APROVADA
@@ -119,30 +119,6 @@ export class TaskViewComponent implements OnInit {
         next: (updatedTask) => {
           // Reflete no front
           this.task = updatedTask;
-
-          // 2Cria comentário “histórico”
-          this.commentService.createComment({
-            out: 'Task:' + task.id,
-            comment: textoHist
-          })
-            .subscribe({
-              next: (newComment: Comment) => {
-                // Insere no topo da lista
-                this.comments.unshift(newComment);
-
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Serviço resgatado',
-                  text: textoHist,
-                  timer: 2000
-                });
-              },
-              error: (err) => {
-                console.error('Erro ao adicionar comentário de histórico', err);
-                task.status = 'REJEITADA'; // Reverte o status se falhar
-                Swal.fire('Aviso', 'Status alterado, mas não foi possível registrar histórico', 'warning');
-              }
-            });
         },
         error: (err) => {
           console.error('Falha ao resgatar serviço', err);
