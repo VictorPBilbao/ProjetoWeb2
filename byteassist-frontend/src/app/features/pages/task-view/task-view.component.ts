@@ -100,7 +100,7 @@ export class TaskViewComponent implements OnInit {
 
   // RF005: redireciona para tela de orçamentos
   onMostrarOrcamento(task: Task): void {
-    this.router.navigate(['/orcamentos', task.id]); //não tem id(adriano vai alterar)
+    this.router.navigate(['/orcamentos', task.id]);
   }
 
   onResgatarServico(task: Task): void {
@@ -108,10 +108,8 @@ export class TaskViewComponent implements OnInit {
       console.error('Task sem ID, impossível resgatar.');
       return;
     }
-
     const now = new Date();
     // const textoHist = `Serviço resgatado: REJEITADA → APROVADA em ${now.toLocaleString()}`;
-
     // Atualiza status no backend
     task.status = 'APROVADA'; // Atualiza o status para APROVADA
     this.taskService.updateTask(task)
@@ -121,7 +119,6 @@ export class TaskViewComponent implements OnInit {
           this.task = updatedTask;
         },
         error: (err) => {
-          console.error('Falha ao resgatar serviço', err);
           task.status = 'REJEITADA'; // Reverte o status se falhar
           Swal.fire('Erro', 'Não foi possível atualizar o status', 'error');
         }
