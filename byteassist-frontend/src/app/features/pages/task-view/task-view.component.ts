@@ -161,7 +161,7 @@ export class TaskViewComponent implements OnInit {
       confirmButtonText: 'Ir para Pagamentos'
     }).then(result => {
       if (result.isConfirmed) {
-        this.router.navigate(['/pagamentos']);
+        this.router.navigate(['/pagamentos', task.id]);
       }
     });
   }
