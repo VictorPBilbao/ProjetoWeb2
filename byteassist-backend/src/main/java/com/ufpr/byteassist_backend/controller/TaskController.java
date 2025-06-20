@@ -138,7 +138,6 @@ public class TaskController {
     }
 
     @PatchMapping("/{id}")
-    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<Task> updateTask(
             @PathVariable String id,
             @Validated(ValidationGroups.Update.class) @RequestBody Task task,
@@ -150,7 +149,7 @@ public class TaskController {
         if (task.getCreator() == null) {
             task.setCreator(user.getId());
         }
-
+        
         return taskService.updateTask(id, task, expand);
     }
 
