@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TaskService } from '../../services/task/task.service';
-import { ActivatedRoute, RouterModule, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RecordidService } from '../../services/utils/recordid.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { Budget } from '../../shared/models/budget.model';
@@ -12,7 +12,7 @@ import { Budget } from '../../shared/models/budget.model';
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './payment.component.html',
-  styleUrls: ['./payment.component.css']
+  styleUrls: ['./payment.component.css'],
 })
 export class PaymentComponent implements OnInit {
   private readonly taskService = inject(TaskService);
@@ -26,7 +26,14 @@ export class PaymentComponent implements OnInit {
   isModalVisible: boolean = false;
   isLoading = false;
 
-  tiposServico = ['Atualização', 'Formatação', 'Configuração', 'Limpeza', 'Manutenção', 'Troca de peças'];
+  tiposServico = [
+    'Atualização',
+    'Formatação',
+    'Configuração',
+    'Limpeza',
+    'Manutenção',
+    'Troca de peças',
+  ];
   opcoesParcelas = [1, 2, 3, 4, 5, 6, 10, 12];
   task = ['001', '005', '007', '009', '011', '013', '017', '018'];
 
@@ -45,7 +52,7 @@ export class PaymentComponent implements OnInit {
     numeroCartao: '',
     vencimentoCartao: '',
     nomeTitular: '',
-    parcelas: 1
+    parcelas: 1,
   };
 
   // Método de inicialização que será chamado quando o componente for carregado
@@ -54,11 +61,16 @@ export class PaymentComponent implements OnInit {
     this.codigoBarras = this.gerarCodigoBarras();
     this.chavePix = this.gerarChavePix();
 
+    // Define a data atual como data do serviço
+    const hoje = new Date();
+    this.pagamento.dataServico = hoje.toISOString().split('T')[0];
+
     //  se a taskId estiver disponível, busca os dados da task caso contrário página n encontrada
     if (this.taskId) {
       this.taskService.getTaskById(this.taskId, 'budget').subscribe({
         next: (task) => {
-          this.pagamento.task = task.id ?? '';
+          this.pagamento.task = this.taskId;
+          this.pagamento.tipoServico = task.type ?? '';
           this.pagamento.valor = (task.budget as Budget)?.amount ?? 0;
         },
         error: () => {
@@ -66,19 +78,33 @@ export class PaymentComponent implements OnInit {
         },
       });
     }
-
   }
 
   // Método que será chamado ao submeter o formulário
   submitForm() {
     this.isLoading = true; // Ativa o estado de loading
-    console.log('Dados do pagamento:', this.pagamento);
 
-    // Simula o tempo de processamento do pagamento
-    setTimeout(() => {
-      this.isLoading = false;  // Desativa o estado de loading
-      this.isModalVisible = true;  // Exibe o modal de confirmação
-    }, 3000); // Simula 3 segundos de processamento (você pode ajustar esse tempo conforme necessário)
+    // Atualiza a task com o status de finalizado
+    this.taskService
+      .updateTask({
+        id: this.taskId,
+        status: 'FINALIZADA',
+      })
+      .subscribe({
+        next: () => {
+          // Simula o tempo de processamento do pagamento
+          setTimeout(() => {
+            this.isLoading = false; // Desativa o estado de loading
+            this.isModalVisible = true; // Exibe o modal de confirmação
+          }, 3000); // Simula 3 segundos de processamento (você pode ajustar esse tempo conforme necessário)
+          // volta para a página de tarefas após atualizar a task this.TaskId
+          console.log('Task atualizada com sucesso');
+          this.router.navigate(['/solicitacao/', this.taskId]);
+        },
+        error: (error) => {
+          console.error('Erro ao atualizar a task:', error);
+        },
+      });
   }
 
   // Método para fechar o modal
@@ -99,11 +125,12 @@ export class PaymentComponent implements OnInit {
 
   // Método para copiar a chave Pix para a área de transferência
   copiarChavePix() {
-    navigator.clipboard.writeText(this.chavePix)
+    navigator.clipboard
+      .writeText(this.chavePix)
       .then(() => {
         alert('Chave Pix copiada com sucesso!');
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('Erro ao copiar a chave Pix:', err);
       });
   }
@@ -111,7 +138,9 @@ export class PaymentComponent implements OnInit {
   // Método para gerar o QR Code
   gerarQrCode() {
     const pixData = this.chavePix;
-    this.qrCodeUrl = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(pixData)}`;
+    this.qrCodeUrl = `https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=${encodeURIComponent(
+      pixData
+    )}`;
   }
 
   // Método para gerar código de barras
