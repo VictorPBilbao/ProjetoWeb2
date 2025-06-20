@@ -24,6 +24,26 @@
       </button>
     </div>
 
+    <!--Ordenação das solicitações-->
+    <div class="d-flex justify-content-between mb-2">
+      <!-- controle de ordenação -->
+      <div>
+        <button
+          class="btn btn-sm btn-outline-primary me-1"
+          (click)="ordenarPorData('asc')"
+        >
+          ↑ Data Crescente
+        </button>
+        <button
+          class="btn btn-sm btn-outline-primary"
+          (click)="ordenarPorData('desc')"
+        >
+          ↓ Data Decrescente
+        </button>
+      </div>
+    </div>
+
+    <!--tabela-->
     <div class="table-responsive">
       <table class="table-custom">
         <thead>
@@ -41,9 +61,19 @@
             <td>{{ task.id | getRecordId }}</td>
             <td>{{ task.time?.createdAt | date : "dd/MM/yyyy" }}</td>
             <td>{{ task.time?.createdAt | date : "HH:mm:ss" }}</td>
-            <td>{{ task.equipment ? (task.equipment | equipmentField : 'model') : '' }}</td>
             <td>
-              <span [ngClass]="'estado-' + (task.status?.trim()?.toUpperCase() ?? '')">
+              {{
+                task.equipment
+                  ? (task.equipment | equipmentField : "model")
+                  : ""
+              }}
+            </td>
+            <td>
+              <span
+                [ngClass]="
+                  'estado-' + (task.status?.trim()?.toUpperCase() ?? '')
+                "
+              >
                 {{ task.status }}
               </span>
             </td>
@@ -75,7 +105,6 @@
 
       <span>Página {{ paginaAtual }} de {{ totalPaginas }}</span>
 
-  </div>
       <button
         class="btn btn-sm btn-outline-primary"
         [disabled]="paginaAtual === totalPaginas"
@@ -83,5 +112,6 @@
       >
         Próxima
       </button>
+    </div>
   </div>
 </section>

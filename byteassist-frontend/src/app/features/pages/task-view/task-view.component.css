@@ -44,6 +44,13 @@
 .task-comments {
   margin-top: 2rem;
 }
+
+.comment-body {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+}
+
 .comments-list .comment {
   background: #f8f9fa;
   border: 1px solid #e3e3e3;

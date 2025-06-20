@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Budget } from '../../shared/models/budget.model';
 import { BudgetService } from '../../services/budget/budget.service';
 import { NotificationComponent } from '../../components/notification/notification.component';
+import { ActivatedRoute } from '@angular/router';
 import ptBr from '@angular/common/locales/pt';
 
 registerLocaleData(ptBr);
@@ -29,9 +30,13 @@ export class BudgetComponent {
   message: string = '';
   showNotification: boolean = false;
 
-  constructor(private budgetService: BudgetService) { }
+  constructor(
+    private budgetService: BudgetService,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
+    const taskId = this.route.snapshot.paramMap.get('taskId');
     this.budgets = this.budgetService.getBudgets();
   }
 

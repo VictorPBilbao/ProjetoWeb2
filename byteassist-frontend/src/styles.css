@@ -149,3 +149,15 @@ p {
   align-self: stretch;
 }
 /*------------*/
+/* Marrom */
+.bg-brown {
+  background-color: #6f4e37 !important;
+}
+/* Roxo */
+.bg-purple {
+  background-color: #6f42c1 !important;
+}
+/* Laranja */
+.bg-orange {
+  background-color: #fd7e14 !important;
+}

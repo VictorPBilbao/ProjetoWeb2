@@ -22,7 +22,15 @@
     <div class="task-info">
       <div class="d-flex align-items-center justify-content-start mb-2">
         <h2 class="task-title mb-0 me-3">{{ task.title }}</h2>
+
         <span
+          class="d-inline-block rounded-pill px-2 py-1"
+          [ngClass]="badgeClass(task.status)"
+        >
+          {{ task.status }}
+        </span>
+
+        <!-- <span
           class="d-inline-block rounded-pill px-2 py-1"
           [ngClass]="{
             'bg-primary': task.status === 'ABERTA',
@@ -71,7 +79,7 @@
             </option>
             }
           </select>
-        </span>
+        </span> -->
       </div>
       <div class="task-meta mb-2">
         <span class="text-muted me-2"
@@ -102,7 +110,35 @@
           }}</span
         >
       </div>
+
+      <!-- a) ORÇADA: Ver orçamento -->
+      <button
+        *ngIf="task.status === 'ORÇADA'"
+        class="btn btn-outline-primary me-2"
+        (click)="onMostrarOrcamento(task)"
+      >
+        Ver Orçamento
+      </button>
+
+      <!-- c) REJEITADA: Resgatar Serviço -->
+      <button
+        *ngIf="task.status === 'REJEITADA'"
+        class="btn btn-outline-success me-2"
+        (click)="onResgatarServico(task)"
+      >
+        Resgatar Serviço
+      </button>
+
+      <!-- d) ARRUMADA: Pagar Serviço -->
+      <button
+        *ngIf="task.status === 'ARRUMADA'"
+        class="btn btn-outline-warning me-2"
+        (click)="onPagarServico(task)"
+      >
+        Pagar Serviço
+      </button>
     </div>
+
     <div class="equipment-info card p-3 ms-md-4 mt-3 mt-md-0">
       <h5 class="mb-2"><i class="bi bi-cpu me-1"></i> Equipamento</h5>
       @if (equipment) {
