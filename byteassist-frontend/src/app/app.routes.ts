@@ -27,13 +27,14 @@ export const routes: Routes = [
   {path: 'dashboard', component: DashboardComponent },
   {path: 'nova-solicitacao', component: NewRequestComponent },
   {path: 'conta', component: AccountComponent },
-  {path: 'orcamentos/:idTask', component: BudgetComponent },
+  {path: 'orcamentos', component: BudgetComponent },
+  {path: 'orcamentos/:idTask?', component: BudgetComponent },
   {path: 'ajuda', component: HelpComponent },
   {path: 'pagamentos', component: PaymentComponent },
-  {path: 'funcionario/orcamentos/:idTask', component: BudgetingComponent },
+  {path: 'funcionario/orcamentos/', component: BudgetingComponent },
+  {path: 'funcionario/orcamentos/:idTask?', component: BudgetingComponent },
   {path: 'funcionario/solicitacoes', component: RequestsComponent },
   {path: 'funcionario/cadastros', component: RegistrationComponent },
-  { path: 'solicitacao/:taskId', loadComponent: () => import('./features/pages/task-view/task-view.component').then(m => m.TaskViewComponent) },
+  {path: 'solicitacao/:taskId', loadComponent: () => import('./features/pages/task-view/task-view.component').then(m => m.TaskViewComponent) },
   {path: '**', redirectTo: '' } // Redireciona para home se rota não existir
-
 ];
