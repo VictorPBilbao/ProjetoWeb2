@@ -18,44 +18,13 @@
     <div class="solicitation-container">
       <div class="solicitation-card">
         <form #registerForm="ngForm" (ngSubmit)="createSolicitacao()" class="solicitation-form">
-          <!-- Tabela -->
-          <table class="solicitation-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>DATA</th>
-                <th>HORA</th>
-                <th>ESTADO</th>
-                <th>ORÇAMENTO</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{ solicitation.id }}</td>
-                <td>{{ solicitation.data }}</td>
-                <td>{{ solicitation.hora }}</td>
-                <td><span class="status status-open">{{ solicitation.estado }}</span></td>
-                <td>
-                  <input
-                    type="text"
-                    name="orcamento"
-                    [(ngModel)]="solicitation.orcamento"
-                    class="budget-input"
-                    placeholder="R$ 0,00"
-                    readonly
-                    [value]="solicitation.orcamento | currency: 'BRL' : 'symbol' : '1.2-2'"
-                    aria-label="Orçamento" />
-                </td>
-              </tr>
-            </tbody>
-          </table>
 
           <!-- LINHA de campos -->
           <div class="form-row">
             <div class="form-group">
               <label for="categoria">CATEGORIA</label>
               <select id="categoria" name="categoria" [(ngModel)]="solicitation.categoria" class="form-select" required>
-                <option value="">Selec...</option>
+                <option value="">Selecione</option>
                 <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
               </select>
             </div>
@@ -63,14 +32,14 @@
             <div class="form-group">
               <label for="marca">MARCA</label>
               <select id="marca" name="marca" [(ngModel)]="solicitation.marca" class="form-select" required>
-                <option value="">Sele...</option>
+                <option value="">Selecione</option>
                 <option *ngFor="let brand of brands" [value]="brand">{{ brand }}</option>
               </select>
             </div>
 
             <div class="form-group">
               <label for="equipamento">EQUIPAMENTO</label>
-              <input id="equipamento" name="equipamento" [(ngModel)]="solicitation.equipamento" class="form-control" placeholder="Digite o modelo..." type="text" required />
+              <input id="equipamento" name="equipamento" [(ngModel)]="solicitation.equipamento" class="form-control" placeholder="Digite o modelo" type="text" required />
             </div>
 
             <div class="form-group">
@@ -82,18 +51,18 @@
           <div class="form-group">
             <label for="tipo">TIPO DA SOLICITAÇÃO</label>
             <select id="tipo" name="type" [(ngModel)]="solicitation.type" class="form-select" required>
-              <option value="">Selec...</option>
+              <option value="">Selecione</option>
               <option *ngFor="let t of type" [value]="t">{{ t }}</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label for="descricaoServico">DESCRIÇÃO DO SERVIÇO</label>
+            <label for="descricaoServico">NOME DO SERVIÇO</label>
             <textarea id="descricaoServico" name="descricaoServico" [(ngModel)]="solicitation.descricaoServico" class="form-textarea" rows="2" placeholder="Descreva o serviço que será realizado..." required ></textarea>
           </div>
 
           <div class="form-group">
-            <label for="defeitoRelatado">DEFEITO RELATADO</label>
+            <label for="defeitoRelatado">RELATO</label>
             <textarea id="defeitoRelatado" name="defeitoRelatado" [(ngModel)]="solicitation.defeitoRelatado" class="form-textarea" rows="2" placeholder="Informe o defeito que foi identificado..." required ></textarea>
           </div>
 

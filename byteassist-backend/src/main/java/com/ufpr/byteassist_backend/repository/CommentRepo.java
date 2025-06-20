@@ -25,7 +25,7 @@ public class CommentRepo implements CommentRepoInterface {
     @Override
     public Optional<List<Comment>> getAllCommentsByTaskId(String taskId) {
         try {
-            String query = "SELECT * FROM Comments_on WHERE out = $taskid ORDER BY comment_date DESC";
+            String query = "SELECT * FROM Comments_on WHERE out = $taskid ORDER BY comment_date ASC";
             Response response = db.queryBind(query, Map.of("taskid", new RecordId("Task", taskId)));
             
             

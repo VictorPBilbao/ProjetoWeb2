@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 // Import MarkdownModule like this
@@ -13,7 +13,7 @@ import { CommentService } from '../../services/comment/comment.service';
 import { BudgetService } from '../../services/budget/budget.service'; // Added import
 import { Comment } from '../../shared/models/comment.model';
 import { RecordIdPipe } from './../../shared/pipes/record-id.pipe';
-import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth/auth.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -37,6 +37,9 @@ export class TaskViewComponent implements OnInit {
   private readonly taskService = inject(TaskService);
   private readonly commentService = inject(CommentService);
   private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+
+  username: string = this.authService.getUsername() ?? '';
 
   ngOnInit(): void {
     const taskId = this.route.snapshot.paramMap.get('taskId');
@@ -72,8 +75,7 @@ export class TaskViewComponent implements OnInit {
   addComment(): void {
     if (this.newCommentText.trim() && this.task) {
       const newComment: Comment = {
-        in: 'Usuário Atual (mock)',
-        out: "teste",
+        out: 'Task:' + this.route.snapshot.paramMap.get('taskId'),
         comment: this.newCommentText.trim(),
       };
       this.comments.push(newComment);

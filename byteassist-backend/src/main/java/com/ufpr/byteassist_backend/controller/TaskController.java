@@ -68,8 +68,8 @@ public class TaskController {
     @PreAuthorize("hasRole('ADMIN') or #username == authentication.principal.username")
     public ResponseEntity<List<Task>> getTasksByUsername(
             @PathVariable String username,
-            @RequestParam(name = "type", defaultValue = "creator") String type,
-            @RequestParam(name = "status", required = false) String status,
+            @RequestParam(defaultValue = "creator") String type,
+            @RequestParam(required = false) String status,
             @RequestParam(required = false) List<String> expand) {
 
         // Validate that type is either "creator" or "assignee"
@@ -96,8 +96,8 @@ public class TaskController {
 
     @GetMapping("/me")
     public ResponseEntity<List<Task>> getCurrentUserTasks(
-            @RequestParam(name = "type", defaultValue = "creator") String type,
-            @RequestParam(name = "status", required = false) String status,
+            @RequestParam(defaultValue = "creator") String type,
+            @RequestParam(required = false) String status,
             @RequestParam(required = false) List<String> expand) {
 
         // Validate that type is either "creator" or "assignee"

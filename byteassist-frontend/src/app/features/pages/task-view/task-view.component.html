@@ -84,21 +84,30 @@
       <div class="task-meta mb-2">
         <span class="text-muted me-2"
           >Criada em:
-          {{ task.time?.createdAt | date : "dd/MM/yyyy HH:mm" }}</span
+          {{
+            task.time?.createdAt
+              | date : "dd/MM/yyyy HH:mm" : "America/Sao_Paulo"
+          }}</span
         >
         <span class="text-muted"
           >Atualizada em:
-          {{ task.time?.updatedAt | date : "dd/MM/yyyy HH:mm" }}</span
+          {{
+            task.time?.updatedAt
+              | date : "dd/MM/yyyy HH:mm" : "America/Sao_Paulo"
+          }}</span
         >
       </div>
       <div class="task-people mb-2">
         <span
           ><i class="bi bi-person"></i> <strong>Criador:</strong>
           {{ task.creator | getRecordId }}</span
-        >
-        <span class="ms-3"
+        ><span class="ms-3"
           ><i class="bi bi-person-badge"></i> <strong>Responsável:</strong>
-          {{ task.assignee | getRecordId }}</span
+          {{
+            (task.assignee | getRecordId)
+              ? (task.assignee | getRecordId)
+              : "Ainda não atribuído"
+          }}</span
         >
       </div>
 
@@ -135,7 +144,9 @@
       @if (equipment) {
       <div><strong>Modelo:</strong> {{ equipment.model }}</div>
       <div><strong>Marca:</strong> {{ equipment.brand }}</div>
+      @if (equipment.color) {
       <div><strong>Cor:</strong> {{ equipment.color }}</div>
+      }
       <div><strong>Tipo:</strong> {{ equipment.type }}</div>
       } @else {
       <span class="text-muted">Sem informações de equipamento.</span>
@@ -151,20 +162,33 @@
   <div class="task-comments">
     <h4>Comentários</h4>
     <div class="comments-list mb-3">
-      @for (comment of comments; track comment.id) {
+      @for (comment of comments; track comment.id) { @if ((comment.in |
+      getRecordId) === 'byteassist_bot') {
+      <div class="bot-comment mb-3">
+        <div class="d-flex align-items-center mb-1">
+          <span class="text-muted small me-2">{{
+            comment.comment_date | date : "dd/MM/yyyy HH:mm" : "UTC-6"
+          }}</span>
+          <hr class="flex-grow-1 my-0" />
+        </div>
+        <div class="bot-comment-body mt-1">
+          <markdown [data]="comment.comment"></markdown>
+        </div>
+      </div>
+      } @else {
       <div class="comment mb-2 p-2 rounded bg-light">
         <div class="comment-header d-flex align-items-center mb-1">
           <i class="bi bi-person-circle me-2"></i>
           <span class="fw-bold">{{ comment.in | getRecordId }}</span>
           <span class="text-muted ms-2 small">{{
-            comment.comment_date | date : "dd/MM/yyyy HH:mm"
+            comment.comment_date | date : "dd/MM/yyyy HH:mm" : "UTC-6"
           }}</span>
         </div>
         <div class="comment-body">
           <markdown [data]="comment.comment"></markdown>
         </div>
       </div>
-      }
+      } }
     </div>
     <form
       class="add-comment-form d-flex flex-column gap-2"
@@ -172,7 +196,7 @@
     >
       <textarea
         class="form-control"
-        rows="3"
+        rows="9"
         placeholder="Adicionar comentário... (Markdown básico suportado)"
         [(ngModel)]="newCommentText"
         name="newCommentText"
