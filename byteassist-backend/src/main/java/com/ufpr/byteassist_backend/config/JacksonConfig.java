@@ -19,7 +19,7 @@ public class JacksonConfig {
 
     @Bean
     @Primary
-    public ObjectMapper objectMapper() {
+    ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         
         SimpleModule module = new SimpleModule();

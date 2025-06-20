@@ -10,12 +10,7 @@ public class UpdateTimeRepo {
 
     // Instância do banco de dados SurrealDB
     private final Surreal db;
-
-    /**
-     * Construtor que inicializa o banco de dados a partir do serviço de banco de dados.
-     * 
-     * @param databaseService Serviço que fornece a instância do banco de dados.
-     */
+    
     public UpdateTimeRepo(DatabaseService databaseService) {
         this.db = databaseService.getDatabase();
     }
@@ -23,7 +18,7 @@ public class UpdateTimeRepo {
     public void updateTimeLastLogin(String id) {
         try {
             // Executa a consulta para atualizar o campo de última data de login
-            String query = String.format("UPDATE %s SET time.last_login_at = time::now()", id);
+            String query = "UPDATE %s SET time.last_login_at = time::now()".formatted(id);
             db.query(query);
         } catch (Exception e) {
             // Ignora a exceção caso ocorra algum erro durante a atualização

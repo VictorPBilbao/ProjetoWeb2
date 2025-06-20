@@ -99,7 +99,7 @@ public class UserRepo implements UserRepoInterface {
 
     public boolean isEmailAvailable(String email) {
         // Monta a query para buscar usuários com o e-mail informado
-        String query = String.format("SELECT * FROM User WHERE email = '%s';", email);
+        String query = "SELECT * FROM User WHERE email = '%s';".formatted(email);
         Response response = db.query(query);
 
         // Verifica se a consulta retornou resultados (se não retornou, o e-mail está disponível)

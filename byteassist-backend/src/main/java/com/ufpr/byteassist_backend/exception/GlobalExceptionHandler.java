@@ -111,9 +111,7 @@ public class GlobalExceptionHandler {
         
         // Check if it's an unrecognized property exception
         Throwable cause = ex.getCause();
-        if (cause instanceof com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException) {
-            com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException propEx = 
-                (com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException) cause;
+        if (cause instanceof com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException propEx) {
             
             errorMessage = "Unknown field: '" + propEx.getPropertyName() + 
                 "'. Available fields for Equipment are: id, brand, model, type";
