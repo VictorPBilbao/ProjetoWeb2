@@ -99,6 +99,7 @@
               <th>Equipamento</th>
               <th>Estado</th>
               <th>Cliente</th>
+              <th>Atribuido</th>
               <th>Ações</th>
             </tr>
           </thead>
@@ -130,6 +131,9 @@
                 {{ task.creator | getRecordId }}
               </td>
 
+              <td>
+                {{ task.assignee | getRecordId }}
+              </td>
               <td>
                 <button
                   class="btn btn-sm btn-info me-1"
