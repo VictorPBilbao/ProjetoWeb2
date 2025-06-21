@@ -11,11 +11,16 @@
           <div class="budget-info">
             <h3 class="task-title">{{ task.title || 'Tarefa sem título' }}</h3>
             <span class="task-id">#{{ task.id | getRecordId }}</span>
-          </div>
-          <div class="budget-status">
-            <span class="status-badge" [class.approved]="task.budget?.accepted" [class.pending]="!task.budget?.accepted">
-              <i class="bi" [class.bi-check-circle-fill]="task.budget?.accepted" [class.bi-clock-fill]="!task.budget?.accepted"></i>
-              {{ task.budget?.accepted ? 'Aprovado' : 'Pendente' }}
+          </div>          <div class="budget-status">
+            <span class="status-badge"
+                  [class.approved]="task.budget?.accepted === 'ACEITA'"
+                  [class.pending]="task.budget?.accepted === 'PENDENTE'"
+                  [class.rejected]="task.budget?.accepted === 'REJEITADA'">
+              <i class="bi"
+                 [class.bi-check-circle-fill]="task.budget?.accepted === 'ACEITA'"
+                 [class.bi-clock-fill]="task.budget?.accepted === 'PENDENTE'"
+                 [class.bi-x-circle-fill]="task.budget?.accepted === 'REJEITADA'"></i>
+              {{ task.budget?.accepted === 'ACEITA' ? 'Aprovado' : task.budget?.accepted === 'REJEITADA' ? 'Rejeitado' : 'Pendente' }}
             </span>
           </div>
         </div>
@@ -61,15 +66,13 @@
         <div class="equipment-info" *ngIf="task.equipment">
           <h4><i class="bi bi-gear"></i> Equipamento</h4>
           <span class="equipment-id">{{ task.equipment | getRecordId }}</span>
-        </div>
-
-        <!-- Ações -->
+        </div>        <!-- Ações -->
         <div class="budget-actions">
           <button
             class="btn btn-success"
             (click)="approvalBudget(task.budget?.id!)"
-            [disabled]="task.budget?.accepted"
-            *ngIf="!task.budget?.accepted">
+            [disabled]="task.budget?.accepted !== 'PENDENTE'"
+            *ngIf="task.budget?.accepted === 'PENDENTE'">
             <i class="bi bi-check-circle"></i>
             Aprovar Orçamento
           </button>
@@ -77,15 +80,19 @@
           <button
             class="btn btn-danger"
             (click)="openRejectBudgetModal(task.budget?.id!)"
-            [disabled]="task.budget?.accepted"
-            *ngIf="!task.budget?.accepted">
+            [disabled]="task.budget?.accepted !== 'PENDENTE'"
+            *ngIf="task.budget?.accepted === 'PENDENTE'">
             <i class="bi bi-x-circle"></i>
             Rejeitar Orçamento
           </button>
 
-          <div class="approved-message" *ngIf="task.budget?.accepted">
-            <i class="bi bi-check-circle-fill text-success"></i>
-            <span>Orçamento aprovado</span>
+          <div class="approved-message" *ngIf="task.budget?.accepted !== 'PENDENTE'">
+            <i class="bi"
+               [class.bi-check-circle-fill]="task.budget?.accepted === 'ACEITA'"
+               [class.bi-x-circle-fill]="task.budget?.accepted === 'REJEITADA'"
+               [class.text-success]="task.budget?.accepted === 'ACEITA'"
+               [class.text-danger]="task.budget?.accepted === 'REJEITADA'"></i>
+            <span>Orçamento {{ task.budget?.accepted === 'ACEITA' ? 'aprovado' : 'rejeitado' }}</span>
           </div>
         </div>
       </div>
@@ -103,31 +110,37 @@
 
   <!-- Modal de Confirmação/Rejeição -->
   <div class="modal-overlay" *ngIf="modalVisible" (click)="closeModal()">
-    <div class="modal-container" (click)="$event.stopPropagation()">
-      <!-- Modal de Aprovação -->
-      <div class="modal-content" *ngIf="selectedTask && selectedTask.budget?.accepted">
+    <div class="modal-container" (click)="$event.stopPropagation()">      <!-- Modal de Aprovação -->
+      <div class="modal-content" *ngIf="modalType === 'approval'">
         <div class="modal-header">
-          <h2><i class="bi bi-check-circle-fill text-success"></i> Orçamento Aprovado</h2>
+          <h2><i class="bi bi-check-circle-fill text-success"></i> Confirmar Aprovação</h2>
           <button class="close-btn" (click)="closeModal()" title="Fechar">
             <i class="bi bi-x"></i>
           </button>
         </div>
         <div class="modal-body">
-          <p>O orçamento foi aprovado com sucesso!</p>
+          <p>Deseja realmente aprovar este orçamento?</p>
           <div class="approval-details">
-            <strong>Valor aprovado:</strong>
-            {{ (selectedTask.budget?.amount! / 100) | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+            <strong>Valor a ser aprovado:</strong>
+            {{ (selectedTask?.budget?.amount! / 100) | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+          </div>
+          <div class="approval-details" style="margin-top: 0.5rem;">
+            <strong>Tarefa:</strong>
+            {{ selectedTask?.title || 'Tarefa sem título' }}
           </div>
         </div>
         <div class="modal-actions">
-          <button class="btn btn-primary" (click)="closeModal()">
-            <i class="bi bi-check"></i> Entendido
+          <button class="btn btn-secondary" (click)="closeModal()">
+            <i class="bi bi-arrow-left"></i> Cancelar
+          </button>
+          <button class="btn btn-success" (click)="confirmApprovalBudget()">
+            <i class="bi bi-check-circle"></i> Confirmar Aprovação
           </button>
         </div>
       </div>
 
       <!-- Modal de Rejeição -->
-      <div class="modal-content" *ngIf="selectedTask && !selectedTask.budget?.accepted">
+      <div class="modal-content" *ngIf="modalType === 'rejection'">
         <div class="modal-header">
           <h2><i class="bi bi-x-circle-fill text-danger"></i> Rejeitar Orçamento</h2>
           <button class="close-btn" (click)="closeModal()" title="Fechar">
@@ -151,7 +164,7 @@
             <i class="bi bi-arrow-left"></i> Cancelar
           </button>          <button
             class="btn btn-danger"
-            (click)="rejectBudget(selectedTask.budget?.id)"
+            (click)="rejectBudget(selectedTask?.budget?.id)"
             [disabled]="!rejectDescription || !rejectDescription.trim()">
             <i class="bi bi-x-circle"></i> Confirmar Rejeição
           </button>

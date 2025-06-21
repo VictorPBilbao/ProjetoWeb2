@@ -3,9 +3,8 @@ import { RecordidService } from './../utils/recordid.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Task } from '../../shared/models/task.model';
-import { map, Observable } from 'rxjs';
+import { map, Observable, finalize } from 'rxjs';
 import { LoadingService } from '../utils/loading.service';
-import { finalize } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',

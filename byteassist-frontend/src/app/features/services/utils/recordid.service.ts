@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class RecordidService {
   constructor() {}
 
-  public getId(recordId: string): {} {
+  public getId(recordId: string): string {
     // If recordId is empty or null, return empty string
     if (!recordId) {
       return '';
