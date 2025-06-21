@@ -229,15 +229,24 @@ h1.titulo-solicitacoes {
     width: 100%; /* Ocupa toda a largura do filters-container */
 }
 
-/* NOVO: Contêiner para a linha de filtros (Estado à esquerda, Datas à direita) */
+/* NOVO: Contêiner para a linha de filtros (Estado e Ordenação à esquerda, Datas à direita) */
 .left-aligned-filters-row {
     display: flex;
-    justify-content: space-between; /* Alinha o primeiro item à esquerda e o último à direita */
+    justify-content: space-between; /* Alinha o primeiro item (left-filters-group) à esquerda e o último (right-aligned-date-filters) à direita */
     align-items: flex-start; /* Alinha os itens pelo topo */
     flex-wrap: wrap; /* Permite que os itens quebrem linha em telas pequenas */
     gap: 15px; /* Espaçamento entre as colunas em telas menores */
     width: 100%; /* Ocupa a largura total */
 }
+
+/* NOVO: Estilos para o grupo de filtros que ficam à esquerda (Estado e Ordenação) */
+.left-filters-group {
+    display: flex; /* Torna-o um flex container */
+    gap: 15px; /* Espaço entre o filtro de Estado e o de Ordenação */
+    flex-wrap: wrap; /* Permite que os filtros quebrem linha dentro deste grupo em telas menores */
+    align-items: flex-start; /* Alinha os itens pelo topo */
+}
+
 
 /* === Estilos para o grupo de filtro (label + input/select/buttons) === */
 .filter-group {
@@ -411,6 +420,15 @@ h1.titulo-solicitacoes {
         gap: 10px;
     }
 
+    /* O novo left-filters-group também precisa de ajustes em telas pequenas */
+    .left-filters-group {
+        flex-direction: column; /* Empilha os filtros de Estado e Ordenação */
+        align-items: center; /* Centraliza os itens dentro dele */
+        width: 100%; /* Ocupa a largura total */
+        gap: 10px; /* Espaço entre Estado e Ordenação */
+    }
+
+
     .right-aligned-date-filters {
         width: 100%; /* Ocupa a largura total para alinhar o conteúdo */
         align-items: center; /* Centraliza os botões e inputs de data */
@@ -423,12 +441,6 @@ h1.titulo-solicitacoes {
     }
     .filter-group label {
         text-align: center;
-    }
-
-    .date-filter-buttons {
-        width: 100%;
-        justify-content: center; /* Centraliza os botões de data */
-        flex-wrap: wrap;
     }
 
     .filter-select,
@@ -444,6 +456,11 @@ h1.titulo-solicitacoes {
     }
     .date-range-inputs .filter-input {
         flex-grow: 1;
+    }
+    .date-filter-buttons {
+      width: 100%;
+      justify-content: center; /* Centraliza os botões de data */
+      flex-wrap: wrap;
     }
 
     /* Tabela responsiva */

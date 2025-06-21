@@ -21,23 +21,41 @@
           {{ mostrarMinhasTarefas ? "Ver todas as Tasks" : "Minhas Tarefas" }}
         </button>
       </div>
-
       <div class="left-aligned-filters-row">
-        <div class="filter-group">
-          <label for="filtroEstado" class="filter-label">Estado:</label>
-          <select
-            id="filtroEstado"
-            class="filter-select"
-            [(ngModel)]="filtroEstado"
-            (change)="filtrarSolicitacoes()"
-          >
-            <option value="">Todos</option>
-            <option *ngFor="let estado of estadosDisponiveis" [value]="estado">
-              {{ estado }}
-            </option>
-          </select>
-        </div>
+        <div class="left-filters-group">
+          <div class="filter-group">
+            <label for="filtroEstado" class="filter-label">Estado:</label>
+            <select
+              id="filtroEstado"
+              class="filter-select"
+              [(ngModel)]="filtroEstado"
+              (change)="filtrarSolicitacoes()"
+            >
+              <option value="">Todos</option>
+              <option
+                *ngFor="let estado of estadosDisponiveis"
+                [value]="estado"
+              >
+                {{ estado }}
+              </option>
+            </select>
+          </div>
 
+          <div class="filter-group">
+            <label for="ordenacaoData" class="filter-label"
+              >Ordenar por Data:</label
+            >
+            <select
+              id="ordenacaoData"
+              class="filter-select"
+              [(ngModel)]="ordemData"
+              (change)="filtrarSolicitacoes()"
+            >
+              <option value="crescente">Mais Antigas Primeiro</option>
+              <option value="decrescente">Mais Recentes Primeiro</option>
+            </select>
+          </div>
+        </div>
         <div class="right-aligned-date-filters">
           <div class="filter-group date-buttons-group">
             <label class="filter-label"></label>
@@ -134,6 +152,7 @@
               <td>
                 {{ task.assignee | getRecordId }}
               </td>
+
               <td>
                 <button
                   class="btn btn-sm btn-info me-1"

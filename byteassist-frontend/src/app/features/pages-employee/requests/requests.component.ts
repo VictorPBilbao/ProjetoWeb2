@@ -40,8 +40,8 @@ export class RequestsComponent implements OnInit {
   filtroDataFim: string = '';
   tipoFiltroData: 'HOJE' | 'PERIODO' | 'TODAS' = 'TODAS';
   estadosDisponiveis: string[] = [];
+  ordemData: 'crescente' | 'decrescente' = 'decrescente'; // Padrão: mais recentes primeiro
 
-  // AQUI É A MUDANÇA PRINCIPAL:
   // Definindo todos os status possíveis explicitamente
   readonly TODOS_OS_STATUS: string[] = [
     'ABERTA',
@@ -220,11 +220,16 @@ export class RequestsComponent implements OnInit {
       return estadoValido && dataValida;
     });
 
-    // 2. Ordenar as solicitações filtradas por data/hora crescente
+    // 2. Ordenar as solicitações filtradas por data/hora
     this.solicitacoesFiltradas.sort((a, b) => {
-      const dateA = new Date(a.time?.createdAt || '');
-      const dateB = new Date(b.time?.createdAt || '');
-      return dateA.getTime() - dateB.getTime(); // Ordem crescente
+      const dateA = new Date(a.time?.createdAt || '').getTime();
+      const dateB = new Date(b.time?.createdAt || '').getTime();
+
+      if (this.ordemData === 'crescente') {
+        return dateA - dateB; // Mais antigas primeiro
+      } else {
+        return dateB - dateA; // Mais recentes primeiro (decrescente)
+      }
     });
 
     this.totalPaginas = Math.ceil(this.solicitacoesFiltradas.length / this.itensPorPagina);
@@ -242,7 +247,6 @@ export class RequestsComponent implements OnInit {
     this.paginaAtual = 1; // Reinicia a paginação
     this.filtrarSolicitacoes(); // Reaplica os filtros
   }
-
 
   public get pages(): number[] {
     return Array.from(
