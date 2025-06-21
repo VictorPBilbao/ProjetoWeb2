@@ -1,84 +1,167 @@
 <app-notification [message]="message" [visible]="showNotification"></app-notification>
-<section class="budget-container flex flex-column items-center">
-  <div class="budget-title-container flex items-center justify-center">
-    <h1>ORÇAR SOLICITAÇÃO</h1>
-  </div>
+<section>
+  <div class="container">
+    <h1><i class="bi bi-calculator"></i> Criar Orçamentos</h1>
 
-  <div class="budgets-list-container">
-    <div class="table-header table-header1 flex items-center justify-between">
-      <div class="header-item">ID</div>
-      <div class="header-item">Criador</div>
-      <div class="header-item">Status</div>
-      <div class="header-item">Valor</div>
+    <!-- Grid de Tarefas -->
+    <div class="budgets-grid" *ngIf="tasks.length > 0">
+      <div class="budget-card" *ngFor="let task of tasks; let i = index">
+        <!-- Cabeçalho do Card -->        <div class="budget-header">
+          <div class="budget-info">
+            <h3 class="task-title">{{ task.title || 'Tarefa sem título' }}</h3>
+            <a [routerLink]="['/solicitacao', getCleanTaskId(task.id)]" class="task-id-link">
+              <span class="task-id">#{{ task.id | getRecordId }}</span>
+            </a>
+          </div>
+          <div class="budget-status">
+            <span class="status-badge pending">
+              <i class="bi bi-plus-circle-fill"></i>
+              Aguardando Orçamento
+            </span>
+          </div>
+        </div>
+
+        <!-- Informações da Tarefa -->
+        <div class="task-details">
+          <div class="detail-row">
+            <i class="bi bi-person-circle"></i>
+            <div class="detail-content">
+              <span class="detail-label">Criado por</span>
+              <span class="detail-value">{{ task?.creator | getRecordId }}</span>
+            </div>
+          </div>
+
+          <div class="detail-row">
+            <i class="bi bi-tag"></i>
+            <div class="detail-content">
+              <span class="detail-label">Tipo de Serviço</span>
+              <span class="detail-value">{{ task.type || 'Não especificado' }}</span>
+            </div>
+          </div>
+
+          <div class="detail-row" *ngIf="task.summary">
+            <i class="bi bi-file-text"></i>
+            <div class="detail-content">
+              <span class="detail-label">Resumo</span>
+              <span class="detail-value">{{ task.summary }}</span>
+            </div>
+          </div>          <div class="detail-row" *ngIf="task.assignee">
+            <i class="bi bi-person-check"></i>
+            <div class="detail-content">
+              <span class="detail-label">Atribuído para</span>
+              <span class="detail-value">{{ task.assignee | getRecordId }}</span>
+            </div>
+          </div>          <div class="detail-row" *ngIf="!task.assignee">
+            <i class="bi bi-person-x"></i>
+            <div class="detail-content">
+              <span class="detail-label">Status de Atribuição</span>
+              <span class="detail-value unassigned">Não atribuída</span>
+            </div>
+          </div>
+
+          <div class="detail-row">
+            <i class="bi bi-info-circle"></i>
+            <div class="detail-content">
+              <span class="detail-label">Status da Tarefa</span>
+              <span class="detail-value">{{ task.status || 'PENDENTE' }}</span>
+            </div>
+          </div>
+        </div>        <!-- Equipamento Relacionado -->
+        <div class="equipment-info" *ngIf="task.equipment">
+          <h4><i class="bi bi-gear"></i> Equipamento</h4>
+          <span class="equipment-id">
+            {{ typeof task.equipment === 'string' ? (task.equipment | getRecordId) : (task.equipment.id | getRecordId) }}
+          </span>
+        </div>        <!-- Ações -->
+        <div class="budget-actions">
+          <!-- Show assign button if task is not assigned -->
+          <button
+            class="btn btn-warning"
+            (click)="assignTaskToMyself(task)"
+            *ngIf="needsAssignment(task)">
+            <i class="bi bi-person-plus"></i>
+            Atribuir para Mim
+          </button>
+
+          <!-- Show create budget button only if task is assigned -->
+          <button
+            class="btn btn-primary"
+            (click)="openCreateBudgetModal(task)"
+            *ngIf="canCreateBudget(task)">
+            <i class="bi bi-calculator"></i>
+            Criar Orçamento
+          </button>
+
+          <!-- Show message if task is not assigned -->
+          <div class="assignment-message" *ngIf="needsAssignment(task)">
+            <i class="bi bi-info-circle text-warning"></i>
+            <span>Atribua esta tarefa para você antes de criar um orçamento</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="table-card" *ngFor="let task of tasks; let i = index">
-      <div class="table-header">
-        <div class="info flex items-center justify-between" (click)="openBudget(i)">
-          <div class="header-item">{{ task.budget?.id }}</div>
-          <div class="header-item">{{ task.budget?.creator }}</div>
-          <div class="header-item">{{ task.budget?.accepted ? 'Aprovado' : 'Pendente' }}</div>
-          <div class="header-item">{{ task.budget?.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</div>
-        </div>
-        <span class="table-caret">
-          <i
-            class="bi "
-            [class.bi-caret-down-fill]="activeAccordion !== i"
-            [class.bi-caret-up-fill]="activeAccordion === i">
-          </i>
-        </span>
-      </div>
-
-      <div class="accordion" [class.ativo]="activeAccordion === i">
-        <div class="budget-details flex justify-between">
-          <div class="descricao">
-            <div class="secao">
-              <h3>Descrição</h3>
-              <p>{{ task.budget?.description }}</p>
-            </div>
-            <div class="secao">
-              <h3>Status</h3>
-              <p>{{ task.budget?.accepted ? 'Aprovado' : 'Pendente' }}</p>
-            </div>
-            <div class="secao">
-              <h3>Criador</h3>
-              <p>{{ task.budget?.creator }}</p>
-            </div>
-          </div>
-
-          <div class="painel-lateral">
-            <div class="detalhes">
-              <p><strong>Valor: </strong>{{ task.budget?.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
-              <p><strong>Criador: </strong>{{ task.budget?.creator }}</p>
-              <p><strong>Status: </strong>{{ task.budget?.accepted ? 'Aprovado' : 'Pendente' }}</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="quote-container flex items-center justify-between">
-          <div class="quote-item">
-            <p class="quote-title">Orçamento</p>
-            <span class="quote-description">{{ task.budget?.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</span>
-          </div>
-          <div class="quote-item">
-            <p class="quote-title">Status</p>
-            <span class="quote-description">{{ task.budget?.accepted ? 'Aprovado' : 'Pendente' }}</span>
-          </div>
-          <button class="quote-button" (click)="budgetingRequest(task.budget?.id)" [disabled]="task.budget?.accepted">ORÇAR</button>
-        </div>
+    <!-- Estado Vazio -->
+    <div class="empty-state" *ngIf="tasks.length === 0">
+      <div class="empty-content">
+        <i class="bi bi-calculator"></i>
+        <h3>Nenhuma tarefa para orçar</h3>
+        <p>Não há tarefas atribuídas a você que precisem de orçamento no momento.</p>
       </div>
     </div>
   </div>
 
-  <div class="budget-modal flex items-center justify-center" *ngIf="modalVisible && selectedTask">
-    <div class="modal-content" >
-      <h2>Solicitação #{{ selectedTask.id }} Orçada!</h2>
-      <button
-        class="btn-ok"
-        style="background-color: black; width: 120px; margin: auto;"
-        (click)="closeModal()">
-          Ok
-      </button>
+  <!-- Modal de Criação de Orçamento -->
+  <div class="modal-overlay" *ngIf="modalVisible" (click)="closeModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2><i class="bi bi-calculator text-primary"></i> Criar Orçamento</h2>
+          <button class="close-btn" (click)="closeModal()" title="Fechar">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <div class="modal-body">          <div class="task-info-modal">
+            <h4>Tarefa: {{ selectedTask?.title || 'Tarefa sem título' }}</h4>
+            <p><strong>ID:</strong> #{{ selectedTask?.id | getRecordId }}</p>
+            <p *ngIf="selectedTask?.summary"><strong>Resumo:</strong> {{ selectedTask?.summary }}</p>
+          </div>
+
+          <div class="field flex flex-column">
+            <label for="budgetAmount">Valor do Orçamento (R$) *</label>
+            <input
+              type="number"
+              id="budgetAmount"
+              [(ngModel)]="budgetAmount"
+              placeholder="0.00"
+              min="0"
+              step="0.01"
+              required>
+          </div>
+
+          <div class="field flex flex-column">
+            <label for="budgetDescription">Descrição do Orçamento *</label>
+            <textarea
+              id="budgetDescription"
+              [(ngModel)]="budgetDescription"
+              placeholder="Descreva os serviços incluídos no orçamento..."
+              rows="4"
+              required>
+            </textarea>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" (click)="closeModal()">
+            <i class="bi bi-arrow-left"></i> Cancelar
+          </button>
+          <button
+            class="btn btn-primary"
+            (click)="createBudget()"
+            [disabled]="!budgetAmount || !budgetDescription || !budgetDescription.trim()">
+            <i class="bi bi-check-circle"></i> Criar Orçamento
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </section>

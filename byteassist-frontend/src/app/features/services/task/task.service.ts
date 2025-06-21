@@ -120,4 +120,31 @@ export class TaskService {
     );
   }
 
+  public getAllTasks(expand?: string | string[]): Observable<Task[]> {
+    const params: any = {};
+
+    if (expand) {
+      // Handle both string format "value1,value2" or array format ["value1", "value2"]
+      params.expand = Array.isArray(expand) ? expand.join(',') : expand;
+    }
+
+    return this.http.get<Task[]>(this.apiUrl, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.token}`,
+      },
+      params,
+    }).pipe(
+      map((tasks) =>
+        tasks.map((task) => ({
+          ...task,
+          time: {
+            createdAt: new Date(task?.time?.createdAt ?? ''),
+            updatedAt: new Date(task?.time?.updatedAt ?? ''),
+          },
+        }))
+      )
+    );
+  }
+
 }

@@ -77,4 +77,19 @@ export class BudgetService {
     const { id, ...budgetPayload } = budget;
     return this.http.patch<Budget>(`${this.apiUrlBudget}/${this.recordIdService.getId(id)}`, budgetPayload, { headers });
   }
+
+  createBudget(budget: Budget, taskId: string): Observable<Budget> {
+    if (!budget || !taskId) {
+      throw new Error('Budget object with a valid taskId is required for creation.');
+    }
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.authService.getToken()}`
+    });
+
+    // exclude 'id' from the payload before sending
+    const { id, ...budgetPayload } = budget;
+    return this.http.post<Budget>(this.apiUrlBudget + `/${taskId}`, budgetPayload, { headers });
+  }
 }
