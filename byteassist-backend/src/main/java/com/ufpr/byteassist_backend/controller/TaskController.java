@@ -142,12 +142,9 @@ public class TaskController {
             @Validated(ValidationGroups.Update.class) @RequestBody Task task,
             @RequestParam(required = false) List<String> expand) {
         // get the current user from the security context
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        // User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        // Set the current user ID as the task creator if already not set
-        if (task.getCreator() == null) {
-            task.setCreator(user.getId());
-        }
+
         
         return taskService.updateTask(id, task, expand);
     }
