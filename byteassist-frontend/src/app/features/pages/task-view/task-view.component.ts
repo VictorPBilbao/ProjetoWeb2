@@ -33,6 +33,21 @@ import { UserService } from '../../services/user/user.service';
 })
 export class TaskViewComponent implements OnInit {
 
+  /** Lista de status possíveis */
+  public statusList = [
+    'ABERTA',
+    'ORÇADA',
+    'APROVADA',
+    'REJEITADA',
+    'REDIRECIONADA',
+    'ARRUMADA',
+    'PAGA',
+    'FINALIZADA'
+  ];
+
+  /** Flag que seu guard/authService define */
+  public isFuncionario = false;
+
   task: Task | null = null;
   equipment: Equipment | null = null;
   budget: Budget | null = null;
@@ -57,6 +72,11 @@ export class TaskViewComponent implements OnInit {
   username: string = this.authService.getUsername() ?? '';
 
   ngOnInit(): void {
+
+    // Checa role via AuthService / hasRole
+    // this.isFuncionario = this.authService.hasRole('FUNCIONARIO');
+    // console.log('isFuncionario:', this.isFuncionario);
+
 
     const taskId = this.route.snapshot.paramMap.get('taskId');
     if (taskId) {
@@ -249,5 +269,26 @@ export class TaskViewComponent implements OnInit {
   //método que vai redirecionar para a tela de orçamento
   public onOrcarSolicitacao(task: Task): void {
     this.router.navigate(['funcionario/orcamentos/', task.id]);
+  }
+
+  public onStatusChange(newStatus: string): void {
+    if (!this.task) return;
+
+    // Prepara o payload com o novo status
+    const updatedTask: Task = {
+      ...this.task,
+      status: newStatus
+    };
+
+    this.taskService.updateTask(updatedTask).subscribe({
+      next: t => {
+        // assume que o back-end retorna o objeto completo
+        this.task = t;
+        Swal.fire('Sucesso', `Status atualizado para ${newStatus}.`, 'success');
+      },
+      error: () => {
+        Swal.fire('Erro', 'Não foi possível atualizar o status.', 'error');
+      }
+    });
   }
 }

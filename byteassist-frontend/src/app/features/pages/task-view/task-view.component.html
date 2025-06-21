@@ -23,12 +23,30 @@
       <div class="d-flex align-items-center justify-content-start mb-2">
         <h2 class="task-title mb-0 me-3">{{ task.title }}</h2>
 
-        <span
-          class="d-inline-block rounded-pill px-2 py-1"
-          [ngClass]="badgeClass(task.status)"
-        >
-          {{ task.status }}
-        </span>
+        <ng-container>
+          <!-- <ng-container *ngIf="isFuncionario; else viewOnlyStatus"> -->
+          <select
+            class="form-select form-select-sm w-auto"
+            [ngClass]="badgeClass(task.status)"
+            [(ngModel)]="task.status"
+            name="statusSelect"
+            required
+            (ngModelChange)="onStatusChange($event)"
+          >
+            <option *ngFor="let s of statusList" [value]="s">
+              {{ s }}
+            </option>
+          </select>
+        </ng-container>
+
+        <ng-template #viewOnlyStatus>
+          <span
+            class="d-inline-block rounded-pill px-2 py-1"
+            [ngClass]="badgeClass(task.status)"
+          >
+            {{ task.status }}
+          </span>
+        </ng-template>
 
         <!-- <span
           class="d-inline-block rounded-pill px-2 py-1"
