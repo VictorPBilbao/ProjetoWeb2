@@ -1,22 +1,22 @@
 <section>
-  <!-- Container principal com fundo branco -->
-  <div class="table-section bg-white p-4 rounded shadow-sm mt-4">
-    <!-- Cabeçalho: blob + título + descrição -->
-    <div class="cabecalho-solicitacoes text-center mb-4">
-      <div class="container-do-titulo">
-        <div class="titulo-wrapper">
-          <!-- <img src="/images/blob.png" alt="Decorativo" class="titulo-blob" /> -->
-          <h1 class="titulo-solicitacoes">
+  <div class="meu-container-principal">
+    <div class="cabecalho-solicitacoesfunc text-center mb-4">
+      <div class="container-do-titulo func">
+        <img src="/images/blob.png" alt="Decorativo" class="titulo-blob" />
+
+        <div class="titulo-wrapper func">
+          <h1 class="titulo-solicitacoes func">
             <i class="fas fa-clipboard-list me-2"></i> SOLICITAÇÕES
           </h1>
         </div>
       </div>
-      <p class="descricao-solicitacoes">Solicitações de clientes.</p>
+      <p class="descricao-solicitacoes func">
+        Aqui você pode gerenciar todas as solicitações de clientes.
+      </p>
     </div>
 
-    <!--tabela-->
-    <div class="table-responsive">
-      <table class="table-custom">
+    <div class="table-responsive func">
+      <table class="table-custom func">
         <thead>
           <tr>
             <th>ID</th>
@@ -52,12 +52,10 @@
               </span>
             </td>
 
-            <!-- Coluna Cliente -->
             <td>
               {{ task.creator | getRecordId }}
             </td>
 
-            <!-- Coluna Ações -->
             <td>
               <button
                 class="btn btn-sm btn-info me-1"
@@ -72,7 +70,6 @@
       </table>
     </div>
 
-    <!-- Paginação -->
     <div
       class="paginacao d-flex justify-content-center align-items-center mt-3 gap-2"
     >
