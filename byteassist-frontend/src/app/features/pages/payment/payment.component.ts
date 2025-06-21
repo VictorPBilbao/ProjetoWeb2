@@ -80,29 +80,25 @@ export class PaymentComponent implements OnInit {
     }
   }
 
-  // Método que será chamado ao submeter o formulário
   submitForm() {
-    this.isLoading = true; // Ativa o estado de loading
+    this.isLoading = true;
 
-    // Atualiza a task com o status de finalizado
     this.taskService
       .updateTask({
         id: this.taskId,
-        status: 'FINALIZADA',
+        status: 'PAGA',
       })
       .subscribe({
         next: () => {
-          // Simula o tempo de processamento do pagamento
-          setTimeout(() => {
-            this.isLoading = false; // Desativa o estado de loading
-            this.isModalVisible = true; // Exibe o modal de confirmação
-          }, 3000); // Simula 3 segundos de processamento (você pode ajustar esse tempo conforme necessário)
-          // volta para a página de tarefas após atualizar a task this.TaskId
-          console.log('Task atualizada com sucesso');
-          this.router.navigate(['/solicitacao/', this.taskId]);
+          console.log('Task atualizada com sucesso no backend.');
+
+          this.isLoading = false;
+          this.isModalVisible = true;
         },
         error: (error) => {
           console.error('Erro ao atualizar a task:', error);
+          this.isLoading = false;
+
         },
       });
   }
@@ -110,7 +106,8 @@ export class PaymentComponent implements OnInit {
   // Método para fechar o modal
   fecharModal() {
     this.isModalVisible = false;
-    window.location.reload(); // Refresca a página após o fechamento do modal
+    this.router.navigate(['/solicitacao/', this.taskId]);
+    // window.location.reload(); // Refresca a página após o fechamento do modal
   }
 
   // Lógica de mudança de tipo de pagamento
