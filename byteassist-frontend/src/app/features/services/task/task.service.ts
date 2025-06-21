@@ -10,9 +10,7 @@ import { LoadingService } from '../utils/loading.service';
   providedIn: 'root',
 })
 export class TaskService {
-  constructor(
-    private readonly loadingService: LoadingService
-  ) { };
+  constructor(private readonly loadingService: LoadingService) { }
 
   private readonly apiUrl = 'https://byteassist-backend.fly.dev/api/task';
   private readonly http = inject(HttpClient);
@@ -100,47 +98,37 @@ export class TaskService {
       throw new Error('Task.id é obrigatório para updateTask');
     }
 
-    const taskPayload = {
-      assignee: task.assignee,
-      // creator: task.creator,
-      // equipment: task.equipment.id,
-      // equipment: equipmentId,
-      status: task.status,
-      // title: task.title,
-      // type: task.type
-    }
+    // const taskPayload = {
+    //   assignee: task.assignee,
+    //   creator: task.creator,
+    //   equipment: task.equipment.id,
+    //   equipment: equipmentId,
+    //   status: task.status,
+    //   title: task.title,
+    //   type: task.type
+    // }
+
+
+    // create a new variable that has the same information as the task but without the id
+    const { id, ...taskPayload } = task;
+
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${this.authService.getToken()}` // Adiciona o token no header
+      Authorization: `Bearer ${this.authService.getToken()}`, // Adiciona o token no header
     });
     this.loadingService.show(); // Exibe o loading
-    return this.http.patch<Task>(`${this.apiUrl}/${this.recordIdService.getId(task.id)}
-      `, taskPayload, { headers }).pipe(
-      finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
-    );
+    return this.http
+      .patch<Task>(
+        `${this.apiUrl}/${this.recordIdService.getId(id)}
+      `,
+        taskPayload,
+        { headers }
+      )
+      .pipe(
+        finalize(() => this.loadingService.hide()) // Esconde o loading após a requisição
+      );
   }
 
-  // // ATUALIZAÇÃO DO MÉTODO updateTask:
-  // // Agora aceita um `Partial<Task>` para enviar apenas os campos que queremos atualizar.
-  // updateTask(taskId: string, updates: Partial<Task>): Observable<Task> {
-  //   console.log('Atualizando tarefa com ID:', updates);
-  //   if (!taskId) { // taskId é o id da tarefa, não o objeto inteiro.
-  //     throw new Error('ID da Task é obrigatório para updateTask');
-  //   }
-
-  //   const headers = new HttpHeaders({
-  //     'Content-Type': 'application/json',
-  //     'Authorization': `Bearer ${this.authService.getToken()}`
-  //   });
-
-  //   this.loadingService.show();
-  //   return this.http.patch<Task>(`${this.apiUrl}/${this.recordIdService.getId(taskId)}`, updates, { headers }).pipe( // Envia `updates` diretamente
-  //     finalize(() => this.loadingService.hide()),
-  //   );
-  // }
-
-
-  // NOVA FUNÇÃO: Para buscar TODAS as tarefas no sistema
   public getAllTasks(status?: string, expand?: string | string[]): Observable<Task[]> {
     const params: any = {};
 

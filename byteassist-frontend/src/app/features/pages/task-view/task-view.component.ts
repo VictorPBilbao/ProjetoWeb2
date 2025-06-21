@@ -32,7 +32,6 @@ import { UserService } from '../../services/user/user.service';
   styleUrls: ['./task-view.component.css'],
 })
 export class TaskViewComponent implements OnInit {
-
   /** Lista de status possíveis */
   public statusList = [
     'ABERTA',
@@ -42,7 +41,7 @@ export class TaskViewComponent implements OnInit {
     'REDIRECIONADA',
     'ARRUMADA',
     'PAGA',
-    'FINALIZADA'
+    'FINALIZADA',
   ];
 
   /** Flag que seu guard/authService define */
@@ -58,7 +57,7 @@ export class TaskViewComponent implements OnInit {
 
   public funcionarios: string[] = [];
   public selectedAssignee: string = '';
-  public rawFuncionarios: string[] = [];    // contém ["User:tecnico1", …]
+  public rawFuncionarios: string[] = []; // contém ["User:tecnico1", …]
   public displayFuncionarios: string[] = []; // contém ["tecnico1", …]
 
   private readonly route = inject(ActivatedRoute);
@@ -72,11 +71,9 @@ export class TaskViewComponent implements OnInit {
   username: string = this.authService.getUsername() ?? '';
 
   ngOnInit(): void {
-
     // Checa role via AuthService / hasRole
     // this.isFuncionario = this.authService.hasRole('FUNCIONARIO');
     // console.log('isFuncionario:', this.isFuncionario);
-
 
     const taskId = this.route.snapshot.paramMap.get('taskId');
     if (taskId) {
@@ -113,13 +110,13 @@ export class TaskViewComponent implements OnInit {
         this.rawFuncionarios = rawList;
 
         // opcional: prepara uma lista só para exibir, mas não afeta o value
-        this.displayFuncionarios = rawList.map(raw =>
+        this.displayFuncionarios = rawList.map((raw) =>
           raw.includes(':') ? raw.split(':')[1] : raw
         );
       },
       error: (err) => {
         console.error('Não foi possível buscar funcionários', err);
-      }
+      },
     });
   }
 
@@ -169,7 +166,10 @@ export class TaskViewComponent implements OnInit {
 
   // RF005: redireciona para tela de orçamentos
   onMostrarOrcamento(task: Task): void {
-    this.router.navigate(['/orcamentos', this.route.snapshot.paramMap.get('taskId')]);
+    this.router.navigate([
+      '/orcamentos',
+      this.route.snapshot.paramMap.get('taskId'),
+    ]);
   }
 
   onResgatarServico(task: Task): void {
@@ -209,8 +209,6 @@ export class TaskViewComponent implements OnInit {
     });
   }
 
-
-  //método que vai alterar de funcionário no front
   public onAssigneeChange(): void {
     if (!this.task || !this.selectedAssignee) return;
 
@@ -223,6 +221,7 @@ export class TaskViewComponent implements OnInit {
       // // assignee: this.selectedAssignee,
       status: 'REDIRECIONADA'
     };
+
 
     this.taskService.updateTask(updatedTask).subscribe({
       next: (t) => {
@@ -272,23 +271,23 @@ export class TaskViewComponent implements OnInit {
   }
 
   public onStatusChange(newStatus: string): void {
-    if (!this.task) return;
+    if (!this.task) { return };
 
     // Prepara o payload com o novo status
     const updatedTask: Task = {
-      ...this.task,
-      status: newStatus
+      id: this.task.id,
+      status: newStatus,
     };
 
     this.taskService.updateTask(updatedTask).subscribe({
-      next: t => {
+      next: (t) => {
         // assume que o back-end retorna o objeto completo
         this.task = t;
         Swal.fire('Sucesso', `Status atualizado para ${newStatus}.`, 'success');
       },
       error: () => {
         Swal.fire('Erro', 'Não foi possível atualizar o status.', 'error');
-      }
+      },
     });
   }
 
