@@ -11,85 +11,162 @@
         </div>
       </div>
       <p class="descricao-solicitacoes func">
-        Aqui você pode gerenciar todas as solicitações de clientes.
+        Aqui você pode gerenciar todas as Taks.
       </p>
     </div>
 
-    <div class="table-responsive func">
-      <table class="table-custom func">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Data</th>
-            <th>Hora</th>
-            <th>Equipamento</th>
-            <th>Estado</th>
-            <th>Cliente</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            *ngFor="let task of solicitacoesPorPagina; trackBy: trackByTaskId"
+    <div class="filters-container mb-4">
+      <div class="centered-button-group">
+        <button class="filter-btn my-tasks-btn" (click)="toggleTaskList()">
+          {{ mostrarMinhasTarefas ? "Ver todas as Tasks" : "Minhas Tarefas" }}
+        </button>
+      </div>
+
+      <div class="left-aligned-filters-row">
+        <div class="filter-group">
+          <label for="filtroEstado" class="filter-label">Estado:</label>
+          <select
+            id="filtroEstado"
+            class="filter-select"
+            [(ngModel)]="filtroEstado"
+            (change)="filtrarSolicitacoes()"
           >
-            <td>{{ task.id | getRecordId }}</td>
-            <td>{{ task.time?.createdAt | date : "dd/MM/yyyy" }}</td>
-            <td>{{ task.time?.createdAt | date : "HH:mm:ss" }}</td>
-            <td>
-              {{
-                task.equipment
-                  ? (task.equipment | equipmentField : "model")
-                  : ""
-              }}
-            </td>
-            <td>
-              <span
-                [ngClass]="
-                  'estado-' + (task.status?.trim()?.toUpperCase() ?? '')
-                "
-              >
-                {{ task.status }}
-              </span>
-            </td>
+            <option value="">Todos</option>
+            <option *ngFor="let estado of estadosDisponiveis" [value]="estado">
+              {{ estado }}
+            </option>
+          </select>
+        </div>
 
-            <td>
-              {{ task.creator | getRecordId }}
-            </td>
-
-            <td>
+        <div class="right-aligned-date-filters">
+          <div class="filter-group date-buttons-group">
+            <label class="filter-label"></label>
+            <div class="date-filter-buttons">
               <button
-                class="btn btn-sm btn-info me-1"
-                (click)="verTask(task)"
-                aria-label="Ver detalhes"
+                type="button"
+                class="filter-btn date-btn"
+                [class.active]="tipoFiltroData === 'TODAS'"
+                (click)="mudarTipoFiltroData('TODAS')"
               >
-                <i class="fas fa-eye"></i>
+                Todas
               </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+              <button
+                type="button"
+                class="filter-btn date-btn"
+                [class.active]="tipoFiltroData === 'HOJE'"
+                (click)="mudarTipoFiltroData('HOJE')"
+              >
+                Hoje
+              </button>
+              <button
+                type="button"
+                class="filter-btn date-btn"
+                [class.active]="tipoFiltroData === 'PERIODO'"
+                (click)="mudarTipoFiltroData('PERIODO')"
+              >
+                Período
+              </button>
+            </div>
+          </div>
 
-    <div
-      class="paginacao d-flex justify-content-center align-items-center mt-3 gap-2"
-    >
-      <button
-        class="btn btn-sm btn-outline-primary"
-        [disabled]="paginaAtual === 1"
-        (click)="mudarPagina(paginaAtual - 1)"
-      >
-        Anterior
-      </button>
+          <div *ngIf="tipoFiltroData === 'PERIODO'" class="date-range-inputs">
+            <input
+              type="date"
+              id="filtroDataInicio"
+              class="filter-input date-input"
+              [(ngModel)]="filtroDataInicio"
+              (change)="filtrarSolicitacoes()"
+            />
+            <span class="date-separator">-</span>
+            <input
+              type="date"
+              id="filtroDataFim"
+              class="filter-input date-input"
+              [(ngModel)]="filtroDataFim"
+              (change)="filtrarSolicitacoes()"
+            />
+          </div>
+        </div>
+      </div>
 
-      <span>Página {{ paginaAtual }} de {{ totalPaginas }}</span>
+      <div class="table-responsive func">
+        <table class="table-custom func">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Data</th>
+              <th>Hora</th>
+              <th>Equipamento</th>
+              <th>Estado</th>
+              <th>Cliente</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let task of solicitacoesPorPagina; trackBy: trackByTaskId"
+            >
+              <td>{{ task.id | getRecordId }}</td>
+              <td>{{ task.time?.createdAt | date : "dd/MM/yyyy" }}</td>
+              <td>{{ task.time?.createdAt | date : "HH:mm:ss" }}</td>
+              <td>
+                {{
+                  task.equipment
+                    ? (task.equipment | equipmentField : "model")
+                    : ""
+                }}
+              </td>
+              <td>
+                <span
+                  [ngClass]="
+                    'estado-' + (task.status?.trim()?.toUpperCase() ?? '')
+                  "
+                >
+                  {{ task.status }}
+                </span>
+              </td>
 
-      <button
-        class="btn btn-sm btn-outline-primary"
-        [disabled]="paginaAtual === totalPaginas"
-        (click)="mudarPagina(paginaAtual + 1)"
-      >
-        Próxima
-      </button>
+              <td>
+                {{ task.creator | getRecordId }}
+              </td>
+
+              <td>
+                <button
+                  class="btn btn-sm btn-info me-1"
+                  (click)="verTask(task)"
+                  aria-label="Ver detalhes"
+                >
+                  <i class="fas fa-eye"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="container-pai d-flex justify-content-center">
+        <div
+          class="paginacao d-flex justify-content-center align-items-center mt-3 gap-2"
+        >
+          <button
+            class="btn btn-sm btn-outline-primary"
+            [disabled]="paginaAtual === 1"
+            (click)="mudarPagina(paginaAtual - 1)"
+          >
+            Anterior
+          </button>
+
+          <span>Página {{ paginaAtual }} de {{ totalPaginas }}</span>
+
+          <button
+            class="btn btn-sm btn-outline-primary"
+            [disabled]="paginaAtual === totalPaginas"
+            (click)="mudarPagina(paginaAtual + 1)"
+          >
+            Próxima
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </section>

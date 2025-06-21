@@ -43,7 +43,7 @@
   top: -100px; /* Mantido como está para a posição vertical do blob */
   left: 50%;
   transform: translateX(-50%);
-  width: 680px;
+  width: 600px;
   height: auto;
   z-index: 0;
   opacity: 1;
@@ -52,7 +52,7 @@
 }
 
 .descricao-solicitacoes {
-  margin-top: 40px; /* Ajuste este valor para mover a descrição mais para cima ou para baixo */
+  margin-top: 10px; /* Ajuste este valor para mover a descrição mais para cima ou para baixo */
   color: #000000; /* Uma cor mais suave para a descrição */
   font-size: 1rem; /* Tamanho da fonte padrão, ajuste se precisar */
   line-height: 1.5; /* Espaçamento entre linhas */
@@ -66,13 +66,13 @@
   position: relative;
   z-index: 2; /* Aumenta o z-index para garantir que o título fique na frente do blob */
   padding: 20px 40px;
-  margin-top: -15px;
+  margin-top: -22px;
 }
 
 /* Título com ícone */
 h1.titulo-solicitacoes {
   color: rgb(255, 255, 255);
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: bold;
   margin: 0;
   background: transparent;
@@ -159,45 +159,6 @@ h1.titulo-solicitacoes {
   white-space: nowrap;
 }
 
-/* Cores específicas dos estados */
-/* Os estados são gerados dinamicamente via ngClass, então mantive as regras de cores para eles */
-.estado-FINALIZADO {
-  background-color: #28a745; /* verde */
-  color: white;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.estado-PENDENTE {
-  background-color: #fd7e14; /* laranja */
-  color: white;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.estado-CANCELADO {
-  background-color: #dc3545; /* vermelho */
-  color: white;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.estado-EM_PROGRESSO {
-  background-color: #0b8699; /* ciano */
-  color: white;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-
 /* Botões com ícones */
 .table-custom button.btn {
   padding: 4px 8px;
@@ -249,4 +210,256 @@ h1.titulo-solicitacoes {
 .btn-sm {
   font-size: 0.875rem;
   padding: 0.25rem 0.5rem;
+}
+
+/* === Contêiner principal dos filtros - agora é um flex-column === */
+.filters-container {
+    display: flex;
+    flex-direction: column; /* Empilha os grupos de filtros */
+    gap: 15px; /* Espaçamento entre o botão centralizado e os filtros da esquerda */
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* === Div para o botão centralizado === */
+.centered-button-group {
+    display: flex; /* Habilita flexbox */
+    justify-content: center; /* Centraliza o botão horizontalmente */
+    width: 100%; /* Ocupa toda a largura do filters-container */
+}
+
+/* NOVO: Contêiner para a linha de filtros (Estado à esquerda, Datas à direita) */
+.left-aligned-filters-row {
+    display: flex;
+    justify-content: space-between; /* Alinha o primeiro item à esquerda e o último à direita */
+    align-items: flex-start; /* Alinha os itens pelo topo */
+    flex-wrap: wrap; /* Permite que os itens quebrem linha em telas pequenas */
+    gap: 15px; /* Espaçamento entre as colunas em telas menores */
+    width: 100%; /* Ocupa a largura total */
+}
+
+/* === Estilos para o grupo de filtro (label + input/select/buttons) === */
+.filter-group {
+    display: flex;
+    flex-direction: column; /* Organiza label e conteúdo em coluna */
+    align-items: flex-start;
+    white-space: nowrap; /* Impede que o grupo quebre linha desnecessariamente */
+}
+
+/* NOVO: Contêiner para os botões e inputs de data alinhados à direita */
+.right-aligned-date-filters {
+    display: flex;
+    flex-direction: column; /* Empilha os botões de data e os inputs de período */
+    align-items: flex-end; /* Alinha o conteúdo (botões de data e inputs) à direita */
+    gap: 5px; /* Espaço entre os botões de data e os inputs de período */
+}
+
+/* NOVO: Estilos para o grupo de botões "Todas", "Hoje" e "Período" */
+.filter-group.date-buttons-group {
+    white-space: normal; /* Permite que o label "Data" quebre linha se necessário */
+    align-items: flex-end; /* Garante que o label e os botões se alinhem à direita dentro deste grupo */
+}
+
+.filter-label {
+    font-size: 0.8rem;
+    color: #555;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+/* === Estilos para o SELECT de Estado === */
+.filter-select {
+    font-size: 0.85rem;
+    padding: 0.35rem 1.5rem 0.35rem 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 0.3rem;
+    height: 32px;
+    background-color: #fff;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20256%20256%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M216.49%2099.51l-80%2080a12%2012%200%2001-17%200l-80-80a12%2012%200%2001%2017-17l71.51%2071.51%2071.51-71.51a12%2012%200%2001%2017%2017z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 0.7rem;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* === Estilos para os BOTÕES DE FILTRO GERAIS (inclui data) === */
+.filter-btn {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #007bff;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    background-color: #fff;
+    color: #007bff;
+    white-space: nowrap;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filter-btn:hover {
+    background-color: #e9ecef;
+}
+
+.filter-btn.active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Estilo para o botão "Minhas Tarefas" (verde) */
+.my-tasks-btn {
+    background-color: #28a745;
+    color: #fff;
+    border-color: #28a745;
+    margin-top:-20px;
+    order: unset;
+    flex-shrink: 0;
+}
+.my-tasks-btn:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+.my-tasks-btn:active,
+.my-tasks-btn:focus {
+    background-color: #1e7e34;
+    border-color: #1c7430;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+
+/* === Estilos para os BOTÕES DE FILTRO DE DATA (dentro do .date-filter-buttons) === */
+.date-filter-buttons {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap; /* Permite que os botões de data quebrem linha se não houver espaço */
+}
+
+.date-filter-buttons .filter-btn {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.8rem;
+    min-width: auto;
+    width: auto;
+}
+
+/* === Estilos para os INPUTS DE DATA (calendário) === */
+.filter-input {
+    font-size: 0.85rem;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 0.3rem;
+    height: 32px;
+    box-sizing: border-box;
+    min-width: 80px;
+    width: 100%; /* Faz os inputs ocuparem 100% da largura de seu pai */
+    max-width: 150px; /* Limita a largura máxima dos inputs individuais */
+}
+
+.filter-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.date-range-inputs {
+    display: flex;
+    flex-direction: row; /* Inputs lado a lado */
+    align-items: center; /* Alinha os itens verticalmente ao centro */
+    gap: 5px; /* Espaço entre os inputs de data e o separador */
+    width: auto; /* Permite que a largura seja determinada pelo conteúdo ou pelo pai */
+}
+
+.date-separator {
+    font-size: 1rem;
+    color: #666;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+/* === Media Queries para Responsividade === */
+@media (max-width: 992px) {
+    .filters-container {
+        align-items: center;
+    }
+
+    .centered-button-group {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .my-tasks-btn {
+        width: 100%;
+        max-width: 250px;
+    }
+
+    /* Ajustes para a nova linha de filtros em telas pequenas */
+    .left-aligned-filters-row {
+        flex-direction: column; /* Empilha Estado e o grupo de Datas */
+        align-items: center; /* Centraliza os dois grupos */
+        width: 100%;
+        gap: 10px;
+    }
+
+    .right-aligned-date-filters {
+        width: 100%; /* Ocupa a largura total para alinhar o conteúdo */
+        align-items: center; /* Centraliza os botões e inputs de data */
+    }
+
+    .filter-group {
+        width: 100%;
+        align-items: center; /* Centraliza o conteúdo de cada filter-group */
+        white-space: normal;
+    }
+    .filter-group label {
+        text-align: center;
+    }
+
+    .date-filter-buttons {
+        width: 100%;
+        justify-content: center; /* Centraliza os botões de data */
+        flex-wrap: wrap;
+    }
+
+    .filter-select,
+    .filter-input,
+    .date-filter-buttons .filter-btn {
+        width: 100%;
+        max-width: 250px;
+    }
+    .date-range-inputs {
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+    .date-range-inputs .filter-input {
+        flex-grow: 1;
+    }
+
+    /* Tabela responsiva */
+    .table-custom.func th,
+    .table-custom.func td {
+        white-space: normal; /* Permite que o texto quebre linha em telas pequenas */
+        padding: 8px 10px;
+        font-size: 0.8rem;
+    }
+
+  .paginacao {
+  /* Garante que ocupe a largura total do pai */
+  width: 100%;
+  /* Centraliza o conteúdo horizontalmente.
+     Você já tem justify-content-center do Bootstrap,
+     mas este é um fallback ou para quando não se usa flexbox no pai. */
+  text-align: center;
+}
 }
