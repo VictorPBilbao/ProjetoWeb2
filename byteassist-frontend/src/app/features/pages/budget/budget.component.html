@@ -1,78 +1,162 @@
 <app-notification [message]="message" [visible]="showNotification"></app-notification>
-<section class="budget-container flex flex-column items-center">
-  <div class="budget-title-container flex items-center justify-center">
-    <h1>ORÇAMENTOS</h1>
-  </div>
+<section>
+  <div class="container">
+    <h1><i class="bi bi-receipt"></i> Gerenciar Orçamentos</h1>
 
-  <div class="budgets-list-container">
-    <div class="table-header table-header1 flex items-center justify-between">
-      <div class="header-item">ID</div>
-      <div class="header-item">Criador</div>
-      <div class="header-item">Status</div>
-      <div class="header-item">Valor</div>
-      <div class="header-item">Descrição</div>
-    </div>
-
-    <div class="table-card" *ngFor="let budget of budgets; let i = index">
-      <div class="table-header">
-        <div class="info flex items-center justify-between" (click)="openBudget(i)">
-          <div class="header-item">{{ budget.id }}</div>
-          <div class="header-item">{{ budget.creator }}</div>
-          <div class="header-item">{{ budget.accepted ? 'Aprovado' : 'Pendente' }}</div>
-          <div class="header-item">{{ budget.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</div>
-          <div class="header-item">{{ budget.description }}</div>
-        </div>
-        <span class="table-caret">
-          <i
-            class="bi "
-            [class.bi-caret-down-fill]="activeAccordion !== i"
-            [class.bi-caret-up-fill]="activeAccordion === i">
-          </i>
-        </span>
-      </div>
-
-      <div class="accordion" [class.ativo]="activeAccordion === i">
-        <div class="budget-details flex justify-between">
-          <div class="descricao">
-            <div class="secao">
-              <h3>Descrição</h3>
-              <p>{{ budget.description }}</p>
-            </div>
-            <div class="secao">
-              <h3>Status</h3>
-              <p>{{ budget.accepted ? 'Aprovado' : 'Pendente' }}</p>
-            </div>
+    <!-- Grid de Orçamentos -->
+    <div class="budgets-grid" *ngIf="tasks.length > 0">
+      <div class="budget-card" *ngFor="let task of tasks; let i = index">
+        <!-- Cabeçalho do Card -->
+        <div class="budget-header">
+          <div class="budget-info">
+            <h3 class="task-title">{{ task.title || 'Tarefa sem título' }}</h3>
+            <span class="task-id">#{{ task.id | getRecordId }}</span>
           </div>
-
-          <div class="painel-lateral">
-            <div class="detalhes">
-              <p><strong>Valor: </strong>{{ budget.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
-              <p><strong>Criador: </strong>{{ budget.creator }}</p>
-            </div>
+          <div class="budget-status">
+            <span class="status-badge" [class.approved]="task.budget?.accepted" [class.pending]="!task.budget?.accepted">
+              <i class="bi" [class.bi-check-circle-fill]="task.budget?.accepted" [class.bi-clock-fill]="!task.budget?.accepted"></i>
+              {{ task.budget?.accepted ? 'Aprovado' : 'Pendente' }}
+            </span>
           </div>
         </div>
 
-        <div class="botoes">
-          <button class="aprovar" (click)="approvalBudget(budget.id!)" [disabled]="budget.accepted"><i class="bi bi-check-circle"></i> Aprovar</button>
-          <button class="rejeitar" (click)="openRejectBudgetModal(budget.id!)" [disabled]="budget.accepted"><i class="bi bi-x-circle"></i> Rejeitar</button>
+        <!-- Valor do Orçamento -->
+        <div class="budget-amount">
+          <span class="amount-label">Valor do Orçamento</span>
+          <span class="amount-value">{{ (task.budget?.amount! / 100) | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</span>
         </div>
+
+        <!-- Informações da Tarefa -->
+        <div class="task-details">
+          <div class="detail-row">
+            <i class="bi bi-person-circle"></i>
+            <div class="detail-content">
+              <span class="detail-label">Criado por</span>
+              <span class="detail-value">{{ task?.budget?.creator | getRecordId }}</span>
+            </div>
+          </div>
+
+          <div class="detail-row">
+            <i class="bi bi-tag"></i>
+            <div class="detail-content">
+              <span class="detail-label">Tipo de Serviço</span>
+              <span class="detail-value">{{ task.type || 'Não especificado' }}</span>
+            </div>
+          </div>
+
+          <div class="detail-row" *ngIf="task.summary">
+            <i class="bi bi-file-text"></i>
+            <div class="detail-content">
+              <span class="detail-label">Resumo</span>
+              <span class="detail-value">{{ task.summary }}</span>
+            </div>
+          </div>
+        </div>        <!-- Descrição do Orçamento -->
+        <div class="budget-description" *ngIf="task.budget?.description">
+          <h4><i class="bi bi-clipboard-check"></i> Descrição do Orçamento</h4>
+          <p>{{ task.budget?.description }}</p>
+        </div>
+
+        <!-- Equipamento Relacionado -->
+        <div class="equipment-info" *ngIf="task.equipment">
+          <h4><i class="bi bi-gear"></i> Equipamento</h4>
+          <span class="equipment-id">{{ task.equipment | getRecordId }}</span>
+        </div>
+
+        <!-- Ações -->
+        <div class="budget-actions">
+          <button
+            class="btn btn-success"
+            (click)="approvalBudget(task.budget?.id!)"
+            [disabled]="task.budget?.accepted"
+            *ngIf="!task.budget?.accepted">
+            <i class="bi bi-check-circle"></i>
+            Aprovar Orçamento
+          </button>
+
+          <button
+            class="btn btn-danger"
+            (click)="openRejectBudgetModal(task.budget?.id!)"
+            [disabled]="task.budget?.accepted"
+            *ngIf="!task.budget?.accepted">
+            <i class="bi bi-x-circle"></i>
+            Rejeitar Orçamento
+          </button>
+
+          <div class="approved-message" *ngIf="task.budget?.accepted">
+            <i class="bi bi-check-circle-fill text-success"></i>
+            <span>Orçamento aprovado</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estado Vazio -->
+    <div class="empty-state" *ngIf="tasks.length === 0">
+      <div class="empty-content">
+        <i class="bi bi-receipt"></i>
+        <h3>Nenhum orçamento encontrado</h3>
+        <p>Não há orçamentos pendentes para revisar no momento.</p>
       </div>
     </div>
   </div>
 
-  <div class="budget-modal flex items-center justify-center" *ngIf="modalVisible">
-    <div class="modal-content" *ngIf="selectedBudget && selectedBudget.accepted">
-      <span class="close" (click)="closeModal()"><i class="bi bi-x"></i></span>
-      <h2>Orçamento Aprovado</h2>
-      <p>Valor: {{ selectedBudget.amount | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</p>
-      <button class="btn-ok" (click)="closeModal()">Ok</button>
-    </div>
+  <!-- Modal de Confirmação/Rejeição -->
+  <div class="modal-overlay" *ngIf="modalVisible" (click)="closeModal()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+      <!-- Modal de Aprovação -->
+      <div class="modal-content" *ngIf="selectedTask && selectedTask.budget?.accepted">
+        <div class="modal-header">
+          <h2><i class="bi bi-check-circle-fill text-success"></i> Orçamento Aprovado</h2>
+          <button class="close-btn" (click)="closeModal()" title="Fechar">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>O orçamento foi aprovado com sucesso!</p>
+          <div class="approval-details">
+            <strong>Valor aprovado:</strong>
+            {{ (selectedTask.budget?.amount! / 100) | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-primary" (click)="closeModal()">
+            <i class="bi bi-check"></i> Entendido
+          </button>
+        </div>
+      </div>
 
-    <div class="modal-content" *ngIf="selectedBudget && !selectedBudget.accepted">
-      <span class="close" (click)="closeModal()"><i class="bi bi-x"></i></span>
-      <h2>Motivo de rejeição:</h2>
-      <textarea [(ngModel)]="rejectDescription" placeholder="Digite o motivo da rejeição"></textarea>
-      <button class="btn-reject" (click)="rejectBudget(selectedBudget.id)">Rejeitar</button>
+      <!-- Modal de Rejeição -->
+      <div class="modal-content" *ngIf="selectedTask && !selectedTask.budget?.accepted">
+        <div class="modal-header">
+          <h2><i class="bi bi-x-circle-fill text-danger"></i> Rejeitar Orçamento</h2>
+          <button class="close-btn" (click)="closeModal()" title="Fechar">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="field flex flex-column">
+            <label for="rejectReason">Motivo da rejeição *</label>
+            <textarea
+              id="rejectReason"
+              [(ngModel)]="rejectDescription"
+              placeholder="Informe o motivo da rejeição do orçamento..."
+              rows="4"
+              required>
+            </textarea>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" (click)="closeModal()">
+            <i class="bi bi-arrow-left"></i> Cancelar
+          </button>          <button
+            class="btn btn-danger"
+            (click)="rejectBudget(selectedTask.budget?.id)"
+            [disabled]="!rejectDescription || !rejectDescription.trim()">
+            <i class="bi bi-x-circle"></i> Confirmar Rejeição
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </section>

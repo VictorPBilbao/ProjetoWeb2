@@ -1,42 +1,63 @@
-import { Component, LOCALE_ID } from '@angular/core';
-import { CommonModule, registerLocaleData } from '@angular/common';
+import { RecordIdPipe } from './../../shared/pipes/record-id.pipe';
+import { Component, inject, LOCALE_ID } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Budget } from '../../shared/models/budget.model';
-import { BudgetService } from '../../services/budget/budget.service';
+import { Task } from '../../shared/models/task.model';
 import { NotificationComponent } from '../../components/notification/notification.component';
 import { ActivatedRoute } from '@angular/router';
-import ptBr from '@angular/common/locales/pt';
-
-registerLocaleData(ptBr);
+import { TaskService } from '../../services/task/task.service';
 
 @Component({
   selector: 'app-budget',
-  imports: [
-    CommonModule,
-    NotificationComponent,
-    FormsModule
-  ],
-  providers: [
-    { provide: LOCALE_ID, useValue: 'pt-BR' }
-  ],
+  imports: [CommonModule, NotificationComponent, FormsModule, RecordIdPipe],
+  providers: [{ provide: LOCALE_ID, useValue: 'pt-BR' }],
   templateUrl: './budget.component.html',
-  styleUrl: './budget.component.css'
+  styleUrl: './budget.component.css',
 })
 export class BudgetComponent {
-  budgets: Budget[] = [];
+  tasks: Task[] = [];
   activeAccordion: number | null = null;
   modalVisible = false;
-  selectedBudget: Budget | null = null;
+  selectedTask: Task | null = null;
   message: string = '';
   showNotification: boolean = false;
   rejectDescription: string = '';
-  constructor(
-    private readonly budgetService: BudgetService,
-    private readonly route: ActivatedRoute
-  ) { }
+
+  private readonly route = inject(ActivatedRoute);
+  private readonly taskService = inject(TaskService);
 
   ngOnInit(): void {
-    this.budgets = this.budgetService.getBudgets();
+    const taskId = this.route.snapshot.paramMap.get('taskId');
+
+    if (taskId) {
+      // If a taskId is provided, fetch the specific task with its budget
+      this.taskService.getTaskById(taskId, 'budget').subscribe({
+      next: (task: Task) => {
+        // Only add the task if it has a budget
+        this.tasks = task.budget ? [task] : [];
+      },
+      error: (error) => {
+        console.error('Erro ao carregar a tarefa:', error);
+        this.message = 'Erro ao carregar a tarefa.';
+        this.showNotification = true;
+      },
+      });
+    } else {
+      // If no taskId is provided, fetch all tasks with their budgets
+      this.taskService.getAllMyTasks('creator', undefined, 'budget').subscribe({
+      next: (tasks: Task[]) => {
+        // Only include tasks where budget is not null
+        this.tasks = tasks.filter(task => task.budget !== null);
+        // console log the tasks
+        console.log('Tarefas carregadas:', this.tasks);
+      },
+      error: (error) => {
+        console.error('Erro ao carregar as tarefas:', error);
+        this.message = 'Erro ao carregar as tarefas.';
+        this.showNotification = true;
+      }
+      });
+    }
   }
 
   openBudget(index: number): void {
@@ -44,35 +65,16 @@ export class BudgetComponent {
   }
 
   async approvalBudget(id: string): Promise<void> {
-    this.selectedBudget = this.budgets.find(budget => budget.id === id) || null;
-    if (!this.selectedBudget) {
-      this.message = 'Erro ao encontrar o orçamento selecionado.';
-      this.showNotification = true;
-      return;
-    }
-
-    this.selectedBudget.accepted = true;
-    console.log('Chamando approveBudget...');
-    await this.budgetService.approveBudget(id);
-    console.log('approveBudget finalizado, abrindo modal');
     this.openModal();
   }
 
   async rejectBudget(id?: string): Promise<void> {
-    if (!this.selectedBudget || !id) {
-      this.message = 'Erro ao encontrar o orçamento selecionado.';
-      this.showNotification = true;
-      return;
-    }
-
-    await this.budgetService.rejectBudget(id);
-    this.selectedBudget.accepted = false;
+    // log the id
+    console.log('Rejecting budget for task ID:', id);
     this.closeModal();
   }
 
   openRejectBudgetModal(id: string): void {
-    this.selectedBudget = this.budgets.find(budget => budget.id === id) || null;
-    this.rejectDescription = '';
     this.openModal();
   }
 

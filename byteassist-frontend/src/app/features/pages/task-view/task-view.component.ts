@@ -169,7 +169,7 @@ export class TaskViewComponent implements OnInit {
 
   // RF005: redireciona para tela de orçamentos
   onMostrarOrcamento(task: Task): void {
-    this.router.navigate(['/orcamentos', task.id]);
+    this.router.navigate(['/orcamentos', this.route.snapshot.paramMap.get('taskId')]);
   }
 
   onResgatarServico(task: Task): void {
@@ -178,8 +178,6 @@ export class TaskViewComponent implements OnInit {
       return;
     }
 
-    const now = new Date();
-    // Atualiza status no backend
     task.status = 'APROVADA'; // Atualiza o status para APROVADA
     this.taskService.updateTask(task).subscribe({
       next: (updatedTask) => {
@@ -203,7 +201,10 @@ export class TaskViewComponent implements OnInit {
       confirmButtonText: 'Ir para Pagamentos',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.router.navigate(['/pagamentos', this.recordidService.getId(task.id ?? '')]);
+        this.router.navigate([
+          '/pagamentos',
+          this.recordidService.getId(task.id ?? ''),
+        ]);
       }
     });
   }
@@ -249,32 +250,19 @@ export class TaskViewComponent implements OnInit {
   // }
 
   public onAssigneeChange(): void {
-    if (!this.task || !this.selectedAssignee) return;
+    if (!this.task || !this.selectedAssignee) {
+      return;
+    }
 
-    // 1) Prepara o objeto completo
-    const updatedTask: Task = {
-      ...this.task,
-      assignee: this.selectedAssignee,
-      status: 'REDIRECIONADA'
-    };
-
-    // 2) Chama o serviço com o Task inteiro
+    const updatedTask = { ...this.task, assignee: this.selectedAssignee };
     this.taskService.updateTask(updatedTask).subscribe({
       next: (t) => {
-        this.task = t; // assume que o back-end retorna tudo direitinho
-        Swal.fire(
-          'Sucesso',
-          'Responsável atribuído e status atualizado para REDIRECIONADA.',
-          'success'
-        );
+        this.task = t; // Atualiza no front
+        Swal.fire('Sucesso', 'Responsável atribuído.', 'success');
       },
       error: () => {
-        Swal.fire(
-          'Erro',
-          'Não foi possível atribuir responsável nem atualizar status.',
-          'error'
-        );
-      }
+        Swal.fire('Erro', 'Não foi possível atribuir responsável.', 'error');
+      },
     });
   }
 
@@ -303,5 +291,4 @@ export class TaskViewComponent implements OnInit {
       }
     });
   }
-
 }

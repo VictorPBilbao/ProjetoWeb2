@@ -95,7 +95,9 @@ public class TaskService {
     }
 
     public ResponseEntity<Task> updateTask(String id, Task task, List<String> expand) {
-
+        
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        
         // * pegar a task atual para ver com oestá */
         Task existingTask = taskRepo.getTaskById(id).orElseThrow(
                 () -> new EnhancedStatusException(
@@ -109,7 +111,6 @@ public class TaskService {
                         "Task not found",
                         "No task found with the provided ID"));
 
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         // se antes a task.status estava 'REJEITADA' e agora esta em 'APROVADA', criar
         // um comentário

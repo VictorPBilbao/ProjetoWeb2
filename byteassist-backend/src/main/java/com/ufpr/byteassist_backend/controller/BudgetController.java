@@ -54,7 +54,6 @@ public class BudgetController {
     }
 
     @PatchMapping("/{id}")
-    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<Budget> updateBudget(@PathVariable String id, @Validated(ValidationGroups.Update.class) @RequestBody Budget budget) {
         return budgetService.updateBudget(id, budget);
     }
