@@ -172,22 +172,55 @@ export class TaskViewComponent implements OnInit {
     ]);
   }
 
+  // onResgatarServico(task: Task): void {
+  //   if (!task.id) {
+  //     console.error('Task sem ID, impossível resgatar.');
+  //     return;
+  //   }
+
+  //   task.status = 'APROVADA'; // Atualiza o status para APROVADA
+  //   this.taskService.updateTask(task).subscribe({
+  //     next: (updatedTask) => {
+  //       // Reflete no front
+  //       this.task = updatedTask;
+  //     },
+  //     error: (err) => {
+  //       console.error('Falha ao resgatar serviço', err);
+  //       task.status = 'REJEITADA'; // Reverte o status se falhar
+  //       Swal.fire('Erro', 'Não foi possível atualizar o status', 'error');
+  //     },
+  //   });
+  // }
+
   onResgatarServico(task: Task): void {
     if (!task.id) {
       console.error('Task sem ID, impossível resgatar.');
       return;
     }
 
-    task.status = 'APROVADA'; // Atualiza o status para APROVADA
-    this.taskService.updateTask(task).subscribe({
+    // Crie um novo objeto com apenas o ID e o status desejado,
+    // exatamente como no onStatusChange
+    const updatedTaskPayload = {
+      id: task.id,
+      status: 'APROVADA', // O status que você quer enviar ao backend
+    };
+
+    this.taskService.updateTask(updatedTaskPayload).subscribe({ // Envia o novo payload
       next: (updatedTask) => {
-        // Reflete no front
-        this.task = updatedTask;
+        // Reflete no front-end com a resposta completa do backend, se necessário
+        this.task = updatedTask; // Isso só funciona se 'this.task' for a task atualmente exibida
+        // Se 'onResgatarServico' é chamado de um *ngFor, você pode precisar
+        // atualizar a tarefa na sua lista 'solicitacoesPorPagina'
+        Swal.fire('Sucesso', 'Serviço resgatado e status atualizado para APROVADA.', 'success');
+        // Opcional: Se 'onResgatarServico' também deve redirecionar, adicione a lógica de Router aqui.
+        // this.router.navigate(['/sua-rota-de-redirecionamento']);
       },
       error: (err) => {
         console.error('Falha ao resgatar serviço', err);
-        task.status = 'REJEITADA'; // Reverte o status se falhar
-        Swal.fire('Erro', 'Não foi possível atualizar o status', 'error');
+        // Aqui, você não precisa reverter task.status = 'REJEITADA';
+        // porque você não alterou o objeto `task` original antes de enviá-lo,
+        // e sim um novo payload.
+        Swal.fire('Erro', 'Não foi possível resgatar o serviço.', 'error');
       },
     });
   }
