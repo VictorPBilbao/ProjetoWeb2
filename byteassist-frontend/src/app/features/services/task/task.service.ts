@@ -120,4 +120,59 @@ export class TaskService {
     );
   }
 
+  // // ATUALIZAÇÃO DO MÉTODO updateTask:
+  // // Agora aceita um `Partial<Task>` para enviar apenas os campos que queremos atualizar.
+  // updateTask(taskId: string, updates: Partial<Task>): Observable<Task> {
+  //   console.log('Atualizando tarefa com ID:', updates);
+  //   if (!taskId) { // taskId é o id da tarefa, não o objeto inteiro.
+  //     throw new Error('ID da Task é obrigatório para updateTask');
+  //   }
+
+  //   const headers = new HttpHeaders({
+  //     'Content-Type': 'application/json',
+  //     'Authorization': `Bearer ${this.authService.getToken()}`
+  //   });
+
+  //   this.loadingService.show();
+  //   return this.http.patch<Task>(`${this.apiUrl}/${this.recordIdService.getId(taskId)}`, updates, { headers }).pipe( // Envia `updates` diretamente
+  //     finalize(() => this.loadingService.hide()),
+  //   );
+  // }
+
+
+  // NOVA FUNÇÃO: Para buscar TODAS as tarefas no sistema
+  public getAllTasks(status?: string, expand?: string | string[]): Observable<Task[]> {
+    const params: any = {};
+
+    if (status) {
+      params.status = status;
+    }
+
+    if (expand) {
+      params.expand = Array.isArray(expand) ? expand.join(',') : expand;
+    }
+
+    this.loadingService.show(); // Exibe o loading para esta requisição também
+    return this.http
+      .get<Task[]>(this.apiUrl, { // Este endpoint é para 'todas as tarefas'
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Authorization: `Bearer ${this.token}`,
+        },
+        params,
+      })
+      .pipe(
+        map((tasks) =>
+          tasks.map((task) => ({
+            ...task,
+            time: {
+              createdAt: new Date(task?.time?.createdAt ?? ''),
+              updatedAt: new Date(task?.time?.updatedAt ?? ''),
+            },
+          }))
+        ),
+        finalize(() => this.loadingService.hide()) // Esconde o loading após a requisição
+      );
+  }
+
 }

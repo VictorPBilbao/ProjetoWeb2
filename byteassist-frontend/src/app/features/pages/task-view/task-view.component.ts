@@ -210,61 +210,61 @@ export class TaskViewComponent implements OnInit {
   }
 
 
-  // //método que vai alterar de funcionário no front
-  // public onAssigneeChange(): void {
-  //   if (!this.task || !this.selectedAssignee) return;
-
-  //   // 1) Atualiza imediatamente no front-end
-  //   this.task.assignee = this.selectedAssignee;
-
-  //   // 2) Prepara o payload com novo assignee e status
-  //   const updatedTask: Task = {
-  //     ...this.task,
-  //     // // assignee: this.selectedAssignee,
-  //     status: 'REDIRECIONADA'
-  //   };
-
-  //   this.taskService.updateTask(updatedTask).subscribe({
-  //     next: (t) => {
-  //       // 3) Garante que task tenha o assignee e status corretos
-  //       this.task = {
-  //         ...t,
-  //         assignee: this.selectedAssignee,
-  //         status: 'REDIRECIONADA'
-  //       };
-  //       Swal.fire(
-  //         'Sucesso',
-  //         'Responsável atribuído e status atualizado para REDIRECIONADA.',
-  //         'success'
-  //       );
-  //     },
-  //     error: () => {
-  //       Swal.fire(
-  //         'Erro',
-  //         'Não foi possível atribuir responsável nem atualizar status.',
-  //         'error'
-  //       );
-  //       // opcional: reverter no front se quiser
-  //     }
-  //   });
-  // }
-
+  //método que vai alterar de funcionário no front
   public onAssigneeChange(): void {
-    if (!this.task || !this.selectedAssignee) {
-      return;
-    }
+    if (!this.task || !this.selectedAssignee) return;
 
-    const updatedTask = { ...this.task, assignee: this.selectedAssignee };
+    // 1) Atualiza imediatamente no front-end
+    this.task.assignee = this.selectedAssignee;
+
+    // 2) Prepara o payload com novo assignee e status
+    const updatedTask: Task = {
+      ...this.task,
+      // // assignee: this.selectedAssignee,
+      status: 'REDIRECIONADA'
+    };
+
     this.taskService.updateTask(updatedTask).subscribe({
       next: (t) => {
-        this.task = t; // Atualiza no front
-        Swal.fire('Sucesso', 'Responsável atribuído.', 'success');
+        // 3) Garante que task tenha o assignee e status corretos
+        this.task = {
+          ...t,
+          assignee: this.selectedAssignee,
+          status: 'REDIRECIONADA'
+        };
+        Swal.fire(
+          'Sucesso',
+          'Responsável atribuído e status atualizado para REDIRECIONADA.',
+          'success'
+        );
       },
       error: () => {
-        Swal.fire('Erro', 'Não foi possível atribuir responsável.', 'error');
-      },
+        Swal.fire(
+          'Erro',
+          'Não foi possível atribuir responsável nem atualizar status.',
+          'error'
+        );
+        // opcional: reverter no front se quiser
+      }
     });
   }
+
+  // public onAssigneeChange(): void {
+  //   if (!this.task || !this.selectedAssignee) {
+  //     return;
+  //   }
+
+  //   const updatedTask = { ...this.task, assignee: this.selectedAssignee };
+  //   this.taskService.updateTask(updatedTask).subscribe({
+  //     next: (t) => {
+  //       this.task = t; // Atualiza no front
+  //       Swal.fire('Sucesso', 'Responsável atribuído.', 'success');
+  //     },
+  //     error: () => {
+  //       Swal.fire('Erro', 'Não foi possível atribuir responsável.', 'error');
+  //     },
+  //   });
+  // }
 
   //método que vai redirecionar para a tela de orçamento
   public onOrcarSolicitacao(task: Task): void {
@@ -291,4 +291,5 @@ export class TaskViewComponent implements OnInit {
       }
     });
   }
+
 }
