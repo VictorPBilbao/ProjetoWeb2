@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Budget } from '../../shared/models/budget.model';
 import { Task } from '../../shared/models/task.model';
 import { LoadingService } from '../utils/loading.service';
 import { Observable } from 'rxjs';
@@ -35,7 +34,7 @@ export class BudgetService {
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
 
-    return this.http.get<Task[]>(`${this.apiUrlTask}/me?expand=budget, equipment, creator`, { headers });
+    return this.http.get<Task[]>(`${this.apiUrlTask}/me?expand=budget, equipment`, { headers });
   }
 
   getTaskWithBudget(taskId: string): Observable<Task> {

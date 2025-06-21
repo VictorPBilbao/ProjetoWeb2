@@ -1,27 +1,18 @@
-import { Component, LOCALE_ID } from '@angular/core';
-import { CommonModule, registerLocaleData } from '@angular/common';
+import { RecordIdPipe } from './../../shared/pipes/record-id.pipe';
+import { Component, inject, LOCALE_ID } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Task } from '../../shared/models/task.model';
-import { BudgetService } from '../../services/budget/budget.service';
 import { NotificationComponent } from '../../components/notification/notification.component';
 import { ActivatedRoute } from '@angular/router';
-import { User } from '../../shared/models/user.model';
-import ptBr from '@angular/common/locales/pt';
-
-registerLocaleData(ptBr);
+import { TaskService } from '../../services/task/task.service';
 
 @Component({
   selector: 'app-budget',
-  imports: [
-    CommonModule,
-    NotificationComponent,
-    FormsModule
-  ],
-  providers: [
-    { provide: LOCALE_ID, useValue: 'pt-BR' }
-  ],
+  imports: [CommonModule, NotificationComponent, FormsModule, RecordIdPipe],
+  providers: [{ provide: LOCALE_ID, useValue: 'pt-BR' }],
   templateUrl: './budget.component.html',
-  styleUrl: './budget.component.css'
+  styleUrl: './budget.component.css',
 })
 export class BudgetComponent {
   tasks: Task[] = [];
@@ -31,51 +22,42 @@ export class BudgetComponent {
   message: string = '';
   showNotification: boolean = false;
   rejectDescription: string = '';
-  constructor(
-    private readonly budgetService: BudgetService,
-    private readonly route: ActivatedRoute
-  ) { }
+
+  private readonly route = inject(ActivatedRoute);
+  private readonly taskService = inject(TaskService);
 
   ngOnInit(): void {
     const taskId = this.route.snapshot.paramMap.get('taskId');
 
     if (taskId) {
-      this.budgetService.getTaskWithBudget(taskId).subscribe({
-        next: (task: Task) => {
-          this.tasks = [task];
-        },
-        error: (error) => {
-          console.error('Erro ao carregar a tarefa:', error);
-          this.message = 'Erro ao carregar a tarefa.';
-          this.showNotification = true;
-        }
+      // If a taskId is provided, fetch the specific task with its budget
+      this.taskService.getTaskById(taskId, 'budget').subscribe({
+      next: (task: Task) => {
+        // Only add the task if it has a budget
+        this.tasks = task.budget ? [task] : [];
+      },
+      error: (error) => {
+        console.error('Erro ao carregar a tarefa:', error);
+        this.message = 'Erro ao carregar a tarefa.';
+        this.showNotification = true;
+      },
       });
     } else {
-      this.budgetService.getTasksWithBudgetFromClient().subscribe({
-        next: (tasks: Task[]) => {
-          this.tasks = tasks;
-        },
-        error: (error) => {
-          console.error('Erro ao carregar as tarefas:', error);
-          this.message = 'Erro ao carregar as tarefas.';
-          this.showNotification = true;
-        }
+      // If no taskId is provided, fetch all tasks with their budgets
+      this.taskService.getAllMyTasks('creator', undefined, 'budget').subscribe({
+      next: (tasks: Task[]) => {
+        // Only include tasks where budget is not null
+        this.tasks = tasks.filter(task => task.budget !== null);
+        // console log the tasks
+        console.log('Tarefas carregadas:', this.tasks);
+      },
+      error: (error) => {
+        console.error('Erro ao carregar as tarefas:', error);
+        this.message = 'Erro ao carregar as tarefas.';
+        this.showNotification = true;
+      }
       });
     }
-  }
-
-  getCreatorName(creator: User | string): string {
-    if (
-      creator &&
-      typeof creator === 'object' &&
-      'name' in creator &&
-      creator.name &&
-      typeof creator.name === 'object' &&
-      'first' in creator.name
-    ) {
-      return (creator.name as { first: string }).first;
-    }
-    return creator as string;
   }
 
   openBudget(index: number): void {
@@ -83,17 +65,16 @@ export class BudgetComponent {
   }
 
   async approvalBudget(id: string): Promise<void> {
-
     this.openModal();
   }
 
   async rejectBudget(id?: string): Promise<void> {
-
+    // log the id
+    console.log('Rejecting budget for task ID:', id);
     this.closeModal();
   }
 
   openRejectBudgetModal(id: string): void {
-
     this.openModal();
   }
 

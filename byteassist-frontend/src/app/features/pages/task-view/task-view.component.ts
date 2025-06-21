@@ -128,7 +128,7 @@ export class TaskViewComponent implements OnInit {
 
   // RF005: redireciona para tela de orçamentos
   onMostrarOrcamento(task: Task): void {
-    this.router.navigate(['/orcamentos', task.id]);
+    this.router.navigate(['/orcamentos', this.route.snapshot.paramMap.get('taskId')]);
   }
 
   onResgatarServico(task: Task): void {
@@ -137,8 +137,6 @@ export class TaskViewComponent implements OnInit {
       return;
     }
 
-    const now = new Date();
-    // Atualiza status no backend
     task.status = 'APROVADA'; // Atualiza o status para APROVADA
     this.taskService.updateTask(task).subscribe({
       next: (updatedTask) => {
@@ -162,24 +160,29 @@ export class TaskViewComponent implements OnInit {
       confirmButtonText: 'Ir para Pagamentos',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.router.navigate(['/pagamentos', this.recordidService.getId(task.id ?? '')]);
+        this.router.navigate([
+          '/pagamentos',
+          this.recordidService.getId(task.id ?? ''),
+        ]);
       }
     });
   }
 
   //método que vai alterar de funcionário no front
   public onAssigneeChange(): void {
-    if (!this.task || !this.selectedAssignee) return;
+    if (!this.task || !this.selectedAssignee) {
+      return;
+    }
 
     const updatedTask = { ...this.task, assignee: this.selectedAssignee };
     this.taskService.updateTask(updatedTask).subscribe({
       next: (t) => {
-        this.task = t;            // Atualiza no front
+        this.task = t; // Atualiza no front
         Swal.fire('Sucesso', 'Responsável atribuído.', 'success');
       },
       error: () => {
         Swal.fire('Erro', 'Não foi possível atribuir responsável.', 'error');
-      }
+      },
     });
   }
 
@@ -187,5 +190,4 @@ export class TaskViewComponent implements OnInit {
   public onOrcarSolicitacao(task: Task): void {
     this.router.navigate(['funcionario/orcamentos/', task.id]);
   }
-
 }

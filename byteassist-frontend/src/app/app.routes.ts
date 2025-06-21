@@ -33,7 +33,7 @@ export const routes: Routes = [
   { path: 'ajuda', component: HelpComponent },
   // { path: 'pagamentos', component: PaymentComponent },
   { path: 'pagamentos/:taskId', component: PaymentComponent },
-  { path: 'funcionario/orcamentos/', component: BudgetingComponent },
+  { path: 'funcionario/orcamentos', component: BudgetingComponent },
   { path: 'funcionario/orcamentos/:taskId', component: BudgetingComponent },
   { path: 'funcionario/solicitacoes', component: RequestsComponent },
   { path: 'funcionario/cadastros', component: RegistrationComponent },
