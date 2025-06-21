@@ -102,7 +102,7 @@ export class TaskService {
     }
 
     const taskPayload = {
-      // assignee: task.assignee,
+      assignee: task.assignee,
       // creator: task.creator,
       // equipment: task.equipment.id,
       // equipment: equipmentId,
