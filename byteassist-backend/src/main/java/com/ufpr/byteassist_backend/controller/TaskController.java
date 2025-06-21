@@ -34,7 +34,7 @@ public class TaskController {
     }
 
     @GetMapping()
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<List<Task>> getAllTasks(
             @RequestParam(required = false) List<String> expand) {
         return taskService.getAllTasks(expand);
