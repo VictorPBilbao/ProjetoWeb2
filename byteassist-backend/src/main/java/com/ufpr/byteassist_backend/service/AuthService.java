@@ -114,6 +114,7 @@ public class AuthService implements UserDetailsService {
         User newUser = new User();
         newUser.setEmail(user.getEmail());
         newUser.setPassword(hashedPassword);
+        newUser.setRole(user.getRole());
 
         // Cria a pessoa associada e o usuário em sequência
         personRepo.createPerson(user.getPerson(), username);
