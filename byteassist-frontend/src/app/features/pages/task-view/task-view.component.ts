@@ -15,6 +15,7 @@ import { Comment } from '../../shared/models/comment.model';
 import { RecordIdPipe } from './../../shared/pipes/record-id.pipe';
 import { AuthService } from '../../services/auth/auth.service';
 import Swal from 'sweetalert2';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
   selector: 'app-task-view',
@@ -31,6 +32,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./task-view.component.css'],
 })
 export class TaskViewComponent implements OnInit {
+
   task: Task | null = null;
   equipment: Equipment | null = null;
   budget: Budget | null = null;
@@ -41,6 +43,8 @@ export class TaskViewComponent implements OnInit {
 
   public funcionarios: string[] = [];
   public selectedAssignee: string = '';
+  public rawFuncionarios: string[] = [];    // contém ["User:tecnico1", …]
+  public displayFuncionarios: string[] = []; // contém ["tecnico1", …]
 
   private readonly route = inject(ActivatedRoute);
   private readonly taskService = inject(TaskService);
@@ -48,10 +52,12 @@ export class TaskViewComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
   private readonly recordidService = inject(RecordidService);
+  private readonly userService = inject(UserService);
 
   username: string = this.authService.getUsername() ?? '';
 
   ngOnInit(): void {
+
     const taskId = this.route.snapshot.paramMap.get('taskId');
     if (taskId) {
       this.taskService.getTaskById(taskId, 'equipment').subscribe({
@@ -79,6 +85,21 @@ export class TaskViewComponent implements OnInit {
       error: () => {
         console.error('Error fetching comments');
       },
+    });
+
+    // 3) aqui, chame a API de funcionários e preencha o combo
+    this.userService.getAllEmployees().subscribe({
+      next: (rawList) => {
+        this.rawFuncionarios = rawList;
+
+        // opcional: prepara uma lista só para exibir, mas não afeta o value
+        this.displayFuncionarios = rawList.map(raw =>
+          raw.includes(':') ? raw.split(':')[1] : raw
+        );
+      },
+      error: (err) => {
+        console.error('Não foi possível buscar funcionários', err);
+      }
     });
   }
 
@@ -167,18 +188,72 @@ export class TaskViewComponent implements OnInit {
     });
   }
 
-  //método que vai alterar de funcionário no front
+
+  // //método que vai alterar de funcionário no front
+  // public onAssigneeChange(): void {
+  //   if (!this.task || !this.selectedAssignee) return;
+
+  //   // 1) Atualiza imediatamente no front-end
+  //   this.task.assignee = this.selectedAssignee;
+
+  //   // 2) Prepara o payload com novo assignee e status
+  //   const updatedTask: Task = {
+  //     ...this.task,
+  //     // // assignee: this.selectedAssignee,
+  //     status: 'REDIRECIONADA'
+  //   };
+
+  //   this.taskService.updateTask(updatedTask).subscribe({
+  //     next: (t) => {
+  //       // 3) Garante que task tenha o assignee e status corretos
+  //       this.task = {
+  //         ...t,
+  //         assignee: this.selectedAssignee,
+  //         status: 'REDIRECIONADA'
+  //       };
+  //       Swal.fire(
+  //         'Sucesso',
+  //         'Responsável atribuído e status atualizado para REDIRECIONADA.',
+  //         'success'
+  //       );
+  //     },
+  //     error: () => {
+  //       Swal.fire(
+  //         'Erro',
+  //         'Não foi possível atribuir responsável nem atualizar status.',
+  //         'error'
+  //       );
+  //       // opcional: reverter no front se quiser
+  //     }
+  //   });
+  // }
+
   public onAssigneeChange(): void {
     if (!this.task || !this.selectedAssignee) return;
 
-    const updatedTask = { ...this.task, assignee: this.selectedAssignee };
+    // 1) Prepara o objeto completo
+    const updatedTask: Task = {
+      ...this.task,
+      assignee: this.selectedAssignee,
+      status: 'REDIRECIONADA'
+    };
+
+    // 2) Chama o serviço com o Task inteiro
     this.taskService.updateTask(updatedTask).subscribe({
       next: (t) => {
-        this.task = t;            // Atualiza no front
-        Swal.fire('Sucesso', 'Responsável atribuído.', 'success');
+        this.task = t; // assume que o back-end retorna tudo direitinho
+        Swal.fire(
+          'Sucesso',
+          'Responsável atribuído e status atualizado para REDIRECIONADA.',
+          'success'
+        );
       },
       error: () => {
-        Swal.fire('Erro', 'Não foi possível atribuir responsável.', 'error');
+        Swal.fire(
+          'Erro',
+          'Não foi possível atribuir responsável nem atualizar status.',
+          'error'
+        );
       }
     });
   }
