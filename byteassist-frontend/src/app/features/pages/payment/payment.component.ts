@@ -81,7 +81,7 @@ export class PaymentComponent implements OnInit {
   }
 
   submitForm() {
-    this.isLoading = true; // Ativa o estado de loading (spinner aparece)
+    this.isLoading = true;
 
     this.taskService
       .updateTask({
@@ -91,14 +91,14 @@ export class PaymentComponent implements OnInit {
       .subscribe({
         next: () => {
           console.log('Task atualizada com sucesso no backend.');
-          // REMOVA O setTimeout AQUI
-          this.isLoading = false; // Desativa o estado de loading (spinner some)
-          this.isModalVisible = true; // Exibe o modal de confirmação (aparece imediatamente após o loading sumir)
+
+          this.isLoading = false;
+          this.isModalVisible = true;
         },
         error: (error) => {
           console.error('Erro ao atualizar a task:', error);
-          this.isLoading = false; // Desativa o loading em caso de erro também
-          // Você pode querer exibir uma mensagem de erro ou outro modal aqui.
+          this.isLoading = false;
+
         },
       });
   }
