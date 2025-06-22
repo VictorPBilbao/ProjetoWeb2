@@ -54,12 +54,14 @@ export class TaskViewComponent implements OnInit {
   error = false;
   comments: Comment[] = [];
   newCommentText: string = '';
+  showManutencaoModal: boolean = false;
+  descricaoManutencao: string = '';
+  orientacoesCliente: string = '';
 
   public funcionarios: string[] = [];
   public selectedAssignee: string = '';
   public rawFuncionarios: string[] = []; // contém ["User:tecnico1", …]
   public displayFuncionarios: string[] = []; // contém ["tecnico1", …]
-
   private readonly route = inject(ActivatedRoute);
   private readonly taskService = inject(TaskService);
   private readonly commentService = inject(CommentService);
@@ -140,6 +142,72 @@ export class TaskViewComponent implements OnInit {
     }
   }
 
+  // Métodos para a modal de manutenção
+  openManutencaoModal(): void {
+    this.showManutencaoModal = true;
+    // Limpar campos ao abrir a modal
+    this.descricaoManutencao = '';
+    this.orientacoesCliente = '';
+  }
+
+  closeManutencaoModal(): void {
+    this.showManutencaoModal = false;
+  }
+
+  saveManutencao(): void {
+    if (!this.descricaoManutencao.trim() || !this.task) {
+      Swal.fire('Atenção', 'A descrição da manutenção é obrigatória.', 'warning');
+      return;
+    }
+
+    const taskId = this.route.snapshot.paramMap.get('taskId');
+    if (!taskId) {
+      console.error('Task ID não encontrado para salvar a manutenção.');
+      Swal.fire('Erro', 'ID da tarefa não encontrado.', 'error');
+      return;
+    }
+
+    let commentContent = `**Manutenção Realizada:**\n\n${this.descricaoManutencao.trim()}`;
+
+    if (this.orientacoesCliente.trim()) {
+      commentContent += `\n\n**Orientações para o Cliente:**\n\n${this.orientacoesCliente.trim()}`;
+    }
+
+    const newComment: Comment = {
+      out: 'Task:' + taskId,
+      comment: commentContent,
+    };
+
+    this.commentService.createComment(newComment).subscribe({
+      next: (createdComment) => {
+        this.comments.push(createdComment);
+        this.closeManutencaoModal();
+        Swal.fire('Sucesso', 'Manutenção registrada com sucesso como comentário!', 'success');
+
+        ///Atualiza o status da tarefa para 'ARRUMADA'
+        const updatedTaskPayload = {
+          id: this.task?.id,
+          status: 'ARRUMADA',
+        };
+
+        this.taskService.updateTask(updatedTaskPayload).subscribe({
+          next: (updatedTask) => {
+            this.task = updatedTask; // Atualiza a tarefa no frontend com a resposta do backend
+            Swal.fire('Sucesso', 'Status da tarefa atualizado para ARRUMADA.', 'success');
+          },
+          error: (err) => {
+            console.error('Erro ao atualizar status para ARRUMADA:', err);
+            Swal.fire('Erro', 'Não foi possível atualizar o status da tarefa para ARRUMADA.', 'error');
+          },
+        });
+      },
+      error: (err) => {
+        console.error('Erro ao registrar manutenção:', err);
+        Swal.fire('Erro', 'Não foi possível registrar a manutenção.', 'error');
+      },
+    });
+  }
+
   // badgeClass(): controla as cores do badge
   badgeClass(status: string | null | undefined): string {
     switch (status) {
@@ -198,28 +266,22 @@ export class TaskViewComponent implements OnInit {
       return;
     }
 
-    // Crie um novo objeto com apenas o ID e o status desejado,
-    // exatamente como no onStatusChange
     const updatedTaskPayload = {
       id: task.id,
       status: 'APROVADA', // O status que você quer enviar ao backend
     };
 
-    this.taskService.updateTask(updatedTaskPayload).subscribe({ // Envia o novo payload
+    this.taskService.updateTask(updatedTaskPayload).subscribe({
       next: (updatedTask) => {
-        // Reflete no front-end com a resposta completa do backend, se necessário
-        this.task = updatedTask; // Isso só funciona se 'this.task' for a task atualmente exibida
-        // Se 'onResgatarServico' é chamado de um *ngFor, você pode precisar
-        // atualizar a tarefa na sua lista 'solicitacoesPorPagina'
+
+        this.task = updatedTask;
         Swal.fire('Sucesso', 'Serviço resgatado e status atualizado para APROVADA.', 'success');
-        // Opcional: Se 'onResgatarServico' também deve redirecionar, adicione a lógica de Router aqui.
+
         // this.router.navigate(['/sua-rota-de-redirecionamento']);
       },
       error: (err) => {
         console.error('Falha ao resgatar serviço', err);
-        // Aqui, você não precisa reverter task.status = 'REJEITADA';
-        // porque você não alterou o objeto `task` original antes de enviá-lo,
-        // e sim um novo payload.
+
         Swal.fire('Erro', 'Não foi possível resgatar o serviço.', 'error');
       },
     });
@@ -244,6 +306,18 @@ export class TaskViewComponent implements OnInit {
 
   public onAssigneeChange(): void {
     if (!this.task || !this.selectedAssignee) {
+      return;
+    }
+
+    const selectedUsername = this.recordidService.getId(this.selectedAssignee);
+
+    if (selectedUsername === this.username) {
+      Swal.fire(
+        'Atenção',
+        'Você não pode redirecionar a solicitação a si mesmo. Selecione outro responsável.',
+        'warning'
+      );
+
       return;
     }
 
@@ -291,4 +365,66 @@ export class TaskViewComponent implements OnInit {
       },
     });
   }
+
+  onFinalizarServico(task: Task): void {
+    if (!task.id) {
+      console.error('Task sem ID, impossível finalizar.');
+      Swal.fire('Erro', 'ID da tarefa não encontrado.', 'error');
+      return;
+    }
+
+    const updatedTaskPayload = {
+      id: task.id,
+      status: 'FINALIZADA', // Novo status
+    };
+
+    this.taskService.updateTask(updatedTaskPayload).subscribe({
+      next: (updatedTask) => {
+        this.task = updatedTask; // Atualiza a tarefa no frontend
+        Swal.fire('Sucesso', 'Status da tarefa atualizado para FINALIZADA.', 'success');
+      },
+      error: (err) => {
+        console.error('Falha ao finalizar serviço:', err);
+        Swal.fire('Erro', 'Não foi possível finalizar o serviço.', 'error');
+      },
+    });
+  }
+
+  public onAssignToMe(): void {
+    if (!this.task || !this.task.id) {
+      console.error('Task ou Task ID não encontrado para atribuição.');
+      Swal.fire('Erro', 'Tarefa não disponível para atribuição.', 'error');
+      return;
+    }
+
+    if (this.task.assignee && this.task.assignee.trim() !== '') {
+      Swal.fire(
+        'Atenção',
+        'Já existe um responsável atribuído. ' +
+        'Use o botão "Redirecionar" para transferi-la.',
+        'warning'
+      );
+      return;
+    }
+
+    const assigneeValue = `User:${this.username}`; // Formato Record ID para o usuário logado
+
+    const updatedTaskPayload = {
+      id: this.task.id,
+      assignee: assigneeValue, // Atribui a si mesmo
+    };
+
+    this.taskService.updateTask(updatedTaskPayload).subscribe({
+      next: (t) => {
+        this.task = t; // Atualiza a task no front com os dados retornados
+        this.selectedAssignee = assigneeValue; // Atualiza o combobox para refletir a mudança
+        Swal.fire('Sucesso', 'Tarefa atribuída a você.', 'success');
+      },
+      error: (err) => {
+        console.error('Erro ao atribuir tarefa a si mesmo:', err);
+        Swal.fire('Erro', 'Não foi possível atribuir a tarefa a você.', 'error');
+      },
+    });
+  }
+
 }

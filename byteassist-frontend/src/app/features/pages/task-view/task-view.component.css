@@ -96,3 +96,143 @@
   width: 180px;       /* define largura fixa */
   display: inline-block; /* evita 100% width */
 }
+
+/* Estilos para a sobreposição (overlay) da modal */
+.maintenance-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Fundo escuro semi-transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Garante que a modal fique acima de outros elementos */
+}
+
+/* Estilos para o conteúdo da modal */
+.maintenance-modal-content {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 90%; /* Largura padrão */
+  max-width: 600px; /* Largura máxima */
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #888;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.close-button:hover {
+  color: #555;
+}
+
+.modal-body {
+  flex-grow: 1; /* Permite que o corpo ocupe o espaço restante */
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block; /* Garante que o label ocupe sua própria linha */
+  color: #555;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box; /* Inclui padding e borda no width */
+}
+
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+  margin-top: auto; /* Empurra o footer para o final se houver espaço */
+}
+
+/* Ajustes para botões */
+.btn {
+  padding: 8px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: #fff;
+  border: 1px solid #6c757d;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+  border: 1px solid #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #004085;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+  .maintenance-modal-content {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .modal-title {
+    font-size: 1.2rem;
+  }
+}
