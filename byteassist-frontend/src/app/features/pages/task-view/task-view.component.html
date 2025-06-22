@@ -72,13 +72,22 @@
           <i class="bi bi-person-badge"></i>
           <strong>Responsável:</strong>
           {{ task.assignee || "Ainda não atribuído" }}
+
+          <button
+            class="btn border-0 shadow-none text-primary btn-sm ms-2"
+            (click)="onAssignToMe()"
+            title="Atribuir esta solicitação a mim"
+          >
+            <i class="bi bi-person-check me-1"></i>
+            <strong>Atribuir</strong>
+          </button>
         </span>
       </div>
 
       <!-- Combobox para atribuir responsável -->
       <div class="mt-2">
         <label for="assigneeSelect" class="form-label">
-          <i class="bi bi-person-plus"></i> Atribuir responsável:
+          <i class="bi bi-person-plus"></i> Redirecionar:
         </label>
         <select
           id="assigneeSelect"
@@ -138,6 +147,23 @@
       >
         Pagar Serviço
       </button>
+
+      <!-- <button
+        *ngIf="task.status === 'ARRUMADA'"
+        class="btn btn-outline-warning me-2"
+        (click)="onPagarServico(task)"
+      >
+        Pagar Serviço
+      </button> -->
+
+      <button
+        *ngIf="task.status === 'PAGA'"
+        class="btn btn-success mt-2"
+        (click)="onFinalizarServico(task)"
+        title="Finalizar Solicitação"
+      >
+        <i class="bi bi-check-circle me-1"></i> Finalizar
+      </button>
     </div>
 
     <div class="equipment-info card p-3 ms-md-4 mt-3 mt-md-0">
@@ -160,7 +186,7 @@
     <p>{{ task.summary || "Sem descrição detalhada." }}</p>
   </div>
 
-  <!-- NOVO: Modal de Manutenção -->
+  <!--Modal de Manutenção -->
   <div *ngIf="showManutencaoModal" class="maintenance-modal-overlay">
     <div class="maintenance-modal-content">
       <div class="modal-header">
@@ -217,7 +243,7 @@
       </div>
     </div>
   </div>
-  <!-- FIM NOVO: Modal de Manutenção -->
+  <!-- Modal de Manutenção -->
 
   <div class="task-comments">
     <h4>Comentários</h4>
