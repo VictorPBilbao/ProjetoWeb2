@@ -47,57 +47,6 @@
             {{ task.status }}
           </span>
         </ng-template>
-
-        <!-- <span
-          class="d-inline-block rounded-pill px-2 py-1"
-          [ngClass]="{
-            'bg-primary': task.status === 'ABERTA',
-            'bg-info': task.status === 'EM ANDAMENTO',
-            'bg-warning': task.status === 'PENDENTE',
-            'bg-secondary': task.status === 'AGUARDANDO_APROVACAO',
-            'bg-success': task.status === 'FINALIZADA',
-            'bg-danger': task.status === 'CANCELADA',
-            'bg-light': ![
-              'ABERTA',
-              'EM ANDAMENTO',
-              'PENDENTE',
-              'AGUARDANDO_APROVACAO',
-              'FINALIZADA',
-              'CANCELADA'
-            ].includes(task.status ?? '')
-          }"
-        >
-          <select
-            class="form-select form-select-sm w-auto border-0 bg-transparent"
-            [ngClass]="{
-              'text-white':
-                task.status === 'ABERTA' ||
-                task.status === 'AGUARDANDO_APROVACAO' ||
-                task.status === 'FINALIZADA' ||
-                task.status === 'CANCELADA',
-              'text-dark':
-                task.status === 'EM ANDAMENTO' ||
-                task.status === 'PENDENTE' ||
-                ![
-                  'ABERTA',
-                  'EM ANDAMENTO',
-                  'PENDENTE',
-                  'AGUARDANDO_APROVACAO',
-                  'FINALIZADA',
-                  'CANCELADA'
-                ].includes(task.status ?? '')
-            }"
-            [(ngModel)]="task.status"
-            aria-label="Status da Tarefa"
-          >
-            @for (s of [ 'ABERTA', 'EM ANDAMENTO', 'PENDENTE',
-            'AGUARDANDO_APROVACAO', 'FINALIZADA', 'CANCELADA' ]; track s) {
-            <option [value]="s" class="text-dark">
-              {{ s }}
-            </option>
-            }
-          </select>
-        </span> -->
       </div>
       <div class="task-meta mb-2">
         <span class="text-muted me-2"
@@ -138,10 +87,8 @@
           name="selectedAssignee"
           (ngModelChange)="onAssigneeChange()"
         >
-          <!-- placeholder -->
           <option value="" disabled selected>Selecione…</option>
 
-          <!-- opções vindas da API (rawFuncionarios e displayFuncionarios) -->
           <option
             *ngFor="let idx of rawFuncionarios; let i = index"
             [value]="idx"
@@ -151,7 +98,14 @@
         </select>
       </div>
 
-      <!-- task aberta o funcionario pode orçar -->
+      <button
+        *ngIf="task.status === 'APROVADA' || task.status === 'REDIRECIONADA'"
+        class="btn btn-outline-info btn-sm mt-2 mb-2"
+        (click)="openManutencaoModal()"
+      >
+        <i class="bi bi-gear me-1"></i> Manutenção
+      </button>
+
       <button
         *ngIf="task.status === 'ABERTA'"
         class="btn btn-outline-secondary"
@@ -161,7 +115,6 @@
         <i class="bi bi-receipt me-1"></i> Orçar
       </button>
 
-      <!-- a) ORÇADA: Ver orçamento -->
       <button
         *ngIf="task.status === 'ORÇADA'"
         class="btn btn-outline-primary me-2"
@@ -170,7 +123,6 @@
         Ver Orçamento
       </button>
 
-      <!-- c) REJEITADA: Resgatar Serviço -->
       <button
         *ngIf="task.status === 'REJEITADA'"
         class="btn btn-outline-success me-2"
@@ -179,7 +131,6 @@
         Resgatar Serviço
       </button>
 
-      <!-- d) ARRUMADA: Pagar Serviço -->
       <button
         *ngIf="task.status === 'ARRUMADA'"
         class="btn btn-outline-warning me-2"
@@ -208,6 +159,65 @@
     <h4>Descrição</h4>
     <p>{{ task.summary || "Sem descrição detalhada." }}</p>
   </div>
+
+  <!-- NOVO: Modal de Manutenção -->
+  <div *ngIf="showManutencaoModal" class="maintenance-modal-overlay">
+    <div class="maintenance-modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Efetuar Manutenção</h5>
+        <button
+          type="button"
+          class="close-button"
+          (click)="closeManutencaoModal()"
+        >
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group mb-3">
+          <label for="descricaoManutencao">Descrição da Manutenção:</label>
+          <textarea
+            id="descricaoManutencao"
+            class="form-control"
+            rows="5"
+            [(ngModel)]="descricaoManutencao"
+            name="descricaoManutencao"
+            required
+            placeholder="Descreva o que foi feito na manutenção."
+          ></textarea>
+        </div>
+        <div class="form-group mb-3">
+          <label for="orientacoesCliente">Orientações para o Cliente:</label>
+          <textarea
+            id="orientacoesCliente"
+            class="form-control"
+            rows="5"
+            [(ngModel)]="orientacoesCliente"
+            name="orientacoesCliente"
+            placeholder="Forneça orientações importantes para o cliente."
+          ></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="closeManutencaoModal()"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="!descricaoManutencao.trim()"
+          (click)="saveManutencao()"
+        >
+          Salvar Manutenção
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- FIM NOVO: Modal de Manutenção -->
 
   <div class="task-comments">
     <h4>Comentários</h4>

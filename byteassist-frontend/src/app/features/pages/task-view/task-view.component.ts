@@ -54,12 +54,14 @@ export class TaskViewComponent implements OnInit {
   error = false;
   comments: Comment[] = [];
   newCommentText: string = '';
+  showManutencaoModal: boolean = false;
+  descricaoManutencao: string = '';
+  orientacoesCliente: string = '';
 
   public funcionarios: string[] = [];
   public selectedAssignee: string = '';
   public rawFuncionarios: string[] = []; // contém ["User:tecnico1", …]
   public displayFuncionarios: string[] = []; // contém ["tecnico1", …]
-
   private readonly route = inject(ActivatedRoute);
   private readonly taskService = inject(TaskService);
   private readonly commentService = inject(CommentService);
@@ -138,6 +140,73 @@ export class TaskViewComponent implements OnInit {
         },
       });
     }
+  }
+
+
+  // Métodos para a modal de manutenção
+  openManutencaoModal(): void {
+    this.showManutencaoModal = true;
+    // Limpar campos ao abrir a modal
+    this.descricaoManutencao = '';
+    this.orientacoesCliente = '';
+  }
+
+  closeManutencaoModal(): void {
+    this.showManutencaoModal = false;
+  }
+
+  saveManutencao(): void {
+    if (!this.descricaoManutencao.trim() || !this.task) {
+      Swal.fire('Atenção', 'A descrição da manutenção é obrigatória.', 'warning');
+      return;
+    }
+
+    const taskId = this.route.snapshot.paramMap.get('taskId');
+    if (!taskId) {
+      console.error('Task ID não encontrado para salvar a manutenção.');
+      Swal.fire('Erro', 'ID da tarefa não encontrado.', 'error');
+      return;
+    }
+
+    let commentContent = `**Manutenção Realizada:**\n\n${this.descricaoManutencao.trim()}`;
+
+    if (this.orientacoesCliente.trim()) {
+      commentContent += `\n\n**Orientações para o Cliente:**\n\n${this.orientacoesCliente.trim()}`;
+    }
+
+    const newComment: Comment = {
+      out: 'Task:' + taskId,
+      comment: commentContent,
+    };
+
+    this.commentService.createComment(newComment).subscribe({
+      next: (createdComment) => {
+        this.comments.push(createdComment);
+        this.closeManutencaoModal();
+        Swal.fire('Sucesso', 'Manutenção registrada com sucesso como comentário!', 'success');
+
+        ///Atualiza o status da tarefa para 'ARRUMADA'
+        const updatedTaskPayload = {
+          id: this.task?.id,
+          status: 'ARRUMADA',
+        };
+
+        this.taskService.updateTask(updatedTaskPayload).subscribe({
+          next: (updatedTask) => {
+            this.task = updatedTask; // Atualiza a tarefa no frontend com a resposta do backend
+            Swal.fire('Sucesso', 'Status da tarefa atualizado para ARRUMADA.', 'success');
+          },
+          error: (err) => {
+            console.error('Erro ao atualizar status para ARRUMADA:', err);
+            Swal.fire('Erro', 'Não foi possível atualizar o status da tarefa para ARRUMADA.', 'error');
+          },
+        });
+      },
+      error: (err) => {
+        console.error('Erro ao registrar manutenção:', err);
+        Swal.fire('Erro', 'Não foi possível registrar a manutenção.', 'error');
+      },
+    });
   }
 
   // badgeClass(): controla as cores do badge
