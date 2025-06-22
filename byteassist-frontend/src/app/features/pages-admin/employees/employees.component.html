@@ -1,0 +1,65 @@
+<section class="employees-section">
+  <div class="main-container">
+    <div class="title-box">
+      <h2 class="title">FUNCIONÁRIOS</h2>
+    </div>
+
+    <p class="subtitle">
+      Aqui você pode visualizar, criar e gerenciar funcionários de forma prática.
+    </p>
+
+    <button class="new-request">Novo Funcionário</button>
+
+    <div class="sort-buttons">
+      <button class="sort-btn">↑ Nome Crescente</button>
+      <button class="sort-btn">↓ Nome Decrescente</button>
+    </div>
+
+    <div class="table-container">
+      <table class="employee-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Telefone</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td>{{ user.id }}</td>
+            <td>{{ user.person.name.first }} {{ user.person.name.last }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.person.phone }}</td>
+            <td>
+              <span
+                class="status"
+                [ngClass]="{
+                  'status-ativa': user.isActive,
+                  'status-inativa': !user.isActive
+                }"
+              >
+                {{ user.isActive ? 'Ativa' : 'Inativo' }}
+              </span>
+            </td>
+            <td *ngIf="user.id | getRecordId as userId">
+              <button class="view-btn" title="Visualizar" (click)="visualizeUser(userId)">
+                <i class="fa fa-eye"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination">
+      <button class="pagination-btn">Anterior</button>
+      <span>Página 1 de 6</span>
+      <button class="pagination-btn">Próxima</button>
+    </div>
+
+    <app-notification *ngIf="showNotification" [message]="message"></app-notification>
+  </div>
+</section>

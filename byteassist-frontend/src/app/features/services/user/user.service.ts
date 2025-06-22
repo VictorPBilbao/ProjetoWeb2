@@ -27,7 +27,10 @@ export class UserService {
       'Content-Type': 'application/json',
     });
 
+    const isCreatingByAdmin = this.getUserRule() === 'RULE_ADMIN'
+
     const newUserPayload = {
+      ...(isCreatingByAdmin ? { role: "Employee" } : {}),
       password: user.password,
       email: user.email,
       person: {
@@ -130,6 +133,28 @@ export class UserService {
 
   getUser(): Observable<User> {
     return this.getPersonByToken<User>('person');
+  }
+
+
+  // Busca o usuario pelo id
+  getUserById(id: string): Observable<User> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.authService.getToken()}`, // Adiciona o token no header
+    });
+
+    this.loadingService.show(); // Exibe o loading
+
+    return this.http
+      .get<User>(`${this.apiUrl}/api/user/${id}?expand=person`, { headers })
+      .pipe(
+        finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
+        catchError((err) => {
+          return throwError(
+            () => new Error('Erro ao buscar usuário: ' + err.message)
+          );
+        })
+      );
   }
 
   updateUser(user: User): Observable<User> {
@@ -269,6 +294,33 @@ export class UserService {
         catchError((err) => {
           return throwError(
             () => new Error('Erro ao buscar funcionários: ' + err.message)
+          );
+        })
+      );
+  }
+
+  getAllUsersByRole(role: string): Observable<User[]> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.authService.getToken()}`,
+    });
+
+    this.loadingService.show(); // Exibe o loading
+
+    return this.http.get<User[]>(`${this.apiUrl}/api/user?expand=person`, { headers })
+      .pipe(
+        map((users: any[]) =>
+        users
+          .filter(user => user.role === role)
+          .map(user => ({
+            ...user,
+            isActive: user.active // converte active → isActive
+          }))
+        ),// Filtra os usuários pela função
+        finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
+        catchError((err) => {
+          return throwError(
+            () => new Error('Erro ao buscar usuários por função: ' + err.message)
           );
         })
       );

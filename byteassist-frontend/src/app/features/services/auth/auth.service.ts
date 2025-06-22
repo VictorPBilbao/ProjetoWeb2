@@ -71,24 +71,4 @@ export class AuthService {
     }
     return null;
   }
-
-  // /** Retorna o array de roles do token JWT, ou [] se não houver */
-  // public getUserRoles(): string[] {
-  //   const token = this.getToken();
-  //   if (!token) return [];
-  //   try {
-  //     const payload: any = JSON.parse(atob(token.split('.')[1]));
-  //     // ajuste aqui se o claim for `authorities` ou outro nome
-  //     return payload.roles ?? payload.authorities ?? [];
-  //   } catch {
-  //     return [];
-  //   }
-  // }
-
-  // /** Retorna true se o usuário tiver o role informado */
-  // public hasRole(role: string): boolean {
-  //   return this.getUserRoles().includes(role);
-  // }
-
-
 }

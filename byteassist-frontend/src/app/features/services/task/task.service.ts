@@ -164,7 +164,7 @@ export class TaskService {
       );
   }
 
-  public getAllTasks(expand?: string | string[]): Observable<Task[]> {
+  public getAllTasks2(expand?: string | string[]): Observable<Task[]> {
     const params: any = {};
 
     if (expand) {

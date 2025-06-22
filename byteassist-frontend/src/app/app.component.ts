@@ -38,4 +38,9 @@ export class AppComponent {
     const currentRoute = this.router.url;
     return !(currentRoute.includes('login') || currentRoute.includes('cadastro'));
   }
+
+  shouldShowSidebar(): boolean {
+    const currentRoute = this.router.url;
+    return !(currentRoute.includes('login') || currentRoute.includes('cadastro') || currentRoute.includes('/'));
+  }
 }

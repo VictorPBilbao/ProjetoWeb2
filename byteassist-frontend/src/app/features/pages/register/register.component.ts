@@ -32,10 +32,16 @@ export class RegisterComponent {
   isCepValid: boolean = true;
   isUsernameAvailable: boolean = true;
   isEmailAvailable: boolean = true;
+  isAdmin: boolean = false;
 
   constructor(
     private router: Router,
     private userService: UserService) {}
+
+  ngOnInit(): void {
+    // Verifica se o usuário é um administrador
+    this.isAdmin = this.userService.getUserRule() === 'RULE_ADMIN';
+  }
 
   onSubmit() {
     this.showNotification = false; // Reseta a notificação ao submeter o formulário
@@ -58,7 +64,11 @@ export class RegisterComponent {
           if (response) {
             this.message = 'Cadastro realizado com sucesso!';
             this.showNotification = true;
-            this.router.navigate(['/login']);
+            if (!this.isAdmin) {
+              this.router.navigate(['/login']);
+            } else {
+              this.router.navigate(['/admin/funcionarios']);
+            }
           } else {
             this.message = 'Erro ao fazer cadastro. Verifique sua conexão ou tente novamente mais tarde.';
           }

@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common'; // Importa o CommonModule para u
 import { NotificationComponent } from '../../components/notification/notification.component'; // Importa o componente de notificação
 import { tap, concatMap } from 'rxjs/operators';
 import { AuthService } from '../../services/auth/auth.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../../services/user/user.service';
 
 @Component({
@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private auth: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     private userService: UserService) { }
 
   ngOnInit(): void {
@@ -34,6 +35,11 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],
+    });
+
+    this.route.queryParamMap.subscribe(params => {
+      this.message = params.get('error') ?? '';
+      this.showNotification = !!this.message;
     });
   }
 
@@ -62,9 +68,14 @@ export class LoginComponent implements OnInit {
       ).subscribe({
         next: () => {
           const userRule = this.userService.getUserRule();
-          (userRule === 'RULE_EMPLOYEE' || userRule === 'RULE_ADMIN') ?
-            this.router.navigate(['/funcionario/solicitacoes']) :
+
+          if (userRule === 'RULE_EMPLOYEE') {
+            this.router.navigate(['/funcionario/solicitacoes']);
+          } else if (userRule === 'RULE_ADMIN') {
+            this.router.navigate(['/admin/funcionarios']);
+          } else if (userRule === 'RULE_CLIENT') {
             this.router.navigate(['/dashboard']);
+          }
         },
         error: (err) => {
           if (err.status === 401) {

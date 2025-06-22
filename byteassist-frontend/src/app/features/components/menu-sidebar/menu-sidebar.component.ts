@@ -21,6 +21,7 @@ export class MenuSidebarComponent {
   sidebarVisible: boolean = true;
   clientLinksVisible: boolean = false;
   employeeLinksVisible: boolean = false;
+  adminLinksVisible: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -41,6 +42,7 @@ export class MenuSidebarComponent {
         const rule = this.userService.getUserRule();
         this.clientLinksVisible = rule === 'RULE_CLIENT';
         this.employeeLinksVisible = rule === 'RULE_EMPLOYEE';
+        this.adminLinksVisible = rule === 'RULE_ADMIN';
       },
       error: (err) => {
         console.error('Erro ao obter a regra do usuário:', err);
