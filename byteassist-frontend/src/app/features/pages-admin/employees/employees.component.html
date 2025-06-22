@@ -8,11 +8,11 @@
       Aqui você pode visualizar, criar e gerenciar funcionários de forma prática.
     </p>
 
-    <button class="new-request">Novo Funcionário</button>
+    <button class="new-request" (click)="createNewEmployee()">Novo Funcionário</button>
 
     <div class="sort-buttons">
-      <button class="sort-btn">↑ Nome Crescente</button>
-      <button class="sort-btn">↓ Nome Decrescente</button>
+      <button class="sort-btn" (click)="sortByNameAsc()">↑ Nome Crescente</button>
+      <button class="sort-btn" (click)="sortByNameDesc()">↓ Nome Decrescente</button>
     </div>
 
     <div class="table-container">
@@ -24,11 +24,12 @@
             <th>Email</th>
             <th>Telefone</th>
             <th>Status</th>
+            <th>Criado Em</th>
             <th>Ações</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let user of users">
+          <tr *ngFor="let user of paginatedUsers">
             <td>{{ user.id }}</td>
             <td>{{ user.person.name.first }} {{ user.person.name.last }}</td>
             <td>{{ user.email }}</td>
@@ -44,6 +45,7 @@
                 {{ user.isActive ? 'Ativa' : 'Inativo' }}
               </span>
             </td>
+            <td>{{ user.time.createdAt | date: 'dd/MM/yyyy' }}</td>
             <td *ngIf="user.id | getRecordId as userId">
               <button class="view-btn" title="Visualizar" (click)="visualizeUser(userId)">
                 <i class="fa fa-eye"></i>
@@ -55,9 +57,13 @@
     </div>
 
     <div class="pagination">
-      <button class="pagination-btn">Anterior</button>
-      <span>Página 1 de 6</span>
-      <button class="pagination-btn">Próxima</button>
+      <button class="pagination-btn" (click)="goToPreviousPage()" [disabled]="currentPage === 1">
+        Anterior
+      </button>
+      <span>Página {{ currentPage }} de {{ totalPages }}</span>
+      <button class="pagination-btn" (click)="goToNextPage()" [disabled]="currentPage === totalPages">
+        Próxima
+      </button>
     </div>
 
     <app-notification *ngIf="showNotification" [message]="message"></app-notification>

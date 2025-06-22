@@ -20,6 +20,10 @@ export class EmployeesComponent {
   message: string = '';
   showNotification: boolean = false;
   users: User[] = [];
+  paginatedUsers: User[] = []; // usuários visíveis na página atual
+  currentPage: number = 1;
+  itemsPerPage: number = 6; // você pode ajustar esse valor
+  totalPages: number = 0;
 
   constructor(
     private readonly userService: UserService,
@@ -32,7 +36,8 @@ export class EmployeesComponent {
     this.userService.getAllUsersByRole("Employee").subscribe({
       next: (users) => {
         this.users = users;
-        console.log('Usuários encontrados:', this.users);
+        this.totalPages = Math.ceil(this.users.length / this.itemsPerPage);
+        this.updatePaginatedUsers();
       },
       error: (error) => {
         console.error('Erro ao carregar os usuários:', error);
@@ -44,5 +49,46 @@ export class EmployeesComponent {
 
   visualizeUser(userId: string) {
     this.route.navigate(['/admin/funcionario', userId]);
+  }
+
+  sortByNameAsc(): void {
+    this.paginatedUsers.sort((a, b) => {
+      const nameA = `${a.person.name.first} ${a.person.name.last}`.toLowerCase();
+      const nameB = `${b.person.name.first} ${b.person.name.last}`.toLowerCase();
+      return nameA.localeCompare(nameB);
+    });
+  }
+
+  sortByNameDesc(): void {
+    this.paginatedUsers.sort((a, b) => {
+      const nameA = `${a.person.name.first} ${a.person.name.last}`.toLowerCase();
+      const nameB = `${b.person.name.first} ${b.person.name.last}`.toLowerCase();
+      return nameB.localeCompare(nameA);
+    });
+  }
+
+  createNewEmployee() {
+    console.log('Navegando para a página de cadastro de funcionário');
+    this.route.navigate(['/admin/cadastrar-funcionario']);
+  }
+
+  updatePaginatedUsers(): void {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    this.paginatedUsers = this.users.slice(start, end);
+  }
+
+  goToPreviousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePaginatedUsers();
+    }
+  }
+
+  goToNextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updatePaginatedUsers();
+    }
   }
 }
