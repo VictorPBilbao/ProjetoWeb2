@@ -1,18 +1,20 @@
 import { CommentService } from './../../services/comment/comment.service';
 import { RecordIdPipe } from './../../shared/pipes/record-id.pipe';
-import { Component, inject, LOCALE_ID } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import localeData from '@angular/common/locales/pt';
 import { Task } from '../../shared/models/task.model';
 import { NotificationComponent } from '../../components/notification/notification.component';
 import { ActivatedRoute } from '@angular/router';
 import { TaskService } from '../../services/task/task.service';
 import { BudgetService } from '../../services/budget/budget.service';
 
+registerLocaleData(localeData);
+
 @Component({
   selector: 'app-budget',
   imports: [CommonModule, NotificationComponent, FormsModule, RecordIdPipe],
-  providers: [{ provide: LOCALE_ID, useValue: 'pt-BR' }],
   templateUrl: './budget.component.html',
   styleUrl: './budget.component.css',
 })
@@ -29,7 +31,7 @@ export class BudgetComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly taskService = inject(TaskService);
   private readonly budgetService = inject(BudgetService);
-  private readonly CommentService = inject(CommentService);
+  private readonly commentService = inject(CommentService);
 
   ngOnInit(): void {
     const taskId = this.route.snapshot.paramMap.get('taskId');
@@ -72,25 +74,11 @@ export class BudgetComponent {
       const statusA = a.budget?.accepted ?? 'PENDENTE';
       const statusB = b.budget?.accepted ?? 'PENDENTE';
 
-      console.log('Sorting:', {
-        taskA: a.id,
-        statusA,
-        orderA: statusOrder[statusA as keyof typeof statusOrder] ?? 3,
-        taskB: b.id,
-        statusB,
-        orderB: statusOrder[statusB as keyof typeof statusOrder] ?? 3,
-      });
-
       return (
         (statusOrder[statusA as keyof typeof statusOrder] ?? 3) -
         (statusOrder[statusB as keyof typeof statusOrder] ?? 3)
       );
     });
-
-    console.log(
-      'Final sorted order:',
-      this.tasks.map((t) => ({ id: t.id, status: t.budget?.accepted }))
-    );
   }
 
   openBudget(index: number): void {
@@ -161,7 +149,7 @@ export class BudgetComponent {
     });
 
     //* Now create a comment for the rejection
-    this.CommentService.createComment({
+    this.commentService.createComment({
       out: this.selectedTask?.id,
       comment: "Rejeitei por: " + this.rejectDescription,
     }).subscribe({

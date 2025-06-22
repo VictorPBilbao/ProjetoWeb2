@@ -23,12 +23,10 @@
               {{ task.budget?.accepted === 'ACEITA' ? 'Aprovado' : task.budget?.accepted === 'REJEITADA' ? 'Rejeitado' : 'Pendente' }}
             </span>
           </div>
-        </div>
-
-        <!-- Valor do Orçamento -->
+        </div>        <!-- Valor do Orçamento -->
         <div class="budget-amount">
           <span class="amount-label">Valor do Orçamento</span>
-          <span class="amount-value">{{ (task.budget?.amount! / 100) | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}</span>
+          <span class="amount-value">{{ (task.budget?.amount! / 100) | currency:'BRL':'symbol':'1.2-2':'pt' }}</span>
         </div>
 
         <!-- Informações da Tarefa -->
@@ -119,10 +117,9 @@
           </button>
         </div>
         <div class="modal-body">
-          <p>Deseja realmente aprovar este orçamento?</p>
-          <div class="approval-details">
+          <p>Deseja realmente aprovar este orçamento?</p>          <div class="approval-details">
             <strong>Valor a ser aprovado:</strong>
-            {{ (selectedTask?.budget?.amount! / 100) | currency:'BRL':'symbol':'1.2-2':'pt-BR' }}
+            {{ (selectedTask?.budget?.amount! / 100) | currency:'BRL':'symbol':'1.2-2':'pt' }}
           </div>
           <div class="approval-details" style="margin-top: 0.5rem;">
             <strong>Tarefa:</strong>

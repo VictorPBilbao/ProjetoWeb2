@@ -1,9 +1,7 @@
-import { User } from "./user.model";
-
 export interface Budget {
   id?: string;
   accepted?: string;
   amount?: number;
-  creator?: User;
+  creator?: string;
   description?: string;
 }

@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
-import { handleErrors } from '../../helpers/errors/handleErrors';
+import { finalize, Observable } from 'rxjs';
 import { LoadingService } from '../utils/loading.service';
 
 @Injectable({
@@ -12,8 +10,8 @@ export class AuthService {
   private readonly apiUrl = 'https://byteassist-backend.fly.dev';
 
   constructor(
-    private http: HttpClient,
-    private loadingService: LoadingService
+    private readonly http: HttpClient,
+    private readonly loadingService: LoadingService
   ) { }
 
   // Faz a requisição para o endpoint login no backend
@@ -68,6 +66,16 @@ export class AuthService {
     if (token) {
       const payload = JSON.parse(atob(token.split('.')[1]));
       return payload.username ?? null;
+    }
+    return null;
+  }
+
+  // get the User ( sub from the jwt )
+  getUser(): string | null {
+    const token = this.getToken();
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.sub ?? null;
     }
     return null;
   }

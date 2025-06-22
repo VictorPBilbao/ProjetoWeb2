@@ -98,17 +98,6 @@ export class TaskService {
       throw new Error('Task.id é obrigatório para updateTask');
     }
 
-    // const taskPayload = {
-    //   assignee: task.assignee,
-    //   creator: task.creator,
-    //   equipment: task.equipment.id,
-    //   equipment: equipmentId,
-    //   status: task.status,
-    //   title: task.title,
-    //   type: task.type
-    // }
-
-
     // create a new variable that has the same information as the task but without the id
     const { id, ...taskPayload } = task;
 
@@ -192,4 +181,3 @@ export class TaskService {
   }
 
 }
-

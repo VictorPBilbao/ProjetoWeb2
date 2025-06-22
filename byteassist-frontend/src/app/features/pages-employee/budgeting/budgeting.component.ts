@@ -1,7 +1,6 @@
 import { Component, inject, LOCALE_ID } from '@angular/core';
 import { Task } from '../../shared/models/task.model';
-import { Budget } from '../../shared/models/budget.model';
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { NotificationComponent } from '../../components/notification/notification.component';
@@ -9,11 +8,15 @@ import { RecordIdPipe } from '../../shared/pipes/record-id.pipe';
 import { BudgetService } from '../../services/budget/budget.service';
 import { TaskService } from '../../services/task/task.service';
 import { RecordidService } from '../../services/utils/recordid.service';
+import localeData from '@angular/common/locales/pt';
+import { AuthService } from '../../services/auth/auth.service';
+
+registerLocaleData(localeData);
 
 @Component({
   selector: 'app-budgeting',
   imports: [NotificationComponent, CommonModule, FormsModule, RecordIdPipe, RouterModule],
-  providers: [{ provide: LOCALE_ID, useValue: 'pt-BR' }],
+  providers: [{ provide: LOCALE_ID, useValue: 'pt' }],
   templateUrl: './budgeting.component.html',
   styleUrl: './budgeting.component.css',
 })
@@ -30,6 +33,7 @@ export class BudgetingComponent {
   private readonly taskService = inject(TaskService);
   private readonly route = inject(ActivatedRoute);
   private readonly recordIdService = inject(RecordidService);
+  private readonly authService = inject(AuthService);
   ngOnInit(): void {
     const taskId = this.route.snapshot.paramMap.get('taskId');
 
@@ -38,7 +42,7 @@ export class BudgetingComponent {
       this.taskService.getTaskById(taskId, 'budget,equipment').subscribe({
         next: (task: Task) => {
           // Only add the task if it doesn't have a budget yet
-          this.tasks = !task.budget ? [task] : [];
+          this.tasks = task.budget ? [] : [task];
         },
         error: (error) => {
           console.error('Erro ao carregar a tarefa:', error);
@@ -52,20 +56,18 @@ export class BudgetingComponent {
           console.log('Todas as tarefas carregadas:', tasks);
 
           // Filter tasks that:
-          // 1. Don't have budgets yet
-          // 2. Have status 'ABERTA'
+          // 1. Have status 'ABERTA'
+          // 2. Don't have budgets yet
           // 3. Are either unassigned (assignee is null) or assigned to current user
           this.tasks = tasks.filter((task) => {
             const hasBudget = task.budget !== null && task.budget !== undefined;
             const isOpenStatus = task.status === 'ABERTA';
-            const isUnassignedOrAssignedToMe = !task.assignee || task.assignee === 'current-user';
+            const isUnassignedOrAssignedToMe = !task.assignee || task.assignee === this.authService.getUser();
 
-            console.log(`Task ${task.id}: hasBudget=${hasBudget}, status=${task.status}, assignee=${task.assignee}, isOpenStatus=${isOpenStatus}, isUnassignedOrAssignedToMe=${isUnassignedOrAssignedToMe}`);
 
             return !hasBudget && isOpenStatus && isUnassignedOrAssignedToMe;
           });
 
-          console.log('Tarefas filtradas (ABERTA + sem orçamento + não atribuída a outros):', this.tasks);
         },
         error: (error) => {
           console.error('Erro ao carregar as tarefas:', error);
@@ -94,7 +96,7 @@ export class BudgetingComponent {
 
     this.taskService.updateTask({
       id: task.id,
-      assignee: 'current-user', // This should be the current user's ID
+      assignee: this.authService.getUser() ?? '', // This should be the current user's ID
     }).subscribe({
       next: (updatedTask) => {
         this.message = 'Tarefa atribuída com sucesso!';
@@ -103,7 +105,7 @@ export class BudgetingComponent {
         // Update the task in the local array
         const taskIndex = this.tasks.findIndex(t => t.id === task.id);
         if (taskIndex !== -1) {
-          this.tasks[taskIndex] = { ...this.tasks[taskIndex], assignee: 'current-user' };
+          this.tasks[taskIndex] = { ...this.tasks[taskIndex], assignee: this.authService.getUser() ?? '' };
         }
       },
       error: (error) => {
@@ -136,11 +138,12 @@ export class BudgetingComponent {
     }
 
     const budget = {
+      creator: this.authService.getUser() ?? '', // This should be the current user's ID
       amount: this.budgetAmount * 100, // Convert to cents
       description: this.budgetDescription.trim()
     };
 
-    this.budgetService.createBudget(budget, this.selectedTask.id!).subscribe({
+    this.budgetService.createBudget(budget, this.recordIdService.getId(this.selectedTask.id!)).subscribe({
       next: (createdBudget) => {
         this.message = 'Orçamento criado com sucesso!';
         this.showNotification = true;
@@ -181,4 +184,7 @@ export class BudgetingComponent {
     this.budgetAmount = 0;
     this.budgetDescription = '';
   }
+}
+function subscribe(arg0: { next: (createdBudget: any) => void; error: (error: any) => void; }) {
+  throw new Error('Function not implemented.');
 }
