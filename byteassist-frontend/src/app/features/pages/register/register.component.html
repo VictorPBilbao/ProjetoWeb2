@@ -1,12 +1,12 @@
 <app-notification [message]="message" [visible]="showNotification"></app-notification>
 
 <section class="register-section-container flex">
-  <div class="register-logo-container">
+  <div class="register-logo-container" *ngIf="!isAdmin">
     <a href="/"><img src="/images/byte.png" alt="logo" class="logo" /> BYTEASSIST</a>
   </div>
 
   <div class="rigister-section-inputs flex flex-column">
-    <h1 class="register-title"> {{ currentStep === 1 ? 'Crie sua conta' : 'Dados Pessoais' }}</h1>
+    <h1 *ngIf="!isAdmin" class="register-title"> {{ currentStep === 1 ? 'Crie sua conta' : 'Dados Pessoais' }}</h1>
     <form #registerForm="ngForm" (ngSubmit)="onSubmit()" class="register-form flex flex-column">
       <div  class="step-container step1 register-form-item flex flex-column"
             [class.active]="currentStep === 1"
@@ -206,7 +206,7 @@
               CADASTRAR
             </button>
             <button type="button" class="btn btn-secondary" (click)="goToPreviousStep()" style="margin-top: 10px;">Voltar</button>
-            <div class="login-link-container">
+            <div class="login-link-container" *ngIf="!isAdmin">
               <p>Já tem uma conta?</p>
               <a routerLink="/login">Logar</a>
             </div>

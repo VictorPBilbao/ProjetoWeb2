@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './features/services/auth/auth.guard';
 
 // Páginas padrão
 import { LoginComponent } from './features/pages/login/login.component';
@@ -20,23 +21,148 @@ import { RequestsComponent } from './features/pages-employee/requests/requests.c
 import { RegistrationComponent } from './features/pages-employee/registration/registration.component';
 import { TaskViewComponent } from './features/pages/task-view/task-view.component';
 
+//Páginas de admin
+import { EmployeesComponent } from './features/pages-admin/employees/employees.component';
+
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'solicitacoes', component: ListMyTasksComponent },
+  {
+    path: 'solicitacoes',
+    component: ListMyTasksComponent,
+    canActivate: [authGuard],
+    data: {
+      role: 'RULE_CLIENT'
+    }
+  },
   { path: 'cadastro', component: RegisterComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'nova-solicitacao', component: NewRequestComponent },
-  { path: 'conta', component: AccountComponent },
-  { path: 'orcamentos', component: BudgetComponent },
-  { path: 'orcamentos/:taskId', component: BudgetComponent },
-  { path: 'ajuda', component: HelpComponent },
-  // { path: 'pagamentos', component: PaymentComponent },
-  { path: 'pagamentos/:taskId', component: PaymentComponent },
-  { path: 'funcionario/orcamentos', component: BudgetingComponent },
-  { path: 'funcionario/orcamentos/:taskId', component: BudgetingComponent },
-  { path: 'funcionario/solicitacoes', component: RequestsComponent },
-  { path: 'funcionario/cadastros', component: RegistrationComponent },
-  { path: 'solicitacao/:taskId', component: TaskViewComponent },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [authGuard],
+    data: {
+      role: 'RULE_CLIENT'
+    }
+  },
+  {
+    path: 'nova-solicitacao',
+    component: NewRequestComponent,
+    canActivate: [authGuard],
+    data: {
+      role: 'RULE_CLIENT'
+    }
+  },
+  {
+    path: 'conta',
+    component: AccountComponent,
+    canActivate: [authGuard],
+    data: {
+      role: 'RULE_CLIENT'
+    }
+  },
+  {
+    path: 'orcamentos',
+    component: BudgetComponent,
+    canActivate: [authGuard],
+    data: {
+      role: 'RULE_CLIENT'
+    }
+  },
+  {
+    path: 'orcamentos/:taskId',
+    component: BudgetComponent,
+    canActivate: [authGuard],
+    data: {
+      role: 'RULE_CLIENT'
+    }
+  },
+  {
+    path: 'ajuda',
+    component: HelpComponent,
+    canActivate: [authGuard],
+    data: {
+      role: 'RULE_CLIENT'
+    }
+  },
+  {
+    path: 'pagamentos/:taskId',
+    component: PaymentComponent,
+    canActivate: [authGuard],
+    data: {
+      role: 'RULE_CLIENT'
+    }
+  },
+  {
+    path: 'funcionario/orcamentos',
+    component: BudgetingComponent,
+    canActivate: [authGuard],
+    data: {
+      role: 'RULE_EMPLOYEE'
+    }
+  },
+  {
+    path: 'funcionario/orcamentos/:taskId',
+    component: BudgetingComponent,
+    canActivate: [authGuard],
+    data: {
+      role: 'RULE_EMPLOYEE'
+    }
+  },
+  {
+    path: 'funcionario/solicitacoes',
+    component: RequestsComponent,
+    canActivate: [authGuard],
+    data: {
+      role: 'RULE_EMPLOYEE'
+    }
+  },
+  {
+    path: 'funcionario/cadastros',
+    component: RegistrationComponent,
+    canActivate: [authGuard],
+    data: {
+      role: 'RULE_EMPLOYEE'
+    }
+  },
+  {
+    path: 'solicitacao/:taskId',
+    component: TaskViewComponent,
+    canActivate: [authGuard],
+    data: {
+      role: 'RULE_CLIENT, RULE_EMPLOYEE'
+    }
+  },
+  {
+    path: 'funcionario/solicitacao/:taskId',
+    component: TaskViewComponent,
+    canActivate: [authGuard],
+    data: {
+      role: 'RULE_EMPLOYEE'
+    }
+  },
+  {
+    path: 'admin/funcionarios',
+    component: EmployeesComponent,
+    canActivate: [authGuard],
+    data: {
+      role: 'RULE_ADMIN'
+    }
+  },
+  {
+    path: 'admin/cadastrar-funcionario',
+    component: RegisterComponent,
+    canActivate: [authGuard],
+    data: {
+      role: 'RULE_ADMIN'
+    }
+  },
+  {
+    path: 'admin/funcionario/:id',
+    component: AccountComponent,
+    canActivate: [authGuard],
+    data: {
+      role: 'RULE_ADMIN'
+    }
+  },
   { path: '**', redirectTo: '' } // Redireciona para home se rota não existir
 ];

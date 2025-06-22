@@ -1,7 +1,7 @@
 <app-notification [message]="message" [visible]="showNotification"></app-notification>
 <section>
   <div class="container">
-    <h1>Meus Dados</h1>
+    <h1>{{ isAdmin ? user.person.name.first + " " + user.person.name.last : 'Meus Dados' }}</h1>
     <form
       class="user-form flex flex-column gap-24"
       #userForm="ngForm"
@@ -244,6 +244,15 @@
 
       <!-- Ações -->
       <div class="actions flex flex-row justify-end gap-16">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="onCancel()"
+          [hidden]="!isAdmin"
+        >
+          Voltar
+        </button>
+
         <button
           type="submit"
           class="btn btn-primary"

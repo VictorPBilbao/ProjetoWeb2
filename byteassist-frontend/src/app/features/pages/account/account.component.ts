@@ -5,6 +5,8 @@ import { User } from '../../shared/models/user.model';
 import { UserService } from '../../services/user/user.service';
 import { NotificationComponent } from '../../components/notification/notification.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-account',
@@ -23,15 +25,35 @@ export class AccountComponent {
   user: User = {} as User;
   message: string = '';
   showNotification: boolean = false;
+  isAdmin: boolean = false;
+  userId: string = '';
 
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit() {
-    this.userService.getUser().subscribe((user: User) => {
-      this.user = user;
-    });
+    this.isAdmin = this.userService.getUserRule() === 'RULE_ADMIN';
+
+    if (this.isAdmin) {
+      this.userId = this.route.snapshot.paramMap.get('id') ?? '';
+      this.userService.getUserById(this.userId).subscribe({
+        next: (user: User) => {
+          this.user = user;
+        },
+        error: (error: any) => {
+          console.error('Error fetching user by ID', error);
+          this.message = 'Erro ao carregar usuário!';
+          this.showNotification = true;
+        }
+      });
+    } else {
+      this.userService.getUser().subscribe((user: User) => {
+        this.user = user;
+      });
+    }
   }
 
   onSubmit() {
@@ -68,6 +90,15 @@ export class AccountComponent {
     } else {
       this.message = 'Preencha todos os campos corretamente!';
       this.showNotification = true;
+    }
+  }
+
+  onCancel() {
+    this.showNotification = false;
+    if (this.isAdmin) {
+      this.router.navigate(['/admin/funcionarios']);
+    } else {
+      this.router.navigate(['/minha-conta']);
     }
   }
 }
