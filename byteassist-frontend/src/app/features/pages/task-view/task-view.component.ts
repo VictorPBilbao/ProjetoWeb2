@@ -344,7 +344,7 @@ export class TaskViewComponent implements OnInit {
 
   //método que vai redirecionar para a tela de orçamento
   public onOrcarSolicitacao(task: Task): void {
-    this.router.navigate(['funcionario/orcamentos/', task.id]);
+    this.router.navigate(['funcionario/orcamentos/', this.recordidService.getId(task.id ?? '')]);
   }
 
   public onStatusChange(newStatus: string): void {
