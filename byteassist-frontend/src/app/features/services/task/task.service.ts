@@ -122,17 +122,16 @@ export class TaskService {
   public getAllTasks(status?: string, expand?: string | string[]): Observable<Task[]> {
     const params: any = {};
 
-    if (status) {
-      params.status = status;
-    }
+    // Força o status para 'ABERTA'
+    params.status = 'ABERTA';
 
     if (expand) {
       params.expand = Array.isArray(expand) ? expand.join(',') : expand;
     }
 
-    this.loadingService.show(); // Exibe o loading para esta requisição também
+    this.loadingService.show();
     return this.http
-      .get<Task[]>(this.apiUrl, { // Este endpoint é para 'todas as tarefas'
+      .get<Task[]>(this.apiUrl, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           Authorization: `Bearer ${this.token}`,
@@ -141,17 +140,20 @@ export class TaskService {
       })
       .pipe(
         map((tasks) =>
-          tasks.map((task) => ({
-            ...task,
-            time: {
-              createdAt: new Date(task?.time?.createdAt ?? ''),
-              updatedAt: new Date(task?.time?.updatedAt ?? ''),
-            },
-          }))
+          tasks
+            .filter(task => !task.assignee || task.assignee.trim() === '') // Filtra por tasks sem assignee
+            .map((task) => ({
+              ...task,
+              time: {
+                createdAt: new Date(task?.time?.createdAt ?? ''),
+                updatedAt: new Date(task?.time?.updatedAt ?? ''),
+              },
+            }))
         ),
-        finalize(() => this.loadingService.hide()) // Esconde o loading após a requisição
+        finalize(() => this.loadingService.hide())
       );
   }
+
 
   public getAllTasks2(expand?: string | string[]): Observable<Task[]> {
     const params: any = {};

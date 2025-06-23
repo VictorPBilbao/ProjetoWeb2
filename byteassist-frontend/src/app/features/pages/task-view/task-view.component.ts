@@ -57,6 +57,7 @@ export class TaskViewComponent implements OnInit {
   showManutencaoModal: boolean = false;
   descricaoManutencao: string = '';
   orientacoesCliente: string = '';
+  public userRole: string | null = null;
 
   public funcionarios: string[] = [];
   public selectedAssignee: string = '';
@@ -73,9 +74,10 @@ export class TaskViewComponent implements OnInit {
   username: string = this.authService.getUsername() ?? '';
 
   ngOnInit(): void {
-    // Checa role via AuthService / hasRole
+
+    this.userRole = this.userService.getUserRule();
     // this.isFuncionario = this.authService.hasRole('FUNCIONARIO');
-    // console.log('isFuncionario:', this.isFuncionario);
+    console.log('isFuncionario:', this.isFuncionario);
 
     const taskId = this.route.snapshot.paramMap.get('taskId');
     if (taskId) {
