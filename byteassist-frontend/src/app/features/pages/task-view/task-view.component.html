@@ -124,7 +124,9 @@
       <button
         *ngIf="
           task.status === 'ABERTA' &&
-          (userRole === 'RULE_EMPLOYEE' || userRole === 'RULE_ADMIN')
+          (userRole === 'RULE_EMPLOYEE' || userRole === 'RULE_ADMIN') &&
+          task.assignee &&
+          task.assignee.trim() !== ''
         "
         class="btn btn-outline-secondary"
         title="Orçar Solicitação"
