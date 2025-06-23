@@ -24,7 +24,6 @@
         <h2 class="task-title mb-0 me-3">{{ task.title }}</h2>
 
         <ng-container>
-          <!-- <ng-container *ngIf="isFuncionario; else viewOnlyStatus"> -->
           <select
             class="form-select form-select-sm w-auto"
             [ngClass]="badgeClass(task.status)"
@@ -32,6 +31,7 @@
             name="statusSelect"
             required
             (ngModelChange)="onStatusChange($event)"
+            [disabled]="userRole === 'RULE_CLIENT'"
           >
             <option *ngFor="let s of statusList" [value]="s">
               {{ s }}
@@ -72,19 +72,23 @@
           <i class="bi bi-person-badge"></i>
           <strong>Responsável:</strong>
           {{ task.assignee || "Ainda não atribuído" }}
-
-          <button
-            class="btn border-0 shadow-none text-primary btn-sm ms-2"
-            (click)="onAssignToMe()"
-            title="Atribuir esta solicitação a mim"
-          >
-            <i class="bi bi-person-check me-1"></i>
-            <strong>Atribuir</strong>
-          </button>
         </span>
+        @if ((userRole === 'RULE_EMPLOYEE' || userRole === 'RULE_ADMIN') &&
+        !task.assignee) {
+        <button
+          class="btn border-0 shadow-none text-primary btn-sm ms-2"
+          (click)="onAssignToMe()"
+          title="Atribuir esta solicitação a mim"
+        >
+          <i class="bi bi-person-check me-1"></i>
+          <strong>Atribuir</strong>
+        </button>
+        }
       </div>
 
-      <!-- Combobox para atribuir responsável -->
+      @if ( (userRole === 'RULE_EMPLOYEE' || userRole === 'RULE_ADMIN') &&
+      task.assignee && task.assignee.trim() !== '' && task.status !==
+      'FINALIZADA' && task.status !== 'PAGA' ) {
       <div class="mt-2">
         <label for="assigneeSelect" class="form-label">
           <i class="bi bi-person-plus"></i> Redirecionar:
@@ -97,7 +101,6 @@
           (ngModelChange)="onAssigneeChange()"
         >
           <option value="" disabled selected>Selecione…</option>
-
           <option
             *ngFor="let idx of rawFuncionarios; let i = index"
             [value]="idx"
@@ -106,9 +109,12 @@
           </option>
         </select>
       </div>
-
+      }
       <button
-        *ngIf="task.status === 'APROVADA' || task.status === 'REDIRECIONADA'"
+        *ngIf="
+          (task.status === 'APROVADA' || task.status === 'REDIRECIONADA') &&
+          (userRole === 'RULE_EMPLOYEE' || userRole === 'RULE_ADMIN')
+        "
         class="btn btn-outline-info btn-sm mt-2 mb-2"
         (click)="openManutencaoModal()"
       >
@@ -116,7 +122,10 @@
       </button>
 
       <button
-        *ngIf="task.status === 'ABERTA'"
+        *ngIf="
+          task.status === 'ABERTA' &&
+          (userRole === 'RULE_EMPLOYEE' || userRole === 'RULE_ADMIN')
+        "
         class="btn btn-outline-secondary"
         title="Orçar Solicitação"
         (click)="onOrcarSolicitacao(task)"
@@ -125,7 +134,7 @@
       </button>
 
       <button
-        *ngIf="task.status === 'ORÇADA'"
+        *ngIf="task.status === 'ORÇADA' && userRole === 'RULE_CLIENT'"
         class="btn btn-outline-primary me-2"
         (click)="onMostrarOrcamento(task)"
       >
@@ -133,7 +142,7 @@
       </button>
 
       <button
-        *ngIf="task.status === 'REJEITADA'"
+        *ngIf="task.status === 'REJEITADA' && userRole === 'RULE_CLIENT'"
         class="btn btn-outline-success me-2"
         (click)="onResgatarServico(task)"
       >
@@ -141,23 +150,18 @@
       </button>
 
       <button
-        *ngIf="task.status === 'ARRUMADA'"
+        *ngIf="task.status === 'ARRUMADA' && userRole === 'RULE_CLIENT'"
         class="btn btn-outline-warning me-2"
         (click)="onPagarServico(task)"
       >
         Pagar Serviço
       </button>
 
-      <!-- <button
-        *ngIf="task.status === 'ARRUMADA'"
-        class="btn btn-outline-warning me-2"
-        (click)="onPagarServico(task)"
-      >
-        Pagar Serviço
-      </button> -->
-
       <button
-        *ngIf="task.status === 'PAGA'"
+        *ngIf="
+          task.status === 'PAGA' &&
+          (userRole === 'RULE_EMPLOYEE' || userRole === 'RULE_ADMIN')
+        "
         class="btn btn-success mt-2"
         (click)="onFinalizarServico(task)"
         title="Finalizar Solicitação"
@@ -186,65 +190,74 @@
     <p>{{ task.summary || "Sem descrição detalhada." }}</p>
   </div>
 
-  <!--Modal de Manutenção -->
-  <div *ngIf="showManutencaoModal" class="maintenance-modal-overlay">
-    <div class="maintenance-modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Efetuar Manutenção</h5>
-        <button
-          type="button"
-          class="close-button"
-          (click)="closeManutencaoModal()"
-        >
-          &times;
-        </button>
+  <div
+    *ngIf="
+      showManutencaoModal &&
+      (userRole === 'RULE_EMPLOYEE' || userRole === 'RULE_ADMIN')
+    "
+    class="maintenance-modal-overlay"
+  ></div>
+
+  <div
+    *ngIf="
+      showManutencaoModal &&
+      (userRole === 'RULE_EMPLOYEE' || userRole === 'RULE_ADMIN')
+    "
+    class="maintenance-modal-content"
+  >
+    <div class="modal-header">
+      <h5 class="modal-title">Efetuar Manutenção</h5>
+      <button
+        type="button"
+        class="close-button"
+        (click)="closeManutencaoModal()"
+      >
+        &times;
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group mb-3">
+        <label for="descricaoManutencao">Descrição da Manutenção:</label>
+        <textarea
+          id="descricaoManutencao"
+          class="form-control"
+          rows="5"
+          [(ngModel)]="descricaoManutencao"
+          name="descricaoManutencao"
+          required
+          placeholder="Descreva o que foi feito na manutenção."
+        ></textarea>
       </div>
-      <div class="modal-body">
-        <div class="form-group mb-3">
-          <label for="descricaoManutencao">Descrição da Manutenção:</label>
-          <textarea
-            id="descricaoManutencao"
-            class="form-control"
-            rows="5"
-            [(ngModel)]="descricaoManutencao"
-            name="descricaoManutencao"
-            required
-            placeholder="Descreva o que foi feito na manutenção."
-          ></textarea>
-        </div>
-        <div class="form-group mb-3">
-          <label for="orientacoesCliente">Orientações para o Cliente:</label>
-          <textarea
-            id="orientacoesCliente"
-            class="form-control"
-            rows="5"
-            [(ngModel)]="orientacoesCliente"
-            name="orientacoesCliente"
-            placeholder="Forneça orientações importantes para o cliente."
-          ></textarea>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          (click)="closeManutencaoModal()"
-        >
-          Cancelar
-        </button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          [disabled]="!descricaoManutencao.trim()"
-          (click)="saveManutencao()"
-        >
-          Salvar Manutenção
-        </button>
+      <div class="form-group mb-3">
+        <label for="orientacoesCliente">Orientações para o Cliente:</label>
+        <textarea
+          id="orientacoesCliente"
+          class="form-control"
+          rows="5"
+          [(ngModel)]="orientacoesCliente"
+          name="orientacoesCliente"
+          placeholder="Forneça orientações importantes para o cliente."
+        ></textarea>
       </div>
     </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="closeManutencaoModal()"
+      >
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        [disabled]="!descricaoManutencao.trim()"
+        (click)="saveManutencao()"
+      >
+        Salvar Manutenção
+      </button>
+    </div>
   </div>
-  <!-- Modal de Manutenção -->
-
   <div class="task-comments">
     <h4>Comentários</h4>
     <div class="comments-list mb-3">
@@ -289,7 +302,6 @@
         required
       ></textarea>
 
-      <!-- Live Preview Section -->
       @if (newCommentText.trim()) {
       <div class="markdown-preview border p-2 rounded mt-2">
         <h6 class="text-muted small">Pré-visualização:</h6>
