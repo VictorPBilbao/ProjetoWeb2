@@ -28,6 +28,7 @@ public class CommentRepo implements CommentRepoInterface {
             String query = "SELECT * FROM Comments_on WHERE out = $taskid ORDER BY comment_date ASC";
             Response response = db.queryBind(query, Map.of("taskid", new RecordId("Task", taskId)));
             
+            System.out.println(response.take(0).getArray().toString());
             
             List<Comment> comments = new ArrayList<>();
             for (var commentRecord : response.take(0).getArray()) {
