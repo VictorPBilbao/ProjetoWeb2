@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bem-vindo ao ByteAssist</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f5f7fa;
+                line-height: 1.6;
+            }
+
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #ffffff;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                padding: 40px 30px;
+                text-align: center;
+                color: white;
+            }
+
+            .logo {
+                font-size: 28px;
+                font-weight: bold;
+                margin-bottom: 10px;
+                letter-spacing: 1px;
+            }
+
+            .tagline {
+                font-size: 16px;
+                opacity: 0.9;
+                margin: 0;
+            }
+
+            .content {
+                padding: 40px 30px;
+            }
+
+            .welcome-text {
+                font-size: 24px;
+                color: #2c3e50;
+                margin-bottom: 20px;
+                font-weight: 600;
+            }
+
+            .intro-text {
+                color: #5a6c7d;
+                font-size: 16px;
+                margin-bottom: 30px;
+            }
+
+            .credentials-box {
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                border-left: 4px solid #667eea;
+                padding: 25px;
+                margin: 30px 0;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            }
+
+            .credentials-title {
+                font-size: 18px;
+                color: #2c3e50;
+                margin-bottom: 15px;
+                font-weight: 600;
+            }
+
+            .credential-item {
+                margin-bottom: 12px;
+                font-size: 16px;
+            }
+
+            .credential-label {
+                color: #6c757d;
+                font-weight: 500;
+            }
+
+            .credential-value {
+                color: #2c3e50;
+                font-weight: 600;
+                font-family: "Courier New", monospace;
+                background-color: #ffffff;
+                padding: 5px 10px;
+                border-radius: 4px;
+                border: 1px solid #dee2e6;
+                display: inline-block;
+                margin-left: 10px;
+            }
+
+            .services-section {
+                margin: 30px 0;
+            }
+
+            .services-title {
+                font-size: 20px;
+                color: #2c3e50;
+                margin-bottom: 20px;
+                font-weight: 600;
+            }
+
+            .services-grid {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                margin-bottom: 25px;
+            }
+
+            .service-item {
+                flex: 1;
+                min-width: 120px;
+                background: #f8f9fa;
+                padding: 15px;
+                text-align: center;
+                border-radius: 8px;
+                border: 1px solid #e9ecef;
+            }
+
+            .service-icon {
+                font-size: 24px;
+                margin-bottom: 8px;
+            }
+
+            .service-name {
+                font-size: 14px;
+                color: #5a6c7d;
+                font-weight: 500;
+            }
+
+            .cta-section {
+                text-align: center;
+                margin: 35px 0;
+            }
+
+            .cta-button {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 15px 30px;
+                text-decoration: none;
+                border-radius: 25px;
+                font-size: 16px;
+                font-weight: 600;
+                display: inline-block;
+                transition: transform 0.2s ease;
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            }
+
+            .cta-button:hover {
+                transform: translateY(-2px);
+            }
+
+            .footer {
+                background-color: #2c3e50;
+                color: #bdc3c7;
+                padding: 30px;
+                text-align: center;
+            }
+
+            .footer-title {
+                color: #ecf0f1;
+                font-size: 18px;
+                margin-bottom: 15px;
+                font-weight: 600;
+            }
+
+            .contact-info {
+                margin-bottom: 20px;
+            }
+
+            .contact-item {
+                margin-bottom: 8px;
+                font-size: 14px;
+            }
+
+            .social-links {
+                margin-top: 20px;
+            }
+
+            .social-link {
+                color: #bdc3c7;
+                text-decoration: none;
+                margin: 0 10px;
+                font-size: 14px;
+            }
+
+            .disclaimer {
+                margin-top: 25px;
+                font-size: 12px;
+                color: #95a5a6;
+                line-height: 1.4;
+            }
+
+            @media (max-width: 600px) {
+                .container {
+                    margin: 0;
+                    box-shadow: none;
+                }
+
+                .header,
+                .content,
+                .footer {
+                    padding: 20px;
+                }
+
+                .services-grid {
+                    flex-direction: column;
+                }
+
+                .service-item {
+                    min-width: auto;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <!-- Header -->
+            <div class="header">
+                <div class="logo">ByteAssist</div>
+                <p class="tagline">Sua assistência técnica de confiança</p>
+            </div>
+
+            <!-- Main Content -->
+            <div class="content">
+                <h1 class="welcome-text">Bem-vindo ao ByteAssist!</h1>
+
+                <p class="intro-text">
+                    Olá <strong>{{NOME}}</strong>,<br /><br />
+                    É com grande satisfação que confirmamos a criação da sua conta no ByteAssist!
+                    Agora você faz parte da nossa família e tem acesso aos melhores serviços de
+                    assistência técnica para smartphones, tablets, laptops e muito mais.
+                </p>
+                <!-- Credentials Box -->
+                <div class="credentials-box">
+                    <div class="credentials-title">🔐 Suas Credenciais de Acesso</div>
+                    <div class="credential-item">
+                        <span class="credential-label">Usuário:</span>
+                        <span class="credential-value">@{{USERNAME}}</span>
+                    </div>
+                    <div class="credential-item">
+                        <span class="credential-label">E-mail:</span>
+                        <span class="credential-value">{{EMAIL}}</span>
+                    </div>
+                    <div class="credential-item">
+                        <span class="credential-label">Senha:</span>
+                        <span class="credential-value">{{PASSWORD}}</span>
+                    </div>                    <p style="margin-top: 15px; font-size: 14px; color: #28a745">
+                        <strong>💡 Dica:</strong> Você pode fazer login usando seu usuário ou
+                        e-mail.
+                    </p>
+                    <p style="margin-top: 10px; font-size: 14px; color: #dc3545">
+                        <strong>⚠️ Importante:</strong> Por segurança, nunca compartilhe suas
+                        credenciais com terceiros.
+                    </p>
+                    <p style="margin-top: 10px; font-size: 14px; color: #6f42c1; background-color: #f8f9fa; padding: 10px; border-radius: 4px; border-left: 3px solid #6f42c1;">
+                        <strong>🔒 Segurança:</strong> Esta senha está sendo enviada apenas neste e-mail por conveniência. 
+                        Após o primeiro acesso, ela será armazenada com criptografia avançada em nossos servidores, 
+                        garantindo que nem mesmo nossa equipe técnica tenha acesso à sua senha real.
+                    </p>
+                </div>
+
+                <!-- Services Section -->
+                <div class="services-section">
+                    <h2 class="services-title">🛠️ Nossos Serviços</h2>
+                    <div class="services-grid">
+                        <div class="service-item">
+                            <div class="service-icon">📱</div>
+                            <div class="service-name">Smartphones</div>
+                        </div>
+                        <div class="service-item">
+                            <div class="service-icon">💻</div>
+                            <div class="service-name">Laptops</div>
+                        </div>
+                        <div class="service-item">
+                            <div class="service-icon">📟</div>
+                            <div class="service-name">Tablets</div>
+                        </div>
+                        <div class="service-item">
+                            <div class="service-icon">🖥️</div>
+                            <div class="service-name">Desktops</div>
+                        </div>
+                    </div>
+
+                    <p style="color: #5a6c7d; font-size: 15px">
+                        Oferecemos diagnóstico gratuito, orçamentos transparentes e garantia em
+                        todos os nossos serviços. Nossa equipe especializada está pronta para
+                        resolver qualquer problema técnico com rapidez e qualidade.
+                    </p>
+                </div>
+
+                <!-- Call to Action -->
+                <div class="cta-section">
+                    <a href="http://localhost:4200/login" class="cta-button">Acessar Minha Conta</a>
+                </div>
+
+                <p style="color: #5a6c7d; font-size: 15px; text-align: center; margin-top: 30px">
+                    Dúvidas? Nossa equipe de suporte está sempre pronta para ajudar!<br />
+                    Entre em contato conosco através dos canais abaixo.
+                </p>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <div class="footer-title">ByteAssist - Assistência Técnica</div>
+
+                <div class="contact-info">
+                    <div class="contact-item">📧 contato@byteassist.com.br</div>
+                    <div class="contact-item">📞 (41) 9827-1512</div>
+                    <div class="contact-item">📱 (41) 9827-1512</div>
+                    <div class="contact-item">📍 Curitiba, PR - Brasil</div>
+                </div>
+
+                <div class="social-links">
+                    <a href="#" class="social-link">Facebook</a> |
+                    <a href="#" class="social-link">Instagram</a> |
+                    <a href="#" class="social-link">WhatsApp</a>
+                </div>
+
+                <div class="disclaimer">
+                    Este é um e-mail automático. Não responda a esta mensagem.<br />
+                    Se você não criou esta conta, por favor entre em contato conosco
+                    imediatamente.<br />
+                    © 2024 ByteAssist. Todos os direitos reservados.
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -36,7 +36,8 @@ public class AuthService implements UserDetailsService {
     // Gerenciador de autenticação para validar credenciais
     private final AuthenticationManager authenticationManager;
 
-    public AuthService(UserRepo userRepo, UpdateTimeRepo updateTimeRepo, JwtService jwtService, PersonRepo personRepo, @Lazy AuthenticationManager authenticationManager) {
+    public AuthService(UserRepo userRepo, UpdateTimeRepo updateTimeRepo, JwtService jwtService, PersonRepo personRepo,
+            @Lazy AuthenticationManager authenticationManager) {
         this.userRepo = userRepo;
         this.updateTimeRepo = updateTimeRepo;
         this.jwtService = jwtService;
@@ -45,48 +46,46 @@ public class AuthService implements UserDetailsService {
         this.authenticationManager = authenticationManager;
     }
 
-
     public ResponseEntity<UserDTO> login(String username, String password) {
 
         try {
             // Autentica o usuário
             authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(username, password)
-            );
+                    new UsernamePasswordAuthenticationToken(username, password)); // Busca o usuário autenticado (tenta
+                                                                                  // por username primeiro, depois por
+                                                                                  // email)
+            Optional<User> userOpt = userRepo.getUser(username);
+            if (userOpt.isEmpty()) {
+                userOpt = userRepo.getUserByEmail(username);
+            }
 
-            // Busca o usuário autenticado
-            User user = userRepo.getUser(username)
-            .orElseThrow(() -> new EnhancedStatusException(
-                HttpStatus.UNAUTHORIZED,
-                "User not found",
-                "The provided username does not exist."
-            ));
+            User user = userOpt.orElseThrow(() -> new EnhancedStatusException(
+                    HttpStatus.UNAUTHORIZED,
+                    "User not found",
+                    "The provided username or email does not exist."));
 
             // Gera o token JWT
             String token = jwtService.generateToken(
-            user.getId().toString(),
-            user.getId().getId().toString(),
-            user.getRole()
-            );
+                    user.getId().toString(),
+                    user.getId().getId().toString(),
+                    user.getRole());
 
             // Atualiza o campo de último login
             updateTimeRepo.updateTimeLastLogin(user.getId().toString());
 
             // Cria e retorna o DTO de resposta
             UserDTO userDTO = new UserDTO(
-            user.getId().toString(),
-            user.isActive(),
-            user.getTime().getLastLoginAt(),
-            token
-            );
+                    user.getId().toString(),
+                    user.isActive(),
+                    user.getTime().getLastLoginAt(),
+                    token);
             return ResponseEntity.ok(userDTO);
 
         } catch (org.springframework.security.core.AuthenticationException ex) {
             throw new EnhancedStatusException(
-            HttpStatus.UNAUTHORIZED,
-            "Authentication failed",
-            "The provided username or password is incorrect."
-            );
+                    HttpStatus.UNAUTHORIZED,
+                    "Authentication failed",
+                    "The provided username or password is incorrect.");
         }
     }
 
@@ -94,17 +93,15 @@ public class AuthService implements UserDetailsService {
         // Checa disponibilidade de username e email antes de qualquer operação
         if (!userRepo.isUsernameAvailable(username)) {
             throw new EnhancedStatusException(
-                HttpStatus.CONFLICT,
-                "Username already exists",
-                "The provided username is already taken."
-            );
+                    HttpStatus.CONFLICT,
+                    "Username already exists",
+                    "The provided username is already taken.");
         }
         if (!userRepo.isEmailAvailable(user.getEmail())) {
             throw new EnhancedStatusException(
-                HttpStatus.CONFLICT,
-                "Email already exists",
-                "The provided email is already in use."
-            );
+                    HttpStatus.CONFLICT,
+                    "Email already exists",
+                    "The provided email is already in use.");
         }
 
         // Criptografa a senha antes de persistir
@@ -123,22 +120,19 @@ public class AuthService implements UserDetailsService {
         // Retorna resposta apropriada
         return createdUser.map(u -> {
             String token = jwtService.generateToken(
-                u.getId().toString(),
-                u.getId().getId().toString(),
-                u.getRole()
-            );
+                    u.getId().toString(),
+                    u.getId().getId().toString(),
+                    u.getRole());
             UserDTO userDTO = new UserDTO(
-                u.getId().toString(),
-                u.isActive(),
-                u.getTime().getLastLoginAt(),
-                token
-            );
+                    u.getId().toString(),
+                    u.isActive(),
+                    u.getTime().getLastLoginAt(),
+                    token);
             return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
         }).orElseThrow(() -> new EnhancedStatusException(
-            HttpStatus.INTERNAL_SERVER_ERROR,
-            "User creation failed",
-            "Unable to create a new user."
-        ));
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "User creation failed",
+                "Unable to create a new user."));
     }
 
     public ResponseEntity<HttpStatus> validateUsername(String username) {
@@ -150,8 +144,16 @@ public class AuthService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepo.getUser(username)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+    public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
+        // First try to find by username
+        Optional<User> user = userRepo.getUser(usernameOrEmail);
+
+        // If not found by username, try by email
+        if (user.isEmpty()) {
+            user = userRepo.getUserByEmail(usernameOrEmail);
+        }
+
+        return user.orElseThrow(
+                () -> new UsernameNotFoundException("User not found with username or email: " + usernameOrEmail));
     }
 }

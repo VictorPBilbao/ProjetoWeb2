@@ -8,6 +8,7 @@ import com.ufpr.byteassist_backend.model.User;
 
 public interface UserRepoInterface {
     Optional<User> getUser(String username);
+    Optional<User> getUserByEmail(String email);
     Optional<User> createUser(User user, String username);
     Optional<User> updateUser(User user, String username);
     Boolean deleteUser(String username);

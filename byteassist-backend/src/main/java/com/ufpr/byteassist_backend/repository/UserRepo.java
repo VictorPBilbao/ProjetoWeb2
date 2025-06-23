@@ -107,6 +107,21 @@ public class UserRepo implements UserRepoInterface {
         return response.take(0).getArray().len() == 0;
     }
 
+    public Optional<User> getUserByEmail(String email) {
+        try {
+            // Query para buscar usuário pelo email
+            String query = "SELECT * FROM User WHERE email = '%s';".formatted(email);
+            Response response = db.query(query);
+            User user = response.take(0).getArray().get(0).get(User.class);
+            if (user != null) {
+                return Optional.ofNullable(user);
+            }
+            return Optional.empty();
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
     public Optional<DetailedUserDTO> getDetailedUser(String username) {
         System.out.println("Fetching detailed user for username: " + username);
         try {

@@ -14,15 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ufpr.byteassist_backend.dto.DetailedUserDTO;
 import com.ufpr.byteassist_backend.dto.UserDTO;
 import com.ufpr.byteassist_backend.service.AuthService;
+import com.ufpr.byteassist_backend.service.EmailService;
 import com.ufpr.byteassist_backend.validation.ValidationGroups;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
     private final AuthService authService;
+    private final EmailService emailService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, EmailService emailService) {
         this.authService = authService;
+        this.emailService = emailService;
     }
 
     @GetMapping("/health")
@@ -37,8 +40,15 @@ public class AuthController {
     }
 
     @PostMapping(value = "/register/{username:[a-z0-9._]{3,30}}")
-    public ResponseEntity<UserDTO> registerForm(@Validated(ValidationGroups.Create.class) @RequestBody DetailedUserDTO registrationRequest, @PathVariable String username) {
-        return authService.register(registrationRequest, username);
+    public ResponseEntity<UserDTO> registerForm(
+            @Validated(ValidationGroups.Create.class) @RequestBody DetailedUserDTO registrationRequest,
+            @PathVariable String username) {
+        
+        ResponseEntity<UserDTO> userDTO = authService.register(registrationRequest, username);
+        if (userDTO.getStatusCode() == HttpStatus.CREATED) {
+            emailService.sendEmail(registrationRequest, username);
+        }
+        return userDTO;
     }
 
     @GetMapping("/validate/username/{username}")
