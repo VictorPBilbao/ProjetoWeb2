@@ -48,9 +48,19 @@
           <!-- Status -->
           <td>
             <span
+              *ngIf="row.isEditing"
               [class.status-active]="row.equipmentType.active"
               [class.status-inactive]="!row.equipmentType.active"
               (click)="toggleStatus(row)"
+              class="status-toggle"
+            >
+              {{ row.equipmentType.active ? 'Ativa' : 'Inativa' }}
+            </span>
+
+            <span
+              *ngIf="!row.isEditing"
+              [class.status-active]="row.equipmentType.active"
+              [class.status-inactive]="!row.equipmentType.active"
             >
               {{ row.equipmentType.active ? 'Ativa' : 'Inativa' }}
             </span>
