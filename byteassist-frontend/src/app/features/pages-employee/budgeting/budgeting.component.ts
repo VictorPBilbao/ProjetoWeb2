@@ -35,6 +35,10 @@ export class BudgetingComponent {
   showNotification: boolean = false;
   budgetAmount: number = 0;
   budgetDescription: string = '';
+  // Novas propriedades para os filtros de relatório
+  startDate: string = ''; // Ou Date, dependendo de como você quer lidar
+  endDate: string = '';   // Ou Date
+
   private readonly budgetService = inject(BudgetService);
   private readonly taskService = inject(TaskService);
   private readonly route = inject(ActivatedRoute);
@@ -214,3 +218,4 @@ function subscribe(arg0: {
 }) {
   throw new Error('Function not implemented.');
 }
+

@@ -3,7 +3,7 @@ import { Task } from '../../shared/models/task.model';
 import { LoadingService } from '../utils/loading.service';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
 import { Budget } from '../../shared/models/budget.model';
 import { RecordidService } from '../utils/recordid.service';
 
@@ -14,6 +14,7 @@ export class BudgetService {
 
   private readonly apiUrlTask = 'https://byteassist-backend.fly.dev/api/task';
   private readonly apiUrlBudget = 'https://byteassist-backend.fly.dev/api/budget';
+  private readonly apiUrlReports = 'https://byteassist-backend.fly.dev';
   private readonly recordIdService = inject(RecordidService);
 
   constructor(
@@ -92,4 +93,18 @@ export class BudgetService {
     const { id, ...budgetPayload } = budget;
     return this.http.post<Budget>(this.apiUrlBudget + `/${taskId}`, budgetPayload, { headers });
   }
+
+
+  getReportPdf(path: string, params?: HttpParams): Observable<Blob> {
+    const headers = new HttpHeaders({
+      'Accept': 'application/pdf',
+      'Authorization': `Bearer ${this.authService.getToken()}`
+    });
+    return this.http.get(
+      `${this.apiUrlReports}${path}`,
+      { headers, params, responseType: 'blob' }
+    );
+  }
+
+
 }

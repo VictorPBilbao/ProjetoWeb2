@@ -1,15 +1,21 @@
-<app-notification [message]="message" [visible]="showNotification"></app-notification>
+<app-notification
+  [message]="message"
+  [visible]="showNotification"
+></app-notification>
 <section>
   <div class="container">
     <h1><i class="bi bi-calculator"></i> Criar Orçamentos</h1>
-
     <!-- Grid de Tarefas -->
     <div class="budgets-grid" *ngIf="tasks.length > 0">
       <div class="budget-card" *ngFor="let task of tasks; let i = index">
-        <!-- Cabeçalho do Card -->        <div class="budget-header">
+        <!-- Cabeçalho do Card -->
+        <div class="budget-header">
           <div class="budget-info">
-            <h3 class="task-title">{{ task.title || 'Tarefa sem título' }}</h3>
-            <a [routerLink]="['/solicitacao', getCleanTaskId(task.id)]" class="task-id-link">
+            <h3 class="task-title">{{ task.title || "Tarefa sem título" }}</h3>
+            <a
+              [routerLink]="['/solicitacao', getCleanTaskId(task.id)]"
+              class="task-id-link"
+            >
               <span class="task-id">#{{ task.id | getRecordId }}</span>
             </a>
           </div>
@@ -27,7 +33,9 @@
             <i class="bi bi-person-circle"></i>
             <div class="detail-content">
               <span class="detail-label">Criado por</span>
-              <span class="detail-value">{{ task?.creator | getRecordId }}</span>
+              <span class="detail-value">{{
+                task?.creator | getRecordId
+              }}</span>
             </div>
           </div>
 
@@ -35,7 +43,9 @@
             <i class="bi bi-tag"></i>
             <div class="detail-content">
               <span class="detail-label">Tipo de Serviço</span>
-              <span class="detail-value">{{ task.type || 'Não especificado' }}</span>
+              <span class="detail-value">{{
+                task.type || "Não especificado"
+              }}</span>
             </div>
           </div>
 
@@ -45,13 +55,17 @@
               <span class="detail-label">Resumo</span>
               <span class="detail-value">{{ task.summary }}</span>
             </div>
-          </div>          <div class="detail-row" *ngIf="task.assignee">
+          </div>
+          <div class="detail-row" *ngIf="task.assignee">
             <i class="bi bi-person-check"></i>
             <div class="detail-content">
               <span class="detail-label">Atribuído para</span>
-              <span class="detail-value">{{ task.assignee | getRecordId }}</span>
+              <span class="detail-value">{{
+                task.assignee | getRecordId
+              }}</span>
             </div>
-          </div>          <div class="detail-row" *ngIf="!task.assignee">
+          </div>
+          <div class="detail-row" *ngIf="!task.assignee">
             <i class="bi bi-person-x"></i>
             <div class="detail-content">
               <span class="detail-label">Status de Atribuição</span>
@@ -63,22 +77,25 @@
             <i class="bi bi-info-circle"></i>
             <div class="detail-content">
               <span class="detail-label">Status da Tarefa</span>
-              <span class="detail-value">{{ task.status || 'PENDENTE' }}</span>
+              <span class="detail-value">{{ task.status || "PENDENTE" }}</span>
             </div>
           </div>
-        </div>        <!-- Equipamento Relacionado -->
+        </div>
+        <!-- Equipamento Relacionado -->
         <div class="equipment-info" *ngIf="task.equipment">
           <h4><i class="bi bi-gear"></i> Equipamento</h4>
           <span class="equipment-id">
             {{ typeof task.equipment === 'string' ? (task.equipment | getRecordId) : (task.equipment.id | getRecordId) }}
           </span>
-        </div>        <!-- Ações -->
+        </div>
+        <!-- Ações -->
         <div class="budget-actions">
           <!-- Show assign button if task is not assigned -->
           <button
             class="btn btn-warning"
             (click)="assignTaskToMyself(task)"
-            *ngIf="needsAssignment(task)">
+            *ngIf="needsAssignment(task)"
+          >
             <i class="bi bi-person-plus"></i>
             Atribuir para Mim
           </button>
@@ -87,7 +104,8 @@
           <button
             class="btn btn-primary"
             (click)="openCreateBudgetModal(task)"
-            *ngIf="canCreateBudget(task)">
+            *ngIf="canCreateBudget(task)"
+          >
             <i class="bi bi-calculator"></i>
             Criar Orçamento
           </button>
@@ -95,7 +113,9 @@
           <!-- Show message if task is not assigned -->
           <div class="assignment-message" *ngIf="needsAssignment(task)">
             <i class="bi bi-info-circle text-warning"></i>
-            <span>Atribua esta tarefa para você antes de criar um orçamento</span>
+            <span
+              >Atribua esta tarefa para você antes de criar um orçamento</span
+            >
           </div>
         </div>
       </div>
@@ -106,7 +126,9 @@
       <div class="empty-content">
         <i class="bi bi-calculator"></i>
         <h3>Nenhuma tarefa para orçar</h3>
-        <p>Não há tarefas atribuídas a você que precisem de orçamento no momento.</p>
+        <p>
+          Não há tarefas atribuídas a você que precisem de orçamento no momento.
+        </p>
       </div>
     </div>
   </div>
@@ -121,10 +143,13 @@
             <i class="bi bi-x"></i>
           </button>
         </div>
-        <div class="modal-body">          <div class="task-info-modal">
-            <h4>Tarefa: {{ selectedTask?.title || 'Tarefa sem título' }}</h4>
+        <div class="modal-body">
+          <div class="task-info-modal">
+            <h4>Tarefa: {{ selectedTask?.title || "Tarefa sem título" }}</h4>
             <p><strong>ID:</strong> #{{ selectedTask?.id | getRecordId }}</p>
-            <p *ngIf="selectedTask?.summary"><strong>Resumo:</strong> {{ selectedTask?.summary }}</p>
+            <p *ngIf="selectedTask?.summary">
+              <strong>Resumo:</strong> {{ selectedTask?.summary }}
+            </p>
           </div>
 
           <div class="field flex flex-column">
@@ -136,7 +161,8 @@
               placeholder="0.00"
               min="0"
               step="0.01"
-              required>
+              required
+            />
           </div>
 
           <div class="field flex flex-column">
@@ -146,7 +172,8 @@
               [(ngModel)]="budgetDescription"
               placeholder="Descreva os serviços incluídos no orçamento..."
               rows="4"
-              required>
+              required
+            >
             </textarea>
           </div>
         </div>
@@ -157,7 +184,10 @@
           <button
             class="btn btn-primary"
             (click)="createBudget()"
-            [disabled]="!budgetAmount || !budgetDescription || !budgetDescription.trim()">
+            [disabled]="
+              !budgetAmount || !budgetDescription || !budgetDescription.trim()
+            "
+          >
             <i class="bi bi-check-circle"></i> Criar Orçamento
           </button>
         </div>

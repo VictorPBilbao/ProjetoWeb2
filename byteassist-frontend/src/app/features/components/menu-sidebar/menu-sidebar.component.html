@@ -2,7 +2,9 @@
   <div class="d-flex">
     <div class="menu-user-container d-flex flex-column menu-padding">
       <div class="d-flex align-items-center">
-        <div class="menu-name-initials-container d-flex align-items-center justify-content-center">
+        <div
+          class="menu-name-initials-container d-flex align-items-center justify-content-center"
+        >
           {{ getUserInitals() }}
         </div>
 
@@ -27,7 +29,7 @@
           routerLink="/dashboard"
           routerLinkActive="active"
         >
-          <img src="/images/menu-sidebar/home.png" class="menu-icon">
+          <img src="/images/menu-sidebar/home.png" class="menu-icon" />
           <p class="nav-link-text">Dashbord</p>
         </a>
       </li>
@@ -37,7 +39,10 @@
           routerLink="/solicitacoes"
           routerLinkActive="active"
         >
-          <img src="/images/menu-sidebar/technical-support.png" class="menu-icon">
+          <img
+            src="/images/menu-sidebar/technical-support.png"
+            class="menu-icon"
+          />
           <p class="nav-link-text">Solitações</p>
         </a>
       </li>
@@ -47,7 +52,7 @@
           routerLink="/orcamentos"
           routerLinkActive="active"
         >
-          <img src="/images/menu-sidebar/value-chain.png" class="menu-icon">
+          <img src="/images/menu-sidebar/value-chain.png" class="menu-icon" />
           <p class="nav-link-text">Orçamentos</p>
         </a>
       </li>
@@ -59,7 +64,10 @@
           routerLink="/funcionario/solicitacoes"
           routerLinkActive="active"
         >
-          <img src="/images/menu-sidebar/technical-support.png" class="menu-icon">
+          <img
+            src="/images/menu-sidebar/technical-support.png"
+            class="menu-icon"
+          />
           <p class="nav-link-text">Solitações</p>
         </a>
       </li>
@@ -69,20 +77,36 @@
           routerLink="/funcionario/orcamentos"
           routerLinkActive="active"
         >
-          <img src="/images/menu-sidebar/value-chain.png" class="menu-icon">
+          <img src="/images/menu-sidebar/value-chain.png" class="menu-icon" />
           <p class="nav-link-text">Orçamentos</p>
         </a>
       </li>
-      <li class="nav-item" *ngIf="employeeLinksVisible">
+      <!-- <li class="nav-item" *ngIf="employeeLinksVisible">
         <a
           class="nav-link flex items-center menu-padding"
           routerLink="/funcionario/cadastros"
           routerLinkActive="active"
         >
-          <img src="/images/menu-sidebar/folder.png" class="menu-icon">
+          <img src="/images/menu-sidebar/folder.png" class="menu-icon" />
           <p class="nav-link-text">Cadastros</p>
         </a>
+      </li> -->
+
+      <li class="nav-item" *ngIf="employeeLinksVisible">
+        <a
+          class="nav-link flex items-center menu-padding"
+          routerLink="/funcionario/relatorios"
+          routerLinkActive="active"
+        >
+          <i class="bi bi-file-earmark-bar-graph menu-icon"></i>
+          <p class="nav-link-text">Relatórios</p>
+        </a>
       </li>
+
+      <li class="nav-item nav-item-seperator">
+        <div class="nav-border"></div>
+      </li>
+
       <!--Employee- END -->
 
       <li class="nav-item" *ngIf="clientLinksVisible">
@@ -91,7 +115,7 @@
           routerLink="/conta"
           routerLinkActive="active"
         >
-          <img src="/images/menu-sidebar/user.png" class="menu-icon">
+          <img src="/images/menu-sidebar/user.png" class="menu-icon" />
           <p class="nav-link-text">Conta</p>
         </a>
       </li>
@@ -101,21 +125,23 @@
           routerLink="/ajuda"
           routerLinkActive="active"
         >
-          <img src="/images/menu-sidebar/customer-support.png" class="menu-icon">
+          <img
+            src="/images/menu-sidebar/customer-support.png"
+            class="menu-icon"
+          />
           <p class="nav-link-text">Suporte</p>
         </a>
       </li>
-
 
       <li class="nav-item" *ngIf="adminLinksVisible">
         <a
           class="nav-link flex items-center menu-padding"
           routerLink="/admin/funcionarios"
           routerLinkActive="active"
-          >
-          <img src="/images/menu-sidebar/folder.png" class="menu-icon">
+        >
+          <img src="/images/menu-sidebar/folder.png" class="menu-icon" />
           <p class="nav-link-text">Funcionários</p>
-          </a>
+        </a>
       </li>
 
       <li class="nav-item" *ngIf="adminLinksVisible">
@@ -123,8 +149,8 @@
           class="nav-link flex items-center menu-padding"
           routerLink="/admin/cadastrar-funcionario"
           routerLinkActive="active"
-          >
-          <img src="/images/menu-sidebar/folder.png" class="menu-icon">
+        >
+          <img src="/images/menu-sidebar/folder.png" class="menu-icon" />
           <p class="nav-link-text">Cadastrar Funcionario</p>
         </a>
       </li>
@@ -134,11 +160,8 @@
       </li>
 
       <li class="nav-item">
-        <a
-          class="nav-link flex items-center menu-padding"
-          (click)="logout()"
-        >
-          <img src="/images/menu-sidebar/logout.svg" class="menu-icon">
+        <a class="nav-link flex items-center menu-padding" (click)="logout()">
+          <img src="/images/menu-sidebar/logout.svg" class="menu-icon" />
           <p class="nav-link-text">Logout</p>
         </a>
       </li>
@@ -147,7 +170,7 @@
 
   <div class="close-sidebar-container" (click)="openSidebar()">
     <i
-      class="bi "
+      class="bi"
       [class.bi-arrow-left-circle]="sidebarVisible"
       [class.bi-arrow-right-circle]="!sidebarVisible"
     >
