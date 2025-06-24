@@ -206,7 +206,7 @@
 h1 {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #333;
+  color: #ffffff;
   margin-bottom: 2rem;
   text-align: center;
   display: flex;
@@ -216,7 +216,7 @@ h1 {
 }
 
 h1 i {
-  color: #007bff;
+  color: #ffffff;
 }
 
 /* Budgets Grid */
@@ -762,5 +762,97 @@ h1 i {
 
   .accordion.ativo {
     max-height: 2000px;
+  }
+}
+
+/* ... (Seus estilos existentes) ... */
+
+/* Nova Seção de Relatórios */
+.reports-section {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+  padding: 2rem;
+  margin-bottom: 2rem; /* Adiciona espaçamento entre os relatórios e o grid de tarefas */
+}
+
+.reports-section h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 1rem;
+}
+
+.reports-section h2 i {
+  color: #007bff; /* Ou outra cor de sua preferência */
+}
+
+.report-card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem; /* Espaçamento entre os cards de relatório */
+}
+
+.report-card:last-child {
+  margin-bottom: 0;
+}
+
+.report-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.75rem;
+}
+
+.report-card p {
+  font-size: 0.95rem;
+  color: #6c757d;
+  margin-bottom: 1.5rem;
+}
+
+.report-filters {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap; /* Permite que os campos quebrem a linha em telas menores */
+}
+
+.report-filters .field {
+  flex: 1; /* Permite que os campos de filtro cresçam e preencham o espaço */
+  min-width: 200px; /* Garante um tamanho mínimo para os campos de data */
+  margin-bottom: 0; /* Remove a margem inferior padrão do .field para alinhar melhor */
+}
+
+/* Ajustes para os botões dentro dos cards de relatório */
+.report-card .btn {
+  width: auto; /* Garante que o botão não ocupe 100% da largura */
+  padding: 0.75rem 1.5rem;
+}
+
+/* Responsividade para a seção de relatórios */
+@media (max-width: 768px) {
+  .reports-section {
+    padding: 1rem;
+  }
+
+  .reports-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .report-card {
+    padding: 1rem;
+  }
+
+  .report-filters {
+    flex-direction: column;
+    gap: 1rem;
   }
 }

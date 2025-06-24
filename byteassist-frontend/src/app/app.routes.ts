@@ -23,6 +23,7 @@ import { CategoriesComponent } from './features/pages-admin/categories/categorie
 
 //Páginas de admin
 import { EmployeesComponent } from './features/pages-admin/employees/employees.component';
+import { ReportsComponent } from './features/pages-employee/reports/reports.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -164,5 +165,15 @@ export const routes: Routes = [
       role: 'RULE_ADMIN'
     }
   },
+
+  {
+    path: 'funcionario/relatorios',
+    component: ReportsComponent,
+    canActivate: [authGuard],
+    data: {
+      role: 'RULE_EMPLOYEE'
+    }
+  },
+
   { path: '**', redirectTo: '' } // Redireciona para home se rota não existir
 ];

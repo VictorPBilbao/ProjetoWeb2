@@ -1,0 +1,60 @@
+<section>
+  <div class="meu-container-principal">
+    <div class="cabecalho-relatorios">
+      <!-- Blob num wrapper próprio -->
+      <div class="blob-wrapper">
+        <img src="/images/blob.png" alt="Decorativo" class="titulo-blob" />
+      </div>
+
+      <!-- Título num wrapper próprio -->
+      <div class="titulo-wrapper">
+        <h1 class="titulo-relatorios">
+          <i class="bi bi-file-earmark-bar-graph me-2"></i>
+          Relatórios
+        </h1>
+      </div>
+
+      <!-- Descrição -->
+      <p class="descricao-relatorios">
+        Escolha abaixo qual relatório deseja gerar.
+      </p>
+    </div>
+
+    <!-- Conteúdo original das report-cards -->
+    <div class="report-card mb-4">
+      <h3>Relatório de Receitas por Período</h3>
+      <p>
+        Visualize as receitas totais da empresa agrupadas por dia em um período
+        específico. As datas podem ser vazias para incluir todo o período
+        disponível.
+      </p>
+      <div class="report-filters mb-3">
+        <div class="field me-3">
+          <label for="startDate">Data Inicial:</label>
+          <input type="date" id="startDate" [(ngModel)]="startDate" />
+        </div>
+        <div class="field">
+          <label for="endDate">Data Final:</label>
+          <input type="date" id="endDate" [(ngModel)]="endDate" />
+        </div>
+      </div>
+      <button class="btn btn-primary" (click)="generateRevenueReportByPeriod()">
+        <i class="bi bi-file-earmark-pdf me-1"></i> Gerar Relatório
+      </button>
+    </div>
+
+    <div class="report-card">
+      <h3>Relatório de Receitas por Categoria</h3>
+      <p>
+        Visualize as receitas totais da empresa, desde sempre, agrupadas por
+        categoria de equipamento.
+      </p>
+      <button
+        class="btn btn-success"
+        (click)="generateRevenueReportByCategory()"
+      >
+        <i class="bi bi-file-earmark-pdf me-1"></i> Gerar Relatório
+      </button>
+    </div>
+  </div>
+</section>
