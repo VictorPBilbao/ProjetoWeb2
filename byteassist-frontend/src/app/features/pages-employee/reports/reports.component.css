@@ -42,7 +42,7 @@
 }
 .titulo-wrapper .titulo-relatorios {
   margin-top: -60px;
-  font-size: 2rem;       /* ajusta aqui */
+  font-size: 1.8rem;       /* ajusta aqui */
   font-weight: 700;
   color: #ffffff;          /* texto em branco sobre o blob */
   white-space: nowrap;
