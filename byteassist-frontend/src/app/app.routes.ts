@@ -18,8 +18,8 @@ import { PaymentComponent } from './features/pages/payment/payment.component';
 // Páginas do funcionário
 import { BudgetingComponent } from './features/pages-employee/budgeting/budgeting.component';
 import { RequestsComponent } from './features/pages-employee/requests/requests.component';
-import { RegistrationComponent } from './features/pages-employee/registration/registration.component';
 import { TaskViewComponent } from './features/pages/task-view/task-view.component';
+import { CategoriesComponent } from './features/pages-admin/categories/categories.component';
 
 //Páginas de admin
 import { EmployeesComponent } from './features/pages-admin/employees/employees.component';
@@ -118,11 +118,11 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'funcionario/cadastros',
-    component: RegistrationComponent,
+    path: 'admin/categorias',
+    component: CategoriesComponent,
     canActivate: [authGuard],
     data: {
-      role: 'RULE_EMPLOYEE'
+      role: 'RULE_ADMIN'
     }
   },
   {

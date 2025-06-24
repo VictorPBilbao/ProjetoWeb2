@@ -121,6 +121,8 @@ export class UserService {
       Authorization: `Bearer ${this.authService.getToken()}`,
     });
 
+    this.loadingService.show(); // Exibe o loading
+
     let params = new HttpParams();
     if (expand) {
       params = params.set('expand', expand);
@@ -128,7 +130,10 @@ export class UserService {
 
     return this.http
       .get<T>(`${this.apiUrl}/api/user/me`, { headers, params })
-      .pipe(catchError(handleErrors.handleError));
+      .pipe(
+        finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
+        catchError(handleErrors.handleError)
+      );
   }
 
   getUser(): Observable<User> {

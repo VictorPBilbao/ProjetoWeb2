@@ -81,17 +81,7 @@
           <p class="nav-link-text">Orçamentos</p>
         </a>
       </li>
-      <!-- <li class="nav-item" *ngIf="employeeLinksVisible">
-        <a
-          class="nav-link flex items-center menu-padding"
-          routerLink="/funcionario/cadastros"
-          routerLinkActive="active"
-        >
-          <img src="/images/menu-sidebar/folder.png" class="menu-icon" />
-          <p class="nav-link-text">Cadastros</p>
-        </a>
-      </li> -->
-
+      
       <li class="nav-item" *ngIf="employeeLinksVisible">
         <a
           class="nav-link flex items-center menu-padding"
@@ -106,7 +96,7 @@
       <li class="nav-item nav-item-seperator">
         <div class="nav-border"></div>
       </li>
-
+      
       <!--Employee- END -->
 
       <li class="nav-item" *ngIf="clientLinksVisible">
@@ -138,8 +128,9 @@
           class="nav-link flex items-center menu-padding"
           routerLink="/admin/funcionarios"
           routerLinkActive="active"
-        >
-          <img src="/images/menu-sidebar/folder.png" class="menu-icon" />
+
+          <img src="/images/menu-sidebar/employee-icon.png" class="menu-icon">
+        
           <p class="nav-link-text">Funcionários</p>
         </a>
       </li>
@@ -149,9 +140,21 @@
           class="nav-link flex items-center menu-padding"
           routerLink="/admin/cadastrar-funcionario"
           routerLinkActive="active"
-        >
-          <img src="/images/menu-sidebar/folder.png" class="menu-icon" />
+          
+          <img src="/images/menu-sidebar/new-employee-icon.png" class="menu-icon">
+        
           <p class="nav-link-text">Cadastrar Funcionario</p>
+        </a>
+      </li>
+
+      <li class="nav-item" *ngIf="adminLinksVisible">
+        <a
+          class="nav-link flex items-center menu-padding"
+          routerLink="/admin/categorias"
+          routerLinkActive="active"
+        >
+          <img src="/images/menu-sidebar/equipment-icon.png" class="menu-icon">
+          <p class="nav-link-text">Categorias</p>
         </a>
       </li>
 

@@ -1,0 +1,85 @@
+<app-notification *ngIf="showNotification" [message]="message"></app-notification>
+<section class="equipment-types-section">
+  <div class="container">
+
+    <div class="title-box">
+      <h2 class="title">TIPOS DE EQUIPAMENTO</h2>
+    </div>
+
+    <div class="header">
+      <p>Aqui você pode visualizar, criar e editar tipos de equipamentos de forma prática.</p>
+    </div>
+
+    <table class="equipment-table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Descrição</th>
+          <th>Status</th>
+          <th>Criado Em</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Entrada para novo tipo -->
+        <tr>
+          <td>
+            <input [(ngModel)]="newEquipmentType.id" placeholder="Nome" />
+          </td>
+          <td>
+            <input [(ngModel)]="newEquipmentType.description" placeholder="Descrição" />
+          </td>
+          <td colspan="3">
+            <button class="btn-green" (click)="addEquipmentType()">Salvar Novo</button>
+          </td>
+        </tr>
+
+        <!-- Tipos existentes -->
+        <tr *ngFor="let row of equipmentTypeList">
+          <!-- Nome -->
+          <td>{{ row.equipmentType.id | getRecordId }}</td>
+
+          <!-- Descrição -->
+          <td *ngIf="!row.isEditing">{{ row.equipmentType.description }}</td>
+          <td *ngIf="row.isEditing">
+            <input [(ngModel)]="row.equipmentType.description" />
+          </td>
+
+          <!-- Status -->
+          <td>
+            <span
+              *ngIf="row.isEditing"
+              [class.status-active]="row.equipmentType.active"
+              [class.status-inactive]="!row.equipmentType.active"
+              (click)="toggleStatus(row)"
+              class="status-toggle"
+            >
+              {{ row.equipmentType.active ? 'Ativa' : 'Inativa' }}
+            </span>
+
+            <span
+              *ngIf="!row.isEditing"
+              [class.status-active]="row.equipmentType.active"
+              [class.status-inactive]="!row.equipmentType.active"
+            >
+              {{ row.equipmentType.active ? 'Ativa' : 'Inativa' }}
+            </span>
+          </td>
+
+          <!-- Criado em -->
+          <td>{{ row.equipmentType.createdAt | date: 'dd/MM/yyyy' }}</td>
+
+          <!-- Ações -->
+          <td class="action-buttons">
+            <button (click)="toggleEdit(row)">
+              {{ row.isEditing ? 'Salvar' : 'Editar' }}
+            </button>
+            <button class="btn-delete" (click)="deleteEquipmentType(row)">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
