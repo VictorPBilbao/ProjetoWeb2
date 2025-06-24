@@ -32,7 +32,7 @@ public class EquipmentRepo implements EquipmentRepoInterface {
             equipments.forEachRemaining(equipmentList::add);
             return Optional.ofNullable(equipmentList);
         } catch (Exception e) {
-            return Optional.empty();
+            throw e;
         }
     }
     

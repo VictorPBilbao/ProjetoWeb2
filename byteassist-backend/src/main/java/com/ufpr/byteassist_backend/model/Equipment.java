@@ -4,6 +4,7 @@ import com.surrealdb.RecordId;
 import com.ufpr.byteassist_backend.validation.ValidationGroups;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,9 +22,9 @@ public class Equipment {
     
     @NotBlank(groups = ValidationGroups.Create.class, message = "Model cannot be blank when creating an equipment")
     private String model;
-    
-    @NotBlank(groups = ValidationGroups.Create.class, message = "Type cannot be blank when creating an equipment")
-    private String type;
+
+    @NotNull(groups = ValidationGroups.Create.class, message = "Type cannot be null when creating an equipment")
+    private RecordId type;
     
     private String color;
 }
