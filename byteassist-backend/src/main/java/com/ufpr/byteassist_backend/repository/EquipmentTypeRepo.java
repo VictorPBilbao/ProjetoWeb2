@@ -62,7 +62,10 @@ public class EquipmentTypeRepo implements EquipmentTypeRepoInterface {
     @Override
     public Boolean deleteEquipmentType(String id) {
         try {
-            db.delete(new RecordId("EquipmentType", id));
+            RecordId recordId = new RecordId("EquipmentType", id);
+            String query = "UPDATE %s SET active = false".formatted(recordId);
+            System.out.println("Executing query: " + query);
+            db.query(query);
             return true;
         } catch (Exception e) {
             return false;
