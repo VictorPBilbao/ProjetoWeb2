@@ -17,15 +17,15 @@
     <!-- Container da solicitação -->
     <div class="solicitation-container">
       <div class="solicitation-card">
-        <form #registerForm="ngForm" (ngSubmit)="createSolicitacao()" class="solicitation-form">
-
-          <!-- LINHA de campos -->
+        <form #registerForm="ngForm" (ngSubmit)="createSolicitacao()" class="solicitation-form">          <!-- LINHA de campos -->
           <div class="form-row">
             <div class="form-group">
-              <label for="categoria">CATEGORIA</label>
+              <label for="categoria">TIPO DE EQUIPAMENTO</label>
               <select id="categoria" name="categoria" [(ngModel)]="solicitation.categoria" class="form-select" required>
                 <option value="">Selecione</option>
-                <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+                <option *ngFor="let equipmentType of equipmentTypes" [value]="equipmentType.id">
+                  {{ equipmentType.description || recordIdService.getId(equipmentType.id || '') }}
+                </option>
               </select>
             </div>
 

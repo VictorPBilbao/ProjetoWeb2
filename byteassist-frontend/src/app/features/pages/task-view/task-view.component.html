@@ -71,7 +71,7 @@
         ><span class="ms-3">
           <i class="bi bi-person-badge"></i>
           <strong>Responsável:</strong>
-          {{ task.assignee || "Ainda não atribuído" }}
+          {{ ( task.assignee | getRecordId ) || "Ainda não atribuído" }}
         </span>
         @if ((userRole === 'RULE_EMPLOYEE' || userRole === 'RULE_ADMIN') &&
         !task.assignee) {
@@ -176,11 +176,10 @@
       <h5 class="mb-2"><i class="bi bi-cpu me-1"></i> Equipamento</h5>
       @if (equipment) {
       <div><strong>Modelo:</strong> {{ equipment.model }}</div>
-      <div><strong>Marca:</strong> {{ equipment.brand }}</div>
-      @if (equipment.color) {
+      <div><strong>Marca:</strong> {{ equipment.brand }}</div>      @if (equipment.color) {
       <div><strong>Cor:</strong> {{ equipment.color }}</div>
       }
-      <div><strong>Tipo:</strong> {{ equipment.type }}</div>
+      <div><strong>Tipo:</strong> {{ equipment.type | getRecordId }}</div>
       } @else {
       <span class="text-muted">Sem informações de equipamento.</span>
       }
@@ -264,7 +263,7 @@
     <h4>Comentários</h4>
     <div class="comments-list mb-3">
       @for (comment of comments; track comment.id) { @if ((comment.in |
-      getRecordId) === 'byteassist_bot') {
+      getRecordId) === 'byteassist-bot') {
       <div class="bot-comment mb-3">
         <div class="d-flex align-items-center mb-1">
           <span class="text-muted small me-2">{{
