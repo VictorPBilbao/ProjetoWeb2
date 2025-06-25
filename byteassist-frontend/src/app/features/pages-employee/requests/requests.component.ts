@@ -55,56 +55,42 @@ export class RequestsComponent implements OnInit {
   ].sort(); // Opcional: ordenar alfabeticamente para exibição
 
 
-  mostrarMinhasTarefas: boolean = true; // Por padrão, mostra as minhas tarefas
+  mostrarMinhasTarefas: boolean = false; // Por padrão, mostra as minhas tarefas
 
   constructor(
     private taskService: TaskService, //pega as tasks de quem ta logado
     private router: Router
   ) { }
 
-  // ngOnInit(): void {
-  //   this.taskService.getAllMyTasks('assignee', undefined, ['equipment'])
-  //     .subscribe({
-  //       next: (tasks) => {
-  //         console.log('📦 Dados recebidos da API:', tasks);
-  //         this.solicitacoes = tasks;
-  //         this.filtrarSolicitacoes();
-  //       },
-  //       error: (err) => console.error('Erro ao carregar solicitações:', err)
-  //     });
-  // }
-
   ngOnInit(): void {
     this.estadosDisponiveis = [...this.TODOS_OS_STATUS];
-    // 1. Carrega as minhas tarefas
+
+    // 1. Carrega todas as tasks abertas primeiro
+    this.taskService.getAllTasks(undefined, ['equipment'])
+      .subscribe({
+        next: (tasks) => {
+          console.log('🌍 Todas as tarefas recebidas da API:', tasks);
+          this.allSolicitacoes = tasks;
+          if (!this.mostrarMinhasTarefas) {
+            this.solicitacoes = [...this.allSolicitacoes];
+            this.filtrarSolicitacoes();
+          }
+        },
+        error: (err) => console.error('Erro ao carregar todas as solicitações:', err)
+      });
+
+    // 2. Depois carrega minhas tarefas
     this.taskService.getAllMyTasks('assignee', undefined, ['equipment'])
       .subscribe({
         next: (tasks) => {
           console.log('📦 Minhas tarefas recebidas da API:', tasks);
           this.mySolicitacoes = tasks;
-          // Se estiver mostrando minhas tarefas por padrão, atualiza a lista principal
           if (this.mostrarMinhasTarefas) {
-            this.solicitacoes = [...this.mySolicitacoes]; // Copia para a lista ativa
-            //this.atualizarEstadosDisponiveis();
+            this.solicitacoes = [...this.mySolicitacoes];
             this.filtrarSolicitacoes();
           }
         },
         error: (err) => console.error('Erro ao carregar minhas solicitações:', err)
-      });
-
-    // 2. Carrega TODAS as tarefas
-    this.taskService.getAllTasks(undefined, ['equipment']) // Chamada para o novo método
-      .subscribe({
-        next: (tasks) => {
-          console.log('🌍 Todas as tarefas recebidas da API:', tasks);
-          this.allSolicitacoes = tasks;
-          // Se não estiver mostrando minhas tarefas por padrão, atualiza a lista principal com todas
-          if (!this.mostrarMinhasTarefas) {
-            this.solicitacoes = [...this.allSolicitacoes]; // Copia para a lista ativa
-            this.filtrarSolicitacoes();
-          }
-        },
-        error: (err) => console.error('Erro ao carregar todas as solicitações:', err)
       });
   }
 

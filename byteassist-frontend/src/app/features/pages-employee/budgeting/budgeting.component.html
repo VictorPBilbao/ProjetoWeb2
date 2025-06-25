@@ -85,7 +85,7 @@
         <div class="equipment-info" *ngIf="task.equipment">
           <h4><i class="bi bi-gear"></i> Equipamento</h4>
           <span class="equipment-id">
-            {{ typeof task.equipment === 'string' ? (task.equipment | getRecordId) : (task.equipment.id | getRecordId) }}
+            {{ task.equipment | equipmentField : "id" | getRecordId }}
           </span>
         </div>
         <!-- Ações -->

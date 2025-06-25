@@ -1,7 +1,12 @@
 <section>
   <div class="meu-container-principal">
     <!-- Simple notification area -->
-    <div *ngIf="showNotification" class="alert" [ngClass]="{'alert-success': !isError, 'alert-danger': isError}" role="alert">
+    <div
+      *ngIf="showNotification"
+      class="alert"
+      [ngClass]="{ 'alert-success': !isError, 'alert-danger': isError }"
+      role="alert"
+    >
       {{ message }}
     </div>
 
@@ -21,7 +26,7 @@
 
       <!-- Descrição -->
       <p class="descricao-relatorios">
-        Escolha abaixo qual relatório deseja gerar.
+        Relatório de receitas geradas pela empresa.
       </p>
     </div>
 
@@ -29,9 +34,9 @@
     <div class="report-card mb-4">
       <h3>Relatório de Receitas</h3>
       <p>
-        Visualize as receitas totais da empresa agrupadas por dia e por categoria de equipamento em um período
-        específico. As datas podem ser vazias para incluir todo o período
-        disponível.
+        Visualize as receitas totais da empresa agrupadas por dia e por
+        categoria de equipamento em um período específico. As datas podem ser
+        vazias para incluir todo o período disponível.
       </p>
       <div class="report-filters mb-3">
         <div class="field me-3">
