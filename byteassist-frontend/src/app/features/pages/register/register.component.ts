@@ -72,7 +72,7 @@ export class RegisterComponent {
               confirmButtonText: 'OK'
             });
             if (!this.isAdmin) {
-              this.router.navigate(['/login']);
+              this.router.navigate(['/login/1']);
             } else {
               this.router.navigate(['/admin/funcionarios']);
             }
