@@ -67,11 +67,12 @@ public class UserRepo implements UserRepoInterface {
     @Override
     public Boolean deleteUser(String username) {
         try {
-            // Remove o registro do usuário do banco de dados
-            db.delete(new RecordId("User", username));
+            RecordId recordId = new RecordId("User", username);
+            String query = "UPDATE %s SET isActive = false".formatted(recordId);
+            System.out.println("Executing query: " + query);
+            db.query(query);
             return true;
         } catch (Exception e) {
-            // Em caso de erro, retorna false
             return false;
         }
     }
@@ -143,8 +144,8 @@ public class UserRepo implements UserRepoInterface {
     @Override
     public Optional<List<String>> getAllEmployees() {
         try {
-            // Busca todos os funcionários no banco de dados
-            Response response = db.query("select value id from User where role = 'Employee'");
+            // Busca todos os funcionários ativos no banco de dados
+            Response response = db.query("select value id from User where role = 'Employee' AND isActive = true");
             List<String> employees = new ArrayList<>();
             for (com.surrealdb.Value value : response.take(0).getArray()) {
                 // value is already a string, how to convert it to String without adding double quotes again?
@@ -153,6 +154,22 @@ public class UserRepo implements UserRepoInterface {
             return Optional.ofNullable(employees);
         } catch (Exception e) {
             // Em caso de erro, retorna Optional vazio
+            return Optional.empty();
+        }
+    }
+
+    public Optional<List<User>> getActiveUsers() {
+        try {
+            String query = "SELECT * FROM User WHERE isActive = true";
+            Response response = db.query(query);
+
+            List<User> users = new ArrayList<>();
+            for (var userRecord : response.take(0).getArray()) {
+                User user = userRecord.get(User.class);
+                users.add(user);
+            }
+            return Optional.of(users);
+        } catch (Exception e) {
             return Optional.empty();
         }
     }
