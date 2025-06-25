@@ -126,8 +126,8 @@
               *ngFor="let task of solicitacoesPorPagina; trackBy: trackByTaskId"
             >
               <td>{{ task.id | getRecordId }}</td>
-              <td>{{ task.time?.createdAt | date : "dd/MM/yyyy" }}</td>
-              <td>{{ task.time?.createdAt | date : "HH:mm:ss" }}</td>
+              <td>{{ task.time?.createdAt | date : "dd/MM/yyyy" : '-0600' }}</td>
+              <td>{{ task.time?.createdAt | date : "HH:mm:ss" : '-0600' }}</td>
               <td>
                 {{
                   task.equipment

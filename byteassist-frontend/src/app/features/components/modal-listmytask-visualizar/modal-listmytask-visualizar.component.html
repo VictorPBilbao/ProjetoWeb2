@@ -26,9 +26,9 @@
             <p><strong>Título:</strong> {{ selecionado.title }}</p>
             <p>
               <strong>Data:</strong>
-              {{ selecionado.time?.createdAt | date : "dd/MM/yyyy" }}
+              {{ selecionado.time?.createdAt | date : "dd/MM/yyyy" : '-0600' }}
               <strong class="ms-3">Hora:</strong>
-              {{ selecionado.time?.createdAt | date : "HH:mm:ss" }}
+              {{ selecionado.time?.createdAt | date : "HH:mm:ss" : '-0600' }}
             </p>
             <p>
               <strong>Estado:</strong>

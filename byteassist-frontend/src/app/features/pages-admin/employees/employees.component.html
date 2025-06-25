@@ -45,7 +45,7 @@
                 {{ user.isActive ? 'Ativa' : 'Inativo' }}
               </span>
             </td>
-            <td>{{ user.time.createdAt | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ user.time.createdAt | date: 'dd/MM/yyyy' : '-0600' }}</td>
             <td *ngIf="user.id | getRecordId as userId">
               <button class="view-btn" title="Visualizar" (click)="visualizeUser(userId)">
                 <i class="fa fa-eye"></i>
