@@ -24,13 +24,13 @@ public class JwtService {
 
         return JWT.create()
                 .withSubject(userId)
-                .withClaim("username", username)
+                .withClaim("username", username.replaceAll("[⟨⟩]", ""))
                 .withClaim("role", role)
                 .withIssuedAt(issuedAt)
                 .withExpiresAt(expiresAt)
                 .sign(ALGORITHM);
     }
-    
+
     public String validateToken(String token) {
         try {
             return JWT.require(ALGORITHM)
