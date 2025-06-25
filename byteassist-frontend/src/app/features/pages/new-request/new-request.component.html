@@ -24,7 +24,7 @@
               <select id="categoria" name="categoria" [(ngModel)]="solicitation.categoria" class="form-select" required>
                 <option value="">Selecione</option>
                 <option *ngFor="let equipmentType of equipmentTypes" [value]="equipmentType.id">
-                  {{ equipmentType.description || recordIdService.getId(equipmentType.id || '') }}
+                  {{ recordIdService.getId(equipmentType.id || '') }}
                 </option>
               </select>
             </div>
