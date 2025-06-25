@@ -329,4 +329,23 @@ export class UserService {
         })
       );
   }
+
+  deleteUser(userId: string): Observable<User> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${this.authService.getToken()}`,
+    });
+
+    this.loadingService.show(); // Exibe o loading
+
+    return this.http.delete<User>(`${this.apiUrl}/api/user/${userId}`, { headers })
+      .pipe(
+        finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
+        catchError((err) => {
+          return throwError(
+            () => new Error('Erro ao deletar usuário: ' + err.message)
+          );
+        })
+      );
+  }
 }

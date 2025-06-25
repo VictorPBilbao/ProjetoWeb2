@@ -46,9 +46,12 @@
               </span>
             </td>
             <td>{{ user.time.createdAt | date: 'dd/MM/yyyy' }}</td>
-            <td *ngIf="user.id | getRecordId as userId">
+            <td *ngIf="user.id | getRecordId as userId" style="width: 100px;">
               <button class="view-btn" title="Visualizar" (click)="visualizeUser(userId)">
                 <i class="fa fa-eye"></i>
+              </button>
+              <button class="view-btn" title="Excluir" (click)="deleteUser(userId)" style="margin-left: 5px;">
+                <i class="fa fa-trash"></i>
               </button>
             </td>
           </tr>
@@ -65,7 +68,5 @@
         Próxima
       </button>
     </div>
-
-    <app-notification *ngIf="showNotification" [message]="message"></app-notification>
   </div>
 </section>

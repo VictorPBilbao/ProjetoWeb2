@@ -2,15 +2,14 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user/user.service';
 import { User } from '../../shared/models/user.model';
-import { NotificationComponent } from '../../components/notification/notification.component';
 import { Router } from '@angular/router';
 import { RecordIdPipe } from './../../shared/pipes/record-id.pipe';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-employees',
   imports: [
     CommonModule,
-    NotificationComponent,
     RecordIdPipe
   ],
   templateUrl: './employees.component.html',
@@ -18,7 +17,6 @@ import { RecordIdPipe } from './../../shared/pipes/record-id.pipe';
 })
 export class EmployeesComponent {
   message: string = '';
-  showNotification: boolean = false;
   users: User[] = [];
   paginatedUsers: User[] = []; // usuários visíveis na página atual
   currentPage: number = 1;
@@ -31,8 +29,6 @@ export class EmployeesComponent {
   ) {}
 
   ngOnInit() {
-    this.showNotification = false;
-
     this.userService.getAllUsersByRole("Employee").subscribe({
       next: (users) => {
         this.users = users;
@@ -42,7 +38,12 @@ export class EmployeesComponent {
       error: (error) => {
         console.error('Erro ao carregar os usuários:', error);
         this.message = 'Erro ao carregar os usuários.';
-        this.showNotification = true;
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro',
+          text: this.message,
+          confirmButtonText: 'OK'
+        });
       }
     });
   }
@@ -76,6 +77,49 @@ export class EmployeesComponent {
     const start = (this.currentPage - 1) * this.itemsPerPage;
     const end = start + this.itemsPerPage;
     this.paginatedUsers = this.users.slice(start, end);
+  }
+
+  deleteUser(userId: string): void {
+    Swal.fire({
+      title: 'Tem certeza?',
+      text: "Você não poderá reverter isso!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sim, excluir!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.userService.deleteUser(userId).subscribe({
+          next: (user) => {
+            if (!user.id) {
+              Swal.fire(
+                'Erro!',
+                'Usuário não encontrado.',
+                'error'
+              );
+              return;
+            }
+
+            Swal.fire(
+              'Excluído!',
+              'O usuário foi excluído com sucesso.',
+              'success'
+            );
+
+            this.route.navigate(['/admin/funcionarios']);
+          },
+          error: (error) => {
+            console.error('Erro ao excluir o usuário:', error);
+            Swal.fire(
+              'Erro!',
+              'Não foi possível excluir o usuário.',
+              'error'
+            );
+          }
+        });
+      }
+    });
   }
 
   goToPreviousPage(): void {

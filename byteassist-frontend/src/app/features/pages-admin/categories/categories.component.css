@@ -101,3 +101,42 @@ table.equipment-table {
   background: #dc3545;
   color: white;
 }
+
+.equipment-type-form {
+  padding: 1rem 0;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field label {
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+
+input[type="text"] {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-actions {
+  text-align: right;
+  align-self: flex-end;
+}
+
+.btn-green {
+  background-color: #28a745;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-green:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
