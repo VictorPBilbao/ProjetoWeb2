@@ -9,6 +9,8 @@ import { NotificationComponent } from '../../components/notification/notificatio
 import { ActivatedRoute } from '@angular/router';
 import { TaskService } from '../../services/task/task.service';
 import { BudgetService } from '../../services/budget/budget.service';
+import { Router } from '@angular/router';
+
 
 registerLocaleData(localeData);
 
@@ -32,6 +34,7 @@ export class BudgetComponent {
   private readonly taskService = inject(TaskService);
   private readonly budgetService = inject(BudgetService);
   private readonly commentService = inject(CommentService);
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
     const taskId = this.route.snapshot.paramMap.get('taskId');
@@ -98,10 +101,13 @@ export class BudgetComponent {
       next: () => {
         this.message = 'Orçamento aprovado com sucesso.';
         this.showNotification = true;
+        this.router.navigate(['/solicitacoes']);
+
       },
       error: (error) => {
         this.message = 'Erro ao aprovar o orçamento.';
         this.showNotification = true;
+        this.router.navigate(['/solicitacoes']);
       },
     });
     //* now update the task to 'APROVADA'
@@ -129,6 +135,7 @@ export class BudgetComponent {
       next: () => {
         this.message = 'Orçamento rejeitado com sucesso.';
         this.showNotification = true;
+        this.router.navigate(['/solicitacoes']);
       },
       error: (error) => {
         this.message = 'Erro ao rejeitar o orçamento.';

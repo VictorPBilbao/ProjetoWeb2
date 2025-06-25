@@ -10,6 +10,7 @@ import { TaskService } from '../../services/task/task.service';
 import { RecordidService } from '../../services/utils/recordid.service';
 import localeData from '@angular/common/locales/pt';
 import { AuthService } from '../../services/auth/auth.service';
+import { EquipmentFieldPipe } from '../../shared/pipes/equipment-field.pipe';
 
 registerLocaleData(localeData);
 
@@ -21,6 +22,7 @@ registerLocaleData(localeData);
     FormsModule,
     RecordIdPipe,
     RouterModule,
+    EquipmentFieldPipe
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'pt' }],
   templateUrl: './budgeting.component.html',

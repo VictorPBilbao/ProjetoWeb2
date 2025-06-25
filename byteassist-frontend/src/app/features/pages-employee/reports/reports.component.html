@@ -1,5 +1,15 @@
 <section>
   <div class="meu-container-principal">
+    <!-- Simple notification area -->
+    <div
+      *ngIf="showNotification"
+      class="alert"
+      [ngClass]="{ 'alert-success': !isError, 'alert-danger': isError }"
+      role="alert"
+    >
+      {{ message }}
+    </div>
+
     <div class="cabecalho-relatorios">
       <!-- Blob num wrapper próprio -->
       <div class="blob-wrapper">
@@ -16,17 +26,17 @@
 
       <!-- Descrição -->
       <p class="descricao-relatorios">
-        Escolha abaixo qual relatório deseja gerar.
+        Relatório de receitas geradas pela empresa.
       </p>
     </div>
 
     <!-- Conteúdo original das report-cards -->
     <div class="report-card mb-4">
-      <h3>Relatório de Receitas por Período</h3>
+      <h3>Relatório de Receitas</h3>
       <p>
-        Visualize as receitas totais da empresa agrupadas por dia em um período
-        específico. As datas podem ser vazias para incluir todo o período
-        disponível.
+        Visualize as receitas totais da empresa agrupadas por dia e por
+        categoria de equipamento em um período específico. As datas podem ser
+        vazias para incluir todo o período disponível.
       </p>
       <div class="report-filters mb-3">
         <div class="field me-3">
@@ -38,21 +48,7 @@
           <input type="date" id="endDate" [(ngModel)]="endDate" />
         </div>
       </div>
-      <button class="btn btn-primary" (click)="generateRevenueReportByPeriod()">
-        <i class="bi bi-file-earmark-pdf me-1"></i> Gerar Relatório
-      </button>
-    </div>
-
-    <div class="report-card">
-      <h3>Relatório de Receitas por Categoria</h3>
-      <p>
-        Visualize as receitas totais da empresa, desde sempre, agrupadas por
-        categoria de equipamento.
-      </p>
-      <button
-        class="btn btn-success"
-        (click)="generateRevenueReportByCategory()"
-      >
+      <button class="btn btn-primary" (click)="generateReport()">
         <i class="bi bi-file-earmark-pdf me-1"></i> Gerar Relatório
       </button>
     </div>
