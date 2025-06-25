@@ -233,9 +233,8 @@ export class UserService {
         }),
         finalize(() => this.loadingService.hide()), // Esconde o loading após a requisição
         catchError((err) => {
-          return throwError(
-            () => new Error('Erro ao validar CEP: ' + err.message)
-          );
+          // Preserve o erro original
+          return throwError(() => err);
         })
       );
   }

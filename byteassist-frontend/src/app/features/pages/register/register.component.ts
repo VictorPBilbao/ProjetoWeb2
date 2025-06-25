@@ -228,10 +228,21 @@ export class RegisterComponent {
         }
       },
       error: (err) => {
-        this.message = err.message || 'Erro ao buscar CEP. Verifique sua conexão ou tente novamente mais tarde.';
-        this.showNotification = true;
-        this.isCepValid = false; // Erro na busca do CEP
-        this.registerForm?.controls['cep']?.setValue(''); // Reseta o campo de CEP
+        const status = err?.status;
+        console.log('status: ', status);
+        if (status >= 500 && status < 600 || status === 0) {
+          // Permite continuar mesmo com erro 500
+          this.message = 'Erro ao consultar o CEP, mas você pode continuar preenchendo os dados.';
+          this.showNotification = true;
+          this.isCepValid = true; // Permite seguir
+          // Não limpa o campo 'cep'
+        } else {
+          // Outros erros
+          this.message = err.message || 'Erro ao buscar CEP. Verifique sua conexão ou tente novamente mais tarde.';
+          this.showNotification = true;
+          this.isCepValid = false;
+          this.registerForm?.controls['cep']?.setValue('');
+        }
       }
     });
   }
