@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Relatório Diário</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            color: #333;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        
+        .header h1 {
+            color: #007bff;
+            margin: 0;
+            font-size: 28px;
+        }
+        
+        .report-info {
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        
+        .report-info p {
+            margin: 5px 0;
+            font-weight: bold;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .data-table th {
+            background-color: #007bff;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .data-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .data-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .data-table tr:hover {
+            background-color: #e3f2fd;
+        }
+        
+        .summary {
+            margin-top: 30px;
+            background-color: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .summary h3 {
+            margin-top: 0;
+            color: #28a745;
+        }
+        
+        .no-data {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            padding: 40px;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 12px;
+            color: #6c757d;
+            border-top: 1px solid #dee2e6;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Relatório Diário</h1>
+    </div>
+    
+    <div class="report-info">
+        <p>Gerado em: <span th:text="${#temporals.format(#temporals.createNow(), 'dd/MM/yyyy HH:mm:ss')}"></span></p>
+        <p th:if="${startDate != null and endDate != null}">
+            Período: <span th:text="${#temporals.format(startDate, 'dd/MM/yyyy')}"></span> até 
+            <span th:text="${#temporals.format(endDate, 'dd/MM/yyyy')}"></span>
+        </p>
+        <p th:if="${startDate == null or endDate == null}">Período: Todos os dados disponíveis</p>
+    </div>
+    
+    <div th:if="${dailyReports != null and !dailyReports.isEmpty()}">
+        <h2 style="color: #007bff; margin-top: 30px; margin-bottom: 15px;">Relatório de Vendas Diárias</h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="report : ${dailyReports}">
+                    <td th:text="${#temporals.format(report.createdAt, 'dd/MM/yyyy')}"></td>
+                    <td th:text="'R$ ' + ${#numbers.formatDecimal(report.valor / 100.0, 1, 2)}"></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="summary">
+            <h3>Resumo - Vendas Diárias</h3>
+            <p>Total de Registros: <span th:text="${dailyReports.size()}"></span></p>
+            <p>Valor Total: <span th:text="'R$ ' + ${#numbers.formatDecimal(#aggregates.sum(dailyReports.![valor]) / 100.0, 1, 2)}"></span></p>
+            <p>Valor Médio: <span th:text="'R$ ' + ${#numbers.formatDecimal(#aggregates.avg(dailyReports.![valor]) / 100.0, 1, 2)}"></span></p>
+        </div>
+    </div>
+    
+    <div th:if="${categoryReports != null and !categoryReports.isEmpty()}">
+        <h2 style="color: #007bff; margin-top: 30px; margin-bottom: 15px;">Vendas por Categoria</h2>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Categoria</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="report : ${categoryReports}">
+                    <td th:text="${report.categoria}"></td>
+                    <td th:text="'R$ ' + ${#numbers.formatDecimal(report.valor / 100.0, 1, 2)}"></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="summary">
+            <h3>Resumo - Vendas por Categoria</h3>
+            <p>Total de Categorias: <span th:text="${categoryReports.size()}"></span></p>
+            <p>Valor Total: <span th:text="'R$ ' + ${#numbers.formatDecimal(#aggregates.sum(categoryReports.![valor]) / 100.0, 1, 2)}"></span></p>
+            <p>Valor Médio por Categoria: <span th:text="'R$ ' + ${#numbers.formatDecimal(#aggregates.avg(categoryReports.![valor]) / 100.0, 1, 2)}"></span></p>
+        </div>
+    </div>
+    
+    <div th:if="${(dailyReports == null or dailyReports.isEmpty()) and (categoryReports == null or categoryReports.isEmpty())}" class="no-data">
+        <h3>Nenhum dado disponível para o período selecionado</h3>
+        <p>Tente um intervalo de datas diferente ou verifique se existem dados no sistema.</p>
+    </div>
+    
+    <div class="footer">
+        <p>ByteAssist - Sistema de Relatórios</p>
+    </div>
+</body>
+</html>
