@@ -92,18 +92,15 @@
               required
             />
           </div>
-          <!-- Valor -->
+          <!-- Valor formatado apenas para leitura -->
           <div class="form-group">
             <label for="valor">Valor (R$)</label>
             <input
-              type="number"
+              type="text"
               class="form-control"
               id="valor"
-              [(ngModel)]="pagamento.valor"
-              name="valor"
-              step="0.01"
+              [value]="pagamento.valor | dividePor100"
               readonly
-              required
             />
           </div>
         </div>

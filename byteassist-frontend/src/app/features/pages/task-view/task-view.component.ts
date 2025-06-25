@@ -169,11 +169,23 @@ export class TaskViewComponent implements OnInit {
       return;
     }
 
-    let commentContent = `**Manutenção Realizada:**\n\n${this.descricaoManutencao.trim()}`;
+    const tecnico = this.authService?.getUsername?.() || 'Técnico Desconhecido';
+    const data = new Date().toLocaleString();
 
-    if (this.orientacoesCliente.trim()) {
-      commentContent += `\n\n**Orientações para o Cliente:**\n\n${this.orientacoesCliente.trim()}`;
-    }
+    let commentContent = `### ⚙️ Relatório Técnico - Byte Assist
+
+A Byte Assist informa que foi realizada uma **intervenção técnica** no equipamento relacionado a esta solicitação.
+
+🔧 **Descrição:** ${this.descricaoManutencao.trim()}
+
+📌 **Orientações:** ${this.orientacoesCliente.trim() || 'Sem orientações.'}
+
+---
+
+📅 ${data} | 👨‍🔧 ${tecnico}
+
+📝 *Registro gerado automaticamente pelo sistema.*
+`;
 
     const newComment: Comment = {
       out: 'Task:' + taskId,
@@ -186,7 +198,7 @@ export class TaskViewComponent implements OnInit {
         this.closeManutencaoModal();
         Swal.fire('Sucesso', 'Manutenção registrada com sucesso como comentário!', 'success');
 
-        ///Atualiza o status da tarefa para 'ARRUMADA'
+        // Atualiza o status da tarefa para 'ARRUMADA'
         const updatedTaskPayload = {
           id: this.task?.id,
           status: 'ARRUMADA',
@@ -194,7 +206,7 @@ export class TaskViewComponent implements OnInit {
 
         this.taskService.updateTask(updatedTaskPayload).subscribe({
           next: (updatedTask) => {
-            this.task = updatedTask; // Atualiza a tarefa no frontend com a resposta do backend
+            this.task = updatedTask;
             Swal.fire('Sucesso', 'Status da tarefa atualizado para ARRUMADA.', 'success');
           },
           error: (err) => {

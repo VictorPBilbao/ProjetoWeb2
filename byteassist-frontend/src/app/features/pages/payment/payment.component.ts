@@ -6,11 +6,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RecordidService } from '../../services/utils/recordid.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { Budget } from '../../shared/models/budget.model';
+import { DividePor100Pipe } from '../../shared/pipes/divide-por100.pipe';
 
 @Component({
   selector: 'app-payment',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, DividePor100Pipe],
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.css'],
 })
@@ -57,6 +58,7 @@ export class PaymentComponent implements OnInit {
 
   // Método de inicialização que será chamado quando o componente for carregado
   ngOnInit(): void {
+
     // Garante que o código de barras e a chave Pix sejam gerados na inicialização
     this.codigoBarras = this.gerarCodigoBarras();
     this.chavePix = this.gerarChavePix();
