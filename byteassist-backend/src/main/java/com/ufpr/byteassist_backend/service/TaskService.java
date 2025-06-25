@@ -83,7 +83,7 @@ public class TaskService {
         // * Create a initial comment for the task
         Comment comment = new Comment();
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        comment.setIn(new RecordId("User", "byteassist_bot"));
+        comment.setIn(new RecordId("User", "byteassist-bot"));
         comment.setOut(createdTask.get().getId());
         comment.setComment("Solicitação criada por _" + user.getUsername() + "_");
 
@@ -112,47 +112,27 @@ public class TaskService {
                         "No task found with the provided ID"));
 
 
-        // se antes a task.status estava 'REJEITADA' e agora esta em 'APROVADA', criar
-        // um comentário
-
-        // For each non-null field in the incoming task, create a comment about the
-        // update
-        if (task.getTitle() != null) {
-            createUpdateComment(updatedTask.getId(),
-                    "Título alterado para _" + task.getTitle() + "_ por _" + user.getUsername() + "_");
+        // Generate update comments based on what fields were changed
+        
+        // Handle status changes with specific messages for status transitions
+        if (task.getStatus() != null && !existingTask.getStatus().equals(task.getStatus())) {
+            String statusComment = generateStatusUpdateComment(existingTask.getStatus(), task.getStatus(), user.getUsername());
+            createUpdateComment(updatedTask.getId(), statusComment);
         }
-        if (task.getSummary() != null) {
-            createUpdateComment(updatedTask.getId(),
-                    "Descrição alterada para _" + task.getSummary() + "_ por _" + user.getUsername() + "_");
+        
+        // Handle assignee changes (redirection)
+        if (task.getAssignee() != null && (existingTask.getAssignee() == null || 
+            !existingTask.getAssignee().getId().equals(task.getAssignee().getId()))) {
+            String assigneeComment = "**📋 Responsável alterado** para _" + task.getAssignee().getId() + 
+                                   "_ por _" + user.getUsername() + "_. Solicitação **redirecionada** 🔄";
+            createUpdateComment(updatedTask.getId(), assigneeComment);
         }
-        if (task.getStatus() != null) {
-            if (existingTask.getStatus().equals("REJEITADA") && task.getStatus().equals("APROVADA")) {
-                createUpdateComment(updatedTask.getId(),
-                        "Serviço resgatado por _" + user.getUsername() + "_");
-            } else if (existingTask.getStatus().equals("ARRUMADA") && task.getStatus().equals("FINALIZADA")) {
-                createUpdateComment(updatedTask.getId(),
-                        "Serviço pago pelo usuário _" + user.getUsername() + "_");
-            } else {
-                createUpdateComment(updatedTask.getId(),
-                        "Status alterado para _" + task.getStatus() + "_. por _" + user.getUsername() + "_");
-            }
-        }
-        if (task.getAssignee() != null) {
-            createUpdateComment(updatedTask.getId(),
-                    "Responsável alterado para _" + task.getAssignee().getId() + "_. por _" + user.getUsername() + "_");
-        }
-        if (task.getEquipment() != null) {
-            createUpdateComment(updatedTask.getId(),
-                    "Equipamento alterado para _" + task.getEquipment().getId() + "_. por _" + user.getUsername()
-                            + "_");
-        }
-        if (task.getBudget() != null) {
-            createUpdateComment(updatedTask.getId(),
-                    "Orçamento alterado para _" + task.getBudget().getId() + "_. por _" + user.getUsername() + "_");
-        }
-        if (task.getType() != null) {
-            createUpdateComment(updatedTask.getId(),
-                    "Tipo alterado para _" + task.getType() + "_. por _" + user.getUsername() + "_");
+        
+        // Handle budget changes (new budget only - budgets cannot be updated)
+        if (task.getBudget() != null && (existingTask.getBudget() == null || 
+            !existingTask.getBudget().getId().equals(task.getBudget().getId()))) {
+            String budgetComment = "**💰 Orçamento adicionado** por _" + user.getUsername() + "_ 📊";
+            createUpdateComment(updatedTask.getId(), budgetComment);
         }
 
         // Expand task if requested
@@ -203,10 +183,40 @@ public class TaskService {
 
     public void createUpdateComment(RecordId task, String text) {
         Comment comment = new Comment();
-        comment.setIn(new RecordId("User", "byteassist_bot"));
+        comment.setIn(new RecordId("User", "byteassist-bot"));
         comment.setOut(task);
         comment.setComment(text);
 
         commentService.createComment(comment);
+    }
+
+    private String generateStatusUpdateComment(String fromStatus, String toStatus, String username) {
+        String transition = fromStatus + "_TO_" + toStatus;
+        
+        switch (transition) {
+            case "ABERTA_TO_ORÇADA":
+                return "**📋 Solicitação orçada** por _" + username + "_ 💰";
+                
+            case "ORÇADA_TO_REJEITADA":
+                return "**❌ Solicitação rejeitada** por _" + username + "_ 🚫";
+                
+            case "REJEITADA_TO_APROVADA":
+                return "**🔄 Solicitação resgatada** por _" + username + "_ ✨";
+                
+            case "ORÇADA_TO_APROVADA":
+                return "**✅ Solicitação aprovada** por _" + username + "_ 🎉";
+                
+            case "APROVADA_TO_ARRUMADA":
+                return "**🔧 Solicitação arrumada** por _" + username + "_ 🛠️";
+                
+            case "ARRUMADA_TO_PAGA":
+                return "**💳 Solicitação paga** por _" + username + "_ 💰";
+                
+            case "PAGA_TO_FINALIZADA":
+                return "**🏁 Solicitação finalizada** por _" + username + "_ ✅";
+                
+            default:
+                return "**🔄 Solicitação atualizada** por _" + username + "_ - Status: _" + toStatus + "_ 📝";
+        }
     }
 }
