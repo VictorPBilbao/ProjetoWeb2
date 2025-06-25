@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'; // Importa ReactiveFormsModule para usar formulários reativos
 import { CommonModule } from '@angular/common'; // Importa o CommonModule para usar ngIf e ngFor no template
-import { NotificationComponent } from '../../components/notification/notification.component'; // Importa o componente de notificação
 import { tap, concatMap } from 'rxjs/operators';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../../services/user/user.service';
+import confetti from 'canvas-confetti'
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    NotificationComponent
+    ReactiveFormsModule
   ], // Importa os módulos necessários
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -21,7 +21,6 @@ import { UserService } from '../../services/user/user.service';
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   message: string = '';
-  showNotification: boolean = false;
 
   constructor (
     private fb: FormBuilder,
@@ -31,6 +30,18 @@ export class LoginComponent implements OnInit {
     private userService: UserService) { }
 
   ngOnInit(): void {
+    const isRegisterSuccess = this.route.snapshot.paramMap.get('isRegisterSuccess');
+    if (isRegisterSuccess === '1') {
+      Swal.fire({
+        title: 'Cadastro realizado com sucesso!',
+        text: 'Faça login para continuar.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      });
+
+      this.launchConfetti(); // Lança confete se o cadastro foi bem-sucedido
+    }
+
     // Cria o formulário de login com campos e validações
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
@@ -39,8 +50,25 @@ export class LoginComponent implements OnInit {
 
     this.route.queryParamMap.subscribe(params => {
       this.message = params.get('error') ?? '';
-      this.showNotification = !!this.message;
+      if (!!this.message) {
+        Swal.fire({
+          title: 'Erro',
+          text: this.message,
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      }
     });
+  }
+
+  launchConfetti() {
+    confetti({
+      particleCount: 500,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#ff0000', '#00ff00', '#0000ff'],
+      zIndex: 1060
+    })
   }
 
   // Método para verificar se o campo está inválido
@@ -55,7 +83,6 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      this.showNotification = false;
       this.auth.login(this.loginForm.value.username, this.loginForm.value.password).pipe(
         tap(response => {
           if (response && response.id && response.token != "") {
@@ -79,11 +106,20 @@ export class LoginComponent implements OnInit {
         },
         error: (err) => {
           if (err.status === 401) {
-            this.message = 'Usuário ou senha inválidos. Tente novamente.';
+            Swal.fire({
+              title: 'Erro de autenticação',
+              text: 'Usuário ou senha inválidos. Tente novamente.',
+              icon: 'error',
+              confirmButtonText: 'OK'
+            });
           } else {
-            this.message = 'Erro ao fazer login. Verifique sua conexão ou tente novamente mais tarde.';
+            Swal.fire({
+              title: 'Erro',
+              text: 'Erro ao fazer login. Verifique sua conexão ou tente novamente mais tarde.',
+              icon: 'error',
+              confirmButtonText: 'OK'
+            });
           }
-          this.showNotification = true;
         }
       });
     } else {

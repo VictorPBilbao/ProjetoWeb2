@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { NotificationComponent } from '../../components/notification/notification.component';
 import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user/user.service';
 import { User } from '../../shared/models/user.model';
@@ -9,13 +8,13 @@ import { Person } from '../../shared/models/person.model';
 import { PersonAddress } from '../../shared/models/person-address.model';
 import { UserTime } from '../../shared/models/user-time.model';
 import { DateValidatorDirective } from '../../shared/directives/date-validator.directive';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-register',
   imports: [
     CommonModule,
     FormsModule,
-    NotificationComponent,
     RouterLink,
     DateValidatorDirective
   ],
@@ -26,7 +25,6 @@ export class RegisterComponent {
   @ViewChild('registerForm') registerForm!: NgForm | undefined;
   user: User = {} as User;
   message: string = '';
-  showNotification: boolean = false;
   currentStep: number = 1; // Variável para controlar o passo atual do formulário
   showPassword: boolean = false; // Variável para controlar a visibilidade da senha
   isCepValid: boolean = true;
@@ -44,12 +42,16 @@ export class RegisterComponent {
   }
 
   onSubmit() {
-    this.showNotification = false; // Reseta a notificação ao submeter o formulário
     this.message = ''; // Reseta a mensagem ao submeter o formulário
 
     if (this.isCepValid === false) {
       this.message = 'CEP inválido. Por favor, verifique o CEP informado.';
-      this.showNotification = true;
+      Swal.fire({
+        icon: 'warning',
+        title: 'Erro',
+        text: this.message,
+        confirmButtonText: 'OK'
+      });
       return;
     }
 
@@ -62,8 +64,13 @@ export class RegisterComponent {
       this.userService.createUser(this.user).subscribe({
         next: (response) => {
           if (response) {
-            this.message = 'Cadastro realizado com sucesso!';
-            this.showNotification = true;
+            this.message = (!this.isAdmin) ? 'Cadastro realizado com sucesso!' : 'Funcionário cadastrado com sucesso!';
+            Swal.fire({
+              icon: 'success',
+              title: 'Sucesso',
+              text: this.message,
+              confirmButtonText: 'OK'
+            });
             if (!this.isAdmin) {
               this.router.navigate(['/login']);
             } else {
@@ -71,17 +78,32 @@ export class RegisterComponent {
             }
           } else {
             this.message = 'Erro ao fazer cadastro. Verifique sua conexão ou tente novamente mais tarde.';
+            Swal.fire({
+              icon: 'error',
+              title: 'Erro',
+              text: this.message,
+              confirmButtonText: 'OK'
+            });
           }
-          this.showNotification = true;
         },
         error: (err) => {
           this.message = 'Ocorreu um erro ao fazer o cadastro. Erro: ' + (err.error?.message || 'Erro desconhecido.');
-          this.showNotification = true;
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: this.message,
+            confirmButtonText: 'OK'
+          });
         }
       });
     } else {
       this.message = 'Preencha todos os campos obrigatórios.';
-      this.showNotification = true;
+      Swal.fire({
+        icon: 'warning',
+        title: 'Atenção',
+        text: this.message,
+        confirmButtonText: 'OK'
+      });
     }
   }
 
@@ -196,7 +218,6 @@ export class RegisterComponent {
 
   // Verifica se o cep é válido
   onVerifyCep(): void {
-    this.showNotification = false; // Reseta a notificação ao verificar o CEP
     const cep = this.registerForm?.controls['cep']?.value || '';
 
     // Verifica se o CEP tem 8 dígitos
@@ -222,7 +243,12 @@ export class RegisterComponent {
           console.log('CEP válido:', address);
         } else {
           this.message = 'CEP não encontrado.';
-          this.showNotification = true;
+          Swal.fire({
+            icon: 'warning',
+            title: 'Erro',
+            text: this.message,
+            confirmButtonText: 'OK'
+          });
           this.isCepValid = false; // CEP inválido
           this.registerForm?.controls['cep']?.setValue(''); // Reseta o campo de CEP
         }
@@ -233,13 +259,23 @@ export class RegisterComponent {
         if (status >= 500 && status < 600 || status === 0) {
           // Permite continuar mesmo com erro 500
           this.message = 'Erro ao consultar o CEP, mas você pode continuar preenchendo os dados.';
-          this.showNotification = true;
+          Swal.fire({
+            icon: 'info',
+            title: 'Atenção',
+            text: this.message,
+            confirmButtonText: 'OK'
+          });
           this.isCepValid = true; // Permite seguir
           // Não limpa o campo 'cep'
         } else {
           // Outros erros
           this.message = err.message || 'Erro ao buscar CEP. Verifique sua conexão ou tente novamente mais tarde.';
-          this.showNotification = true;
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: this.message,
+            confirmButtonText: 'OK'
+          });
           this.isCepValid = false;
           this.registerForm?.controls['cep']?.setValue('');
         }
@@ -248,13 +284,17 @@ export class RegisterComponent {
   }
 
   onValidateUsername(): void {
-    this.showNotification = false; // Reseta a notificação ao validar o nome de usuário
     var username = this.registerForm?.controls['username']?.value || '';
     username = username.replace(/\s+/g, '').toLowerCase();
 
     if (username.length < 3) {
       this.message = 'O nome de usuário deve ter pelo menos 3 caracteres.';
-      this.showNotification = true;
+      Swal.fire({
+        icon: 'warning',
+        title: 'Atenção',
+        text: this.message,
+        confirmButtonText: 'OK'
+      });
       return;
     }
 
@@ -271,7 +311,12 @@ export class RegisterComponent {
           console.log(err.status)
           this.message = 'Erro ao validar nome de usuário: ' + (err.error?.message || 'Erro desconhecido.');
         }
-        this.showNotification = true;
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro',
+          text: this.message,
+          confirmButtonText: 'OK'
+        });
         this.isUsernameAvailable = false; // Nome de usuário indisponível
         this.registerForm?.controls['username']?.setValue('');
       }
@@ -279,12 +324,16 @@ export class RegisterComponent {
   }
 
   onValidateEmail(): void {
-    this.showNotification = false; // Reseta a notificação ao validar o email
     const email = this.registerForm?.controls['email']?.value || '';
 
     if (!email || !email.includes('@')) {
       this.message = 'Por favor, insira um email válido.';
-      this.showNotification = true;
+      Swal.fire({
+        icon: 'warning',
+        title: 'Atenção',
+        text: this.message,
+        confirmButtonText: 'OK'
+      });
       return;
     }
 
@@ -300,7 +349,12 @@ export class RegisterComponent {
           // Outros erros
           this.message = 'Erro ao validar email: ' + (err.error?.message || 'Erro desconhecido.');
         }
-        this.showNotification = true;
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro',
+          text: this.message,
+          confirmButtonText: 'OK'
+        });
         this.isEmailAvailable = false; // Email indisponível
         this.registerForm?.controls['email']?.setValue('');
       }

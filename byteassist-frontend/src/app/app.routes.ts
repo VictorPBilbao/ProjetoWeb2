@@ -28,6 +28,7 @@ import { ReportsComponent } from './features/pages-employee/reports/reports.comp
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'login/:isRegisterSuccess', component: LoginComponent },
   {
     path: 'solicitacoes',
     component: ListMyTasksComponent,

@@ -1,4 +1,3 @@
-<app-notification *ngIf="showNotification" [message]="message"></app-notification>
 <section class="equipment-types-section">
   <div class="container">
 
@@ -8,6 +7,41 @@
 
     <div class="header">
       <p>Aqui você pode visualizar, criar e editar tipos de equipamentos de forma prática.</p>
+    </div>
+
+    <!-- Entrada para novo tipo -->
+    <div class="equipment-type-form flex items-center gap-4">
+      <div class="form-field">
+        <label for="equipmentName">Nome do Tipo</label>
+        <input
+          id="equipmentName"
+          type="text"
+          [(ngModel)]="newEquipmentType.id"
+          placeholder="Ex: Impressora"
+          required
+        />
+      </div>
+
+      <div class="form-field">
+        <label for="equipmentDescription">Descrição</label>
+        <input
+          id="equipmentDescription"
+          type="text"
+          [(ngModel)]="newEquipmentType.description"
+          placeholder="Ex: Impressora térmica usada em etiquetas"
+          required
+        />
+      </div>
+
+      <div class="form-actions">
+        <button
+          class="btn btn-green"
+          (click)="addEquipmentType()"
+          [disabled]="!newEquipmentType.id || !newEquipmentType.description"
+        >
+          Salvar Novo
+        </button>
+      </div>
     </div>
 
     <table class="equipment-table">
@@ -21,19 +55,6 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Entrada para novo tipo -->
-        <tr>
-          <td>
-            <input [(ngModel)]="newEquipmentType.id" placeholder="Nome" />
-          </td>
-          <td>
-            <input [(ngModel)]="newEquipmentType.description" placeholder="Descrição" />
-          </td>
-          <td colspan="3">
-            <button class="btn-green" (click)="addEquipmentType()">Salvar Novo</button>
-          </td>
-        </tr>
-
         <!-- Tipos existentes -->
         <tr *ngFor="let row of equipmentTypeList">
           <!-- Nome -->

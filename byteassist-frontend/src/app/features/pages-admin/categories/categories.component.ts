@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EquipmentType } from '../../shared/models/equipmentType.model';
 import { EquipmentTypeService } from '../../services/equipment/equipmentType.service';
-import { NotificationComponent } from '../../components/notification/notification.component';
 import { Router } from '@angular/router';
 import { RecordIdPipe } from '../../shared/pipes/record-id.pipe';
+import Swal from 'sweetalert2';
 
 interface EquipmentTypeStructure {
   equipmentType: EquipmentType;
@@ -17,7 +17,6 @@ interface EquipmentTypeStructure {
   imports: [
     CommonModule,
     FormsModule,
-    NotificationComponent,
     RecordIdPipe
   ],
 
@@ -33,7 +32,6 @@ export class CategoriesComponent {
     createdAt: new Date()
   };
   message: string = '';
-  showNotification: boolean = false;
 
   constructor(
     private equipmentTypeService: EquipmentTypeService,
@@ -51,7 +49,12 @@ export class CategoriesComponent {
       error: (error) => {
         console.error('Erro ao carregar categorias:', error);
         this.message = 'Erro ao carregar categorias.';
-        this.showNotification = true;
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro',
+          text: this.message,
+          confirmButtonText: 'OK'
+        });
       }
     });
   }
@@ -59,7 +62,12 @@ export class CategoriesComponent {
   addEquipmentType() {
     if (this.newEquipmentType.description?.trim() === '' || this.newEquipmentType.id === '') {
       this.message = 'Descrição e nome são obrigatórios.';
-      this.showNotification = true;
+      Swal.fire({
+        icon: 'warning',
+        title: 'Atenção',
+        text: this.message,
+        confirmButtonText: 'OK'
+      });
       return;
     }
 
@@ -71,13 +79,24 @@ export class CategoriesComponent {
         });
         this.newEquipmentType = { description: '', active: true, createdAt: new Date() }; // Reset form
         this.message = 'Categoria adicionada com sucesso.';
-        this.showNotification = true;
-        this.router.navigate(['/admin/categorias']);
+        Swal.fire({
+          icon: 'success',
+          title: 'Sucesso',
+          text: this.message,
+          confirmButtonText: 'OK'
+        }).then(() => {
+          this.router.navigate(['/admin/categorias'], { replaceUrl: true });
+        });
       },
       error: (error) => {
         console.error('Erro ao adicionar categoria:', error);
         this.message = 'Erro ao adicionar categoria.';
-        this.showNotification = true;
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro',
+          text: this.message,
+          confirmButtonText: 'OK'
+        });
       }
     });
   }
@@ -93,7 +112,12 @@ export class CategoriesComponent {
 
     if (row.equipmentType.description?.trim() === '') {
       this.message = 'Descrição é obrigatória.';
-      this.showNotification = true;
+      Swal.fire({
+        icon: 'warning',
+        title: 'Atenção',
+        text: this.message,
+        confirmButtonText: 'OK'
+      });
       return;
     }
 
@@ -101,13 +125,24 @@ export class CategoriesComponent {
       next: () => {
         row.isEditing = false;
         this.message = 'Categoria atualizada com sucesso.';
-        this.showNotification = true;
-        this.router.navigate(['/admin/categorias']);
+        Swal.fire({
+          icon: 'success',
+          title: 'Sucesso',
+          text: this.message,
+          confirmButtonText: 'OK'
+        }).then(() => {
+          this.router.navigate(['/admin/categorias'], { replaceUrl: true });
+        });
       },
       error: (error) => {
         console.error('Erro ao atualizar categoria:', error);
         this.message = 'Erro ao atualizar categoria.';
-        this.showNotification = true;
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro',
+          text: this.message,
+          confirmButtonText: 'OK'
+        });
       }
     });
   }
@@ -117,20 +152,40 @@ export class CategoriesComponent {
   }
 
   deleteEquipmentType(rowToDelete: EquipmentTypeStructure) {
-    if (!confirm('Tem certeza que deseja excluir esta categoria?')) {
-      return;
-    }
-
-    this.equipmentTypeService.deleteEquipmentType(rowToDelete.equipmentType.id ?? '').subscribe({
-      next: () => {
-        this.equipmentTypeList = this.equipmentTypeList.filter(row => row !== rowToDelete);
-        this.message = 'Categoria excluída com sucesso.';
-        this.showNotification = true;
-      },
-      error: (error) => {
-        console.error('Erro ao excluir categoria:', error);
-        this.message = 'Erro ao excluir categoria.';
-        this.showNotification = true;
+    Swal.fire({
+      title: 'Tem certeza?',
+      text: 'Essa ação irá excluir a categoria permanentemente.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, excluir',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.equipmentTypeService.deleteEquipmentType(rowToDelete.equipmentType.id ?? '').subscribe({
+          next: () => {
+            this.message = 'Categoria excluída com sucesso.';
+            Swal.fire({
+              icon: 'success',
+              title: 'Sucesso',
+              text: this.message,
+              confirmButtonText: 'OK'
+            }).then(() => {
+              this.router.navigate(['/admin/categorias'], { replaceUrl: true });
+            });
+          },
+          error: (error) => {
+            console.error('Erro ao excluir categoria:', error);
+            this.message = 'Erro ao excluir categoria.';
+            Swal.fire({
+              icon: 'error',
+              title: 'Erro',
+              text: this.message,
+              confirmButtonText: 'OK'
+            });
+          }
+        });
       }
     });
   }
