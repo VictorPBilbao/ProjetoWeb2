@@ -9,7 +9,7 @@ import { RecordidService } from '../../services/utils/recordid.service';
 import { Equipment } from '../../shared/models/equipment.model';
 import { RecordIdPipe } from '../../shared/pipes/record-id.pipe';
 import { EquipmentFieldPipe } from '../../shared/pipes/equipment-field.pipe';
-
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-requests',
@@ -76,7 +76,15 @@ export class RequestsComponent implements OnInit {
             this.filtrarSolicitacoes();
           }
         },
-        error: (err) => console.error('Erro ao carregar todas as solicitações:', err)
+        error: (err) => {
+          console.error('Erro ao carregar todas as solicitações:', err);
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Erro ao carregar todas as solicitações.',
+            confirmButtonText: 'OK',
+          });
+        }
       });
 
     // 2. Depois carrega minhas tarefas
@@ -90,7 +98,15 @@ export class RequestsComponent implements OnInit {
             this.filtrarSolicitacoes();
           }
         },
-        error: (err) => console.error('Erro ao carregar minhas solicitações:', err)
+        error: (err) => {
+          console.error('Erro ao carregar minhas solicitações:', err)
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Erro ao carregar minhas solicitações:' + err,
+            confirmButtonText: 'OK',
+          });
+        }
       });
   }
 

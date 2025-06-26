@@ -3,7 +3,6 @@ import { Task } from '../../shared/models/task.model';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute } from '@angular/router';
-import { NotificationComponent } from '../../components/notification/notification.component';
 import { RecordIdPipe } from '../../shared/pipes/record-id.pipe';
 import { BudgetService } from '../../services/budget/budget.service';
 import { TaskService } from '../../services/task/task.service';
@@ -11,13 +10,13 @@ import { RecordidService } from '../../services/utils/recordid.service';
 import localeData from '@angular/common/locales/pt';
 import { AuthService } from '../../services/auth/auth.service';
 import { EquipmentFieldPipe } from '../../shared/pipes/equipment-field.pipe';
+import Swal from 'sweetalert2';
 
 registerLocaleData(localeData);
 
 @Component({
   selector: 'app-budgeting',
   imports: [
-    NotificationComponent,
     CommonModule,
     FormsModule,
     RecordIdPipe,
@@ -34,7 +33,6 @@ export class BudgetingComponent {
   modalVisible = false;
   selectedTask: Task | null = null;
   message: string = '';
-  showNotification: boolean = false;
   budgetAmount: number = 0;
   budgetDescription: string = '';
   // Novas propriedades para os filtros de relatório
@@ -59,7 +57,12 @@ export class BudgetingComponent {
         error: (error) => {
           console.error('Erro ao carregar a tarefa:', error);
           this.message = 'Erro ao carregar a tarefa.';
-          this.showNotification = true;
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: this.message,
+            confirmButtonText: 'OK',
+          });
         },
       });
     } else {
@@ -86,7 +89,12 @@ export class BudgetingComponent {
         error: (error) => {
           console.error('Erro ao carregar as tarefas:', error);
           this.message = 'Erro ao carregar as tarefas.';
-          this.showNotification = true;
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: this.message,
+            confirmButtonText: 'OK',
+          });
         },
       });
     }
@@ -104,7 +112,12 @@ export class BudgetingComponent {
   assignTaskToMyself(task: Task): void {
     if (!task.id) {
       this.message = 'Erro: ID da tarefa não encontrado.';
-      this.showNotification = true;
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro',
+        text: this.message,
+        confirmButtonText: 'OK',
+      });
       return;
     }
 
@@ -116,7 +129,12 @@ export class BudgetingComponent {
       .subscribe({
         next: (updatedTask) => {
           this.message = 'Tarefa atribuída com sucesso!';
-          this.showNotification = true;
+          Swal.fire({
+            icon: 'success',
+            title: 'Sucesso',
+            text: this.message,
+            confirmButtonText: 'OK',
+          });
 
           // Update the task in the local array
           const taskIndex = this.tasks.findIndex((t) => t.id === task.id);
@@ -130,7 +148,12 @@ export class BudgetingComponent {
         error: (error) => {
           console.error('Error assigning task:', error);
           this.message = 'Erro ao atribuir a tarefa.';
-          this.showNotification = true;
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: this.message,
+            confirmButtonText: 'OK',
+          });
         },
       });
   }
@@ -156,7 +179,12 @@ export class BudgetingComponent {
       !this.budgetDescription.trim()
     ) {
       this.message = 'Por favor, preencha todos os campos obrigatórios.';
-      this.showNotification = true;
+      Swal.fire({
+        icon: 'warning',
+        title: 'Atenção',
+        text: this.message,
+        confirmButtonText: 'OK',
+      });
       return;
     }
 
@@ -171,7 +199,12 @@ export class BudgetingComponent {
       .subscribe({
         next: (createdBudget) => {
           this.message = 'Orçamento criado com sucesso!';
-          this.showNotification = true;
+          Swal.fire({
+            icon: 'success',
+            title: 'Sucesso',
+            text: this.message,
+            confirmButtonText: 'OK',
+          });
 
           // Update the task status to 'ORÇADA'
           this.taskService
@@ -197,7 +230,12 @@ export class BudgetingComponent {
         error: (error) => {
           console.error('Error creating budget:', error);
           this.message = 'Erro ao criar o orçamento.';
-          this.showNotification = true;
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: this.message,
+            confirmButtonText: 'OK',
+          });
         },
       });
   }

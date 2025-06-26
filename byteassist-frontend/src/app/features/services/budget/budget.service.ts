@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Task } from '../../shared/models/task.model';
 import { LoadingService } from '../utils/loading.service';
-import { Observable } from 'rxjs';
+import { Observable, finalize } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { HttpHeaders, HttpClient, HttpParams } from '@angular/common/http';
 import { Budget } from '../../shared/models/budget.model';
@@ -29,7 +29,10 @@ export class BudgetService {
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
 
-    return this.http.get<Task[]>(`${this.apiUrlTask}?expand=budget, equipment`, { headers });
+    this.loadingService.show(); // Exibe o loading
+    return this.http.get<Task[]>(`${this.apiUrlTask}?expand=budget, equipment`, { headers }).pipe(
+      finalize(() => this.loadingService.hide()) // Esconde o loading após a requisição
+    );
   }
 
   getTasksWithBudgetFromClient(): Observable<Task[]> {
@@ -38,7 +41,10 @@ export class BudgetService {
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
 
-    return this.http.get<Task[]>(`${this.apiUrlTask}/me?expand=budget, equipment`, { headers });
+    this.loadingService.show(); // Exibe o loading
+    return this.http.get<Task[]>(`${this.apiUrlTask}/me?expand=budget, equipment`, { headers }).pipe(
+      finalize(() => this.loadingService.hide()) // Esconde o loading após a requisição
+    );
   }
 
   getTaskWithBudget(taskId: string): Observable<Task> {
@@ -47,7 +53,10 @@ export class BudgetService {
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
 
-    return this.http.get<Task>(`${this.apiUrlTask}/${taskId}?expand=budget, equipment`, { headers });
+    this.loadingService.show(); // Exibe o loading
+    return this.http.get<Task>(`${this.apiUrlTask}/${taskId}?expand=budget, equipment`, { headers }).pipe(
+      finalize(() => this.loadingService.hide()) // Esconde o loading após a requisição
+    );
   }
 
   budgetingRequest(budgetId: string): Promise<void> {
@@ -74,9 +83,12 @@ export class BudgetService {
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
 
+    this.loadingService.show(); // Exibe o loading
     // Exclude 'id' from the payload before sending
     const { id, ...budgetPayload } = budget;
-    return this.http.patch<Budget>(`${this.apiUrlBudget}/${this.recordIdService.getId(id)}`, budgetPayload, { headers });
+    return this.http.patch<Budget>(`${this.apiUrlBudget}/${this.recordIdService.getId(id)}`, budgetPayload, { headers }).pipe(
+      finalize(() => this.loadingService.hide()) // Esconde o loading após a requisição
+    );
   }
 
   createBudget(budget: Budget, taskId: string): Observable<Budget> {
@@ -89,9 +101,12 @@ export class BudgetService {
       'Authorization': `Bearer ${this.authService.getToken()}`
     });
 
+    this.loadingService.show(); // Exibe o loading
     // exclude 'id' from the payload before sending
     const { id, ...budgetPayload } = budget;
-    return this.http.post<Budget>(this.apiUrlBudget + `/${taskId}`, budgetPayload, { headers });
+    return this.http.post<Budget>(this.apiUrlBudget + `/${taskId}`, budgetPayload, { headers }).pipe(
+      finalize(() => this.loadingService.hide()) // Esconde o loading após a requisição
+    );
   }
 
 

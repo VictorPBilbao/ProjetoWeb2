@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, finalize } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
+import { LoadingService } from '../utils/loading.service';
 
 export interface Task {
   id: string;
@@ -25,20 +26,20 @@ export interface Task {
 })
 export class DashboardService {
   private readonly apiUrl = 'https://byteassist-backend.fly.dev/api/task/me';
-  private readonly token;
 
   constructor(
     private readonly http: HttpClient,
-    private readonly authService: AuthService
-  ) {
-    this.token = this.authService.getToken();
-  }
+    private readonly authService: AuthService,
+    private readonly loadingService: LoadingService
+  ) {}
 
   public getMyTasks(): Observable<Task[]> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: `Bearer ${this.token}`
+      Authorization: `Bearer ${this.authService.getToken()}`
     });
+
+    this.loadingService.show(); // Show loading indicator
 
     return this.http.get<Task[]>(this.apiUrl, { headers })
       .pipe(
@@ -50,7 +51,8 @@ export class DashboardService {
               updatedAt: new Date(task.time.updatedAt).toISOString()
             }
           }))
-        )
+        ),
+        finalize(() => this.loadingService.hide()) // Hide loading indicator after request completes
       );
   }
 }
