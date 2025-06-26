@@ -114,23 +114,30 @@ public class TaskService {
 
         // Generate update comments based on what fields were changed
         
+        // Check if assignee was changed to determine if we need to skip redundant status comments
+        boolean assigneeChanged = task.getAssignee() != null && (existingTask.getAssignee() == null || 
+            !existingTask.getAssignee().getId().equals(task.getAssignee().getId()));
+        
         // Handle status changes with specific messages for status transitions
+        // Skip status comment if it's just a REDIRECIONADA status when assignee was changed
         if (task.getStatus() != null && !existingTask.getStatus().equals(task.getStatus())) {
-            String statusComment = generateStatusUpdateComment(existingTask.getStatus(), task.getStatus(), user.getUsername());
-            createUpdateComment(updatedTask.getId(), statusComment);
+            boolean isRedirectionStatusOnly = "REDIRECIONADA".equals(task.getStatus()) && assigneeChanged;
+            
+            if (!isRedirectionStatusOnly) {
+                String statusComment = generateStatusUpdateComment(existingTask.getStatus(), task.getStatus(), user.getUsername());
+                createUpdateComment(updatedTask.getId(), statusComment);
+            }
         }
         
         // Handle assignee changes (initial assignment vs reassignment)
-        if (task.getAssignee() != null && (existingTask.getAssignee() == null || 
-            !existingTask.getAssignee().getId().equals(task.getAssignee().getId()))) {
-            
+        if (assigneeChanged) {
             String assigneeComment;
             if (existingTask.getAssignee() == null) {
                 // Initial assignment
                 assigneeComment = "**� Solicitação assumida** pelo funcionário _" + task.getAssignee().getId() + "_ 📋";
             } else {
                 // Reassignment
-                assigneeComment = "**�📋 Responsável alterado** para _" + task.getAssignee().getId() + 
+                assigneeComment = "**📋 Responsável alterado** para _" + task.getAssignee().getId() + 
                                 "_ por _" + user.getUsername() + "_. Solicitação **redirecionada** 🔄";
             }
             createUpdateComment(updatedTask.getId(), assigneeComment);
