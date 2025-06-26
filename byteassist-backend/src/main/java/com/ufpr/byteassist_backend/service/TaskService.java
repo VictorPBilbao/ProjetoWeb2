@@ -120,11 +120,19 @@ public class TaskService {
             createUpdateComment(updatedTask.getId(), statusComment);
         }
         
-        // Handle assignee changes (redirection)
+        // Handle assignee changes (initial assignment vs reassignment)
         if (task.getAssignee() != null && (existingTask.getAssignee() == null || 
             !existingTask.getAssignee().getId().equals(task.getAssignee().getId()))) {
-            String assigneeComment = "**📋 Responsável alterado** para _" + task.getAssignee().getId() + 
-                                   "_ por _" + user.getUsername() + "_. Solicitação **redirecionada** 🔄";
+            
+            String assigneeComment;
+            if (existingTask.getAssignee() == null) {
+                // Initial assignment
+                assigneeComment = "**� Solicitação assumida** pelo funcionário _" + task.getAssignee().getId() + "_ 📋";
+            } else {
+                // Reassignment
+                assigneeComment = "**�📋 Responsável alterado** para _" + task.getAssignee().getId() + 
+                                "_ por _" + user.getUsername() + "_. Solicitação **redirecionada** 🔄";
+            }
             createUpdateComment(updatedTask.getId(), assigneeComment);
         }
         
