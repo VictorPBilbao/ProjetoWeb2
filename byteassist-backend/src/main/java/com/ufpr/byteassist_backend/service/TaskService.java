@@ -134,7 +134,7 @@ public class TaskService {
             String assigneeComment;
             if (existingTask.getAssignee() == null) {
                 // Initial assignment
-                assigneeComment = "**� Solicitação assumida** pelo funcionário _" + task.getAssignee().getId() + "_ 📋";
+                assigneeComment = "**🔄 Solicitação assumida** pelo funcionário _" + task.getAssignee().getId() + "_ 📋";
             } else {
                 // Reassignment
                 assigneeComment = "**📋 Responsável alterado** para _" + task.getAssignee().getId() + 
