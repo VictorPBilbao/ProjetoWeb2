@@ -34,6 +34,8 @@ export class BudgetingComponent {
   selectedTask: Task | null = null;
   message: string = '';
   budgetAmount: number = 0;
+  budgetAmountFormatted: string = '';
+  budgetAmountError: string = '';
   budgetDescription: string = '';
   // Novas propriedades para os filtros de relatório
   startDate: string = ''; // Ou Date, dependendo de como você quer lidar
@@ -105,6 +107,8 @@ export class BudgetingComponent {
   openCreateBudgetModal(task: Task): void {
     this.selectedTask = task;
     this.budgetAmount = 0;
+    this.budgetAmountFormatted = '';
+    this.budgetAmountError = '';
     this.budgetDescription = '';
     this.openModal();
   }
@@ -168,14 +172,96 @@ export class BudgetingComponent {
   }
 
   getCleanTaskId(taskId: string | undefined): string {
-    if (!taskId) return '';
+    if (!taskId) {
+      return '';
+    }
     return this.recordIdService.getId(taskId);
   }
 
+  onBudgetAmountChange(event: any): void {
+    const input = event.target.value;
+    // Remove all non-numeric characters except comma and dot
+    const cleanedValue = input.replace(/[^\d,.]/g, '');
+
+    // Convert comma to dot for decimal separation
+    const normalizedValue = cleanedValue.replace(',', '.');
+
+    // Parse the value
+    const numericValue = parseFloat(normalizedValue);
+
+    // Validate the input
+    this.validateBudgetAmount(numericValue, cleanedValue);
+
+    // Update the formatted value
+    this.budgetAmountFormatted = input;
+  }
+
+  formatBudgetAmount(): void {
+    if (!this.budgetAmountFormatted) {
+      this.budgetAmount = 0;
+      return;
+    }
+
+    // Remove currency symbols and normalize
+    const cleanedValue = this.budgetAmountFormatted
+      .replace(/[R$\s]/g, '')
+      .replace(',', '.');
+
+    const numericValue = parseFloat(cleanedValue);
+
+    if (!isNaN(numericValue) && numericValue >= 0) {
+      this.budgetAmount = numericValue;
+      // Format as Brazilian currency
+      this.budgetAmountFormatted = this.formatCurrency(numericValue);
+      this.budgetAmountError = '';
+    } else {
+      this.validateBudgetAmount(numericValue, cleanedValue);
+    }
+  }
+
+  private formatCurrency(value: number): string {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(value);
+  }
+
+  private validateBudgetAmount(numericValue: number, cleanedValue: string): void {
+    if (!cleanedValue || cleanedValue.trim() === '') {
+      this.budgetAmountError = 'Valor é obrigatório';
+      this.budgetAmount = 0;
+    } else if (isNaN(numericValue)) {
+      this.budgetAmountError = 'Digite um valor válido';
+      this.budgetAmount = 0;
+    } else if (numericValue <= 0) {
+      this.budgetAmountError = 'O valor deve ser maior que zero';
+      this.budgetAmount = 0;
+    } else if (numericValue > 999999.99) {
+      this.budgetAmountError = 'Valor muito alto (máximo: R$ 999.999,99)';
+      this.budgetAmount = 0;
+    } else {
+      this.budgetAmountError = '';
+      this.budgetAmount = numericValue;
+    }
+  }
+
   createBudget(): void {
+    // Validate budget amount
+    if (this.budgetAmountError || this.budgetAmount <= 0) {
+      this.message = 'Por favor, insira um valor válido e positivo para o orçamento.';
+      Swal.fire({
+        icon: 'warning',
+        title: 'Atenção',
+        text: this.message,
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
     if (
       !this.selectedTask ||
-      !this.budgetAmount ||
       !this.budgetDescription.trim()
     ) {
       this.message = 'Por favor, preencha todos os campos obrigatórios.';
@@ -188,9 +274,12 @@ export class BudgetingComponent {
       return;
     }
 
+    // Convert to cents (multiply by 100 and round to avoid floating point issues)
+    const amountInCents = Math.round(this.budgetAmount * 100);
+
     const budget = {
       creator: this.authService.getUser() ?? '', // This should be the current user's ID
-      amount: this.budgetAmount * 100, // Convert to cents
+      amount: amountInCents, // Amount in cents
       description: this.budgetDescription.trim(),
     };
 
@@ -249,6 +338,8 @@ export class BudgetingComponent {
     this.modalVisible = false;
     this.selectedTask = null;
     this.budgetAmount = 0;
+    this.budgetAmountFormatted = '';
+    this.budgetAmountError = '';
     this.budgetDescription = '';
   }
 }
@@ -258,4 +349,3 @@ function subscribe(arg0: {
 }) {
   throw new Error('Function not implemented.');
 }
-

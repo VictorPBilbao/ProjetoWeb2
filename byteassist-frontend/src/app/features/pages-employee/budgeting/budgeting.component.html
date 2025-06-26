@@ -151,14 +151,18 @@
           <div class="field flex flex-column">
             <label for="budgetAmount">Valor do Orçamento (R$) *</label>
             <input
-              type="number"
+              type="text"
               id="budgetAmount"
-              [(ngModel)]="budgetAmount"
-              placeholder="0.00"
-              min="0"
-              step="0.01"
+              [(ngModel)]="budgetAmountFormatted"
+              (input)="onBudgetAmountChange($event)"
+              (blur)="formatBudgetAmount()"
+              placeholder="Ex: R$ 150,00"
               required
+              [class.error]="budgetAmountError"
             />
+            <small class="error-message" *ngIf="budgetAmountError">
+              {{ budgetAmountError }}
+            </small>
           </div>
 
           <div class="field flex flex-column">
@@ -181,7 +185,7 @@
             class="btn btn-primary"
             (click)="createBudget()"
             [disabled]="
-              !budgetAmount || !budgetDescription || !budgetDescription.trim()
+              budgetAmountError || budgetAmount <= 0 || !budgetDescription || !budgetDescription.trim()
             "
           >
             <i class="bi bi-check-circle"></i> Criar Orçamento

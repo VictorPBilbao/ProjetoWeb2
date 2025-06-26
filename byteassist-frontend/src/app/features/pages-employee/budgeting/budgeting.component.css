@@ -691,6 +691,31 @@ h1 i {
   margin: 0;
 }
 
+/* Error styling for budget amount input */
+.field input.error {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.field input.error:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+  outline: none;
+}
+
+/* Currency input styling */
+.field input[type="text"] {
+  font-family: monospace;
+  text-align: left;
+}
+
 .modal-actions {
   padding: 1.5rem;
   border-top: 1px solid #dee2e6;
