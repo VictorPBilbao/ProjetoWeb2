@@ -146,6 +146,7 @@
               class="form-control"
               id="numeroCartao"
               [(ngModel)]="pagamento.numeroCartao"
+              mask="0000 0000 0000 0000"
               name="numeroCartao"
               required
             />
@@ -159,6 +160,7 @@
               class="form-control"
               id="vencimentoCartao"
               [(ngModel)]="pagamento.vencimentoCartao"
+              mask="00/0000"
               name="vencimentoCartao"
               placeholder="MM/AA"
               required
@@ -176,6 +178,8 @@
               class="form-control"
               id="nomeTitular"
               [(ngModel)]="pagamento.nomeTitular"
+              mask="A*"
+              pattern="[A-Za-zÀ-ÿ\s]+"
               name="nomeTitular"
               required
             />

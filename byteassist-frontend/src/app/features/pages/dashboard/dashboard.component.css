@@ -12,7 +12,7 @@
   padding: 2rem;
   position: relative;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  width: 950px;
+  width: 1100px;
   align-items: center;
   overflow-y: hidden;
   margin-top: -15px;
@@ -51,8 +51,8 @@
 }
 
 .chart-card canvas {
-  width: 300px !important;
-  height: 300px !important;
+  width: 400px !important;
+  height: 400px !important;
 }
 
 .charts-container {

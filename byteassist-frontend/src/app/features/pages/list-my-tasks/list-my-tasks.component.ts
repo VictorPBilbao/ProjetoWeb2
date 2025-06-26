@@ -21,7 +21,7 @@ export class ListMyTasksComponent implements OnInit {
   public readonly recordIdService = inject(RecordidService);
   // ===== Paginação =====
   paginaAtual: number = 1;
-  itensPorPagina: number = 4;
+  itensPorPagina: number = 5;
   totalPaginas: number = 0;
 
   tasks: Task[] = [];

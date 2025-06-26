@@ -182,7 +182,7 @@ A Byte Assist informa que foi realizada uma **intervenção técnica** no equipa
 
 ---
 
-📅 ${data} | 👨‍🔧 ${tecnico}
+👨‍🔧**Responsável:** ${tecnico}
 
 📝 *Registro gerado automaticamente pelo sistema.*
 `;

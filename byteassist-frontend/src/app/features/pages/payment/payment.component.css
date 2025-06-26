@@ -2,6 +2,12 @@ section {
   padding: 40px 20px;
 }
 
+.erro {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
+
 .payment-wrapper {
   max-width: 800px;
   margin: auto;
