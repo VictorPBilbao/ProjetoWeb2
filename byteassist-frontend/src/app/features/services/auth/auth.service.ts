@@ -64,8 +64,13 @@ export class AuthService {
   getUsername(): string | null {
     const token = this.getToken();
     if (token) {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.username ?? null;
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.username ?? null;
+      } catch (error) {
+        console.error('Error decoding JWT token:', error);
+        return null;
+      }
     }
     return null;
   }
@@ -74,8 +79,13 @@ export class AuthService {
   getUser(): string | null {
     const token = this.getToken();
     if (token) {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.sub ?? null;
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.sub ?? null;
+      } catch (error) {
+        console.error('Error decoding JWT token:', error);
+        return null;
+      }
     }
     return null;
   }
