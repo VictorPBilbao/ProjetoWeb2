@@ -211,6 +211,7 @@ export class BudgetingComponent {
 
     if (!isNaN(numericValue) && numericValue >= 0) {
       this.budgetAmount = numericValue;
+
       // Format as Brazilian currency
       this.budgetAmountFormatted = this.formatCurrency(numericValue);
       this.budgetAmountError = '';
@@ -238,6 +239,12 @@ export class BudgetingComponent {
     } else if (numericValue <= 0) {
       this.budgetAmountError = 'O valor deve ser maior que zero';
       this.budgetAmount = 0;
+      Swal.fire({
+        icon: 'warning',
+        title: 'Valor inválido',
+        text: 'O valor do orçamento não pode ser negativo ou zero.',
+        confirmButtonText: 'OK',
+      });
     } else if (numericValue > 999999.99) {
       this.budgetAmountError = 'Valor muito alto (máximo: R$ 999.999,99)';
       this.budgetAmount = 0;

@@ -8,6 +8,7 @@
   background-color: inherit !important;
   color: inherit !important;
   border-color: rgba(173, 216, 19, 0) !important;
+
 }
 
 .meu-container-principal {
@@ -15,13 +16,15 @@
   padding: 1rem; /* Reduzido de 1.5rem para 1rem */
   border-radius: 20px;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); /* shadow-sm */
-  margin-top: 1.5rem; /* mt-4, equivalente a 1.5rem ou 24px */
+  margin-top: 1rem; /* mt-4, equivalente a 1.5rem ou 24px */
 
   /* Propriedades para largura e centralização */
   max-width: 1000px; /* Define a largura máxima do container */
   margin-left: auto; /* Centraliza horizontalmente */
   margin-right: auto; /* Centraliza horizontalmente */
   overflow: hidden;
+  margin-bottom: 0 !important;
+   padding-bottom: 0 !important;
 }
 
 /* Se quiser que o blob fique dentro com ajuste automático */
@@ -121,19 +124,45 @@ h1.titulo-solicitacoes {
   border-collapse: collapse;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 14px;
-  background-color: #e0f2f7; /* Tom de azul mais escurinho (um azul claro, tipo "powder blue") */
+  background-color: #e0f2f7ec; /* Tom de azul mais escurinho (um azul claro, tipo "powder blue") */
   border-radius: 8px;
   overflow: hidden;
 }
 
 /* Cabeçalho com fundo azul escuro e texto branco */
 .table-custom thead th {
-  background-color: #0a1a8e;
+  background-color: #0c6bf8;
   color: white;
   font-weight: bold;
   padding: 12px;
   text-align: left;
 }
+
+
+/* ------------------ ESTADO DAS SOLICITAÇÕES ------------------ */
+.table-custom span {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: white;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  user-select: none;
+  text-align: center;
+  min-width: 60px;
+}
+
+.estado-ABERTA        { background-color: #585d68; }
+.estado-ORÇADA        { background-color: #8a6e63; }
+.estado-REJEITADA     { background-color: #dc3545; }
+.estado-APROVADA      { background-color: #ffc107; color: #212529; /* texto escuro no amarelo */ }
+.estado-REDIRECIONADA { background-color: #6f42c1; }
+.estado-ARRUMADA      { background-color: #007bff; }
+.estado-PAGA          { background-color: #fd7e14; }
+.estado-FINALIZADA    { background-color: #28a745; }
+
 
 /* Linhas da tabela */
 .table-custom tbody tr {
@@ -479,4 +508,10 @@ h1.titulo-solicitacoes {
      mas este é um fallback ou para quando não se usa flexbox no pai. */
   text-align: center;
 }
+
+.paginacao {
+  margin-top: 0.5rem;   /* ou 0 se quiser colar na tabela */
+  margin-bottom: 0;     /* remove o espaço embaixo */
+}
+
 }

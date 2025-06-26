@@ -7,11 +7,13 @@ import { RecordidService } from '../../services/utils/recordid.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { Budget } from '../../shared/models/budget.model';
 import { DividePor100Pipe } from '../../shared/pipes/divide-por100.pipe';
+import { NgxMaskDirective } from 'ngx-mask';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-payment',
   standalone: true,
-  imports: [FormsModule, CommonModule, DividePor100Pipe],
+  imports: [FormsModule, CommonModule, DividePor100Pipe, NgxMaskDirective],
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.css'],
 })
@@ -95,7 +97,15 @@ export class PaymentComponent implements OnInit {
           console.log('Task atualizada com sucesso no backend.');
 
           this.isLoading = false;
-          this.isModalVisible = true;
+          Swal.fire({
+            icon: 'success',
+            title: 'Pagamento confirmado!',
+            text: 'O pagamento foi processado com sucesso.',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            this.router.navigate(['/solicitacao/', this.taskId]);
+          });
+
         },
         error: (error) => {
           console.error('Erro ao atualizar a task:', error);
@@ -127,7 +137,13 @@ export class PaymentComponent implements OnInit {
     navigator.clipboard
       .writeText(this.chavePix)
       .then(() => {
-        alert('Chave Pix copiada com sucesso!');
+        Swal.fire({
+          icon: 'success',
+          title: 'Chave Pix copiada!',
+          showConfirmButton: false,
+          timer: 2000,
+        });
+
       })
       .catch((err) => {
         console.error('Erro ao copiar a chave Pix:', err);
