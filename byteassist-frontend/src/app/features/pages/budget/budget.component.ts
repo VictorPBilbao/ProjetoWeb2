@@ -5,18 +5,18 @@ import { CommonModule, registerLocaleData } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import localeData from '@angular/common/locales/pt';
 import { Task } from '../../shared/models/task.model';
-import { NotificationComponent } from '../../components/notification/notification.component';
 import { ActivatedRoute } from '@angular/router';
 import { TaskService } from '../../services/task/task.service';
 import { BudgetService } from '../../services/budget/budget.service';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 
 registerLocaleData(localeData);
 
 @Component({
   selector: 'app-budget',
-  imports: [CommonModule, NotificationComponent, FormsModule, RecordIdPipe],
+  imports: [CommonModule, FormsModule, RecordIdPipe],
   templateUrl: './budget.component.html',
   styleUrl: './budget.component.css',
 })
@@ -26,7 +26,6 @@ export class BudgetComponent {
   modalVisible = false;
   selectedTask: Task | null = null;
   message: string = '';
-  showNotification: boolean = false;
   rejectDescription: string = '';
   modalType: 'approval' | 'rejection' = 'approval';
 
@@ -50,7 +49,12 @@ export class BudgetComponent {
         error: (error) => {
           console.error('Erro ao carregar a tarefa:', error);
           this.message = 'Erro ao carregar a tarefa.';
-          this.showNotification = true;
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: this.message,
+            confirmButtonText: 'OK',
+          });
         },
       });
     } else {
@@ -66,7 +70,12 @@ export class BudgetComponent {
         error: (error) => {
           console.error('Erro ao carregar as tarefas:', error);
           this.message = 'Erro ao carregar as tarefas.';
-          this.showNotification = true;
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: this.message,
+            confirmButtonText: 'OK',
+          });
         },
       });
     }
@@ -100,13 +109,24 @@ export class BudgetComponent {
     this.budgetService.updateBudget({ id: this.selectedTask?.budget?.id, accepted: 'ACEITA' }).subscribe({
       next: () => {
         this.message = 'Orçamento aprovado com sucesso.';
-        this.showNotification = true;
+        Swal.fire({
+          icon: 'success',
+          title: 'Sucesso',
+          text: this.message,
+          confirmButtonText: 'OK',
+        });
+
         this.router.navigate(['/solicitacoes']);
 
       },
       error: (error) => {
         this.message = 'Erro ao aprovar o orçamento.';
-        this.showNotification = true;
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro',
+          text: this.message,
+          confirmButtonText: 'OK',
+        });
         this.router.navigate(['/solicitacoes']);
       },
     });
@@ -134,12 +154,22 @@ export class BudgetComponent {
     }).subscribe({
       next: () => {
         this.message = 'Orçamento rejeitado com sucesso.';
-        this.showNotification = true;
+        Swal.fire({
+          icon: 'success',
+          title: 'Sucesso',
+          text: this.message,
+          confirmButtonText: 'OK',
+        });
         this.router.navigate(['/solicitacoes']);
       },
       error: (error) => {
         this.message = 'Erro ao rejeitar o orçamento.';
-        this.showNotification = true;
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro',
+          text: this.message,
+          confirmButtonText: 'OK',
+        });
       },
     });
     //* now update the task to 'REJEITADA'

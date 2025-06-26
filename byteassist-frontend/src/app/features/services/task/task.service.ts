@@ -16,7 +16,6 @@ export class TaskService {
   private readonly http = inject(HttpClient);
   private readonly recordIdService = inject(RecordidService);
   private readonly authService = inject(AuthService);
-  private readonly token = this.authService.getToken();
 
   public getAllMyTasks(
     type: string = 'creator',
@@ -34,11 +33,13 @@ export class TaskService {
       params.expand = Array.isArray(expand) ? expand.join(',') : expand;
     }
 
+    this.loadingService.show(); // Show loading indicator
+
     return this.http
       .get<Task[]>(`${this.apiUrl}/me`, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.authService.getToken()}`,
         },
         params,
       })
@@ -51,7 +52,8 @@ export class TaskService {
               updatedAt: new Date(task?.time?.updatedAt ?? ''),
             },
           }))
-        )
+        ),
+        finalize(() => this.loadingService.hide()) // Hide loading indicator after request completes
       );
   }
 
@@ -63,13 +65,17 @@ export class TaskService {
       params.expand = Array.isArray(expand) ? expand.join(',') : expand;
     }
 
+    this.loadingService.show(); // Show loading indicator
+
     return this.http.post<Task>(this.apiUrl, task, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.token}`,
+        Authorization: `Bearer ${this.authService.getToken()}`,
       },
       params,
-    });
+    }).pipe(
+      finalize(() => this.loadingService.hide()) // Hide loading indicator after request completes
+    );
   }
 
   public getTaskById(
@@ -83,13 +89,17 @@ export class TaskService {
       params.expand = Array.isArray(expand) ? expand.join(',') : expand;
     }
 
+    this.loadingService.show(); // Show loading indicator
+
     return this.http.get<Task>(`${this.apiUrl}/${taskId}`, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.token}`,
+        Authorization: `Bearer ${this.authService.getToken()}`,
       },
       params,
-    });
+    }).pipe(
+      finalize(() => this.loadingService.hide()) // Hide loading indicator after request completes
+    );
   }
 
   //atualizar status da task no back
@@ -134,7 +144,7 @@ export class TaskService {
       .get<Task[]>(this.apiUrl, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.authService.getToken()}`,
         },
         params,
       })
@@ -163,10 +173,12 @@ export class TaskService {
       params.expand = Array.isArray(expand) ? expand.join(',') : expand;
     }
 
+    this.loadingService.show(); // Show loading indicator
+
     return this.http.get<Task[]>(this.apiUrl, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.token}`,
+        Authorization: `Bearer ${this.authService.getToken()}`,
       },
       params,
     }).pipe(
@@ -178,8 +190,8 @@ export class TaskService {
             updatedAt: new Date(task?.time?.updatedAt ?? ''),
           },
         }))
-      )
+      ),
+      finalize(() => this.loadingService.hide()) // Hide loading indicator after request completes
     );
   }
-
 }

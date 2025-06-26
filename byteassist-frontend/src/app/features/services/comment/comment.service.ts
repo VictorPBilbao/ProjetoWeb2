@@ -10,7 +10,6 @@ import { Comment } from '../../shared/models/comment.model';
 export class CommentService {
   private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
-  private readonly token = this.authService.getToken();
   private readonly apiUrl = 'https://byteassist-backend.fly.dev/api';
 
   public createComment(comment: Comment): Observable<Comment> {
@@ -18,7 +17,7 @@ export class CommentService {
     return this.http.post<Comment>(`${this.apiUrl}/comment`, body, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.token}`,
+        Authorization: `Bearer ${this.authService.getToken()}`,
       },
     });
   }
@@ -27,7 +26,7 @@ export class CommentService {
     return this.http.get<Comment[]>(`${this.apiUrl}/comment/byTaskId/${taskId}`, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.token}`,
+        Authorization: `Bearer ${this.authService.getToken()}`,
       },
     });
   }
